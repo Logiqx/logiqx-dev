@@ -54,15 +54,33 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 	strcat(ST, "]"); \
 }
 
-#define FORMAT_ROM_NAME(ST, ROM) \
+#define FORMAT_LISTINFO_ROM(ST, ROM) \
 { \
+	char size[10]; \
 	char crc[9]; \
 \
-	if (ROM->merge) \
-		sprintf(ST, "rom ( name %s merge %s size %lu", ROM->name, ROM->merge, (unsigned long) ROM->size); \
+	if (strchr(ROM->name, ' ')) \
+		sprintf(ST, "rom ( name \"%s\"", ROM->name); \
 	else \
-		sprintf(ST, "rom ( name %s size %lu", ROM->name, (unsigned long) ROM->size); \
-	if (!(ROM->rom_flags & FLAG_ROM_NODUMP)) \
+		sprintf(ST, "rom ( name %s", ROM->name); \
+\
+	if (ROM->merge) \
+	{ \
+		strcat(ST, " merge "); \
+		if (strchr(ROM->merge, ' ')) \
+			strcat(ST, "\""); \
+		strcat(ST, ROM->merge); \
+		if (strchr(ROM->merge, ' ')) \
+			strcat(ST, "\""); \
+	} \
+	\
+	if (ROM->size) \
+	{ \
+		sprintf(size, "%lu", (unsigned long) ROM->size); \
+		strcat(ST, " size "); \
+		strcat(ST, size); \
+	} \
+	if (ROM->crc) \
 	{ \
 		sprintf(crc, "%08lx", (unsigned long) ROM->crc); \
 		strcat(ST, " crc "); \
@@ -94,9 +112,22 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 	strcat(ST, " )"); \
 }
 
-#define FORMAT_DISK_NAME(ST, DISK) \
+#define FORMAT_LISTINFO_DISK(ST, DISK) \
 { \
-	sprintf(ST, "disk ( name %s", DISK->name); \
+	if (strchr(DISK->name, ' ')) \
+		sprintf(ST, "disk ( name \"%s\"", DISK->name); \
+	else \
+		sprintf(ST, "disk ( name %s", DISK->name); \
+\
+	if (DISK->merge) \
+	{ \
+		strcat(ST, " merge "); \
+		if (strchr(DISK->merge, ' ')) \
+			strcat(ST, "\""); \
+		strcat(ST, DISK->merge); \
+		if (strchr(DISK->merge, ' ')) \
+			strcat(ST, "\""); \
+	} \
 	if (DISK->sha1) \
 	{ \
 		strcat(ST, " sha1 "); \
@@ -112,12 +143,23 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 		strcat(ST, " region "); \
 		strcat(ST, DISK->region); \
 	} \
+	if (DISK->disk_flags & FLAG_DISK_BADDUMP) \
+	{ \
+		strcat(ST, " flags baddump"); \
+	} \
+	if (DISK->disk_flags & FLAG_DISK_NODUMP) \
+	{ \
+		strcat(ST, " flags nodump"); \
+	} \
 	strcat(ST, " )"); \
 }
 
-#define FORMAT_SAMPLE_NAME(ST, SAMPLE) \
+#define FORMAT_LISTINFO_SAMPLE(ST, SAMPLE) \
 { \
-	sprintf(ST, "sample %s", SAMPLE->name); \
+	if (strchr(SAMPLE->name, ' ')) \
+		sprintf(ST, "sample \"%s\"", SAMPLE->name); \
+	else \
+		sprintf(ST, "sample %s", SAMPLE->name); \
 }
 
 #endif /* _DATLIB_H_ */

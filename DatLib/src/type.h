@@ -64,6 +64,7 @@ struct disk
 	/* --- Fields that appear in data files */
 
 	char *name;
+	char *merge;
 	char *md5;
 	char *sha1;
 	char *region;
@@ -71,8 +72,6 @@ struct disk
 	/* --- Fields that are calculated by DatLib */
 
 	struct game *game;
-
-	char *merge;
 
 	uint32_t crc;
 
@@ -512,12 +511,16 @@ struct ini_entry
 
 /* --- Disk Flags --- */
 
-#define FLAG_DISK_NAME			0x01
-#define FLAG_DISK_MD5			0x02
-#define FLAG_DISK_SHA1			0x04
-#define FLAG_DISK_REGION		0x08
-#define FLAG_DISK_DUPLICATE		0x10
-#define FLAG_DISK_CONFLICT		0x20
+#define FLAG_DISK_NAME			0x0001
+#define FLAG_DISK_MERGE			0x0002
+#define FLAG_DISK_MD5			0x0004
+#define FLAG_DISK_SHA1			0x0008
+#define FLAG_DISK_REGION		0x0010
+#define	FLAG_DISK_BADDUMP		0x0020
+#define	FLAG_DISK_NODUMP		0x0040
+#define FLAG_DISK_DUPLICATE		0x0080
+#define FLAG_DISK_CONFLICT		0x0100
+#define FLAG_DISK_BIOS			0x0200
 
 
 /* --- Sample Flags --- */

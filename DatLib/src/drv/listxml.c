@@ -186,6 +186,10 @@ int load_mame_listxml(struct dat *dat)
 			if (*TOKEN)
 				BUFFER2_PUT_TOKEN(TOKEN_DISK_NAME)
 
+			GET_XML_ATTRIBUTE("merge")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_DISK_MERGE)
+
 			GET_XML_ATTRIBUTE("sha1")
 			if (*TOKEN)
 				BUFFER2_PUT_TOKEN(TOKEN_DISK_SHA1)
@@ -197,6 +201,13 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("region")
 			if (*TOKEN)
 				BUFFER2_PUT_TOKEN(TOKEN_DISK_REGION)
+
+			GET_XML_ATTRIBUTE("status")
+			if (*TOKEN)
+			{
+				if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+					BUFFER2_PUT_TOKEN(TOKEN_DISK_FLAGS)
+			}
 		}
 		else if (strstr(BUFFER1_PTR, "<sample "))
 		{

@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.8"
-#define DATLIB_DATE "22 July 2004"
+#define DATLIB_VERSION "v1.9"
+#define DATLIB_DATE "30 July 2004"
 
 
 /* --- Standard includes --- */
@@ -678,7 +678,7 @@ int store_tokenized_dat(struct dat *dat)
 	struct comment *comments=0;
 	char type;
 
-	int num_comments=0, errflg=0;
+	int i, num_comments=0, errflg=0;
 
 	if (datlib_debug)
 	{
@@ -808,12 +808,7 @@ int store_tokenized_dat(struct dat *dat)
 					curr_rom->size=strtoul(BUFFER2_PTR, NULL, 10);
 
 				else if (type==TOKEN_ROM_CRC)
-				{
 					curr_rom->crc=strtoul(BUFFER2_PTR, NULL, 16);
-
-					if (curr_rom->crc==0)
-						curr_rom->rom_flags|=FLAG_ROM_NODUMP;
-				}
 
 				else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
 					curr_rom->md5=BUFFER2_PTR;
@@ -856,6 +851,9 @@ int store_tokenized_dat(struct dat *dat)
 				if (type==TOKEN_DISK_NAME)
 					curr_disk++;
 
+				else if (type==TOKEN_DISK_MERGE)
+					curr_disk->merge=BUFFER2_PTR;
+
 				else if (type==TOKEN_DISK_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
 				{
 					curr_disk->md5=BUFFER2_PTR;
@@ -874,6 +872,14 @@ int store_tokenized_dat(struct dat *dat)
 
 				else if (type==TOKEN_DISK_REGION)
 					curr_disk->region=BUFFER2_PTR;
+
+				else if (type==TOKEN_DISK_FLAGS)
+				{
+					if (!strcmp(BUFFER2_PTR, "baddump"))
+						curr_disk->disk_flags|=FLAG_DISK_BADDUMP;
+					else if (!strcmp(BUFFER2_PTR, "nodump"))
+						curr_disk->disk_flags|=FLAG_DISK_NODUMP;
+				}
 			}
 
 			if (type==TOKEN_DISK_NAME)
@@ -955,6 +961,26 @@ int store_tokenized_dat(struct dat *dat)
 		}
 
 		BUFFER2_ADVANCE_LINE
+	}
+
+	/* --- Mark 'no dumps' --- */
+
+	for (i=0; i<dat->num_roms; i++)
+	{
+		if (dat->roms[i].crc==0 && !(dat->roms[i].rom_flags & FLAG_ROM_NODUMP))
+		{
+			dat->roms[i].rom_flags|=FLAG_ROM_NODUMP;
+			dat->roms[i].rom_fixes|=FLAG_ROM_NODUMP;
+		}
+	}
+
+	for (i=0; i<dat->num_disks; i++)
+	{
+		if (dat->disks[i].crc==0 && !(dat->disks[i].disk_flags & FLAG_DISK_NODUMP))
+		{
+			dat->disks[i].disk_flags|=FLAG_DISK_NODUMP;
+			dat->disks[i].disk_fixes|=FLAG_DISK_NODUMP;
+		}
 	}
 
 	/* --- Override the ClrMamePro header in the dat with user parameters --- */
@@ -1088,6 +1114,17 @@ int lower_case(struct dat *dat)
 			{
 				strcpy(curr_disk->name, TOKEN);
 				curr_disk->disk_fixes|=FLAG_DISK_NAME;
+			}
+
+			if (curr_disk->merge)
+			{
+				strcpy(TOKEN, curr_disk->merge);
+				LOWER(TOKEN);
+				if (strcmp(curr_disk->merge, TOKEN))
+				{
+					strcpy(curr_disk->merge, TOKEN);
+					curr_disk->disk_fixes|=FLAG_DISK_MERGE;
+				}
 			}
 		}
 
@@ -1597,6 +1634,7 @@ int fix_merging(struct dat *dat)
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
 			struct game *game_romof=curr_game->game_romof;
+			int merged=0;
 
 			while (game_romof)
 			{
@@ -1609,11 +1647,24 @@ int fix_merging(struct dat *dat)
 						if (!curr_disk->merge || strcmp(curr_disk->merge, curr_disk->name))
 						{
 							curr_disk->merge=curr_disk->name;
+							curr_disk->disk_fixes|=FLAG_DISK_MERGE;
 						}
 
 						if (curr_disk->crc && !merge_disk->crc)
 						{
 							merge_disk->crc=curr_disk->crc;
+
+							if (merge_disk->disk_flags & FLAG_DISK_NODUMP)
+							{
+								merge_disk->disk_flags&=~FLAG_DISK_NODUMP;
+								merge_disk->disk_fixes|=FLAG_DISK_NODUMP;
+							}
+
+							if (!(merge_disk->disk_flags & FLAG_DISK_BADDUMP))
+							{
+								merge_disk->disk_flags|=FLAG_DISK_BADDUMP;
+								merge_disk->disk_fixes|=FLAG_DISK_BADDUMP;
+							}
 						}
 
 						if (curr_disk->sha1 && !merge_disk->sha1)
@@ -1627,10 +1678,21 @@ int fix_merging(struct dat *dat)
 							merge_disk->md5=curr_disk->md5;
 							merge_disk->disk_fixes|=FLAG_DISK_MD5;
 						}
+
+						if (game_romof->game_flags & FLAG_RESOURCE_NAME)
+							curr_disk->disk_flags|=FLAG_DISK_BIOS;
+
+						merged++;
 					}
 				}
 
 				game_romof=game_romof->game_romof;
+			}
+
+			if (!merged && curr_disk->merge)
+			{
+				curr_disk->merge=0;
+				curr_disk->disk_fixes|=FLAG_DISK_MERGE;
 			}
 		}
 	}
@@ -1654,6 +1716,18 @@ int fix_merging(struct dat *dat)
 						if (!curr_disk->crc && merge_disk->crc)
 						{
 							curr_disk->crc=merge_disk->crc;
+
+							if (curr_disk->disk_flags & FLAG_DISK_NODUMP)
+							{
+								curr_disk->disk_flags&=~FLAG_DISK_NODUMP;
+								curr_disk->disk_fixes|=FLAG_DISK_NODUMP;
+							}
+
+							if (!(curr_disk->disk_flags & FLAG_DISK_BADDUMP))
+							{
+								curr_disk->disk_flags|=FLAG_DISK_BADDUMP;
+								curr_disk->disk_fixes|=FLAG_DISK_BADDUMP;
+							}
 						}
 
 						if (!curr_disk->sha1 && merge_disk->sha1)
@@ -1932,6 +2006,9 @@ int summarise_dat(struct dat *dat)
 			if (curr_disk->name)
 				curr_disk->disk_flags|=FLAG_DISK_NAME;
 
+			if (curr_disk->merge)
+				curr_disk->disk_flags|=FLAG_DISK_MERGE;
+
 			if (curr_disk->md5)
 				curr_disk->disk_flags|=FLAG_DISK_MD5;
 
@@ -1940,6 +2017,8 @@ int summarise_dat(struct dat *dat)
 
 			if (curr_disk->region)
 				curr_disk->disk_flags|=FLAG_DISK_REGION;
+
+			// N.B. FLAG_DISK_BADDUMP, FLAG_DISK_NODUMP already set
 
 			curr_game->disk_flags|=curr_disk->disk_flags;
 		}
@@ -2104,10 +2183,34 @@ int report_warnings(struct dat *dat)
 				if (dat->disk_name_idx[i].disk->crc && !dat->disk_name_idx[j].disk->crc)
 				{
 					dat->disk_name_idx[j].disk->crc=dat->disk_name_idx[i].disk->crc;
+
+					if (dat->disk_name_idx[j].disk->disk_flags & FLAG_DISK_NODUMP)
+					{
+						dat->disk_name_idx[j].disk->disk_flags&=~FLAG_DISK_NODUMP;
+						dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_NODUMP;
+					}
+
+					if (!(dat->disk_name_idx[j].disk->disk_flags & FLAG_DISK_BADDUMP))
+					{
+						dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_BADDUMP;
+						dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_BADDUMP;
+					}
 				}
 				else if (!dat->disk_name_idx[i].disk->crc && dat->disk_name_idx[j].disk->crc)
 				{
 					dat->disk_name_idx[i].disk->crc=dat->disk_name_idx[j].disk->crc;
+
+					if (dat->disk_name_idx[i].disk->disk_flags & FLAG_DISK_NODUMP)
+					{
+						dat->disk_name_idx[i].disk->disk_flags&=~FLAG_DISK_NODUMP;
+						dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_NODUMP;
+					}
+
+					if (!(dat->disk_name_idx[i].disk->disk_flags & FLAG_DISK_BADDUMP))
+					{
+						dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_BADDUMP;
+						dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_BADDUMP;
+					}
 				}
 				else if (dat->disk_name_idx[i].disk->crc != dat->disk_name_idx[j].disk->crc &&
 					dat->disk_name_idx[i].disk->crc != ~dat->disk_name_idx[j].disk->crc)
@@ -2182,7 +2285,11 @@ int report_warnings(struct dat *dat)
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
 			curr_disk->disk_warnings|=(curr_disk->disk_flags ^ dat->disk_flags) &
-				(FLAG_DISK_MD5 | FLAG_DISK_SHA1 | FLAG_DISK_REGION);
+				(FLAG_DISK_REGION);
+
+			if (!(curr_disk->disk_flags & FLAG_DISK_NODUMP))
+				curr_disk->disk_warnings|=(curr_disk->disk_flags ^ dat->disk_flags) &
+					(FLAG_DISK_MD5 | FLAG_DISK_SHA1);
 
 			curr_game->disk_warnings|=curr_disk->disk_warnings;
 		}
@@ -2473,12 +2580,18 @@ int report_fixes(struct dat *dat)
 
 			if (dat->disk_fixes & FLAG_DISK_NAME)
 				fprintf(dat->log_file, "    Name\n");
+			if (dat->disk_fixes & FLAG_DISK_MERGE)
+				fprintf(dat->log_file, "    Merge\n");
 			if (dat->disk_fixes & FLAG_DISK_MD5)
 				fprintf(dat->log_file, "    MD5\n");
 			if (dat->disk_fixes & FLAG_DISK_SHA1)
 				fprintf(dat->log_file, "    SHA1\n");
 			if (dat->disk_fixes & FLAG_DISK_REGION)
 				fprintf(dat->log_file, "    Region\n");
+			if (dat->disk_fixes & FLAG_DISK_BADDUMP)
+				fprintf(dat->log_file, "    Bad Dump\n");
+			if (dat->disk_fixes & FLAG_DISK_NODUMP)
+				fprintf(dat->log_file, "    No Dump\n");
 			if (dat->disk_fixes & FLAG_DISK_DUPLICATE)
 				fprintf(dat->log_file, "    Duplicate\n");
 
@@ -2639,6 +2752,14 @@ int report_fixes(struct dat *dat)
 							fprintf(dat->log_file, "    Disk %s - name set/changed.\n", curr_disk->name);
 						}
 
+						if (curr_disk->disk_fixes & FLAG_DISK_MERGE)
+						{
+							if (curr_disk->merge)
+								fprintf(dat->log_file, "    Disk %s - merge name set.\n", curr_disk->name);
+							else
+								fprintf(dat->log_file, "    Disk %s - merge name removed (disk name not in parent).\n", curr_disk->name);
+						}
+
 						if (curr_disk->disk_fixes & FLAG_DISK_MD5)
 						{
 							if (curr_disk->md5)
@@ -2655,6 +2776,22 @@ int report_fixes(struct dat *dat)
 						{
 							if (curr_disk->region)
 								fprintf(dat->log_file, "    Disk %s - region set/changed.\n", curr_disk->name);
+						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_BADDUMP)
+						{
+							if (curr_disk->disk_flags & FLAG_DISK_BADDUMP)
+								fprintf(dat->log_file, "    Disk %s - bad dump set.\n", curr_disk->name);
+							else
+								fprintf(dat->log_file, "    Disk %s - bad dump cleared.\n", curr_disk->name);
+						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_NODUMP)
+						{
+							if (curr_disk->disk_flags & FLAG_DISK_NODUMP)
+								fprintf(dat->log_file, "    Disk %s - no dump set.\n", curr_disk->name);
+							else
+								fprintf(dat->log_file, "    Disk %s - no dump cleared.\n", curr_disk->name);
 						}
 
 						if (curr_disk->disk_fixes & FLAG_DISK_DUPLICATE)
@@ -2796,9 +2933,6 @@ int rebuild_dat_indices(struct dat *dat)
 
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
-				//if (dat->options->options & OPTION_COMPLEMENT_BAD_CRCS && curr_rom->rom_flags & FLAG_ROM_BADDUMP)
-					//curr_rom->crc=~curr_rom->crc;
-
 				curr_rom->game=curr_game;
 
 				curr_game_rom_crc_idx++->rom=curr_rom;
@@ -3000,7 +3134,7 @@ int build_zip_structures(struct dat *dat)
 
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
-			if (curr_disk->crc!=0 || dat->options->options & OPTION_INCLUDE_NODUMPS_IN_ZIPS)
+			if (!(curr_disk->disk_flags & FLAG_DISK_NODUMP) || dat->options->options & OPTION_INCLUDE_NODUMPS_IN_ZIPS)
 			{
 				if (dat->options->options & OPTION_DAT_NO_MERGING)
 				{
@@ -3782,12 +3916,18 @@ int save_dat(struct dat *dat)
 				{
 					fprintf(dat->log_file, "Disk information that has been lost:\n\n");
 
+					if (lost & FLAG_DISK_MERGE)
+						fprintf(dat->log_file, "    Merge\n");
 					if (lost & FLAG_DISK_MD5)
 						fprintf(dat->log_file, "    MD5\n");
 					if (lost & FLAG_DISK_SHA1)
 						fprintf(dat->log_file, "    SHA1\n");
 					if (lost & FLAG_DISK_REGION)
 						fprintf(dat->log_file, "    Region\n");
+					if (lost & FLAG_DISK_BADDUMP)
+						fprintf(dat->log_file, "    Bad Dump\n");
+					if (lost & FLAG_DISK_NODUMP)
+						fprintf(dat->log_file, "    No Dump\n");
 
 					fprintf(dat->log_file, "\n");
 				}

@@ -11,6 +11,7 @@
 
 /* --- My includes --- */
 
+#include "../datlib.h"
 #include "../type.h"
 #include "../token.h"
 
@@ -385,6 +386,12 @@ int load_mame_listinfo(struct dat *dat)
 					BUFFER2_PUT_TOKEN(TOKEN_DISK_NAME)
 				}
 
+				else if (!strcmp(TOKEN, "merge"))
+				{
+					BUFFER1_GET_TOKEN
+					BUFFER2_PUT_TOKEN(TOKEN_DISK_MERGE)
+				}
+
 				else if (!strcmp(TOKEN, "md5"))
 				{
 					BUFFER1_GET_TOKEN
@@ -403,6 +410,18 @@ int load_mame_listinfo(struct dat *dat)
 					BUFFER2_PUT_TOKEN(TOKEN_DISK_REGION)
 				}
 
+				else if (!strcmp(TOKEN, "flags"))
+				{
+					BUFFER1_GET_TOKEN
+
+					if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+						BUFFER2_PUT_TOKEN(TOKEN_DISK_FLAGS)
+				}
+
+				/* --- Support the bad syntax of MAME v0.68 --- */
+
+				else if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+					BUFFER2_PUT_TOKEN(TOKEN_DISK_FLAGS)
 			}
 		}
 
@@ -432,6 +451,8 @@ int load_mess_listinfo(struct dat *dat)
 
 int save_mame_listinfo(struct dat *dat)
 {
+	char st[MAX_STRING_LENGTH];
+
 	struct game *curr_game=0;
 	struct comment *curr_comment=0;
 	struct rom *curr_rom=0;
@@ -585,62 +606,16 @@ int save_mame_listinfo(struct dat *dat)
 
 		for (j=0, curr_rom=curr_game->roms; j<dat->games[i].num_roms; j++, curr_rom++)
 		{
-			if (strchr(curr_rom->name, ' '))
-				fprintf(dat->out, "\trom ( name \"%s\" ", curr_rom->name);
-			else
-				fprintf(dat->out, "\trom ( name %s ", curr_rom->name);
+			FORMAT_LISTINFO_ROM(st, curr_rom)
 
-			if (curr_rom->merge!=0)
-			{
-				if (strchr(curr_rom->merge, ' '))
-					fprintf(dat->out, "merge \"%s\" ", curr_rom->merge);
-				else
-					fprintf(dat->out, "merge %s ", curr_rom->merge);
-			}
-
-			fprintf(dat->out, "size %ld ", (unsigned long) curr_rom->size);
-
-			if (curr_rom->crc!=0)
-				fprintf(dat->out, "crc %08lx ", (unsigned long) curr_rom->crc);
-
-			if (curr_rom->sha1!=0)
-				fprintf(dat->out, "sha1 %s ", curr_rom->sha1);
-
-			if (curr_rom->md5!=0)
-				fprintf(dat->out, "md5 %s ", curr_rom->md5);
-
-			if (curr_rom->region!=0)
-				fprintf(dat->out, "region %s ", curr_rom->region);
-
-			if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
-				fprintf(dat->out, "flags baddump ");
-
-			if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
-				fprintf(dat->out, "flags nodump ");
-
-			fprintf(dat->out, ")\n");
+			fprintf(dat->out, "\t%s\n", st);
 		}
 
 		for (j=0, curr_disk=curr_game->disks; j<dat->games[i].num_disks; j++, curr_disk++)
 		{
-			if (strchr(curr_disk->name, ' '))
-				fprintf(dat->out, "\tdisk ( name \"%s\" ", curr_disk->name);
-			else
-				fprintf(dat->out, "\tdisk ( name %s ", curr_disk->name);
+			FORMAT_LISTINFO_DISK(st, curr_disk)
 
-			//if (curr_disk->crc!=0)
-				//fprintf(dat->out, "crc %08lx ", (unsigned long) curr_disk->crc);
-
-			if (curr_disk->sha1!=0)
-				fprintf(dat->out, "sha1 %s ", curr_disk->sha1);
-
-			if (curr_disk->md5!=0)
-				fprintf(dat->out, "md5 %s ", curr_disk->md5);
-
-			if (curr_disk->region!=0)
-				fprintf(dat->out, "region %s ", curr_disk->region);
-
-			fprintf(dat->out, ")\n");
+			fprintf(dat->out, "\t%s\n", st);
 		}
 
 		if (curr_game->sampleof!=0)
@@ -653,10 +628,9 @@ int save_mame_listinfo(struct dat *dat)
 
 		for (j=0, curr_sample=curr_game->samples; j<dat->games[i].num_samples; j++, curr_sample++)
 		{
-			if (strchr(curr_sample->name, ' '))
-				fprintf(dat->out, "\tsample \"%s\"\n", curr_sample->name);
-			else
-				fprintf(dat->out, "\tsample %s\n", curr_sample->name);
+			FORMAT_LISTINFO_SAMPLE(st, curr_sample)
+
+			fprintf(dat->out, "\t%s\n", st);
 		}
 
 		fprintf(dat->out, ")\n\n");
@@ -667,7 +641,8 @@ int save_mame_listinfo(struct dat *dat)
 			FLAG_GAME_COMMENTS;
 	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC|FLAG_ROM_MD5|FLAG_ROM_SHA1|
 	               FLAG_ROM_REGION|FLAG_ROM_BADDUMP|FLAG_ROM_NODUMP|FLAG_ROM_FUNNYSIZE|FLAG_ROM_BIOS;
-	dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MD5|FLAG_DISK_SHA1|FLAG_DISK_REGION;
+	dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MERGE|FLAG_DISK_MD5|FLAG_DISK_SHA1|
+			FLAG_DISK_REGION|FLAG_DISK_BADDUMP|FLAG_DISK_NODUMP;
 	dat->sample_saved=FLAG_SAMPLE_NAME;
 
 	return(errflg);

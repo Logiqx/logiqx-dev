@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.8 - 22/07/2004
+                          DatLib v1.9 - 30/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+30/07/2004  *** v1.9 ***
+
+            - Added full support for disk 'merge' and 'flags' information.
+            - Improved the FORMAT_LISTINFO_XXXXXX macros a little bit.
 
 22/07/2004  *** v1.8 ***
 
