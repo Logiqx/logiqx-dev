@@ -4,8 +4,8 @@
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.0"
-#define IMGCHK_DATE "2 July 2004"
+#define IMGCHK_VERSION "v2.1"
+#define IMGCHK_DATE "11 July 2004"
 
 
 /* --- The standard includes --- */
@@ -46,6 +46,7 @@ extern int datlib_debug;
 int main(int argc, char **argv)
 {
 	struct ini_entry *ini=0;
+	struct options *options=0;
 	struct dat *dat=0;
 
 	char st[MAX_STRING_LENGTH+1];
@@ -59,6 +60,10 @@ int main(int argc, char **argv)
 	printf("Written by Logiqx (http://www.logiqx.com)\n");
 	printf("===============================================================================\n");
 
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
 	/* --- Read INI options --- */
 
 	if (!errflg && !(ini=load_ini("imgchk.ini")))
@@ -66,7 +71,10 @@ int main(int argc, char **argv)
 
 	if (!errflg && find_ini_value(ini, "Dat", "Dat"))
 	{
-		if ((dat=init_dat(find_ini_value(ini, "Dat", "Dat"), OPTION_SHOW_SUMMARY, 0, 0))==0)
+		options->options=OPTION_SHOW_SUMMARY;
+		options->fn=find_ini_value(ini, "Dat", "Dat");
+
+		if ((dat=init_dat(options))==0)
 			errflg++;
 	}
 	else
@@ -89,6 +97,8 @@ int main(int argc, char **argv)
 
 	dat=free_dat(dat);
 	ini=free_ini(ini);
+
+	FREE(options)
 
 	return(errflg);
 }

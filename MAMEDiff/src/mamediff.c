@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.3"
-#define MAMEDIFF_DATE "6 July 2004"
+#define MAMEDIFF_VERSION "v2.4"
+#define MAMEDIFF_DATE "11 July 2004"
 
 
 /* --- The standard includes --- */
@@ -56,6 +56,7 @@ int main(int argc, char **argv)
 
 	int verbose=0, caesar=0, set_type=0, diff_type=0, renames=0, zeros=0;
 
+	struct options *options=0;
 	struct dat *dat1=0, *dat2=0;
 
 	int old_syntax=0, errflg=0;
@@ -196,15 +197,28 @@ int main(int argc, char **argv)
 		exit (1);
 	}
 
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
+	if (!errflg)
+	{
+		options->options=set_type|OPTION_SHOW_SUMMARY;
+		options->fn=argv[optind];
+	}
+
 	/* --- Load the data files --- */
 
-	if (!errflg && (dat1=init_dat(argv[optind], set_type|OPTION_SHOW_SUMMARY, 0, 0))==0)
+	if (!errflg && (dat1=init_dat(options))==0)
 		errflg++;
 
 	if (!errflg)
+	{
 		printf("\n");
+		options->fn=argv[optind+1];
+	}
 
-	if (!errflg && (dat2=init_dat(argv[optind+1], set_type|OPTION_SHOW_SUMMARY, 0, 0))==0)
+	if (!errflg && (dat2=init_dat(options))==0)
 		errflg++;
 
 	if (!errflg)
@@ -224,6 +238,8 @@ int main(int argc, char **argv)
 
 	free_dat(dat2);
 	free_dat(dat1);
+
+	FREE(options)
 
 	/* --- All done --- */
 

@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ROMINFO_VERSION "v2.0"
-#define ROMINFO_DATE "2 July 2004"
+#define ROMINFO_VERSION "v2.1"
+#define ROMINFO_DATE "11 July 2004"
 
 
 /* --- The standard includes --- */
@@ -98,7 +98,6 @@ int main(int argc, char **argv)
 
 struct crc *load_crcs(int argc, char **argv)
 {
-	char fn[MAX_FILENAME_LENGTH+1];
 	ZIP *zip;
 	struct zipent *zipent;
 	struct stat buf;
@@ -307,13 +306,26 @@ int scan_dir(FILE *out, char *dir, struct crc *crcs)
 
 int scan_dat(FILE *out, char *fn, struct crc *crcs)
 {
-	struct dat *dat;
+	struct options *options=0;
+	struct dat *dat=0;
 	struct rom_idx *rom_match;
 	int printed_fn=0;
 	int printed_game=0;
 	int i, errflg=0;
 
-	if (!errflg && (dat=init_dat(fn, OPTION_LOAD_QUIETLY, 0, 0))==0)
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
+	if (!errflg)
+	{
+		options->options=OPTION_LOAD_QUIETLY;
+		options->fn=fn;
+	}
+
+	/* --- Initialise the data file --- */
+
+	if (!errflg && (dat=init_dat(options))==0)
 		errflg++;
 
 	for (i=0; !errflg && i<MAX_ZIP_ENTRIES && crcs[i].crc; i++)
@@ -373,6 +385,8 @@ int scan_dat(FILE *out, char *fn, struct crc *crcs)
 
 
 	dat=free_dat(dat);
+
+	FREE(options)
 
 	return(0);
 }

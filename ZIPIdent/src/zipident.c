@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ZIPIDENT_VERSION "v2.0"
-#define ZIPIDENT_DATE "2 July 2004"
+#define ZIPIDENT_VERSION "v2.1"
+#define ZIPIDENT_DATE "11 July 2004"
 
 
 /* --- The standard includes --- */
@@ -51,13 +51,17 @@ int main(int argc, char **argv)
 
 	extern int optind;
 
-	FILE *definite=0, *maybe=0;
 	struct stat buf;
+
+	FILE *definite=0, *maybe=0;
+
+	struct options *options=0;
 	struct dat *dat=0;
 	struct game_match *game_match=0;
 	char st[MAX_STRING_LENGTH+1];
 	char path[MAX_FILENAME_LENGTH+1];
 	char defpath[MAX_FILENAME_LENGTH+1]="";
+
 	int i, delete=0, scan_type=0;
 	char c;
 	int errflg=0;
@@ -107,9 +111,19 @@ int main(int argc, char **argv)
 		strcat(st, "/zipident.dat");
 	}
 
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
+	if (!errflg)
+	{
+		options->options=OPTION_LOWER_CASE|OPTION_SHOW_SUMMARY;
+		options->fn=st;
+	}
+
 	/* --- Initialise the dat --- */
 
-	if (!errflg && (dat=init_dat(st, OPTION_LOWER_CASE|OPTION_SHOW_SUMMARY, 0, 0))==0)
+	if (!errflg && (dat=init_dat(options))==0)
 		errflg++;
 
 	if (!errflg)
@@ -261,6 +275,8 @@ int main(int argc, char **argv)
 	FREE(game_match)
 
 	dat=free_dat(dat);
+
+	FREE(options)
 
 	return(errflg);
 }

@@ -4,8 +4,8 @@
  * Little tool that tries to find ZIP files that you need!
  * -------------------------------------------------------------------------- */
 
-#define ZIPFIND_VERSION "v2.0"
-#define ZIPFIND_DATE "2 July 2004"
+#define ZIPFIND_VERSION "v2.1"
+#define ZIPFIND_DATE "11 July 2004"
 
 
 /* --- The standard includes --- */
@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 	extern int optind;
 	extern char *optarg;
 
+	struct options *options=0;
 	struct dat *missing=0, *ziplist=0;
 	int verbose=0;
 	char *url=0;
@@ -81,17 +82,30 @@ int main(int argc, char **argv)
 		errflg++;
 	}
 
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
+	if (!errflg)
+	{
+		options->options=OPTION_SHOW_SUMMARY;
+		options->fn=argv[optind];
+	}
+
 	/* --- Load the 'missing' data file --- */
 
-	if (!errflg && (missing=init_dat(argv[optind], OPTION_SHOW_SUMMARY, 0, 0))==0)
+	if (!errflg && (missing=init_dat(options))==0)
 		errflg++;
 
 	if (!errflg)
+	{
 		printf("\n");
+		options->fn=argv[optind+1];
+	}
 
 	/* --- Load the 'ziplist' data file --- */
 
-	if (!errflg && (ziplist=init_dat(argv[optind+1], OPTION_SHOW_SUMMARY, 0, 0))==0)
+	if (!errflg && (ziplist=init_dat(options))==0)
 		errflg++;
 
 	if (!errflg)
@@ -112,6 +126,8 @@ int main(int argc, char **argv)
 
 	ziplist=free_dat(ziplist);
 	missing=free_dat(missing);
+
+	FREE(options)
 
 	return(errflg);
 }

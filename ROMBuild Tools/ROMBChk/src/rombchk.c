@@ -99,6 +99,7 @@ int main(int argc, char **argv)
 int process_dat(char *fn)
 {
 	char base_fn[MAX_FILENAME_LENGTH+1];
+	struct options *options=0;
 	struct dat *dat=0;
 	
 	int i=0, j=0, k=0, found;
@@ -107,7 +108,17 @@ int process_dat(char *fn)
 	struct Rom *roms;
 	struct game_idx *game_match;
 
-	if ((dat=init_dat(fn, OPTION_LOAD_QUIETLY, 0, 0))==0)
+	/* --- Allocate memory for user options --- */
+
+	STRUCT_CALLOC(options, 1, sizeof(struct options))
+
+	if (!errflg)
+	{
+		options->options=OPTION_LOAD_QUIETLY;
+		options->fn=fn;
+	}
+
+	if ((dat=init_dat(options))==0)
 	{
 		fprintf(stderr, "Error trying to load %s\n", fn);
 		errflg++;
@@ -182,7 +193,9 @@ int process_dat(char *fn)
 		printf("Validating %s details in ROMBuild...\n", ems[i].descr);
 		sprintf(base_fn, "%s.dat", ems[i].descr);
 
-		if ((dat=init_dat(base_fn, OPTION_LOAD_QUIETLY, 0, 0))==0)
+		options->fn=base_fn;
+
+		if ((dat=init_dat(options))==0)
 		{
 			fprintf(stderr, "Error trying to load %s\n", base_fn);
 			errflg++;
@@ -215,6 +228,8 @@ int process_dat(char *fn)
 
 		i++;
 	}
+
+	FREE(options)
 
 	printf("All done!\n");
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ImgChk v2.0 - 02/07/2004
+                          ImgChk v2.1 - 11/07/2004
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
 
@@ -61,11 +61,18 @@ people like Roman, xRay1 and Eldio who will also find it useful.
 History
 -------
 
+11/07/2004  *** v2.1 ***
+
+            - Updated the source to use the new functions of DatLib v1.4.
+	    - There is no functional change within ImgChk though.
+
 02/07/2004  *** v2.0 ***
+
             Added directory support (previously it only supported ZIPs).
             Modified to use DatLib - there are no game or ROM limits anymore!
             Also supports all DatLib formats (ListInfo, XML, RomCenter, etc).
             Note: For XML support to work, you need xml2info.exe in your path.
 
 21/01/2003  *** v1.0 ***
+
             Private release.

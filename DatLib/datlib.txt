@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.4 - xx/xx/xxxx
+                          DatLib v1.4 - 11/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ do anything with them but I am interested to hear them!
 History
 -------
 
-xx/xx/xxxx  *** v1.4 ***
+11/07/2004  *** v1.4 ***
 
             - Added support for comments before games in CMPro data files.
             - Added an option to ignore missing year information.

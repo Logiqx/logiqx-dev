@@ -150,7 +150,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				{
 					curr_game_name_idx=0;
 
-					if (dat2->options & OPTION_DAT_FULL_MERGING)
+					if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 						curr_game_name_idx=bsearch((void *)curr_game_zip_rom2->rom->game->name, dat1->game_name_idx, dat1->num_games, sizeof(struct game_idx), find_game_by_name);
 					else if (curr_game_zip_rom2->rom->game->cloneof)
 					{
@@ -205,11 +205,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			fprintf(changes_log, "Changes dat for use with %s\n", st);
 
 			fprintf(changes_log, "Copy changes over a perfect ");
-			if (dat1->options & OPTION_DAT_NO_MERGING)
+			if (dat1->options->options & OPTION_DAT_NO_MERGING)
 				fprintf(changes_log, "non-merged");
-			if (dat1->options & OPTION_DAT_SPLIT_MERGING)
+			if (dat1->options->options & OPTION_DAT_SPLIT_MERGING)
 				fprintf(changes_log, "split-merged");
-			if (dat1->options & OPTION_DAT_FULL_MERGING)
+			if (dat1->options->options & OPTION_DAT_FULL_MERGING)
 				fprintf(changes_log, "fully-merged");
 
 			strcpy(st, dat1->name);
@@ -230,7 +230,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 			/* --- Report ZIP removals --- */
 
-			if (dat2->options & OPTION_DAT_FULL_MERGING)
+			if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 				LRPAD(st, " ZIPs Removed (n.b. ZIPs include clones) ", "-", 80)
 			else
 				LRPAD(st, " ZIPs Removed ", "-", 80)
@@ -250,7 +250,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 			/* --- Report ZIP changes --- */
 
-			if (dat2->options & OPTION_DAT_FULL_MERGING)
+			if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 				LRPAD(st, " ZIPs Changed (n.b. ZIPs include clones) ", "-", 80)
 			else
 				LRPAD(st, " ZIPs Changed ", "-", 80)
@@ -270,7 +270,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 			/* --- Report ZIP additions --- */
 
-			if (dat2->options & OPTION_DAT_FULL_MERGING)
+			if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 				LRPAD(st, " ZIPs Added (n.b. ZIPs include clones) ", "-", 80)
 			else
 				LRPAD(st, " ZIPs Added ", "-", 80)
@@ -300,11 +300,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			fprintf(changes_log, "Supplementary dat for use with %s\n", st);
 
 			fprintf(changes_log, "Use in addition to a perfect ");
-			if (dat1->options & OPTION_DAT_NO_MERGING)
+			if (dat1->options->options & OPTION_DAT_NO_MERGING)
 				fprintf(changes_log, "non-merged");
-			if (dat1->options & OPTION_DAT_SPLIT_MERGING)
+			if (dat1->options->options & OPTION_DAT_SPLIT_MERGING)
 				fprintf(changes_log, "split-merged");
-			if (dat1->options & OPTION_DAT_FULL_MERGING)
+			if (dat1->options->options & OPTION_DAT_FULL_MERGING)
 				fprintf(changes_log, "fully-merged");
 
 			strcpy(st, dat1->name);
@@ -350,7 +350,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 							else
 								fprintf(changes_log, "  ROM: %12s (%7lu bytes, crc %08lx)", curr_rom->name, (unsigned long) curr_rom->size, (unsigned long) curr_rom->crc);
 
-							if (dat2->options & OPTION_DAT_FULL_MERGING)
+							if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 								fprintf(changes_log, " - from %s", curr_rom->game->name);
 
 							fprintf(changes_log, "\n");
@@ -384,7 +384,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 				if (curr_game->description!=0)
 				{
-					if (dat2->options & OPTION_DAT_FULL_MERGING)
+					if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 						fprintf(changes_dat, "\tdescription \"%s [n.b. includes clones]\"\n", curr_game->description);
 					else
 						fprintf(changes_dat, "\tdescription \"%s\"\n", curr_game->description);
