@@ -47,14 +47,14 @@ The home page for MAMEDiff is http://www.logiqx.com/
 There are two ways that you may want to use MAMEDiff; one will give a general
 overview of changes and the other will tell you how to fix your sets.
 
-Before you use MAMEDiff you will need the listinfo output from the versions of
+Before you use MAMEDiff you will need the listxml output from the versions of
 MAME that you are comparing. You can do this with the following command:
 
-mame -listinfo >listinfo.txt
+mame -listxml >listxml.txt
 
-Alternatively, you can use newer listxml option which is now a part of MAME:
+For older versions of MAME, you may need to use the listinfo option instead:
 
-mame -listxml >listinfo.xml
+mame -listinfo >listinfo.xml
 
 
 3.1. To generate a summary of changes
@@ -62,7 +62,7 @@ mame -listxml >listinfo.xml
 
 Use the command:
 
-mamediff listinfo.1 listinfo.2      (using whatever file names you chose)
+mamediff listxml.1 listxml.2      (using whatever file names you chose)
 
 
 This will save a report to mamediff.log containing up to 4 sections:
@@ -79,7 +79,7 @@ above), use the '-v' option (verbose mode). This gives a deeper insight into the
 changes and also says whether the new ROMs can already be found elsewhere in
 MAME sets.
 
-i.e. mamediff -v listinfo.1 listinfo.2
+i.e. mamediff -v listxml.1 listxml.2
 
 Handy tip: Wildcards can also be used to specify the filenames.
 
@@ -89,7 +89,7 @@ Handy tip: Wildcards can also be used to specify the filenames.
 
 Use the m, s or n options (m=merged sets, s=split sets, n=non-merged sets).
 
-e.g. mamediff -m listinfo.1 listinfo.2
+e.g. mamediff -m listxml.1 listxml.2
 
 
 This will save a report to mamediff.log containing 3 sections:

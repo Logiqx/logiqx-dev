@@ -140,10 +140,15 @@ called cpzn.txt that contains two lines (cpzn1 and cpzn2 in this case):
 
   e.g. datutil -g @cpzn.txt -c listxml.dat
 
-The above example would select all cpzn1 and cpzn2 games from listxml.dat. One
-last thing to mention about the -g and -G options is that you can use the -!
-option to invert you selection (i.e. exclude games). This works for individual
-game/sourcefile names and lists of names provided through the @ symbol.
+The above example would select all cpzn1 and cpzn2 games from listxml.dat.
+
+I should also mention that game names including spaces do not require quotes
+around them when using the @ method. If you are specifying them on the command
+line then yes, they do require quotes.
+
+One last thing to mention about the -g and -G options is that you can use the
+-! option to invert your selection (i.e. exclude games). This works for
+individual game/sourcefile names and lists of names when using the @ symbol.
 
 If you wish to exclude clones from the newly saved dat, you can use the '-r'
 (remove clones) option.
@@ -245,7 +250,7 @@ You should never need the -d option since that is for debugging DatUtil. ;)
 Quick reference
 ---------------
 
-Defaults (behavior within DatLib that can not be switched off):
+Defaults:
 
   -   fix merging (used to be the -m option)
   -   remove duplicate ROMs/disks/samples
