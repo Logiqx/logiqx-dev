@@ -25,13 +25,13 @@ probably isn't for you, please don't question me about it.
 Basic Usage
 -----------
 
-Firstly, you'll need to put the MAME listinfo output into the same directory
+Firstly, you'll need to put the MAME listxml output into the same directory
 as ZIPIdent.exe.
 
-   mame -listinfo >zipident.dat
+   mame -listxml >zipident.dat
 
-NB. The reason for using full listinfo instead of a ClrMamePro dat is that it
-contains all sorts of additional information that ZIPIdent uses for reports.
+N.B. Old versions of MAME provided 'listinfo' rather than 'listxml'. For those
+versions of MAME, use the 'listinfo' output.
 
 To process a directory or ZIP with ZIPIdent, just use the syntax:
 
@@ -153,7 +153,7 @@ Step 3 - Searching for ROM matches
 ----------------------------------
 
 Just matches on the three file attributes CRC, name and size. Zero, one or more
-of these attrbiutes may match and every matching ROM in the listinfo acquires
+of these attrbiutes may match and every matching ROM in the listxml acquires
 a 'best score' (performed against all files in the ZIP).
 
 
