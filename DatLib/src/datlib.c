@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.10"
-#define DATLIB_DATE "18 August 2004"
+#define DATLIB_VERSION "v1.11"
+#define DATLIB_DATE "26 October 2004"
 
 
 /* --- Standard includes --- */
@@ -1430,6 +1430,22 @@ int fix_merging(struct dat *dat)
 	{
 		struct game_idx *game_match;
 
+		/* --- Game must not reference itself in romof of cloneof --- */
+
+		if (curr_game->cloneof && !strcmp(curr_game->name, curr_game->cloneof))
+		{
+			curr_game->cloneof=0;
+			curr_game->game_fixes|=FLAG_GAME_CLONEOF;
+		}
+
+		if (curr_game->romof && !strcmp(curr_game->name, curr_game->romof))
+		{
+			curr_game->romof=0;
+			curr_game->game_fixes|=FLAG_GAME_ROMOF;
+		}
+
+		/* --- Fix romof --- */
+
 		if (curr_game->romof)
 		{
 			if (curr_game->cloneof && strcmp(curr_game->romof, curr_game->cloneof))
@@ -1448,6 +1464,8 @@ int fix_merging(struct dat *dat)
 				curr_game->game_romof=game_match->game;
 			}
 		}
+
+		/* --- Fix cloneof --- */
 
 		if (curr_game->cloneof)
 		{
@@ -1469,6 +1487,8 @@ int fix_merging(struct dat *dat)
 				}
 			}
 		}
+
+		/* --- Fix sampleof --- */
 
 		if (curr_game->sampleof)
 		{

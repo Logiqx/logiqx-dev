@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.10 - 18/08/2004
+                          DatLib v1.11 - 26/10/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -23,6 +23,7 @@ Load only:
   - RomCenter 2.00
   - MAME and MESS ListXML
   - Nebula Drivers
+  - Zinc --list-sets
   - ClrMame Log
   - Folder Scan (subdirectories and zips)
 
@@ -170,6 +171,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+26/10/2004  *** v1.11 ***
+
+            - Added a parser for the ZiNc --list-sets.
 
 18/08/2004  *** v1.10 ***
 
