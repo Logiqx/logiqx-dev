@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPIdent v2.3 - 13/02/2005
+                         ZIPIdent v2.4 - 28/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -181,6 +181,12 @@ matched against different games).
 
 History
 -------
+
+28/02/2005  *** v2.4 ***
+
+            - Uses DatLib v2.2.
+            - Added support for tab delimited files.
+            - Fixed problem of unrecognised escape sequences looping forever!
 
 13/02/2005  *** v2.3 ***
 
