@@ -31,14 +31,18 @@ extern int datlib_debug;
 
 /* --- Original comparison (no dat file generation) --- */
 
-int compare_games(struct game_change *game_change, struct game *game1, struct game *game2)
+int compare_games(struct game_change *game_change, struct game *game1, struct game *game2, int set_type)
 {
-	struct rom_idx *roms_idx1;
-	struct rom_idx *roms_idx2;
+	struct rom_idx *roms_idx1, *roms_idx2;
+	struct disk_idx *disks_idx1, *disks_idx2;
+	struct sample_idx *samples_idx1, *samples_idx2;
 
-	int game_flags=0, rom_flags;
+	uint16_t game_flags=0;
+	uint16_t game_rom_flags=0, rom_flags=0;
+	uint8_t game_disk_flags=0, disk_flags=0;
+	uint8_t game_sample_flags=0, sample_flags=0;
 
-	uint32_t i=0, j=0, k;
+	uint32_t i, j, k;
 
 	int found, diff=0;
 
@@ -53,6 +57,12 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 		roms_idx1=game1->rom_crc_idx;
 		roms_idx2=game2->rom_crc_idx;
 
+		disks_idx1=game1->disk_crc_idx;
+		disks_idx2=game2->disk_crc_idx;
+
+		samples_idx1=game1->sample_name_idx;
+		samples_idx2=game2->sample_name_idx;
+
 		if (strcmp(game1->name, game2->name))
 			game_flags|=GAME_RENAMED;
 
@@ -63,6 +73,8 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 		{
 			game_flags|=GAME_NEW_CLONE;
 		}
+
+		i=j=0;
 
 		while (i<game1->num_roms || j<game2->num_roms)
 		{
@@ -100,46 +112,46 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 						strcmp(roms_idx1[i+1].rom->name, roms_idx2[j].rom->name)<=0)
 					{
 						if (roms_idx1[i].rom->merge)
-							rom_flags|=P_ROMS_REMOVED;
+							rom_flags|=P_ROM_REMOVED;
 						else
-							rom_flags|=ROMS_REMOVED;
+							rom_flags|=ROM_REMOVED;
 					}
 					else if (j<game2->num_roms-1 &&
 						roms_idx1[i].rom->crc==roms_idx2[j+1].rom->crc &&
 						strcmp(roms_idx1[i].rom->name, roms_idx2[j+1].rom->name)>=0)
 					{
 						if (roms_idx2[j].rom->merge)
-							rom_flags|=P_ROMS_ADDED;
+							rom_flags|=P_ROM_ADDED;
 						else
-							rom_flags|=ROMS_ADDED;
+							rom_flags|=ROM_ADDED;
 					}
 					else
 					{
 						if (roms_idx1[i].rom->merge)
-							rom_flags|=P_ROMS_RENAMED;
+							rom_flags|=P_ROM_RENAMED;
 						else
-							rom_flags|=ROMS_RENAMED;
+							rom_flags|=ROM_RENAMED;
 
 						if (roms_idx1[i].rom->merge && !roms_idx2[j].rom->merge)
-							rom_flags|=ROMS_UNMERGED;
+							rom_flags|=ROM_UNMERGED;
 
 						if (!roms_idx1[i].rom->merge && roms_idx2[j].rom->merge)
-							rom_flags|=ROMS_MERGED;
+							rom_flags|=ROM_MERGED;
 					}
 				}
 				else
 				{
 					if (roms_idx1[i].rom->merge && !roms_idx2[j].rom->merge)
-						rom_flags|=ROMS_UNMERGED;
+						rom_flags|=ROM_UNMERGED;
 
 					if (!roms_idx1[i].rom->merge && roms_idx2[j].rom->merge)
-						rom_flags|=ROMS_MERGED;
+						rom_flags|=ROM_MERGED;
 				}
 
-				if (!(rom_flags & (ROMS_ADDED | P_ROMS_ADDED)))
+				if (!(rom_flags & (ROM_ADDED | P_ROM_ADDED)))
 					i++;
 
-				if (!(rom_flags & (ROMS_REMOVED | P_ROMS_REMOVED)))
+				if (!(rom_flags & (ROM_REMOVED | P_ROM_REMOVED)))
 					j++;
 			}
 
@@ -152,22 +164,22 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 						game_change->rom_changes[game_change->num_rom_changes].rom2=roms_idx2[k].rom;
 
 						if (roms_idx1[i].rom->merge)
-							rom_flags|=P_ROMS_COMP_CRC;
+							rom_flags|=P_ROM_COMP_CRC;
 						else
-							rom_flags|=ROMS_COMP_CRC;
+							rom_flags|=ROM_COMP_CRC;
 
 						if (roms_idx1[i].rom->merge && !roms_idx2[k].rom->merge)
-							rom_flags|=ROMS_UNMERGED;
+							rom_flags|=ROM_UNMERGED;
 
 						if (!roms_idx1[i].rom->merge && roms_idx2[k].rom->merge)
-							rom_flags|=ROMS_MERGED;
+							rom_flags|=ROM_MERGED;
 
 						if (strcmp(roms_idx1[i].rom->name, roms_idx2[k].rom->name))
 						{
 							if (roms_idx1[i].rom->merge)
-								rom_flags|=P_ROMS_RENAMED;
+								rom_flags|=P_ROM_RENAMED;
 							else
-								rom_flags|=ROMS_RENAMED;
+								rom_flags|=ROM_RENAMED;
 						}
 						found=1;
 					}
@@ -176,9 +188,9 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 				if (!found)
 				{
 					if (roms_idx1[i].rom->merge)
-						rom_flags|=P_ROMS_REMOVED;
+						rom_flags|=P_ROM_REMOVED;
 					else
-						rom_flags|=ROMS_REMOVED;
+						rom_flags|=ROM_REMOVED;
 				}
 	
 				i++;
@@ -193,26 +205,152 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 				if (!found)
 				{
 					if (roms_idx2[j].rom->merge)
-						rom_flags|=P_ROMS_ADDED;
+						rom_flags|=P_ROM_ADDED;
 					else
-						rom_flags|=ROMS_ADDED;
+						rom_flags|=ROM_ADDED;
 				}
 
 				j++;
 			}
 
 			if (rom_flags)
-				game_change->rom_changes[game_change->num_rom_changes++].flags=rom_flags;
+			{
+				game_change->rom_changes[game_change->num_rom_changes++].rom_flags=rom_flags;
+				game_rom_flags|=rom_flags;
+			}
+		}
 
-			game_flags|=rom_flags;
+		i=j=0;
+
+		while (set_type==0 && (i<game1->num_disks || j<game2->num_disks))
+		{
+			if (i<game1->num_disks)
+				game_change->disk_changes[game_change->num_disk_changes].disk1=disks_idx1[i].disk;
+			else
+				game_change->disk_changes[game_change->num_disk_changes].disk1=0;
+
+			if (j<game2->num_disks)
+				game_change->disk_changes[game_change->num_disk_changes].disk2=disks_idx2[j].disk;
+			else
+				game_change->disk_changes[game_change->num_disk_changes].disk2=0;
+
+			disk_flags=0;
+
+			if (i>=game1->num_disks) diff=1;
+			if (j>=game2->num_disks) diff=-1;
+			if (i<game1->num_disks && j<game2->num_disks)
+			{
+				diff=0;
+
+				if (disks_idx2[j].disk->crc > disks_idx1[i].disk->crc)
+					diff=-1;
+
+				if (disks_idx2[j].disk->crc < disks_idx1[i].disk->crc)
+					diff=1;
+			}
+
+			if (diff==0)
+			{
+				if (strcmp(disks_idx1[i].disk->name, disks_idx2[j].disk->name))
+				{
+					if (i<game1->num_disks-1 &&
+						disks_idx1[i+1].disk->crc==disks_idx2[j].disk->crc &&
+						strcmp(disks_idx1[i+1].disk->name, disks_idx2[j].disk->name)<=0)
+					{
+						disk_flags|=DISK_REMOVED;
+					}
+					else if (j<game2->num_disks-1 &&
+						disks_idx1[i].disk->crc==disks_idx2[j+1].disk->crc &&
+						strcmp(disks_idx1[i].disk->name, disks_idx2[j+1].disk->name)>=0)
+					{
+						disk_flags|=DISK_ADDED;
+					}
+					else
+					{
+						disk_flags|=DISK_RENAMED;
+					}
+				}
+
+				if (!(disk_flags & DISK_ADDED))
+					i++;
+
+				if (!(disk_flags & DISK_REMOVED))
+					j++;
+			}
+
+			if (diff<0)
+			{
+				disk_flags|=DISK_REMOVED;
+				i++;
+			}
+
+			if (diff>0)
+			{
+				disk_flags|=DISK_ADDED;
+				j++;
+			}
+
+			if (disk_flags)
+			{
+				game_change->disk_changes[game_change->num_disk_changes++].disk_flags=disk_flags;
+				game_disk_flags|=disk_flags;
+			}
+		}
+		i=j=0;
+
+		while (set_type==0 && (i<game1->num_samples || j<game2->num_samples))
+		{
+			if (i<game1->num_samples)
+				game_change->sample_changes[game_change->num_sample_changes].sample1=samples_idx1[i].sample;
+			else
+				game_change->sample_changes[game_change->num_sample_changes].sample1=0;
+
+			if (j<game2->num_samples)
+				game_change->sample_changes[game_change->num_sample_changes].sample2=samples_idx2[j].sample;
+			else
+				game_change->sample_changes[game_change->num_sample_changes].sample2=0;
+
+			sample_flags=0;
+
+			if (i>=game1->num_samples) diff=1;
+			if (j>=game2->num_samples) diff=-1;
+			if (i<game1->num_samples && j<game2->num_samples)
+				diff=strcmp(samples_idx1[j].sample->name, samples_idx2[i].sample->name);
+
+			if (diff==0)
+			{
+				i++;
+				j++;
+			}
+
+			if (diff<0)
+			{
+				sample_flags|=SAMPLE_REMOVED;
+				i++;
+			}
+
+			if (diff>0)
+			{
+				sample_flags|=SAMPLE_ADDED;
+				j++;
+			}
+
+			if (sample_flags)
+			{
+				game_change->sample_changes[game_change->num_sample_changes++].sample_flags=sample_flags;
+				game_sample_flags|=sample_flags;
+			}
 		}
 	}
 
-	if (game_flags)
+	if (game_flags || game_rom_flags || game_disk_flags || game_sample_flags)
 	{
 		game_change->game1=game1;
 		game_change->game2=game2;
-		game_change->flags=game_flags;
+		game_change->game_flags=game_flags;
+		game_change->rom_flags=game_rom_flags;
+		game_change->disk_flags=game_disk_flags;
+		game_change->sample_flags=game_sample_flags;
 	}
 
 	if (game1)
@@ -220,15 +358,19 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 	if (game2)
 		game2->flags|=PROCESSED;
 
-	return(game_flags);
+	return(game_flags|game_rom_flags|game_disk_flags|game_sample_flags);
 }
 
 #define COMPARE_GAMES(GAME1, GAME2) \
 { \
-	if (compare_games(&game_changes[num_game_changes], GAME1, GAME2)) \
+	if (compare_games(&game_changes[num_game_changes], GAME1, GAME2, set_type)) \
 	{ \
 		game_changes[num_game_changes+1].rom_changes=game_changes[num_game_changes].rom_changes+ \
 			game_changes[num_game_changes].num_rom_changes; \
+		game_changes[num_game_changes+1].disk_changes=game_changes[num_game_changes].disk_changes+ \
+			game_changes[num_game_changes].num_disk_changes; \
+		game_changes[num_game_changes+1].sample_changes=game_changes[num_game_changes].sample_changes+ \
+			game_changes[num_game_changes].num_sample_changes; \
 		num_game_changes++; \
 	} \
 }
@@ -237,10 +379,13 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 {
 	struct game_change *game_changes=0;
 	struct rom_change *rom_changes=0;
+	struct disk_change *disk_changes=0;
+	struct sample_change *sample_changes=0;
 	struct game_idx *games_idx1, *games_idx2;
 	struct game_idx *idx;
 	
-	int num_game_changes=0;
+	uint32_t num_game_changes=0;
+
 	int i=0, j=0;
 	int namediff=0;
 
@@ -257,6 +402,12 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 		STRUCT_CALLOC(rom_changes, dat1->num_roms+dat2->num_roms, sizeof(struct rom_change))
 
 	if (!errflg)
+		STRUCT_CALLOC(disk_changes, dat1->num_disks+dat2->num_disks, sizeof(struct disk_change))
+
+	if (!errflg)
+		STRUCT_CALLOC(sample_changes, dat1->num_samples+dat2->num_samples, sizeof(struct sample_change))
+
+	if (!errflg)
 		FOPEN(out, "mamediff.log", "w")
 
 	if (!errflg && caesar)
@@ -268,6 +419,8 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 	if (!errflg)
 	{
 		game_changes->rom_changes=rom_changes;
+		game_changes->disk_changes=disk_changes;
+		game_changes->sample_changes=sample_changes;
 
 		games_idx1=dat1->game_name_idx; games_idx2=dat2->game_name_idx;
 
@@ -332,7 +485,7 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 
 		for (i=j=0; caesar && i<num_game_changes; i++)
 		{
-			if (game_changes[i].flags & GAME_ADDED)
+			if (game_changes[i].game_flags & GAME_ADDED)
 			{
 				while (strcmp(games_idx2[j].game->name, game_changes[i].game2->name))
 					j++;
@@ -342,8 +495,8 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 
 		for (i=j=0; caesar && i<num_game_changes; i++)
 		{
-			if ((game_changes[i].flags & GAME_RENAMED) ||
-				(game_changes[i].flags & GAME_REMOVED))
+			if ((game_changes[i].game_flags & GAME_RENAMED) ||
+				(game_changes[i].game_flags & GAME_REMOVED))
 			{
 				while (strcmp(games_idx1[j].game->name, game_changes[i].game1->name))
 					j++;
@@ -354,34 +507,33 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 		if (set_type==0)
 		{
 			report_game_changes(out,
-				GAME_REMOVED,
+				GAME_REMOVED, 0, 0, 0,
 				" Game removals ",
-				0, 0, game_changes, num_game_changes, verbose);
+				dat1, game_changes, num_game_changes, verbose);
 
 			report_game_changes(out,
-				GAME_NEW_CLONE|GAME_RENAMED|
-				ROMS_RENAMED|ROMS_MERGED|ROMS_UNMERGED|ROMS_REMOVED|
-				P_ROMS_RENAMED|P_ROMS_REMOVED|
-				ROMS_COMP_CRC|P_ROMS_COMP_CRC,
-				" Games affected by set reorganisation ",
-				0, 0, game_changes, num_game_changes, verbose);
+				GAME_NEW_CLONE|GAME_RENAMED,
+				ROM_RENAMED|ROM_MERGED|ROM_UNMERGED|ROM_REMOVED|
+				P_ROM_RENAMED|P_ROM_REMOVED|ROM_COMP_CRC|P_ROM_COMP_CRC,
+				DISK_RENAMED|DISK_REMOVED, SAMPLE_REMOVED,
+				" Games affected by reorganisation of ROMs/Disks/Samples ",
+				dat1, game_changes, num_game_changes, verbose);
 
 			report_game_changes(out,
-				ROMS_ADDED|P_ROMS_ADDED,
-				" Games requiring additional ROMs ",
-				dat1->rom_crc_idx, dat1->num_roms, game_changes, num_game_changes, verbose);
+				0, ROM_ADDED|P_ROM_ADDED, DISK_ADDED, SAMPLE_ADDED,
+				" Games requiring additional ROMs/Disks/Samples ",
+				dat1, game_changes, num_game_changes, verbose);
 
 			report_game_changes(out,
-				GAME_ADDED,
+				GAME_ADDED, 0, 0, 0,
 				" Game additions ",
-				0, 0, game_changes, num_game_changes, verbose);
+				dat1, game_changes, num_game_changes, verbose);
 		}
 	
 		if (set_type==OPTION_DAT_FULL_MERGING)
 		{
-			errflg=report_required_rebuilds(out, dat1, 0,
-				GAME_NEW_CLONE|GAME_REMOVED|
-				ROMS_RENAMED|ROMS_REMOVED,
+			errflg=report_required_rebuilds(out, dat1, 0, 0,
+				GAME_NEW_CLONE|GAME_REMOVED, ROM_RENAMED|ROM_REMOVED,
 				" Merged set changes (just rebuild the ZIPs) ",
 				game_changes, num_game_changes);
 		}
@@ -389,8 +541,8 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 		if (set_type==OPTION_DAT_SPLIT_MERGING)
 		{
 			errflg=report_required_rebuilds(out, dat1,
-				GAME_RENAMED|GAME_REMOVED|
-				ROMS_RENAMED|ROMS_MERGED|ROMS_REMOVED, ROMS_UNMERGED,
+				GAME_RENAMED|GAME_REMOVED, ROM_RENAMED|ROM_MERGED|ROM_REMOVED,
+				0, ROM_UNMERGED,
 				" Split set changes (just rebuild the ZIPs) ",
 				game_changes, num_game_changes);
 		}
@@ -398,20 +550,19 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 		if (set_type==OPTION_DAT_NO_MERGING)
 		{
 			errflg=report_required_rebuilds(out, dat1,
-				GAME_RENAMED|GAME_REMOVED|
-				ROMS_RENAMED|ROMS_REMOVED|
-				P_ROMS_RENAMED|P_ROMS_REMOVED, 0,
+				GAME_RENAMED|GAME_REMOVED, ROM_RENAMED|ROM_REMOVED|P_ROM_RENAMED|P_ROM_REMOVED,
+				0, 0,
 				" Non-merged set changes (just rebuild the ZIPs) ",
 				game_changes, num_game_changes);
 		}
 
 		if (set_type!=0)
 		{
-			report_required_roms(out, ROMS_ADDED|P_ROMS_ADDED,
+			report_required_roms(out, 0, ROM_ADDED|P_ROM_ADDED,
 				" Games requiring new/fixed ROMs (visit SYS2064!) ",
 				game_changes, num_game_changes);
 
-			report_required_roms(out, GAME_ADDED,
+			report_required_roms(out, GAME_ADDED, 0,
 				" Game additions (new ROMs required) ",
 				game_changes, num_game_changes);
 		}
@@ -426,14 +577,16 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 	if (new) fclose(new);
 	if (out) fclose(out);
 
+	FREE(sample_changes)
+	FREE(disk_changes)
 	FREE(rom_changes)
 	FREE(game_changes)
 
 	return(errflg);
 }
 
-void report_game_changes(FILE *out, unsigned long flags, char *description,
-	struct rom_idx *rom_crc_idx, long num_roms,
+void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uint8_t disk_flags, uint8_t sample_flags,
+	char *description, struct dat *dat1,
 	struct game_change *game_changes, int num_game_changes, int verbose)
 {
 	int i, j, k;
@@ -441,7 +594,10 @@ void report_game_changes(FILE *out, unsigned long flags, char *description,
 
 	for (i=j=0; i<num_game_changes; i++)
 	{
-		if (game_changes[i].flags & (flags))
+		if (game_changes[i].game_flags & (game_flags) ||
+			game_changes[i].rom_flags & (rom_flags) ||
+			game_changes[i].disk_flags & (disk_flags) ||
+			game_changes[i].sample_flags & (sample_flags))
 		{	
 			if (!j++)
 			{
@@ -449,22 +605,22 @@ void report_game_changes(FILE *out, unsigned long flags, char *description,
 				fprintf(out, "%s\n\n", st);
 			}
 
-			if ((game_changes[i].flags & GAME_RENAMED) ||
-				(game_changes[i].flags & GAME_NEW_CLONE) ||
-				(game_changes[i].flags & GAME_REMOVED))
+			if ((game_changes[i].game_flags & GAME_RENAMED) ||
+				(game_changes[i].game_flags & GAME_NEW_CLONE) ||
+				(game_changes[i].game_flags & GAME_REMOVED))
 			{
 				FORMAT_GAME_NAME(st, game_changes[i].game1)
 				fprintf(out, "< %s\n", st);
 			}
-			else if (!(game_changes[i].flags & GAME_ADDED))
+			else if (!(game_changes[i].game_flags & GAME_ADDED))
 			{
 				FORMAT_GAME_NAME(st, game_changes[i].game1)
 				fprintf(out, "%s\n", st);
 			}
 
-			if ((game_changes[i].flags & GAME_RENAMED) ||
-				(game_changes[i].flags & GAME_NEW_CLONE) ||
-				(game_changes[i].flags & GAME_ADDED))
+			if ((game_changes[i].game_flags & GAME_RENAMED) ||
+				(game_changes[i].game_flags & GAME_NEW_CLONE) ||
+				(game_changes[i].game_flags & GAME_ADDED))
 			{
 				FORMAT_GAME_NAME(st, game_changes[i].game2)
 				fprintf(out, "> %s\n", st);
@@ -472,137 +628,225 @@ void report_game_changes(FILE *out, unsigned long flags, char *description,
 
 			for (k=0; verbose && k<game_changes[i].num_rom_changes; k++)
 			{
-				if (((game_changes[i].rom_changes[k].flags & ROMS_RENAMED) ||
-					(game_changes[i].rom_changes[k].flags & P_ROMS_RENAMED) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_COMP_CRC) ||
-					(game_changes[i].rom_changes[k].flags & P_ROMS_COMP_CRC) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_REMOVED) ||
-					(game_changes[i].rom_changes[k].flags & P_ROMS_REMOVED) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_MERGED) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_UNMERGED)) &&
-					!(flags & ROMS_ADDED))
+				if (((game_changes[i].rom_changes[k].rom_flags & ROM_RENAMED) ||
+					(game_changes[i].rom_changes[k].rom_flags & P_ROM_RENAMED) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_COMP_CRC) ||
+					(game_changes[i].rom_changes[k].rom_flags & P_ROM_COMP_CRC) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_REMOVED) ||
+					(game_changes[i].rom_changes[k].rom_flags & P_ROM_REMOVED) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_MERGED) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_UNMERGED)) &&
+					!(rom_flags & ROM_ADDED))
 				{
 					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom1)
 					fprintf(out, "< %s\n", st);
 				}
 
-				if (((game_changes[i].rom_changes[k].flags & ROMS_RENAMED) ||
-					(game_changes[i].rom_changes[k].flags & P_ROMS_RENAMED) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_COMP_CRC) ||
-					(game_changes[i].rom_changes[k].flags & P_ROMS_COMP_CRC) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_MERGED) ||
-					(game_changes[i].rom_changes[k].flags & ROMS_UNMERGED)) &&
-					!(flags & ROMS_ADDED))
+				if (((game_changes[i].rom_changes[k].rom_flags & ROM_RENAMED) ||
+					(game_changes[i].rom_changes[k].rom_flags & P_ROM_RENAMED) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_COMP_CRC) ||
+					(game_changes[i].rom_changes[k].rom_flags & P_ROM_COMP_CRC) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_MERGED) ||
+					(game_changes[i].rom_changes[k].rom_flags & ROM_UNMERGED)) &&
+					!(rom_flags & ROM_ADDED))
 				{
 					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom2)
 					fprintf(out, "> %s\n", st);
 				}
 
-				if (((game_changes[i].rom_changes[k].flags & ROMS_ADDED) &&
-					(flags & ROMS_ADDED)) ||
-					((game_changes[i].rom_changes[k].flags & P_ROMS_ADDED) &&
-					(flags & P_ROMS_ADDED)))
+				if (((game_changes[i].rom_changes[k].rom_flags & ROM_ADDED) &&
+					(rom_flags & ROM_ADDED)) ||
+					((game_changes[i].rom_changes[k].rom_flags & P_ROM_ADDED) &&
+					(rom_flags & P_ROM_ADDED)))
 				{
 					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom2)
 					fprintf(out, "> %s", st);
 
 					if (game_changes[i].rom_changes[k].rom2->rom_flags & FLAG_ROM_NODUMP)
 						fprintf(out, " *just ignore\n");
-					else if (bsearch((const void *)&game_changes[i].rom_changes[k].rom2->crc, rom_crc_idx, num_roms, sizeof(struct rom_idx), find_rom_by_crc))
+					else if (bsearch((const void *)&game_changes[i].rom_changes[k].rom2->crc, dat1->rom_crc_idx, dat1->num_roms, sizeof(struct rom_idx), find_rom_by_crc))
 						fprintf(out, " *already in MAME\n");
-					else if (bsearch((const void *)&game_changes[i].rom_changes[k].rom2->crc, rom_crc_idx, num_roms, sizeof(struct rom_idx), find_rom_by_comp_crc))
+					else if (bsearch((const void *)&game_changes[i].rom_changes[k].rom2->crc, dat1->rom_crc_idx, dat1->num_roms, sizeof(struct rom_idx), find_rom_by_comp_crc))
 						fprintf(out, " *already in MAME\n");
 					else
 						fprintf(out, "\n");
 				}
 			}
 
-			if (!verbose && (flags & game_changes[i].flags &
-				(ROMS_RENAMED|P_ROMS_RENAMED|
-				ROMS_REMOVED|P_ROMS_REMOVED|
-				ROMS_COMP_CRC|P_ROMS_COMP_CRC|
-				ROMS_ADDED|P_ROMS_ADDED|
-				ROMS_MERGED|ROMS_UNMERGED)))
+			for (k=0; verbose && k<game_changes[i].num_disk_changes; k++)
+			{
+				if (((game_changes[i].disk_changes[k].disk_flags & DISK_RENAMED) ||
+					(game_changes[i].disk_changes[k].disk_flags & DISK_REMOVED)) &&
+					!(disk_flags & DISK_ADDED))
+				{
+					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk1)
+					fprintf(out, "< %s\n", st);
+				}
+
+				if ((game_changes[i].disk_changes[k].disk_flags & DISK_RENAMED) &&
+					!(disk_flags & DISK_ADDED))
+				{
+					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk2)
+					fprintf(out, "> %s\n", st);
+				}
+
+				if ((game_changes[i].disk_changes[k].disk_flags & DISK_ADDED) &&
+					(disk_flags & DISK_ADDED))
+				{
+					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk2)
+					fprintf(out, "> %s", st);
+
+					if (game_changes[i].disk_changes[k].disk2->crc==0)
+						fprintf(out, " *just ignore\n");
+					else if (bsearch((const void *)&game_changes[i].disk_changes[k].disk2->crc, dat1->disk_crc_idx, dat1->num_disks, sizeof(struct disk_idx), find_disk_by_crc))
+						fprintf(out, " *already in MAME\n");
+					else
+						fprintf(out, "\n");
+				}
+			}
+
+			for (k=0; verbose && k<game_changes[i].num_sample_changes; k++)
+			{
+				if (((game_changes[i].sample_changes[k].sample_flags & SAMPLE_REMOVED)) &&
+					!(sample_flags & SAMPLE_ADDED))
+				{
+					FORMAT_SAMPLE_NAME(st, game_changes[i].sample_changes[k].sample1)
+					fprintf(out, "< %s\n", st);
+				}
+
+				if ((game_changes[i].sample_changes[k].sample_flags & SAMPLE_ADDED) &&
+					(sample_flags & SAMPLE_ADDED))
+				{
+					FORMAT_SAMPLE_NAME(st, game_changes[i].sample_changes[k].sample2)
+					fprintf(out, "> %s\n", st);
+				}
+			}
+
+			if (!verbose && (rom_flags & game_changes[i].rom_flags &
+				(ROM_RENAMED|P_ROM_RENAMED|
+				ROM_REMOVED|P_ROM_REMOVED|
+				ROM_COMP_CRC|P_ROM_COMP_CRC|
+				ROM_ADDED|P_ROM_ADDED|
+				ROM_MERGED|ROM_UNMERGED) ||
+				disk_flags & game_changes[i].disk_flags &
+				(DISK_RENAMED|DISK_REMOVED|DISK_ADDED) ||
+				sample_flags & game_changes[i].sample_flags &
+				(SAMPLE_REMOVED|SAMPLE_ADDED)))
 			{
 				k=0;
 				fprintf(out, "Changes: ");
 				
-				if (flags & game_changes[i].flags & ROMS_RENAMED)
+				if (rom_flags & game_changes[i].rom_flags & ROM_RENAMED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM renames");
 				}
 
-				if (flags & game_changes[i].flags & P_ROMS_RENAMED)
+				if (rom_flags & game_changes[i].rom_flags & P_ROM_RENAMED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM renames (in parent)");
 				}
 
-				if (flags & game_changes[i].flags & ROMS_COMP_CRC)
+				if (rom_flags & game_changes[i].rom_flags & ROM_COMP_CRC)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "complemented CRCs");
 				}
 
-				if (flags & game_changes[i].flags & P_ROMS_COMP_CRC)
+				if (rom_flags & game_changes[i].rom_flags & P_ROM_COMP_CRC)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "complemented CRCs (in parent)");
 				}
 
-				if (flags & game_changes[i].flags & ROMS_REMOVED)
+				if (rom_flags & game_changes[i].rom_flags & ROM_REMOVED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM removals");
 				}
 
-				if (flags & game_changes[i].flags & P_ROMS_REMOVED)
+				if (rom_flags & game_changes[i].rom_flags & P_ROM_REMOVED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM removals (in parent)");
 				}
 
-				if (flags & game_changes[i].flags & ROMS_ADDED)
+				if (rom_flags & game_changes[i].rom_flags & ROM_ADDED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM additions");
 				}
 
-				if (flags & game_changes[i].flags & P_ROMS_ADDED)
+				if (rom_flags & game_changes[i].rom_flags & P_ROM_ADDED)
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM additions (in parent)");
 				}
 
-				if (flags & game_changes[i].flags & (ROMS_MERGED|ROMS_UNMERGED))
+				if (rom_flags & game_changes[i].rom_flags & (ROM_MERGED|ROM_UNMERGED))
 				{
 					if (k++)
 						fprintf(out, ", ");
 					fprintf(out, "ROM merge details");
 				}
 
+				if (disk_flags & game_changes[i].disk_flags & DISK_RENAMED)
+				{
+					if (k++)
+						fprintf(out, ", ");
+					fprintf(out, "disk renames");
+				}
+
+				if (disk_flags & game_changes[i].disk_flags & DISK_REMOVED)
+				{
+					if (k++)
+						fprintf(out, ", ");
+					fprintf(out, "disk removals");
+				}
+
+				if (disk_flags & game_changes[i].disk_flags & DISK_ADDED)
+				{
+					if (k++)
+						fprintf(out, ", ");
+					fprintf(out, "disk additions");
+				}
+
+				if (sample_flags & game_changes[i].sample_flags & SAMPLE_REMOVED)
+				{
+					if (k++)
+						fprintf(out, ", ");
+					fprintf(out, "sample removals");
+				}
+
+				if (sample_flags & game_changes[i].sample_flags & SAMPLE_ADDED)
+				{
+					if (k++)
+						fprintf(out, ", ");
+					fprintf(out, "sample additions");
+				}
+
 				fprintf(out, "\n");
 			}
 
-			if (!(game_changes[i].flags & (GAME_REMOVED|GAME_ADDED)))
+			if (!(game_changes[i].game_flags & (GAME_REMOVED|GAME_ADDED)))
 				fprintf(out, "\n");
 		}
 	}
 
-	if (j && (flags & (GAME_REMOVED|GAME_ADDED)))
+	if (j && (game_flags & (GAME_REMOVED|GAME_ADDED)))
 		fprintf(out, "\n");
 }
 
-void report_required_roms(FILE *out, unsigned long flags, char *description,
+void report_required_roms(FILE *out, uint16_t game_flags, uint16_t rom_flags, char *description,
 	struct game_change *game_changes, int num_game_changes)
 {
 	int i, j;
@@ -610,7 +854,8 @@ void report_required_roms(FILE *out, unsigned long flags, char *description,
 
 	for (i=j=0; i<num_game_changes; i++)
 	{
-		if (game_changes[i].flags & (flags))
+		if (game_changes[i].game_flags & (game_flags) ||
+			game_changes[i].rom_flags & (rom_flags))
 		{	
 			if (!j++)
 			{
@@ -626,7 +871,8 @@ void report_required_roms(FILE *out, unsigned long flags, char *description,
 	if (j) fprintf(out, "\n");
 }
 
-int report_required_rebuilds(FILE *out, struct dat *dat, int child_flags, int parent_flags, char *description,
+int report_required_rebuilds(FILE *out, struct dat *dat, uint16_t child_game_flags, uint16_t child_rom_flags,
+	uint16_t parent_game_flags, uint16_t parent_rom_flags, char *description,
 	struct game_change *game_changes, int num_game_changes)
 {
 	struct game_idx *rebuild_list=0;
@@ -641,7 +887,8 @@ int report_required_rebuilds(FILE *out, struct dat *dat, int child_flags, int pa
 
 	for (i=0; !errflg && i<num_game_changes; i++)
 	{
-		if (game_changes[i].flags & (child_flags))
+		if (game_changes[i].game_flags & (child_game_flags) ||
+			game_changes[i].rom_flags & (child_rom_flags))
 		{
 			found=j=0;
 
@@ -659,7 +906,8 @@ int report_required_rebuilds(FILE *out, struct dat *dat, int child_flags, int pa
 
 	for (i=0; !errflg && i<num_game_changes; i++)
 	{
-		if (game_changes[i].flags & (parent_flags))
+		if (game_changes[i].game_flags & (parent_game_flags) ||
+			game_changes[i].rom_flags & (parent_rom_flags))
 		{
 			found=j=0;
 

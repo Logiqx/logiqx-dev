@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.4 - 11/07/2004
+                          MAMEDiff v2.5 - 18/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -187,6 +187,8 @@ When using the -d1, -d2 and -d3 options, there are two additional options:
    have dummy ROMs then do not use -z and conversely, if you like to have
    dummy ROMs then use -z.
 
+-b will include allow you to use non-seperated BIOS ROMs just like ClrMamePro.
+
 In order for the -d options to work, they interpret the clrmamepro header item
 'forcemerging' from the dats (to identify the styles of ROM merging that
 are supported by the emulators). Absense of this item is taken to mean that all
@@ -269,6 +271,12 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+18/07/2004  *** v2.5 ***
+
+            - Added -b option (non-seperated BIOS) for use with the -dX modes.
+	    - Added sample and disk support to the standard comparison modes.
+              i.e. Running MAMEDiff without options or in verbose mode (-v).
 
 11/07/2004  *** v2.4 ***
 
