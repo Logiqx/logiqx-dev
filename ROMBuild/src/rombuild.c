@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ROMBUILD_VERSION "v2.4"
-#define ROMBUILD_DATE "30 January 2005"
+#define ROMBUILD_VERSION "v2.5"
+#define ROMBUILD_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
