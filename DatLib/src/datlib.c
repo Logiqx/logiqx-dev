@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.3"
-#define DATLIB_DATE "7 March 2005"
+#define DATLIB_VERSION "v2.4"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -4553,7 +4553,7 @@ int build_zip_structures(struct dat *dat)
 		/* --- Locate ZIP --- */
 
 		if ((dat->options->options & OPTION_DAT_FULL_MERGING) &&
-			(curr_game->romof && !(curr_game->game_romof->game_flags & FLAG_RESOURCE_NAME)))
+			(curr_game->game_romof && !(curr_game->game_romof->game_flags & FLAG_RESOURCE_NAME)))
 		{
 			curr_game_zip_name_idx=bsearch((void *)curr_game->romof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
 		}
@@ -4642,7 +4642,7 @@ int build_zip_structures(struct dat *dat)
 		/* --- Locate ZIP --- */
 
 		if ((dat->options->options & OPTION_DAT_FULL_MERGING) &&
-			(curr_game->sampleof && !(curr_game->game_sampleof->game_flags & FLAG_RESOURCE_NAME)))
+			(curr_game->game_sampleof && !(curr_game->game_sampleof->game_flags & FLAG_RESOURCE_NAME)))
 		{
 			curr_game_zip_name_idx=bsearch((void *)curr_game->sampleof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
 		}

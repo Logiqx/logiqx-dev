@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.3 - 07/03/2005
+                          DatLib v2.4 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.4 ***
+
+            - Fixed another crash with datutil -X and 'forcemerging full'.
+            - Changed the delimited format to use \N for NULLs.
 
 07/03/2005  *** v2.3 ***
 

@@ -63,10 +63,16 @@ int identify_tab_delimited(struct dat *dat)
 { \
 	char *token_ptr=TOKEN; \
 \
-	BUFFER1_GET_TOKEN_TO_DELIMITER('\t') \
-\
-	if (*TOKEN) \
-		BUFFER2_PUT_TOKEN(TYPE) \
+	if (strncmp(BUFFER1_PTR, "\\N", 2)) \
+	{ \
+		BUFFER1_GET_TOKEN_TO_DELIMITER('\t') \
+		if (*TOKEN) \
+			BUFFER2_PUT_TOKEN(TYPE) \
+	} \
+	else \
+	{ \
+		BUFFER1_SKIP_FIELD \
+	} \
 }
 
 int load_tab_delimited(struct dat *dat)
@@ -421,7 +427,7 @@ if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 } \
 else \
 { \
-	fprintf(dat->out, "\t"); \
+	fprintf(dat->out, "\\N\t"); \
 	dat->OBJECT##_saved|=FIELD_FLAG; \
 }
 
@@ -433,7 +439,7 @@ if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 } \
 else \
 { \
-	fprintf(dat->out, "\t"); \
+	fprintf(dat->out, "\\N\t"); \
 }
 
 #define OUTPUT_0_6_FLOAT_FIELD(OBJECT, FIELD, FIELD_FLAG) \
@@ -444,7 +450,7 @@ if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 } \
 else \
 { \
-	fprintf(dat->out, "\t"); \
+	fprintf(dat->out, "\\N\t"); \
 }
 
 #define OUTPUT_PADDED_HEX_FIELD(OBJECT, FIELD, FIELD_FLAG) \
@@ -455,7 +461,7 @@ if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 } \
 else \
 { \
-	fprintf(dat->out, "\t"); \
+	fprintf(dat->out, "\\N\t"); \
 }
 
 #define OUTPUT_UNPADDED_HEX_FIELD(OBJECT, FIELD, FIELD_FLAG) \
@@ -466,7 +472,7 @@ if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 } \
 else \
 { \
-	fprintf(dat->out, "\t"); \
+	fprintf(dat->out, "\\N\t"); \
 }
 
 int save_tab_delimited(struct dat *dat)
