@@ -335,6 +335,7 @@ int save_romcenter_250(struct dat *dat)
 {
 	struct game *curr_game;
 	struct rom *curr_rom;
+	struct disk *curr_disk;
 
 	int i, j;
 
@@ -555,9 +556,58 @@ int save_romcenter_250(struct dat *dat)
 		}
 	}
 
+	if (dat->num_disks)
+		fprintf(dat->out, "\n[DISKS]");
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
+		{
+			if (curr_game->cloneof)
+			{
+				fprintf(dat->out, "\n¬%s¬", curr_game->cloneof);
+
+				if (curr_game->game_cloneof)
+					fprintf(dat->out, "%s", curr_game->game_cloneof->description);
+				else
+					fprintf(dat->out, "%s (description unknown)", curr_game->cloneof);
+			}
+			else
+			{
+				fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
+			}
+
+			fprintf(dat->out, "¬%s¬%s", curr_game->name, curr_game->description);
+
+			fprintf(dat->out, "¬%s", curr_disk->name);
+
+			/* --- Do not complement SHA1 information --- */
+			if (curr_disk->disk_flags & FLAG_DISK_SHA1)
+				fprintf(dat->out, "¬%s", curr_disk->sha1);
+			else
+				fprintf(dat->out, "¬");
+
+			/* --- There is no size --- */
+			fprintf(dat->out, "¬");
+
+			if (curr_game->romof)
+				fprintf(dat->out, "¬%s", curr_game->romof);
+			else
+				fprintf(dat->out, "¬");
+
+			if (curr_disk->merge)
+				fprintf(dat->out, "¬%s", curr_disk->merge);
+			else
+				fprintf(dat->out, "¬");
+
+			fprintf(dat->out, "¬");
+		}
+	}
+
 	dat->game_saved=FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME|
 			FLAG_GAME_DESCRIPTION|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF;
 	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC;
+	dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MERGE|FLAG_DISK_SHA1;
 
 	if (invalid)
 	{
