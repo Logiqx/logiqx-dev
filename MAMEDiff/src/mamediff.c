@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
-	int verbose=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
+	int verbose=0, equality_only=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
 
 	struct options *options1=0, *options2=0;
 	struct dat *dat1=0, *dat2=0;
@@ -71,11 +71,14 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while ((c = getopt(argc, argv, "vmsnd:rzbo:?MSNtT")) != EOF)
+	while ((c = getopt(argc, argv, "v=msnd:rzbo:?MSNtT")) != EOF)
 	switch (c)
 	{
 		case 'v':
 			verbose++;
+			break;
+		case '=':
+			equality_only++;
 			break;
 		case 'm':
 			errflg+=set_type;
@@ -256,7 +259,7 @@ int main(int argc, char **argv)
 	if (!errflg)
 	{
 		if (diff_type==0)
-			errflg=standard_compare(dat1, dat2, verbose, set_type);
+			errflg=standard_compare(dat1, dat2, verbose, equality_only, set_type);
 		else
 			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros, object_type);
 	}

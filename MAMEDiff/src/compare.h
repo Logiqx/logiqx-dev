@@ -54,7 +54,7 @@ struct sample_change
 
 /* --- Function prototypes for comparisons --- */
 
-int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int set_type);
+int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int equality_only, int set_type);
 
 void report_game_changes(FILE *, uint16_t, uint16_t, uint8_t, uint8_t, char *, struct dat *, struct game_change *, int, int);
 void report_required_roms(FILE *, uint16_t, uint16_t, char *, struct game_change *, int);

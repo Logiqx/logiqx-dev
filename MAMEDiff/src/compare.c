@@ -376,7 +376,7 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 	} \
 }
 
-int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int set_type)
+int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int equality_only, int set_type)
 {
 	struct game_change *game_changes=0;
 	struct rom_change *rom_changes=0;
@@ -486,11 +486,11 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int set_ty
 
 		for (i=0; i<num_game_changes; i++)
 		{
-			if (game_changes[i].game_flags & GAME_REMOVED)
+			if (equality_only==0 && game_changes[i].game_flags & GAME_REMOVED)
 				fprintf(out, "%s\t\n", game_changes[i].game1->name);
 			else if (game_changes[i].game_flags & GAME_RENAMED)
 				fprintf(out, "%s\t%s\n", game_changes[i].game1->name, game_changes[i].game2->name);
-			else if (game_changes[i].game_flags & GAME_ADDED)
+			else if (equality_only==0 && game_changes[i].game_flags & GAME_ADDED)
 				fprintf(out, "\t%s\n", game_changes[i].game2->name);
 		}
 
@@ -504,10 +504,13 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int set_ty
 
 		if (set_type==0)
 		{
-			report_game_changes(log,
-				GAME_REMOVED, 0, 0, 0,
-				" Game removals ",
-				dat1, game_changes, num_game_changes, verbose);
+			if (equality_only==0)
+			{
+				report_game_changes(log,
+					GAME_REMOVED, 0, 0, 0,
+					" Game removals ",
+					dat1, game_changes, num_game_changes, verbose);
+			}
 
 			report_game_changes(log,
 				GAME_NEW_CLONE|GAME_RENAMED,
@@ -522,10 +525,13 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int set_ty
 				" Games requiring additional ROMs/Disks/Samples ",
 				dat1, game_changes, num_game_changes, verbose);
 
-			report_game_changes(log,
-				GAME_ADDED, 0, 0, 0,
-				" Game additions ",
-				dat1, game_changes, num_game_changes, verbose);
+			if (equality_only==0)
+			{
+				report_game_changes(log,
+					GAME_ADDED, 0, 0, 0,
+					" Game additions ",
+					dat1, game_changes, num_game_changes, verbose);
+			}
 		}
 	
 		if (set_type==OPTION_DAT_FULL_MERGING)
