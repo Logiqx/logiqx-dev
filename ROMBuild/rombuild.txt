@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.3 - 06/01/2005
+                         ROMBuild v2.4 - 30/01/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,11 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+30/01/2005  *** v2.4 ***
+
+            Removed FBA v0.2.94.98 from the source (superceded by v0.2.95.22).
+            Added von2 (MAME v0.91) for Nebula Jukebox v2.9 and M1 v0.7.5a3.
 
 06/01/2005  *** v2.3 ***
 
