@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.2 - 28/02/2005
+                          DatLib v2.3 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.3 ***
+
+            - Fixed a problem with counting parents (happened with DatUtil -X).
+            - This also avoids a crash with datutil -X and 'forcemerging full'.
 
 28/02/2005  *** v2.2 ***
 

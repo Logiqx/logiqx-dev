@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.2"
-#define DATLIB_DATE "28 February 2005"
+#define DATLIB_VERSION "v2.3"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -2348,7 +2348,6 @@ int fix_merging_phase_1(struct dat *dat)
 			else
 			{
 				curr_game->game_cloneof=game_match->game;
-				curr_game->game_cloneof->num_clones+=1;
 
 				if (!curr_game->romof)
 				{
@@ -2400,9 +2399,6 @@ int fix_merging_phase_1(struct dat *dat)
 				curr_game->game_cloneof=parent_game;
 				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
 				curr_game->game_fixes|=FLAG_GAME_CLONEOFCLONE;
-
-				curr_game->game_cloneof->num_clones--;
-				parent_game->num_clones++;
 			}
 		}
 	}
@@ -2653,6 +2649,78 @@ int fix_merging_phase_1(struct dat *dat)
 				}
 
 				game_sampleof=game_sampleof->game_sampleof;
+			}
+		}
+	}
+
+	return(errflg);
+}
+
+int identify_parents(struct dat *dat)
+{
+	struct game *curr_game=0;
+	struct game_idx *curr_game_name_idx=0;
+	uint32_t i;
+
+	int errflg=0;
+
+	/* --- Need a game name index to run 'fix merging' --- */
+
+	if (datlib_debug)
+	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Creating temporary game name index...\n");
+	}
+
+	curr_game_name_idx=dat->game_name_idx;
+	
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+		curr_game_name_idx++->game=curr_game;
+
+	qsort(dat->game_name_idx, dat->num_games, sizeof(struct game_idx), game_name_idx_sort_function);
+
+	/* --- Now the index is available, run 'fix merging' --- */
+
+	if (datlib_debug)
+	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Identifying parents...\n");
+	}
+
+	/* --- Fix game level details first (cloneof/romof/sampleof) --- */
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		struct game_idx *game_match;
+
+		/* --- Process romof --- */
+
+		if (curr_game->romof)
+		{
+			if ((game_match=bsearch((void *)curr_game->romof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
+			{
+				curr_game->game_romof=game_match->game;
+			}
+		}
+
+		/* --- Process cloneof --- */
+
+		if (curr_game->cloneof)
+		{
+			if ((game_match=bsearch((void *)curr_game->cloneof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
+			{
+				curr_game->game_cloneof=game_match->game;
+				curr_game->game_cloneof->num_clones++;
+			}
+		}
+
+		/* --- process sampleof --- */
+
+		if (curr_game->sampleof)
+		{
+			if ((game_match=bsearch((void *)curr_game->sampleof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
+			{
+				curr_game->game_sampleof=game_match->game;
 			}
 		}
 	}
@@ -5110,6 +5178,9 @@ struct dat *init_dat(struct options *options)
 
 	if (!errflg && !(options->options & OPTION_FIX_MERGING_OFF))
 		errflg=fix_merging_phase_1(dat);
+
+	if (!errflg)
+		errflg=identify_parents(dat);
 
 	if (!errflg && !(options->options & OPTION_REMOVE_DUPLICATES_OFF))
 		errflg=remove_duplicates(dat);
