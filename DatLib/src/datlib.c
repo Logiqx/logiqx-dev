@@ -1353,6 +1353,8 @@ int fix_merging(struct dat *dat)
 	struct game *curr_game=0;
 	struct game_idx *curr_game_name_idx=0;
 	struct rom *curr_rom=0;
+	struct disk *curr_disk=0;
+	struct sample *curr_sample=0;
 	uint32_t i, j, k;
 
 	int errflg=0;
@@ -1395,7 +1397,7 @@ int fix_merging(struct dat *dat)
 			}
 			else
 			{
-				curr_game->merge=game_match->game;
+				curr_game->game_romof=game_match->game;
 			}
 		}
 
@@ -1408,13 +1410,13 @@ int fix_merging(struct dat *dat)
 			}
 			else
 			{
-				curr_game->parent=game_match->game;
-				curr_game->parent->num_clones+=1;
+				curr_game->game_cloneof=game_match->game;
+				curr_game->game_cloneof->num_clones+=1;
 
 				if (!curr_game->romof)
 				{
 					curr_game->romof=curr_game->cloneof;
-					curr_game->merge=curr_game->parent;
+					curr_game->game_romof=curr_game->game_cloneof;
 					curr_game->game_fixes|=FLAG_GAME_ROMOF;
 				}
 			}
@@ -1427,6 +1429,10 @@ int fix_merging(struct dat *dat)
 				curr_game->sampleof=0;
 				curr_game->game_fixes|=FLAG_GAME_SAMPLEOF;
 			}
+			else
+			{
+				curr_game->game_sampleof=game_match->game;
+			}
 		}
 	}
 
@@ -1434,21 +1440,21 @@ int fix_merging(struct dat *dat)
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (curr_game->parent)
+		if (curr_game->game_cloneof)
 		{
-			if (curr_game->parent->parent)
+			if (curr_game->game_cloneof->game_cloneof)
 			{
 				if (curr_game->romof && !strcmp(curr_game->romof, curr_game->cloneof))
 				{
 					curr_game->romof=0;
-					curr_game->merge=0;
+					curr_game->game_romof=0;
 					curr_game->game_fixes|=FLAG_GAME_ROMOF;
 				}
 
-				curr_game->parent->num_clones--;
+				curr_game->game_cloneof->num_clones--;
 
 				curr_game->cloneof=0;
-				curr_game->parent=0;
+				curr_game->game_cloneof=0;
 				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
 
 				curr_game->game_fixes|=FLAG_GAME_CLONEOFCLONE;
@@ -1462,14 +1468,14 @@ int fix_merging(struct dat *dat)
 	{
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
-			struct game *merge=curr_game->merge;
+			struct game *game_romof=curr_game->game_romof;
 			int merged=0;
 
-			while (merge)
+			while (game_romof)
 			{
 				struct rom *merge_rom;
 
-				for (k=0, merge_rom=merge->roms; k<merge->num_roms; k++, merge_rom++)
+				for (k=0, merge_rom=game_romof->roms; k<game_romof->num_roms; k++, merge_rom++)
 				{
 					if (!strcmp(curr_rom->name, merge_rom->name))
 					{
@@ -1509,14 +1515,14 @@ int fix_merging(struct dat *dat)
 							merge_rom->rom_fixes|=FLAG_ROM_MD5;
 						}
 
-						if (merge->game_flags & FLAG_RESOURCE_NAME)
+						if (game_romof->game_flags & FLAG_RESOURCE_NAME)
 							curr_rom->rom_flags|=FLAG_ROM_BIOS;
 
 						merged++;
 					}
 				}
 
-				merge=merge->merge;
+				game_romof=game_romof->game_romof;
 			}
 
 			if (!merged && curr_rom->merge)
@@ -1527,19 +1533,19 @@ int fix_merging(struct dat *dat)
 		}
 	}
 
-	/* --- Second pass pushes CRCs downwards --- */
+	/* --- Second ROM pass pushes CRCs downwards --- */
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
-			struct game *merge=curr_game->merge;
+			struct game *game_romof=curr_game->game_romof;
 
-			while (curr_rom->merge && merge)
+			while (curr_rom->merge && game_romof)
 			{
 				struct rom *merge_rom;
 
-				for (k=0, merge_rom=merge->roms; k<merge->num_roms; k++, merge_rom++)
+				for (k=0, merge_rom=game_romof->roms; k<game_romof->num_roms; k++, merge_rom++)
 				{
 					if (!strcmp(curr_rom->name, merge_rom->name))
 					{
@@ -1575,7 +1581,120 @@ int fix_merging(struct dat *dat)
 					}
 				}
 
-				merge=merge->merge;
+				game_romof=game_romof->game_romof;
+			}
+		}
+	}
+
+	/* --- First disk pass corrects merge names and pushes CRCs upwards --- */
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
+		{
+			struct game *game_romof=curr_game->game_romof;
+
+			while (game_romof)
+			{
+				struct disk *merge_disk;
+
+				for (k=0, merge_disk=game_romof->disks; k<game_romof->num_disks; k++, merge_disk++)
+				{
+					if (!strcmp(curr_disk->name, merge_disk->name))
+					{
+						if (!curr_disk->merge || strcmp(curr_disk->merge, curr_disk->name))
+						{
+							curr_disk->merge=curr_disk->name;
+						}
+
+						if (curr_disk->crc && !merge_disk->crc)
+						{
+							merge_disk->crc=curr_disk->crc;
+						}
+
+						if (curr_disk->sha1 && !merge_disk->sha1)
+						{
+							merge_disk->sha1=curr_disk->sha1;
+							merge_disk->disk_fixes|=FLAG_DISK_SHA1;
+						}
+
+						if (curr_disk->md5 && !merge_disk->md5)
+						{
+							merge_disk->md5=curr_disk->md5;
+							merge_disk->disk_fixes|=FLAG_DISK_MD5;
+						}
+					}
+				}
+
+				game_romof=game_romof->game_romof;
+			}
+		}
+	}
+
+	/* --- Second disk pass pushes CRCs downwards --- */
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
+		{
+			struct game *game_romof=curr_game->game_romof;
+
+			while (curr_disk->merge && game_romof)
+			{
+				struct disk *merge_disk;
+
+				for (k=0, merge_disk=game_romof->disks; k<game_romof->num_disks; k++, merge_disk++)
+				{
+					if (!strcmp(curr_disk->name, merge_disk->name))
+					{
+						if (!curr_disk->crc && merge_disk->crc)
+						{
+							curr_disk->crc=merge_disk->crc;
+						}
+
+						if (!curr_disk->sha1 && merge_disk->sha1)
+						{
+							curr_disk->sha1=merge_disk->sha1;
+							curr_disk->disk_fixes|=FLAG_DISK_SHA1;
+						}
+
+						if (!curr_disk->md5 && merge_disk->md5)
+						{
+							curr_disk->md5=merge_disk->md5;
+							curr_disk->disk_fixes|=FLAG_DISK_MD5;
+						}
+					}
+				}
+
+				game_romof=game_romof->game_romof;
+			}
+		}
+	}
+
+	/* --- Work out merging of samples --- */
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		for (j=0, curr_sample=curr_game->samples; j<curr_game->num_samples; j++, curr_sample++)
+		{
+			struct game *game_sampleof=curr_game->game_sampleof;
+
+			while (game_sampleof)
+			{
+				struct sample *merge_sample;
+
+				for (k=0, merge_sample=game_sampleof->samples; k<game_sampleof->num_samples; k++, merge_sample++)
+				{
+					if (!strcmp(curr_sample->name, merge_sample->name))
+					{
+						if (!curr_sample->merge || strcmp(curr_sample->merge, curr_sample->name))
+						{
+							curr_sample->merge=curr_sample->name;
+						}
+					}
+				}
+
+				game_sampleof=game_sampleof->game_sampleof;
 			}
 		}
 	}
@@ -1878,6 +1997,8 @@ int report_warnings(struct dat *dat)
 		printf("Recording warnings...\n");
 	}
 
+	/* --- Identify CRC conflicts and do final bit of 'fix merging' --- */
+
 	for (i=0; i<dat->num_roms; i++)
 	{
 		for (j=i+1; j<dat->num_roms && !strcmp(dat->rom_name_idx[i].rom->name, dat->rom_name_idx[j].rom->name); j++)
@@ -1963,6 +2084,65 @@ int report_warnings(struct dat *dat)
 		}
 	}
 
+	for (i=0; i<dat->num_disks; i++)
+	{
+		for (j=i+1; j<dat->num_disks && !strcmp(dat->disk_name_idx[i].disk->name, dat->disk_name_idx[j].disk->name); j++)
+		{
+			if ((dat->disk_name_idx[i].disk->game->name && dat->disk_name_idx[j].disk->game->name &&
+				!strcmp(dat->disk_name_idx[i].disk->game->name, dat->disk_name_idx[j].disk->game->name)) ||
+				(dat->disk_name_idx[i].disk->game->name && dat->disk_name_idx[j].disk->game->cloneof &&
+				!strcmp(dat->disk_name_idx[i].disk->game->name, dat->disk_name_idx[j].disk->game->cloneof)) ||
+				(dat->disk_name_idx[i].disk->game->cloneof && dat->disk_name_idx[j].disk->game->name &&
+				!strcmp(dat->disk_name_idx[i].disk->game->cloneof, dat->disk_name_idx[j].disk->game->name)) ||
+				(dat->disk_name_idx[i].disk->game->cloneof && dat->disk_name_idx[j].disk->game->cloneof &&
+				!strcmp(dat->disk_name_idx[i].disk->game->cloneof, dat->disk_name_idx[j].disk->game->cloneof)))
+			{
+				if (dat->disk_name_idx[i].disk->crc && !dat->disk_name_idx[j].disk->crc)
+				{
+					dat->disk_name_idx[j].disk->crc=dat->disk_name_idx[i].disk->crc;
+				}
+				else if (!dat->disk_name_idx[i].disk->crc && dat->disk_name_idx[j].disk->crc)
+				{
+					dat->disk_name_idx[i].disk->crc=dat->disk_name_idx[j].disk->crc;
+				}
+				else if (dat->disk_name_idx[i].disk->crc != dat->disk_name_idx[j].disk->crc &&
+					dat->disk_name_idx[i].disk->crc != ~dat->disk_name_idx[j].disk->crc)
+				{
+					dat->disk_name_idx[i].disk->disk_warnings|=FLAG_DISK_CONFLICT;
+					dat->disk_name_idx[j].disk->disk_warnings|=FLAG_DISK_CONFLICT;
+				}
+
+				if (dat->disk_name_idx[i].disk->sha1 && !dat->disk_name_idx[j].disk->sha1)
+				{
+					dat->disk_name_idx[j].disk->sha1=dat->disk_name_idx[i].disk->sha1;
+					dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_SHA1;
+					dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_SHA1;
+				}
+				else if (!dat->disk_name_idx[i].disk->sha1 && dat->disk_name_idx[j].disk->sha1)
+				{
+					dat->disk_name_idx[i].disk->sha1=dat->disk_name_idx[j].disk->sha1;
+					dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_SHA1;
+					dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_SHA1;
+				}
+
+				if (dat->disk_name_idx[i].disk->md5 && !dat->disk_name_idx[j].disk->md5)
+				{
+					dat->disk_name_idx[j].disk->md5=dat->disk_name_idx[i].disk->md5;
+					dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_MD5;
+					dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_MD5;
+				}
+				else if (!dat->disk_name_idx[i].disk->md5 && dat->disk_name_idx[j].disk->md5)
+				{
+					dat->disk_name_idx[i].disk->md5=dat->disk_name_idx[j].disk->md5;
+					dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_MD5;
+					dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_MD5;
+				}
+			}
+		}
+	}
+
+	/* --- Calculate warnings --- */
+
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
 		curr_game->game_warnings=(curr_game->game_flags ^ dat->game_flags) &
@@ -1997,7 +2177,7 @@ int report_warnings(struct dat *dat)
 
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
-			curr_disk->disk_warnings=(curr_disk->disk_flags ^ dat->disk_flags) &
+			curr_disk->disk_warnings|=(curr_disk->disk_flags ^ dat->disk_flags) &
 				(FLAG_DISK_MD5 | FLAG_DISK_SHA1 | FLAG_DISK_REGION);
 
 			curr_game->disk_warnings|=curr_disk->disk_warnings;
@@ -2084,6 +2264,13 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing SHA1\n");
 			if (dat->disk_warnings & FLAG_DISK_REGION)
 				fprintf(dat->log_file, "    Missing Region\n");
+			if (dat->disk_warnings & FLAG_DISK_CONFLICT)
+			{
+				if (dat->options->options & OPTION_MD5_CHECKSUMS)
+					fprintf(dat->log_file, "    MD5 Conflict\n");
+				else
+					fprintf(dat->log_file, "    SHA1 Conflict\n");
+			}
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -2142,6 +2329,13 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    Disk %s - Missing MD5\n", curr_disk->name);
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1)
 							fprintf(dat->log_file, "    Disk %s - Missing SHA1\n", curr_disk->name);
+						if (curr_disk->disk_warnings & FLAG_DISK_CONFLICT)
+						{
+							if (dat->options->options & OPTION_MD5_CHECKSUMS)
+								fprintf(dat->log_file, "    Disk %s - MD5 Conflict (%s)\n", curr_disk->name, curr_disk->md5);
+							else
+								fprintf(dat->log_file, "    Disk %s - SHA1 Conflict (%s)\n", curr_disk->name, curr_disk->sha1);
+						}
 						if (curr_disk->disk_warnings & FLAG_DISK_REGION)
 							fprintf(dat->log_file, "    Disk %s - Missing Region\n", curr_disk->name);
 					}
@@ -2403,6 +2597,12 @@ int report_fixes(struct dat *dat)
 								fprintf(dat->log_file, "    ROM %s - SHA1 set/changed.\n", curr_rom->name);
 						}
 
+						if (curr_rom->rom_fixes & FLAG_ROM_REGION)
+						{
+							if (curr_rom->region)
+								fprintf(dat->log_file, "    ROM %s - region set/changed.\n", curr_rom->name);
+						}
+
 						if (curr_rom->rom_fixes & FLAG_ROM_BADDUMP)
 						{
 							if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
@@ -2433,6 +2633,24 @@ int report_fixes(struct dat *dat)
 						if (curr_disk->disk_fixes & FLAG_DISK_NAME)
 						{
 							fprintf(dat->log_file, "    Disk %s - name set/changed.\n", curr_disk->name);
+						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_MD5)
+						{
+							if (curr_disk->md5)
+								fprintf(dat->log_file, "    Disk %s - MD5 set/changed.\n", curr_disk->name);
+						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_SHA1)
+						{
+							if (curr_disk->sha1)
+								fprintf(dat->log_file, "    Disk %s - SHA1 set/changed.\n", curr_disk->name);
+						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_REGION)
+						{
+							if (curr_disk->region)
+								fprintf(dat->log_file, "    Disk %s - region set/changed.\n", curr_disk->name);
 						}
 
 						if (curr_disk->disk_fixes & FLAG_DISK_DUPLICATE)
@@ -2558,13 +2776,13 @@ int rebuild_dat_indices(struct dat *dat)
 		if (curr_game->cloneof)
 		{
 			game_match=bsearch((void *)curr_game->cloneof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-			curr_game->parent=game_match->game;
+			curr_game->game_cloneof=game_match->game;
 		}
 
 		if (curr_game->romof)
 		{
 			game_match=bsearch((void *)curr_game->romof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-			curr_game->merge=game_match->game;
+			curr_game->game_romof=game_match->game;
 		}
 
 		if (curr_game->num_roms)

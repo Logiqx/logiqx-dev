@@ -72,6 +72,8 @@ struct disk
 
 	struct game *game;
 
+	char *merge;
+
 	uint32_t crc;
 
 	uint8_t disk_flags;
@@ -100,6 +102,8 @@ struct sample
 	/* --- Fields that are calculated by DatLib */
 
 	struct game *game;
+
+	char *merge;
 
 	uint8_t sample_flags;
 	uint8_t sample_warnings;
@@ -133,8 +137,9 @@ struct game
 
 	/* --- Fields that are calculated by DatLib */
 
-	struct game *parent;
-	struct game *merge;
+	struct game *game_cloneof;
+	struct game *game_romof;
+	struct game *game_sampleof;
 
 	struct comment *comments;
 
@@ -478,6 +483,7 @@ struct ini_entry
 #define FLAG_DISK_SHA1			0x04
 #define FLAG_DISK_REGION		0x08
 #define FLAG_DISK_DUPLICATE		0x10
+#define FLAG_DISK_CONFLICT		0x20
 
 
 /* --- Sample Flags --- */

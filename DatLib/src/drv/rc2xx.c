@@ -436,7 +436,7 @@ int save_romcenter_250(struct dat *dat)
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				if (curr_game->cloneof)
-					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->parent->description);
+					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->game_cloneof->description);
 				else
 					fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
 	
@@ -474,7 +474,7 @@ int save_romcenter_250(struct dat *dat)
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				if (curr_game->cloneof)
-					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->parent->description);
+					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->game_cloneof->description);
 				else
 					fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
 	

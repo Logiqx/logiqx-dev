@@ -46,12 +46,12 @@ or GCC on Linux. Set up an environment for compiling everything as follows:
 1) Create a directory somewhere on your machine for all of my utilities.
    e.g. mkdir d:\logiqx         Windows
         mkdir d:/logiqx         CygWin
-	mkdir $HOME/logiqx      Linux
+        mkdir $HOME/logiqx      Linux
 
 2) Create an environment variable called 'LOGIQX' that points to the directory.
    e.g. set LOGIQX=d:\logiqx            Windows
         export LOGIQX=d:/logiqx         CygWin
-	export LOGIQX=$HOME/logiqx      Linux
+        export LOGIQX=$HOME/logiqx      Linux
 
 3) Create a directory called 'dev' inside the Logiqx directory.
 
@@ -173,19 +173,21 @@ History
 
 xx/xx/xxxx  *** v1.7 ***
 
-	    - Avoids duplicate ROMs in MAMEDiff dats using -m and -d1/-d2/-d3.
-	    - Directory scanner now supports CHDs (when in a game directory).
-	    - Directory scanner can spoof samples (OPTION_OBJECT_TYPE_SAMPLE).
-	    - Improved 'fix merging' where clone ROMs are not in the parent.
+            - Avoids duplicate ROMs in MAMEDiff dats using -m and -d1/-d2/-d3.
+            - Directory scanner now supports CHDs (when in a game directory).
+            - Directory scanner can spoof samples (OPTION_OBJECT_TYPE_SAMPLE).
+            - Improved 'fix merging' where clone ROMs are not in the parent.
+            - Improved 'fix merging' to work for disks (SHA1/MD5 can be copied).
+            - Added check for SHA1/MD5 conflicts of disks.
 
 18/07/2004  *** v1.6 ***
 
-	    - Added disk CRCs for MAMEDiff (CRC is calculated using MD5/SHA1).
-	    - Added OPTION_NON_SEPERATED_BIOS_ROMS for MAMEDiff -d1/-d2/-d3.
+            - Added disk CRCs for MAMEDiff (CRC is calculated using MD5/SHA1).
+            - Added OPTION_NON_SEPERATED_BIOS_ROMS for MAMEDiff -d1/-d2/-d3.
 
 17/07/2004  *** v1.5 ***
 
-	    - Added the OPTION_NEBULA_JUKEBOX (parses Z80 and Samples only).
+            - Added the OPTION_NEBULA_JUKEBOX (parses Z80 and Samples only).
 
 11/07/2004  *** v1.4 ***
 
