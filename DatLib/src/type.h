@@ -589,6 +589,8 @@ struct romcenter_emulator
 struct st_idx
 {
 	char *st;
+
+	uint16_t flags;
 };
 
 struct options
@@ -745,6 +747,9 @@ struct dat
 	uint8_t device_flags;
 	uint8_t extension_flags;
 
+	uint8_t game_selection_warnings;
+	uint8_t sourcefile_selection_warnings;
+
 	uint16_t game_warnings;
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
@@ -853,6 +858,18 @@ struct ini_entry
 #define	FLAG_DAT_NO_MERGING		0x0004
 
 
+/* --- Selection Flags --- */
+
+#define	FLAG_BAD_GAME_SELECTION		0x01
+
+#define	FLAG_BAD_SOURCEFILE_SELECTION	0x01
+
+
+/* --- String Index Flags --- */
+
+#define	FLAG_STRING_INDEX_USED		0x0001
+
+
 /* --- Game Flags --- */
 
 #define	FLAG_GAME_NAME			0x0001
@@ -870,6 +887,7 @@ struct ini_entry
 #define FLAG_GAME_REBUILDTO		0x1000
 
 #define FLAG_GAME_CLONEOFCLONE		0x4000
+#define FLAG_GAME_DUPLICATE		0x8000
 
 
 /* --- Comment Flags --- */
