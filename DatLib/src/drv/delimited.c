@@ -77,6 +77,7 @@ int identify_tab_delimited(struct dat *dat)
 
 int load_tab_delimited(struct dat *dat)
 {
+	char *game_name;
 	int errflg=0;
 
 	BUFFER1_REWIND
@@ -86,7 +87,7 @@ int load_tab_delimited(struct dat *dat)
 	{
 		/* --- Game/machine information --- */
 
-		if (BUFFER1_RECORD_TYPE("game"))
+		if (BUFFER1_RECORD_TYPE("game\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -95,58 +96,48 @@ int load_tab_delimited(struct dat *dat)
 
 			/* --- Process the other fields --- */
 
-			BUFFER1_GET_FIELD(TOKEN_GAME_NAME)
-			BUFFER1_GET_FIELD(TOKEN_GAME_SOURCEFILE)
-			BUFFER1_GET_FIELD(TOKEN_GAME_CLONEOF)
-			BUFFER1_GET_FIELD(TOKEN_GAME_ROMOF)
-			BUFFER1_GET_FIELD(TOKEN_GAME_SAMPLEOF)
-			BUFFER1_GET_FIELD(TOKEN_GAME_DESCRIPTION)
-			BUFFER1_GET_FIELD(TOKEN_GAME_YEAR)
-			BUFFER1_GET_FIELD(TOKEN_GAME_MANUFACTURER)
-			BUFFER1_GET_FIELD(TOKEN_GAME_HISTORY)
-			BUFFER1_GET_FIELD(TOKEN_GAME_REBUILDTO)
-		}
-		else if (BUFFER1_RECORD_TYPE("machine"))
-		{
-			/* --- Skip record type and data file name --- */
-
-			BUFFER1_SKIP_FIELD
+			game_name=BUFFER1_PTR;
 			BUFFER1_SKIP_FIELD
 
-			/* --- Process the other fields --- */
-
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_NAME)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_SOURCEFILE)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_CLONEOF)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_ROMOF)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_SAMPLEOF)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_DESCRIPTION)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_YEAR)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_MANUFACTURER)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_HISTORY)
-			BUFFER1_GET_FIELD(TOKEN_MACHINE_REBUILDTO)
-		}
-		else if (BUFFER1_RECORD_TYPE("resource"))
-		{
-			/* --- Skip record type and data file name --- */
-
-			BUFFER1_SKIP_FIELD
-			BUFFER1_SKIP_FIELD
-
-			/* --- Process the other fields --- */
-
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_NAME)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_SOURCEFILE)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_DESCRIPTION)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_YEAR)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_MANUFACTURER)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_HISTORY)
-			BUFFER1_GET_FIELD(TOKEN_RESOURCE_REBUILDTO)
+			if (!strncmp(BUFFER1_PTR, "no", 2))
+			{
+				BUFFER1_SKIP_FIELD
+				strcpy(TOKEN, game_name);
+				if (strchr(TOKEN, '\t'))
+					*strchr(TOKEN, '\t')='\0';
+				BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_NAME) \
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_SOURCEFILE)
+				BUFFER1_SKIP_FIELD
+				BUFFER1_SKIP_FIELD
+				BUFFER1_SKIP_FIELD
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_DESCRIPTION)
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_YEAR)
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_MANUFACTURER)
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_HISTORY)
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_REBUILDTO)
+			}
+			else
+			{
+				BUFFER1_SKIP_FIELD
+				strcpy(TOKEN, game_name);
+				if (strchr(TOKEN, '\t'))
+					*strchr(TOKEN, '\t')='\0';
+				BUFFER2_PUT_TOKEN(TOKEN_GAME_NAME) \
+				BUFFER1_GET_FIELD(TOKEN_GAME_SOURCEFILE)
+				BUFFER1_GET_FIELD(TOKEN_GAME_CLONEOF)
+				BUFFER1_GET_FIELD(TOKEN_GAME_ROMOF)
+				BUFFER1_GET_FIELD(TOKEN_GAME_SAMPLEOF)
+				BUFFER1_GET_FIELD(TOKEN_GAME_DESCRIPTION)
+				BUFFER1_GET_FIELD(TOKEN_GAME_YEAR)
+				BUFFER1_GET_FIELD(TOKEN_GAME_MANUFACTURER)
+				BUFFER1_GET_FIELD(TOKEN_GAME_HISTORY)
+				BUFFER1_GET_FIELD(TOKEN_GAME_REBUILDTO)
+			}
 		}
 
 		/* --- Comment information --- */
 
-		if (BUFFER1_RECORD_TYPE("comment"))
+		if (BUFFER1_RECORD_TYPE("game_comment\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -161,7 +152,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- BIOS Set information --- */
 
-		if (BUFFER1_RECORD_TYPE("biosset"))
+		if (BUFFER1_RECORD_TYPE("game_biosset\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -178,7 +169,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- ROM information --- */
 
-		if (BUFFER1_RECORD_TYPE("rom"))
+		if (BUFFER1_RECORD_TYPE("game_rom\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -204,7 +195,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Disk information --- */
 
-		if (BUFFER1_RECORD_TYPE("disk"))
+		if (BUFFER1_RECORD_TYPE("game_disk\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -225,7 +216,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Sample information --- */
 
-		if (BUFFER1_RECORD_TYPE("sample"))
+		if (BUFFER1_RECORD_TYPE("game_sample\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -240,7 +231,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Chip information --- */
 
-		if (BUFFER1_RECORD_TYPE("chip"))
+		if (BUFFER1_RECORD_TYPE("game_chip\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -258,7 +249,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Video information --- */
 
-		if (BUFFER1_RECORD_TYPE("video"))
+		if (BUFFER1_RECORD_TYPE("game_video\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -279,7 +270,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Sound information --- */
 
-		if (BUFFER1_RECORD_TYPE("sound"))
+		if (BUFFER1_RECORD_TYPE("game_sound\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -294,7 +285,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Input information --- */
 
-		if (BUFFER1_RECORD_TYPE("input"))
+		if (BUFFER1_RECORD_TYPE("game_input\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -314,7 +305,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Dipswitch information --- */
 
-		if (BUFFER1_RECORD_TYPE("dipswitch"))
+		if (BUFFER1_RECORD_TYPE("game_dipswitch\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -327,7 +318,7 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_DIPSWITCH_NAME)
 		}
 
-		if (BUFFER1_RECORD_TYPE("dipvalue"))
+		if (BUFFER1_RECORD_TYPE("game_dipvalue\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -344,7 +335,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Driver information --- */
 
-		if (BUFFER1_RECORD_TYPE("driver"))
+		if (BUFFER1_RECORD_TYPE("game_driver\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -366,7 +357,7 @@ int load_tab_delimited(struct dat *dat)
 
 		/* --- Device information --- */
 
-		if (BUFFER1_RECORD_TYPE("device"))
+		if (BUFFER1_RECORD_TYPE("game_device\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -379,7 +370,7 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_DEVICE_NAME)
 		}
 
-		if (BUFFER1_RECORD_TYPE("extension"))
+		if (BUFFER1_RECORD_TYPE("game_extension\t"))
 		{
 			/* --- Skip record type and data file name --- */
 
@@ -528,34 +519,19 @@ int save_tab_delimited(struct dat *dat)
 	{
 		/* --- Game/machine information --- */
 
-		if (curr_game->game_flags & FLAG_GAME_NAME)
-		{
-			fprintf(dat->out, "game\t");
-			fprintf(dat->out, "%s\t", dat_name);
-			OUTPUT_STRING_FIELD(game, name, FLAG_GAME_NAME)
-		}
-		else if (curr_game->game_flags & FLAG_MACHINE_NAME)
-		{
-			fprintf(dat->out, "machine\t");
-			fprintf(dat->out, "%s\t", dat_name);
-			OUTPUT_STRING_FIELD(game, name, FLAG_MACHINE_NAME)
-		}
-		else if (curr_game->game_flags & FLAG_RESOURCE_NAME)
-		{
-			fprintf(dat->out, "resource\t");
-			fprintf(dat->out, "%s\t", dat_name);
-			OUTPUT_STRING_FIELD(game, name, FLAG_RESOURCE_NAME)
-		}
+		fprintf(dat->out, "game\t%s\t", dat_name);
+
+		OUTPUT_STRING_FIELD(game, name, (FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME))
+
+		if (curr_game->game_flags & FLAG_RESOURCE_NAME)
+			fprintf(dat->out, "no\t");
+		else
+			fprintf(dat->out, "\\N\t");
 
 		OUTPUT_STRING_FIELD(game, sourcefile, FLAG_GAME_SOURCEFILE)
-
-		if (curr_game->game_flags & (FLAG_GAME_NAME | FLAG_MACHINE_NAME))
-		{
-			OUTPUT_STRING_FIELD(game, cloneof, FLAG_GAME_CLONEOF)
-			OUTPUT_STRING_FIELD(game, romof, FLAG_GAME_ROMOF)
-			OUTPUT_STRING_FIELD(game, sampleof, FLAG_GAME_SAMPLEOF)
-		}
-
+		OUTPUT_STRING_FIELD(game, cloneof, FLAG_GAME_CLONEOF)
+		OUTPUT_STRING_FIELD(game, romof, FLAG_GAME_ROMOF)
+		OUTPUT_STRING_FIELD(game, sampleof, FLAG_GAME_SAMPLEOF)
 		OUTPUT_STRING_FIELD(game, description, FLAG_GAME_DESCRIPTION)
 		OUTPUT_STRING_FIELD(game, year, FLAG_GAME_YEAR)
 		OUTPUT_STRING_FIELD(game, manufacturer, FLAG_GAME_MANUFACTURER)
@@ -568,7 +544,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_comment=curr_game->comments; j<curr_game->num_comments; j++, curr_comment++)
 		{
-			fprintf(dat->out, "comment\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_comment\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(comment, text, FLAG_COMMENT_TEXT)
 
@@ -579,7 +555,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_biosset=curr_game->biossets; j<curr_game->num_biossets; j++, curr_biosset++)
 		{
-			fprintf(dat->out, "biosset\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_biosset\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(biosset, name, FLAG_BIOSSET_NAME)
 			OUTPUT_STRING_FIELD(biosset, description, FLAG_BIOSSET_DESCRIPTION)
@@ -592,7 +568,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
-			fprintf(dat->out, "rom\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_rom\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(rom, name, FLAG_ROM_NAME)
 			OUTPUT_STRING_FIELD(rom, merge, FLAG_ROM_MERGE)
@@ -614,7 +590,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
-			fprintf(dat->out, "disk\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_disk\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(disk, name, FLAG_DISK_NAME)
 			OUTPUT_STRING_FIELD(disk, merge, FLAG_DISK_MERGE)
@@ -631,7 +607,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_sample=curr_game->samples; j<curr_game->num_samples; j++, curr_sample++)
 		{
-			fprintf(dat->out, "sample\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_sample\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(sample, name, FLAG_SAMPLE_NAME)
 
@@ -642,7 +618,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_chip=curr_game->chips; j<curr_game->num_chips; j++, curr_chip++)
 		{
-			fprintf(dat->out, "chip\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_chip\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(chip, type, FLAG_CHIP_TYPE)
 			OUTPUT_STRING_FIELD(chip, soundonly, FLAG_CHIP_SOUNDONLY)
@@ -656,7 +632,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_video=curr_game->videos; j<curr_game->num_videos; j++, curr_video++)
 		{
-			fprintf(dat->out, "video\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_video\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(video, screen, FLAG_VIDEO_SCREEN)
 			OUTPUT_STRING_FIELD(video, orientation, FLAG_VIDEO_ORIENTATION)
@@ -673,7 +649,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_sound=curr_game->sounds; j<curr_game->num_sounds; j++, curr_sound++)
 		{
-			fprintf(dat->out, "sound\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_sound\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_UNSIGNED_LONG_FIELD(sound, channels, FLAG_SOUND_CHANNELS)
 
@@ -684,7 +660,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_input=curr_game->inputs; j<curr_game->num_inputs; j++, curr_input++)
 		{
-			fprintf(dat->out, "input\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_input\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_UNSIGNED_LONG_FIELD(input, players, FLAG_INPUT_PLAYERS)
 			OUTPUT_STRING_FIELD(input, control, FLAG_INPUT_CONTROL)
@@ -700,13 +676,13 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_dipswitch=curr_game->dipswitches; j<curr_game->num_dipswitches; j++, curr_dipswitch++)
 		{
-			fprintf(dat->out, "dipswitch\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_dipswitch\t%s\t%s\t", dat_name, curr_game->name);
 			OUTPUT_STRING_FIELD(dipswitch, name, FLAG_DIPSWITCH_NAME)
 			fprintf(dat->out, "\n");
 
 			for (k=0, curr_dipvalue=curr_dipswitch->dipvalues; k<curr_dipswitch->num_dipvalues; k++, curr_dipvalue++)
 			{
-				fprintf(dat->out, "dipvalue\t%s\t%s\t", dat_name, curr_game->name);
+				fprintf(dat->out, "game_dipvalue\t%s\t%s\t", dat_name, curr_game->name);
 
 				OUTPUT_STRING_FIELD(dipswitch, name, FLAG_DIPSWITCH_NAME)
 
@@ -721,7 +697,7 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_driver=curr_game->drivers; j<curr_game->num_drivers; j++, curr_driver++)
 		{
-			fprintf(dat->out, "driver\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_driver\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(driver, status, FLAG_DRIVER_STATUS)
 			OUTPUT_STRING_FIELD(driver, emulation, FLAG_DRIVER_EMULATION)
@@ -739,13 +715,13 @@ int save_tab_delimited(struct dat *dat)
 
 		for (j=0, curr_device=curr_game->devices; j<curr_game->num_devices; j++, curr_device++)
 		{
-			fprintf(dat->out, "device\t%s\t%s\t", dat_name, curr_game->name);
+			fprintf(dat->out, "game_device\t%s\t%s\t", dat_name, curr_game->name);
 			OUTPUT_STRING_FIELD(device, name, FLAG_DEVICE_NAME)
 			fprintf(dat->out, "\n");
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)
 			{
-				fprintf(dat->out, "extension\t%s\t%s\t", dat_name, curr_game->name);
+				fprintf(dat->out, "game_extension\t%s\t%s\t", dat_name, curr_game->name);
 
 				OUTPUT_STRING_FIELD(device, name, FLAG_DEVICE_NAME)
 
