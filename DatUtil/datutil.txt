@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.3 - 17/07/2004
+                         DatUtil v2.4 - 21/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -285,6 +285,15 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+21/07/2004  *** v2.4 ***
+
+            - Uses DatLib v1.7
+            - Added support for MESS XML.
+            - Directory scanner now supports CHDs (when in a game directory).
+            - Improved 'fix merging' (where clone ROMs are not in the parent).
+            - Enhanced 'fix merging' to work for disks (SHA1/MD5 are copied).
+            - Added check for SHA1/MD5 conflicts of disks across clones.
 
 17/07/2004  *** v2.3 ***
 
