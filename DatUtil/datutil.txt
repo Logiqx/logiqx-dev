@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.9 - 25/11/2004
+                         DatUtil v2.10 - 04/01/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -23,6 +23,7 @@ Load only:
   - RomCenter 2.00
   - MAME and MESS ListXML
   - Nebula Drivers
+  - Calice Drivers
   - Zinc --list-sets
   - ClrMame Log
   - Folder Scan (subdirectories and zips)
@@ -286,6 +287,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+04/01/2005  *** v2.10 ***
+
+            - Uses DatLib v1.13.
+            - Added support for Calice drivers.
 
 25/11/2004  *** v2.9 ***
 
