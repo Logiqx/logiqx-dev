@@ -429,10 +429,12 @@ int specify_mame_listinfo(struct dat *dat)
 {
 	if (strcmp(dat->options->save_format, "listinfo") &&
 		strcmp(dat->options->save_format, "info") &&
+		strcmp(dat->options->save_format, "li") &&
 		strcmp(dat->options->save_format, "clrmamepro") &&
 		strcmp(dat->options->save_format, "clrmame") &&
 		strcmp(dat->options->save_format, "cmpro") &&
-		strcmp(dat->options->save_format, "cmp"))
+		strcmp(dat->options->save_format, "cmp") &&
+		strcmp(dat->options->save_format, "cm"))
 		return(0);
 	else
 		return(1);
