@@ -21,6 +21,7 @@
 
 /* --- MAMEDiff definitions and macros --- */
 
+#include "mamediff.h"
 #include "compare.h"
 
 
@@ -662,7 +663,7 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					FORMAT_LISTINFO_ROM(st, game_changes[i].rom_changes[k].rom2)
 					fprintf(out, "> %s", st);
 
-					if (game_changes[i].rom_changes[k].rom2->rom_flags & FLAG_ROM_NODUMP)
+					if (!strcmp(game_changes[i].rom_changes[k].rom2->status, "nodump"))
 						fprintf(out, " *just ignore\n");
 					else if (bsearch((const void *)&game_changes[i].rom_changes[k].rom2->crc, dat1->rom_crc_idx, dat1->num_roms, sizeof(struct rom_idx), find_rom_by_crc))
 						fprintf(out, " *already in MAME\n");
@@ -696,7 +697,7 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					FORMAT_LISTINFO_DISK(st, game_changes[i].disk_changes[k].disk2)
 					fprintf(out, "> %s", st);
 
-					if (game_changes[i].disk_changes[k].disk2->disk_flags & FLAG_DISK_NODUMP)
+					if (!strcmp(game_changes[i].disk_changes[k].disk2->status, "nodump"))
 						fprintf(out, " *just ignore\n");
 					else if (bsearch((const void *)&game_changes[i].disk_changes[k].disk2->crc, dat1->disk_crc_idx, dat1->num_disks, sizeof(struct disk_idx), find_disk_by_crc))
 						fprintf(out, " *already in MAME\n");
