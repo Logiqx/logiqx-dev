@@ -294,7 +294,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 11. History
 -----------
 
-02/08/2004  *** v2.8 ***
+02/08/2004  *** v2.9 ***
 
             - Fixed a bug that was introduced in v2.6 and affected -d3 option.
 
