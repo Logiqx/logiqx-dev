@@ -12,7 +12,7 @@
 
 /* --- Token structure (the description field is used by the directory scan and for debugging output) --- */
 
-struct token
+struct datlib_token
 {
 	uint8_t type;
 	char *description;
@@ -24,29 +24,32 @@ struct token
 enum {
 	TOKEN_UNDEFINED,
 	TOKEN_GAME_NAME,
-	TOKEN_GAME_DESCRIPTION,
-	TOKEN_GAME_YEAR,
-	TOKEN_GAME_MANUFACTURER,
-	TOKEN_GAME_REBUILDTO,
+	TOKEN_GAME_SOURCEFILE,
 	TOKEN_GAME_CLONEOF,
 	TOKEN_GAME_ROMOF,
 	TOKEN_GAME_SAMPLEOF,
-	TOKEN_GAME_COMMENT,
+	TOKEN_GAME_DESCRIPTION,
+	TOKEN_GAME_YEAR,
+	TOKEN_GAME_MANUFACTURER,
+	TOKEN_GAME_HISTORY,
+	TOKEN_GAME_REBUILDTO,
 	TOKEN_RESOURCE_NAME,
+	TOKEN_RESOURCE_SOURCEFILE,
 	TOKEN_RESOURCE_DESCRIPTION,
 	TOKEN_RESOURCE_YEAR,
 	TOKEN_RESOURCE_MANUFACTURER,
+	TOKEN_RESOURCE_HISTORY,
 	TOKEN_RESOURCE_REBUILDTO,
-	TOKEN_RESOURCE_COMMENT,
 	TOKEN_MACHINE_NAME,
-	TOKEN_MACHINE_DESCRIPTION,
-	TOKEN_MACHINE_YEAR,
-	TOKEN_MACHINE_MANUFACTURER,
-	TOKEN_MACHINE_REBUILDTO,
+	TOKEN_MACHINE_SOURCEFILE,
 	TOKEN_MACHINE_CLONEOF,
 	TOKEN_MACHINE_ROMOF,
 	TOKEN_MACHINE_SAMPLEOF,
-	TOKEN_MACHINE_COMMENT,
+	TOKEN_MACHINE_DESCRIPTION,
+	TOKEN_MACHINE_YEAR,
+	TOKEN_MACHINE_MANUFACTURER,
+	TOKEN_MACHINE_HISTORY,
+	TOKEN_MACHINE_REBUILDTO,
 	TOKEN_CLRMAMEPRO_NAME,
 	TOKEN_CLRMAMEPRO_DESCRIPTION,
 	TOKEN_CLRMAMEPRO_CATEGORY,
@@ -66,21 +69,61 @@ enum {
 	TOKEN_ROMCENTER_DAT_MERGE,
 	TOKEN_ROMCENTER_EMULATOR_REFNAME,
 	TOKEN_ROMCENTER_EMULATOR_VERSION,
+	TOKEN_COMMENT_TEXT,
+	TOKEN_BIOSSET_NAME,
+	TOKEN_BIOSSET_DESCRIPTION,
+	TOKEN_BIOSSET_DEFAULT,
 	TOKEN_ROM_NAME,
-	TOKEN_ROM_MERGE,
+	TOKEN_ROM_BIOS,
 	TOKEN_ROM_SIZE,
 	TOKEN_ROM_CRC,
 	TOKEN_ROM_MD5,
 	TOKEN_ROM_SHA1,
+	TOKEN_ROM_MERGE,
 	TOKEN_ROM_REGION,
-	TOKEN_ROM_FLAGS,
+	TOKEN_ROM_OFFSET,
+	TOKEN_ROM_STATUS,
+	TOKEN_ROM_DISPOSE,
+	TOKEN_ROM_SOUNDONLY,
 	TOKEN_DISK_NAME,
-	TOKEN_DISK_MERGE,
 	TOKEN_DISK_MD5,
 	TOKEN_DISK_SHA1,
+	TOKEN_DISK_MERGE,
 	TOKEN_DISK_REGION,
-	TOKEN_DISK_FLAGS,
+	TOKEN_DISK_INDEX,
+	TOKEN_DISK_STATUS,
 	TOKEN_SAMPLE_NAME,
+	TOKEN_CHIP_NAME,
+	TOKEN_CHIP_TYPE,
+	TOKEN_CHIP_SOUNDONLY,
+	TOKEN_CHIP_CLOCK,
+	TOKEN_VIDEO_SCREEN,
+	TOKEN_VIDEO_ORIENTATION,
+	TOKEN_VIDEO_WIDTH,
+	TOKEN_VIDEO_HEIGHT,
+	TOKEN_VIDEO_ASPECTX,
+	TOKEN_VIDEO_ASPECTY,
+	TOKEN_VIDEO_REFRESH,
+	TOKEN_SOUND_CHANNELS,
+	TOKEN_INPUT_SERVICE,
+	TOKEN_INPUT_TILT,
+	TOKEN_INPUT_PLAYERS,
+	TOKEN_INPUT_CONTROL,
+	TOKEN_INPUT_BUTTONS,
+	TOKEN_INPUT_COINS,
+	TOKEN_DIPSWITCH_NAME,
+	TOKEN_DIPVALUE_NAME,
+	TOKEN_DIPVALUE_DEFAULT,
+	TOKEN_DRIVER_STATUS,
+	TOKEN_DRIVER_EMULATION,
+	TOKEN_DRIVER_COLOR,
+	TOKEN_DRIVER_SOUND,
+	TOKEN_DRIVER_GRAPHIC,
+	TOKEN_DRIVER_COCKTAIL,
+	TOKEN_DRIVER_PROTECTION,
+	TOKEN_DRIVER_PALETTESIZE,
+	TOKEN_DEVICE_NAME,
+	TOKEN_EXTENSION_NAME,
 	NUM_TOKEN_TYPES
 };
 
@@ -89,66 +132,6 @@ enum {
 
 #define TOKEN (dat->token)
 
-#define CONVERT_XML_CHARACTERS \
-{ \
-	char *ptr; \
-\
-	if ((ptr=strstr(TOKEN, "&amp;"))) \
-	{ \
-		*ptr='&'; \
-		strcpy(ptr+1, ptr+5); \
-	} \
-	if ((ptr=strstr(TOKEN, "&lt;"))) \
-	{ \
-		*ptr='<'; \
-		strcpy(ptr+1, ptr+4); \
-	} \
-	if ((ptr=strstr(TOKEN, "&gt;"))) \
-	{ \
-		*ptr='>'; \
-		strcpy(ptr+1, ptr+4); \
-	} \
-	if ((ptr=strstr(TOKEN, "&#"))) \
-	{ \
-		if (strchr(ptr, ';')) \
-		{ \
-			*ptr=(char)atoi(strstr(TOKEN, "&#")+2); \
-			strcpy(ptr+1, strchr(ptr, ';')+1); \
-		} \
-	} \
-}
-
-#define GET_XML_ATTRIBUTE(ATTRIBUTE) \
-{ \
-	sprintf(TOKEN, " %s=", ATTRIBUTE); \
-\
-	if (strstr(BUFFER1_PTR, TOKEN)) \
-	{ \
-		strcpy(TOKEN, strstr(BUFFER1_PTR, TOKEN)+strlen(TOKEN)+1); \
-		if (strchr(TOKEN, '"')) \
-			*strchr(TOKEN, '"')='\0'; \
-		CONVERT_XML_CHARACTERS \
-	} \
-	else \
-	{ \
-		*TOKEN='\0'; \
-	} \
-}
-
-#define GET_XML_ELEMENT \
-{ \
-	if (strchr(BUFFER1_PTR, '>')) \
-	{ \
-		strcpy(TOKEN, strchr(BUFFER1_PTR, '>')+1); \
-		if (strchr(TOKEN, '<')) \
-			*strchr(TOKEN, '<')='\0'; \
-		CONVERT_XML_CHARACTERS \
-	} \
-	else \
-	{ \
-		*TOKEN='\0'; \
-	} \
-}
 
 /* --- Buffer handling routines (buffer 1) --- */
 
@@ -170,7 +153,7 @@ enum {
 
 #define BUFFER1_PUT_TOKEN(TYPE) \
 { \
-	if (tokens[TYPE].type==TYPE) \
+	if (datlib_tokens[TYPE].type==TYPE) \
 	{ \
 		if (BUFFER1_REMAINING) \
 		{ \
@@ -195,7 +178,7 @@ enum {
 	} \
 	else \
 	{ \
-		fprintf(stderr, "Token ID mismatch - check the tokens array in token.c!\n"); \
+		fprintf(stderr, "Token ID mismatch - check the datlib_tokens array in token.c!\n"); \
 		errflg++; \
 	} \
 }
@@ -203,6 +186,8 @@ enum {
 #define BUFFER1_GET_TOKEN \
 { \
 	char *token_ptr=TOKEN; \
+	char *tmp_ptr; \
+	unsigned long escaped_char; \
 \
 	while ((*BUFFER1_PTR==' ') || (*BUFFER1_PTR=='\t')) \
 		BUFFER1_PTR++; \
@@ -210,9 +195,29 @@ enum {
 	if (*BUFFER1_PTR=='"') \
 	{ \
 		BUFFER1_PTR++; \
-		while (*BUFFER1_PTR!='"' && *BUFFER1_PTR!='\0') \
+		while ((*(BUFFER1_PTR-1)=='\\' || *BUFFER1_PTR!='"') && *BUFFER1_PTR!='\0') \
 		{ \
-			*token_ptr++=*BUFFER1_PTR++; \
+			if (*(BUFFER1_PTR-1)=='\\') \
+			{ \
+				switch (*BUFFER1_PTR) \
+				{ \
+					case 'n' : *token_ptr++='\n'; BUFFER1_PTR++; break; \
+					case '\\' : *token_ptr++='\\'; BUFFER1_PTR++; break; \
+					case '\"' : *token_ptr++='\"'; BUFFER1_PTR++; break; \
+					case 'x' : \
+						escaped_char=strtoul(++BUFFER1_PTR, &tmp_ptr, 16); \
+						if (tmp_ptr-BUFFER1_PTR!=2) \
+							escaped_char=escaped_char>>(4*(tmp_ptr-BUFFER1_PTR-2)); \
+						*token_ptr++=(unsigned char)escaped_char; \
+						BUFFER1_PTR+=2; \
+						break; \
+					default: fprintf(stderr, "Unrecognised escape sequence '\\%c'!", *BUFFER1_PTR); \
+				} \
+			} \
+			else if (*BUFFER1_PTR!='\\') \
+				*token_ptr++=*BUFFER1_PTR++; \
+			else \
+				BUFFER1_PTR++; \
 		} \
 		if (*BUFFER1_PTR=='"') \
 			BUFFER1_PTR++; \
@@ -249,7 +254,7 @@ enum {
 
 #define BUFFER2_PUT_TOKEN(TYPE) \
 { \
-	if (tokens[TYPE].type==TYPE) \
+	if (datlib_tokens[TYPE].type==TYPE) \
 	{ \
 		if (BUFFER2_REMAINING) \
 		{ \
@@ -274,15 +279,9 @@ enum {
 	} \
 	else \
 	{ \
-		fprintf(stderr, "Token ID mismatch - check the tokens array in token.c!\n"); \
+		fprintf(stderr, "Token ID mismatch - check the datlib_tokens array in token.c!\n"); \
 		errflg++; \
 	} \
-}
-
-#define BUFFER2_GET_TOKEN \
-{ \
-	strcpy(TOKEN, BUFFER2_PTR); \
-	BUFFER2_PTR+=strlen(TOKEN)+1; \
 }
 
 
