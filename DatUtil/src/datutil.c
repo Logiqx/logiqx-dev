@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.10"
-#define DATUTIL_DATE "4 January 2005"
+#define DATUTIL_VERSION "v2.11"
+#define DATUTIL_DATE "16 January 2005"
 
 
 /* --- The standard includes --- */
