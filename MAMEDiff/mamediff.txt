@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.8 - 30/07/2004
+                          MAMEDiff v2.9 - 02/08/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,10 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+02/08/2004  *** v2.8 ***
+
+            - Fixed a bug that was introduced in v2.6 and affected -d3 option.
 
 30/07/2004  *** v2.8 ***
 
