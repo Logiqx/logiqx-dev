@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.4 - 11/07/2004
+                          DatLib v1.5 - 17/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+17/07/2004  *** v1.5 ***
+
+	    - Added the OPTION_NEBULA_JUKEBOX (parses Z80 and Samples only).
 
 11/07/2004  *** v1.4 ***
 

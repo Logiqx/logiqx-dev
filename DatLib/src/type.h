@@ -405,12 +405,11 @@ struct ini_entry
 #define OPTION_GAME_AND_CLONES		0x00000800	// DatUtil -c option
 
 #define OPTION_REMOVE_CLONES		0x00001000	// DatUtil -r option
+#define OPTION_NEBULA_JUKEBOX		0x00002000	// DatUtil -j option
 
 #define OPTION_EXTENDED_CHECKSUMS	0x00010000	// DatUtil -x option
-#define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil -x option
-#define OPTION_MD5_CHECKSUMS		0x00040000	// DatUtil -x option
-
-//#define OPTION_COMPLEMENT_BAD_CRCS	0x00004000	// For testing purposes!
+#define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil default
+#define OPTION_MD5_CHECKSUMS		0x00040000	// DatUtil -m option
 
 #define	OPTION_DAT_FULL_MERGING		0x00100000	// Used by MAMEDiff
 #define	OPTION_DAT_SPLIT_MERGING	0x00200000	// Used by MAMEDiff

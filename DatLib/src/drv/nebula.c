@@ -58,6 +58,9 @@ int load_nebula_driver(struct dat *dat)
 	BUFFER1_REWIND
 	BUFFER2_REWIND
 
+	if (dat->options->options & OPTION_NEBULA_JUKEBOX)
+		dat->options->options|=OPTION_REMOVE_CLONES;
+
 	while (!errflg && BUFFER1_REMAINING)
 	{
 		BUFFER1_GET_TOKEN
@@ -67,8 +70,11 @@ int load_nebula_driver(struct dat *dat)
 
 		if (*TOKEN=='[')
 		{
-			if (!strcmp(TOKEN, "[program]") || !strcmp(TOKEN, "[decryption]") || !strcmp(TOKEN, "[text]") ||
-			    !strcmp(TOKEN, "[z80]") || !strcmp(TOKEN, "[samples]") || !strcmp(TOKEN, "[graphics]"))
+			if (!strcmp(TOKEN, "[z80]") || !strcmp(TOKEN, "[samples]"))
+				in_rom_section=1;
+			else if (!(dat->options->options & OPTION_NEBULA_JUKEBOX) &&
+			   	(!strcmp(TOKEN, "[program]") || !strcmp(TOKEN, "[decryption]") ||
+				!strcmp(TOKEN, "[text]") || !strcmp(TOKEN, "[graphics]")))
 				in_rom_section=1;
 			else
 				in_rom_section=0;
