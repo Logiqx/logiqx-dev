@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.6"
-#define DATLIB_DATE "18 July 2004"
+#define DATLIB_VERSION "v1.7"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -70,6 +70,90 @@ void display_datlib_version(void)
  * Directory scanner - dir_scan()
  * Treats sub-directories and ZIPs in the directory being scanned as games
  * -------------------------------------------------------------------------- */
+
+int output_sample_details(FILE *out, char *name)
+{
+	int errflg=0;
+
+	fprintf(out, "%s \"%s\"\n", tokens[TOKEN_SAMPLE_NAME].description, name);
+
+	return(errflg);
+}
+
+int output_chd_details(FILE *out, char *name, char *fn)
+{
+	FILE *in=0;
+
+	char tag[8];
+	uint32_t length=0;
+	uint32_t version=0;
+	uint8_t byte;
+
+	int i=0, errflg=0;
+
+	fprintf(out, "%s \"%s\"\n", tokens[TOKEN_DISK_NAME].description, name);
+
+	FOPEN(in, fn, "rb")
+
+	if (!errflg)
+	{
+		fread(tag, 1, 8, in);
+
+		if (strncmp(tag, "MComprHD", 8))
+		{
+			fprintf(stderr, "Error: CHD file did not have expected header\n");
+			errflg++;
+		}
+	}
+
+	if (!errflg)
+	{
+		for (i=0; i<4; i++)
+		{
+			fread(&byte, 1, 1, in);
+			length=length*256+byte;
+		}
+	}
+
+	if (!errflg)
+	{
+		for (i=0; i<4; i++)
+		{
+			fread(&byte, 1, 1, in);
+			version=version*256+byte;
+		}
+	}
+
+	if (!errflg)
+	{
+		fprintf(out, "%s ", tokens[TOKEN_DISK_MD5].description);
+
+		fseek(in, 44, 0);
+		for (i=0; i<16; i++)
+		{
+			fread(&byte, 1, 1, in);
+			fprintf(out, "%02x", byte);
+		}
+		fprintf(out, "\n");
+	}
+
+	if (!errflg && version>=3)
+	{
+		fprintf(out, "%s ", tokens[TOKEN_DISK_SHA1].description);
+
+		fseek(in, 80, 0);
+		for (i=0; i<20; i++)
+		{
+			fread(&byte, 1, 1, in);
+			fprintf(out, "%02x", byte);
+		}
+		fprintf(out, "\n");
+	}
+
+	FCLOSE(in)
+
+	return(errflg);
+}
 
 int output_rom_details(FILE *out, char *name, uint32_t crc, uint32_t size, char *mem)
 {
@@ -190,7 +274,11 @@ int dir_scan(struct dat *dat)
 					{
 						while (!errflg && (zipent = readzip(zip)) != 0)
 						{
-							if (dat->options->options & OPTION_EXTENDED_CHECKSUMS)
+							if (dat->options->options & OPTION_OBJECT_TYPE_SAMPLE)
+							{
+								errflg=output_sample_details(out, zipent->name);
+							}
+							else if (dat->options->options & OPTION_EXTENDED_CHECKSUMS)
 							{
 								if (zipent->uncompressed_size && zipent->uncompressed_size<=MAX_ROM_SIZE)
 								{
@@ -200,14 +288,14 @@ int dir_scan(struct dat *dat)
 										errflg=readuncompresszip(zip, zipent, mem);
 
 									if (!errflg)
-										output_rom_details(out, zipent->name, 0, zipent->uncompressed_size, mem);
+										errflg=output_rom_details(out, zipent->name, 0, zipent->uncompressed_size, mem);
 
-									FREE(mem);
+									FREE(mem)
 								}
 							}
 							else
 							{
-								output_rom_details(out, zipent->name, zipent->crc32, zipent->uncompressed_size, 0);
+								errflg=output_rom_details(out, zipent->name, zipent->crc32, zipent->uncompressed_size, 0);
 							}
 						}
 						closezip(zip);
@@ -227,15 +315,28 @@ int dir_scan(struct dat *dat)
 						sprintf(st, "%s/%s", fn, sdirentp->d_name);
 						if (stat(st, &buf) == 0)
 						{
-							if (!(buf.st_mode & S_IFDIR) && buf.st_size && buf.st_size<=MAX_ROM_SIZE)
+							if (!(buf.st_mode & S_IFDIR))
 							{
-								BYTE_MALLOC(mem, (int)buf.st_size)
-								BYTE_READ(mem, (int)buf.st_size, st);
+								if (dat->options->options & OPTION_OBJECT_TYPE_SAMPLE)
+								{
+									errflg=output_sample_details(out, sdirentp->d_name);
+								}
+								else if (strrchr(st, '.') && !strcmp(strrchr(st, '.'), ".chd"))
+								{
+									errflg=output_chd_details(out, sdirentp->d_name, st);
+								}
+								else if (buf.st_size && buf.st_size<=MAX_ROM_SIZE)
+								{
+									BYTE_MALLOC(mem, (int)buf.st_size)
 
-								if (!errflg)
-									output_rom_details(out, sdirentp->d_name, 0, buf.st_size, mem);
+									if (!errflg)
+										BYTE_READ(mem, (int)buf.st_size, st)
 
-								FREE(mem);
+									if (!errflg)
+										errflg=output_rom_details(out, sdirentp->d_name, 0, buf.st_size, mem);
+
+									FREE(mem)
+								}
 							}
 						}
 						else
@@ -1781,19 +1882,83 @@ int report_warnings(struct dat *dat)
 	{
 		for (j=i+1; j<dat->num_roms && !strcmp(dat->rom_name_idx[i].rom->name, dat->rom_name_idx[j].rom->name); j++)
 		{
-			if (dat->rom_name_idx[i].rom->crc != dat->rom_name_idx[j].rom->crc &&
-				dat->rom_name_idx[i].rom->crc != ~dat->rom_name_idx[j].rom->crc &&
-				((dat->rom_name_idx[i].rom->game->name && dat->rom_name_idx[j].rom->game->name &&
+			if ((dat->rom_name_idx[i].rom->game->name && dat->rom_name_idx[j].rom->game->name &&
 				!strcmp(dat->rom_name_idx[i].rom->game->name, dat->rom_name_idx[j].rom->game->name)) ||
 				(dat->rom_name_idx[i].rom->game->name && dat->rom_name_idx[j].rom->game->cloneof &&
 				!strcmp(dat->rom_name_idx[i].rom->game->name, dat->rom_name_idx[j].rom->game->cloneof)) ||
 				(dat->rom_name_idx[i].rom->game->cloneof && dat->rom_name_idx[j].rom->game->name &&
 				!strcmp(dat->rom_name_idx[i].rom->game->cloneof, dat->rom_name_idx[j].rom->game->name)) ||
 				(dat->rom_name_idx[i].rom->game->cloneof && dat->rom_name_idx[j].rom->game->cloneof &&
-				!strcmp(dat->rom_name_idx[i].rom->game->cloneof, dat->rom_name_idx[j].rom->game->cloneof))))
+				!strcmp(dat->rom_name_idx[i].rom->game->cloneof, dat->rom_name_idx[j].rom->game->cloneof)))
 			{
-				dat->rom_name_idx[i].rom->rom_warnings|=FLAG_ROM_CONFLICT;
-				dat->rom_name_idx[j].rom->rom_warnings|=FLAG_ROM_CONFLICT;
+				if (dat->rom_name_idx[i].rom->crc && !dat->rom_name_idx[j].rom->crc)
+				{
+					dat->rom_name_idx[j].rom->crc=dat->rom_name_idx[i].rom->crc;
+					dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_CRC;
+					dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_CRC;
+
+					if (dat->rom_name_idx[j].rom->rom_flags & FLAG_ROM_NODUMP)
+					{
+						dat->rom_name_idx[j].rom->rom_flags&=~FLAG_ROM_NODUMP;
+						dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_NODUMP;
+					}
+
+					if (!(dat->rom_name_idx[j].rom->rom_flags & FLAG_ROM_BADDUMP))
+					{
+						dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_BADDUMP;
+						dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_BADDUMP;
+					}
+				}
+				else if (!dat->rom_name_idx[i].rom->crc && dat->rom_name_idx[j].rom->crc)
+				{
+					dat->rom_name_idx[i].rom->crc=dat->rom_name_idx[j].rom->crc;
+					dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_CRC;
+					dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_CRC;
+
+					if (dat->rom_name_idx[i].rom->rom_flags & FLAG_ROM_NODUMP)
+					{
+						dat->rom_name_idx[i].rom->rom_flags&=~FLAG_ROM_NODUMP;
+						dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_NODUMP;
+					}
+
+					if (!(dat->rom_name_idx[i].rom->rom_flags & FLAG_ROM_BADDUMP))
+					{
+						dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_BADDUMP;
+						dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_BADDUMP;
+					}
+				}
+				else if (dat->rom_name_idx[i].rom->crc != dat->rom_name_idx[j].rom->crc &&
+					dat->rom_name_idx[i].rom->crc != ~dat->rom_name_idx[j].rom->crc)
+				{
+					dat->rom_name_idx[i].rom->rom_warnings|=FLAG_ROM_CONFLICT;
+					dat->rom_name_idx[j].rom->rom_warnings|=FLAG_ROM_CONFLICT;
+				}
+
+				if (dat->rom_name_idx[i].rom->sha1 && !dat->rom_name_idx[j].rom->sha1)
+				{
+					dat->rom_name_idx[j].rom->sha1=dat->rom_name_idx[i].rom->sha1;
+					dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_SHA1;
+					dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_SHA1;
+				}
+				else if (!dat->rom_name_idx[i].rom->sha1 && dat->rom_name_idx[j].rom->sha1)
+				{
+					dat->rom_name_idx[i].rom->sha1=dat->rom_name_idx[j].rom->sha1;
+					dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_SHA1;
+					dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_SHA1;
+				}
+
+				if (dat->rom_name_idx[i].rom->md5 && !dat->rom_name_idx[j].rom->md5)
+				{
+					dat->rom_name_idx[j].rom->md5=dat->rom_name_idx[i].rom->md5;
+					dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_MD5;
+					dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_MD5;
+				}
+				else if (!dat->rom_name_idx[i].rom->md5 && dat->rom_name_idx[j].rom->md5)
+				{
+					dat->rom_name_idx[i].rom->md5=dat->rom_name_idx[j].rom->md5;
+					dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_MD5;
+					dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_MD5;
+				}
 			}
 		}
 	}
@@ -3453,7 +3618,7 @@ struct dat *free_dat(struct dat *dat)
 			printf("%-16s: ", "Datlib.free_dat");
 			printf("Freeing memory of dat structure...\n");
 		}
-		FREE(dat);
+		FREE(dat)
 	}
 
 	if (datlib_debug)
@@ -3521,7 +3686,7 @@ struct ini_entry *load_ini(char *fn)
 
 struct ini_entry *free_ini(struct ini_entry *ini)
 {
-	FREE(ini);
+	FREE(ini)
 
 	return(ini);
 }

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.6 - 18/07/2004
+                          DatLib v1.7 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,13 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v1.7 ***
+
+	    - Avoids duplicate ROMs in MAMEDiff dats using -m and -d1/-d2/-d3.
+	    - Directory scanner now supports CHDs (when in a game directory).
+	    - Directory scanner can spoof samples (OPTION_OBJECT_TYPE_SAMPLE).
+	    - Improved 'fix merging' where clone ROMs are not in the parent.
 
 18/07/2004  *** v1.6 ***
 
