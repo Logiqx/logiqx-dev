@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.1 - 04/07/2004
+                          DatLib v1.2 - 05/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,9 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+05/07/2004  *** v1.1 ***
+            - Removed ROM size limit when extended checksums are not being used.
 
 04/07/2004  *** v1.1 ***
             - ClrMamePro/RomCenter header is now ignored when using OPTION_GAME.
