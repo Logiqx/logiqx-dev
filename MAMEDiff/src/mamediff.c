@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.1"
-#define MAMEDIFF_DATE "4 July 2004"
+#define MAMEDIFF_VERSION "v2.2"
+#define MAMEDIFF_DATE "5 July 2004"
 
 
 /* --- The standard includes --- */

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.1 - 04/07/2004
+                          MAMEDiff v2.1 - 05/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -269,6 +269,14 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+05/07/2004  *** v2.2 ***
+
+            - When using -d1/-d2/-d3, games without ROMs are now ignored.
+            - When using -d1/-d2/-d3 and -z, no dumps that replace a real CRC
+              are not considered a change now (keeping previous ROM is fine).
+            - Fixed a bug in the standard comparison that could cause a memory
+              fault and crash MAMEDiff.
 
 04/07/2004  *** v2.1 ***
 
