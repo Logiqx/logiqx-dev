@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.1 - 10/09/2004
+                         ROMBuild v2.2 - 26/10/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,10 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+26/10/2004  *** v2.2 ***
+
+            Added Dynasty Wars support for various emus following MAME v0.87.
 
 10/09/2004  *** v2.1 ***
 
