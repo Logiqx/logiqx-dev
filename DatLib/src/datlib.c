@@ -2832,7 +2832,7 @@ int build_zip_structures(struct dat *dat)
 		printf("g: %s\n", curr_game_zip->game->name);
 
 		for (j=0, curr_game_zip_rom=curr_game_zip->game_zip_roms; j<curr_game_zip->num_game_zip_roms; j++, curr_game_zip_rom++)
-			printf("   r: %s\n", curr_game_zip_rom->rom->name);
+			printf("   r: %s (%08lx)\n", curr_game_zip_rom->rom->name, (unsigned long) curr_game_zip_rom->rom->crc);
 	}*/
 
 	return(errflg);
@@ -3195,14 +3195,14 @@ struct dat *init_dat(struct options *options)
 	if (!errflg)
 		errflg=rebuild_dat_indices(dat);
 
-	if (!errflg)
-		errflg=build_zip_structures(dat);
-
 	if (!errflg && dat->log_file)
 		errflg=report_warnings(dat);
 
 	if (!errflg && dat->log_file)
 		errflg=report_fixes(dat);
+
+	if (!errflg)
+		errflg=build_zip_structures(dat);
 
 	/* --- If any error occurred then throw everything away --- */
 
