@@ -11,7 +11,7 @@
 
 /* --- Driver structure --- */
 
-struct driver
+struct datlib_driver
 {
 	char *description;
 
@@ -31,7 +31,7 @@ struct driver
 int identify_##NAME(struct dat *); \
 int load_##NAME(struct dat *); \
 int save_##NAME(struct dat *); \
-struct driver driver_##NAME = \
+struct datlib_driver datlib_driver_##NAME = \
 { \
 	DESCRIPTION, \
 \
@@ -44,7 +44,7 @@ struct driver driver_##NAME = \
 	save_##NAME \
 };
 
-#define DRIVER(NAME) &driver_##NAME,
+#define DRIVER(NAME) &datlib_driver_##NAME,
 
 
 #endif /* _DATLIB_DRIVER_H_ */

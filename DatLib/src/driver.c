@@ -14,7 +14,7 @@ DECLARE_DRIVER(mame_listinfo, "MAME ListInfo", "listinfo", 0)
 DECLARE_DRIVER(romcenter_250, "RomCenter 2.50", "romcenter2", 7)
 DECLARE_DRIVER(romcenter_200, "RomCenter 2.00", NULL, 7)
 DECLARE_DRIVER(romcenter_190, "RomCenter 1.90", NULL, 7)
-DECLARE_DRIVER(mame_listxml, "MAME ListXML", NULL, 0)
+DECLARE_DRIVER(mame_listxml, "MAME ListXML", "listxml", 0)
 DECLARE_DRIVER(mess_listxml, "MESS ListXML", NULL, 0)
 DECLARE_DRIVER(mess_listinfo, "MESS ListInfo", NULL, 0)
 DECLARE_DRIVER(nebula_driver, "Nebula Driver", NULL, 0)
@@ -30,7 +30,7 @@ DECLARE_DRIVER(ziplist, "ZIP List", NULL, 5)
 
 /* --- List the drivers that have already been declared --- */
 
-const struct driver *drivers[] =
+const struct datlib_driver *datlib_drivers[] =
 {
 	DRIVER(mame_listinfo)
 	DRIVER(romcenter_250)
