@@ -5,7 +5,7 @@
 
 #include <unistd.h>
 
-#if defined (__MINGW32_VERSION) || defined (__CYGWIN__) || defined (_MSC_VER)
+#if defined (__CYGWIN__) || defined (_MSC_VER)
 int getopt(int argc, char **argv, char *opts);
 #endif
 

@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.12"
-#define DATLIB_DATE "25 November 2004"
+#define DATLIB_VERSION "v1.13"
+#define DATLIB_DATE "4 January 2005"
 
 
 /* --- Standard includes --- */
@@ -1320,7 +1320,8 @@ int add_missing_info(struct dat *dat)
 
 				if (rom_match)
 				{
-					if (rom_match->rom->crc==curr_rom->crc || rom_match->rom->crc==~curr_rom->crc)
+					if (rom_match->rom->crc==curr_rom->crc || rom_match->rom->crc==~curr_rom->crc ||
+						curr_rom->rom_flags & FLAG_ROM_NODUMP)
 					{
 						if (rom_match->rom->size!=curr_rom->size)
 						{
@@ -1333,7 +1334,12 @@ int add_missing_info(struct dat *dat)
 							curr_rom->rom_fixes|=FLAG_ROM_CRC;
 							curr_rom->crc=rom_match->rom->crc;
 
-							if (!(curr_rom->rom_flags & FLAG_ROM_BADDUMP))
+							if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
+							{
+								curr_rom->rom_fixes|=FLAG_ROM_NODUMP;
+								curr_rom->rom_flags&=~FLAG_ROM_NODUMP;
+							}
+							else if (!(curr_rom->rom_flags & FLAG_ROM_BADDUMP))
 							{
 								curr_rom->rom_fixes|=FLAG_ROM_BADDUMP;
 								curr_rom->rom_flags|=FLAG_ROM_BADDUMP;

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.12 - 25/11/2004
+                          DatLib v1.13 - 04/01/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -23,6 +23,7 @@ Load only:
   - RomCenter 2.00
   - MAME and MESS ListXML
   - Nebula Drivers
+  - Calice Drivers
   - Zinc --list-sets
   - ClrMame Log
   - Folder Scan (subdirectories and zips)
@@ -171,6 +172,12 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+04/01/2005  *** v1.13 ***
+
+            - Added support for Calice drivers.
+            - Modified the -i functionality for the use of Calice drivers.
+            - Made a change to getopt.h for the latest version of MinGW/GCC.
 
 25/11/2004  *** v1.12 ***
 
