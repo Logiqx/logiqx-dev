@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.7 - 22/07/2004
+                          MAMEDiff v2.8 - 30/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+30/07/2004  *** v2.8 ***
+
+            - Uses DatLib v1.9.
+            - Added full support for disk 'merge' and 'flags' information.
 
 22/07/2004  *** v2.7 ***
 

@@ -127,9 +127,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_disk2=curr_game_zip2->game_zip_disks;
 					!found && k<curr_game_zip2->num_game_zip_disks; k++, curr_game_zip_disk2++)
 				{
-					if ((curr_game_zip_disk2->disk->crc==0 ||
+					if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
 						curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
-						((renames==0 && curr_game_zip_disk2->disk->crc!=0) ||
+						((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
 						 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
 					{
 						found++;
@@ -312,9 +312,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_disk1=curr_game_zip1->game_zip_disks;
 					!found && k<curr_game_zip1->num_game_zip_disks; k++, curr_game_zip_disk1++)
 				{
-					if ((curr_game_zip_disk2->disk->crc==0 ||
+					if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
 						curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
-						((renames==0 && curr_game_zip_disk2->disk->crc!=0) ||
+						((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
 						 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
 					{
 						found++;
@@ -339,9 +339,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 					for (k=0, curr_disk=curr_game->disks; !found && k<curr_game->num_disks; k++, curr_disk++)
 					{
-						if ((curr_game_zip_disk2->disk->crc==0 ||
+						if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
 							curr_disk->crc==curr_game_zip_disk2->disk->crc) &&
-							((renames==0 && curr_game_zip_disk2->disk->crc!=0) ||
+							((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
 							!strcmp(curr_disk->name, curr_game_zip_disk2->disk->name)))
 						{
 							found++;
@@ -703,7 +703,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 							curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED ||
 							(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
 						{
-							if (curr_disk->crc==0)
+							if (curr_disk->disk_flags & FLAG_DISK_NODUMP)
 								fprintf(changes_log, "  Disk: %12s (no dump available)", curr_disk->name);
 							else
 							{
@@ -798,32 +798,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED ||
 						(diff_type==2 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE))
 					{
-						if (strchr(curr_rom->name, ' '))
-							fprintf(changes_dat, "\trom ( name \"%s\" ", curr_rom->name);
-						else
-							fprintf(changes_dat, "\trom ( name %s ", curr_rom->name);
+						curr_rom->merge=0;
 
-						fprintf(changes_dat, "size %ld ", (unsigned long) curr_rom->size);
+						FORMAT_LISTINFO_ROM(st, curr_rom)
 
-						if (curr_rom->crc!=0)
-							fprintf(changes_dat, "crc %08lx ", (unsigned long) curr_rom->crc);
-
-						if (curr_rom->sha1!=0)
-							fprintf(changes_dat, "sha1 %s ", curr_rom->sha1);
-
-						if (curr_rom->md5!=0)
-							fprintf(changes_dat, "md5 %s ", curr_rom->md5);
-
-						if (curr_rom->region!=0)
-							fprintf(changes_dat, "region %s ", curr_rom->region);
-
-						if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
-							fprintf(changes_dat, "flags baddump ");
-
-						if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
-							fprintf(changes_dat, "flags nodump ");
-
-						fprintf(changes_dat, ")\n");
+						fprintf(changes_dat, "\t%s\n", st);
 					}
 				}
 
@@ -838,21 +817,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED ||
 						(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
 					{
-						if (strchr(curr_disk->name, ' '))
-							fprintf(changes_dat, "\tdisk ( name \"%s\" ", curr_disk->name);
-						else
-							fprintf(changes_dat, "\tdisk ( name %s ", curr_disk->name);
+						curr_disk->merge=0;
 
-						if (curr_disk->sha1!=0)
-							fprintf(changes_dat, "sha1 %s ", curr_disk->sha1);
+						FORMAT_LISTINFO_DISK(st, curr_disk)
 
-						if (curr_disk->md5!=0)
-							fprintf(changes_dat, "md5 %s ", curr_disk->md5);
-
-						if (curr_disk->region!=0)
-							fprintf(changes_dat, "region %s ", curr_disk->region);
-
-						fprintf(changes_dat, ")\n");
+						fprintf(changes_dat, "\t%s\n", st);
 					}
 				}
 
@@ -867,12 +836,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ADDED ||
 						(diff_type==2 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE))
 					{
-						if (strchr(curr_sample->name, ' '))
-							fprintf(changes_dat, "\tsample \"%s\"", curr_sample->name);
-						else
-							fprintf(changes_dat, "\tsample %s", curr_sample->name);
+						curr_sample->merge=0;
 
-						fprintf(changes_dat, "\n");
+						FORMAT_LISTINFO_SAMPLE(st, curr_sample)
+
+						fprintf(changes_dat, "\t%s\n", st);
 					}
 				}
 

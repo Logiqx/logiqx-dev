@@ -638,7 +638,7 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					(game_changes[i].rom_changes[k].rom_flags & ROM_UNMERGED)) &&
 					!(rom_flags & ROM_ADDED))
 				{
-					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom1)
+					FORMAT_LISTINFO_ROM(st, game_changes[i].rom_changes[k].rom1)
 					fprintf(out, "< %s\n", st);
 				}
 
@@ -650,7 +650,7 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					(game_changes[i].rom_changes[k].rom_flags & ROM_UNMERGED)) &&
 					!(rom_flags & ROM_ADDED))
 				{
-					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom2)
+					FORMAT_LISTINFO_ROM(st, game_changes[i].rom_changes[k].rom2)
 					fprintf(out, "> %s\n", st);
 				}
 
@@ -659,7 +659,7 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					((game_changes[i].rom_changes[k].rom_flags & P_ROM_ADDED) &&
 					(rom_flags & P_ROM_ADDED)))
 				{
-					FORMAT_ROM_NAME(st, game_changes[i].rom_changes[k].rom2)
+					FORMAT_LISTINFO_ROM(st, game_changes[i].rom_changes[k].rom2)
 					fprintf(out, "> %s", st);
 
 					if (game_changes[i].rom_changes[k].rom2->rom_flags & FLAG_ROM_NODUMP)
@@ -679,24 +679,24 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 					(game_changes[i].disk_changes[k].disk_flags & DISK_REMOVED)) &&
 					!(disk_flags & DISK_ADDED))
 				{
-					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk1)
+					FORMAT_LISTINFO_DISK(st, game_changes[i].disk_changes[k].disk1)
 					fprintf(out, "< %s\n", st);
 				}
 
 				if ((game_changes[i].disk_changes[k].disk_flags & DISK_RENAMED) &&
 					!(disk_flags & DISK_ADDED))
 				{
-					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk2)
+					FORMAT_LISTINFO_DISK(st, game_changes[i].disk_changes[k].disk2)
 					fprintf(out, "> %s\n", st);
 				}
 
 				if ((game_changes[i].disk_changes[k].disk_flags & DISK_ADDED) &&
 					(disk_flags & DISK_ADDED))
 				{
-					FORMAT_DISK_NAME(st, game_changes[i].disk_changes[k].disk2)
+					FORMAT_LISTINFO_DISK(st, game_changes[i].disk_changes[k].disk2)
 					fprintf(out, "> %s", st);
 
-					if (game_changes[i].disk_changes[k].disk2->crc==0)
+					if (game_changes[i].disk_changes[k].disk2->disk_flags & FLAG_DISK_NODUMP)
 						fprintf(out, " *just ignore\n");
 					else if (bsearch((const void *)&game_changes[i].disk_changes[k].disk2->crc, dat1->disk_crc_idx, dat1->num_disks, sizeof(struct disk_idx), find_disk_by_crc))
 						fprintf(out, " *already in MAME\n");
@@ -710,14 +710,14 @@ void report_game_changes(FILE *out, uint16_t game_flags, uint16_t rom_flags, uin
 				if (((game_changes[i].sample_changes[k].sample_flags & SAMPLE_REMOVED)) &&
 					!(sample_flags & SAMPLE_ADDED))
 				{
-					FORMAT_SAMPLE_NAME(st, game_changes[i].sample_changes[k].sample1)
+					FORMAT_LISTINFO_SAMPLE(st, game_changes[i].sample_changes[k].sample1)
 					fprintf(out, "< %s\n", st);
 				}
 
 				if ((game_changes[i].sample_changes[k].sample_flags & SAMPLE_ADDED) &&
 					(sample_flags & SAMPLE_ADDED))
 				{
-					FORMAT_SAMPLE_NAME(st, game_changes[i].sample_changes[k].sample2)
+					FORMAT_LISTINFO_SAMPLE(st, game_changes[i].sample_changes[k].sample2)
 					fprintf(out, "> %s\n", st);
 				}
 			}
@@ -950,6 +950,11 @@ int report_required_rebuilds(FILE *out, struct dat *dat, uint16_t child_game_fla
 
 void print_game(FILE *new, struct game *game)
 {
+	struct rom *curr_rom;
+	struct disk *curr_disk;
+	struct sample *curr_sample;
+	char st[MAX_STRING_LENGTH];
+
 	int i;
 
 	if (game->game_flags & FLAG_RESOURCE_NAME)
@@ -973,30 +978,25 @@ void print_game(FILE *new, struct game *game)
 			fprintf(new, "\tmanufacturer \"%s\"\n", game->manufacturer);
 	}
 
-	for (i=0; i<game->num_roms; i++)
+	for (i=0, curr_rom=game->roms; i<game->num_roms; i++, curr_rom++)
 	{
-		if (game->cloneof && game->roms[i].merge)
-		{
-			fprintf(new, "\trom ( name %s merge %s size %lu ", game->roms[i].name, game->roms[i].merge, (unsigned long) game->roms[i].size);
+		FORMAT_LISTINFO_ROM(st, curr_rom)
 
-			if (game->roms[i].crc)
-				fprintf(new, "crc %08lx ", (unsigned long) game->roms[i].crc);
-			else
-				fprintf(new, "flags nodump ");
+		fprintf(new, "\t%s\n", st);
+	}
 
-			fprintf(new, ")\n");
-		}
-		else
-		{
-			fprintf(new, "\trom ( name %s size %lu ", game->roms[i].name, (unsigned long) game->roms[i].size);
+	for (i=0, curr_disk=game->disks; i<game->num_disks; i++, curr_disk++)
+	{
+		FORMAT_LISTINFO_DISK(st, curr_disk)
 
-			if (game->roms[i].crc)
-				fprintf(new, "crc %08lx ", (unsigned long) game->roms[i].crc);
-			else
-				fprintf(new, "flags nodump ");
+		fprintf(new, "\t%s\n", st);
+	}
 
-			fprintf(new, ")\n");
-		}
+	for (i=0, curr_sample=game->samples; i<game->num_samples; i++, curr_sample++)
+	{
+		FORMAT_LISTINFO_SAMPLE(st, curr_sample)
+
+		fprintf(new, "\t%s\n", st);
 	}
 
 	fprintf(new, ")\n\n");
