@@ -28,6 +28,7 @@ int find_game_zip_by_name(const void *name, const void *game_zip_idx);
 int find_rom_by_crc(const void *crc, const void *rom_idx);
 int find_rom_by_comp_crc(const void *crc, const void *rom_idx);
 int find_rom_by_name(const void *name, const void *rom_idx);
+int find_disk_by_crc(const void *crc, const void *disk_idx);
 int find_disk_by_name(const void *name, const void *disk_idx);
 int find_sample_by_name(const void *name, const void *sample_idx);
 int find_game_by_crc(const void *crc, const void *game_idx);
@@ -53,15 +54,6 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 	strcat(ST, "]"); \
 }
 
-/*#define FORMAT_ROM_NAME(ST, ROM) \
-{ \
-	if (ROM->merge) \
-		sprintf(ST, "rom ( name %s merge %s size %lu crc %08lx ", ROM->name, ROM->merge, (unsigned long) ROM->size, (unsigned long) ROM->crc); \
-	else \
-		sprintf(ST, "rom ( name %s size %lu crc %08lx ", ROM->name, (unsigned long) ROM->size, (unsigned long) ROM->crc); \
-	strcat(ST, ")"); \
-}*/
-
 #define FORMAT_ROM_NAME(ST, ROM) \
 { \
 	char crc[9]; \
@@ -86,6 +78,11 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 		strcat(ST, " md5 "); \
 		strcat(ST, ROM->md5); \
 	} \
+	if (ROM->region) \
+	{ \
+		strcat(ST, " region "); \
+		strcat(ST, ROM->region); \
+	} \
 	if (ROM->rom_flags & FLAG_ROM_BADDUMP) \
 	{ \
 		strcat(ST, " flags baddump"); \
@@ -95,6 +92,32 @@ char *find_ini_value(struct ini_entry *ini, char *section, char *param);
 		strcat(ST, " flags nodump"); \
 	} \
 	strcat(ST, " )"); \
+}
+
+#define FORMAT_DISK_NAME(ST, DISK) \
+{ \
+	sprintf(ST, "disk ( name %s", DISK->name); \
+	if (DISK->sha1) \
+	{ \
+		strcat(ST, " sha1 "); \
+		strcat(ST, DISK->sha1); \
+	} \
+	if (DISK->md5) \
+	{ \
+		strcat(ST, " md5 "); \
+		strcat(ST, DISK->md5); \
+	} \
+	if (DISK->region) \
+	{ \
+		strcat(ST, " region "); \
+		strcat(ST, DISK->region); \
+	} \
+	strcat(ST, " )"); \
+}
+
+#define FORMAT_SAMPLE_NAME(ST, SAMPLE) \
+{ \
+	sprintf(ST, "sample %s", SAMPLE->name); \
 }
 
 #endif /* _DATLIB_H_ */
