@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.2"
-#define DATUTIL_DATE "11 July 2004"
+#define DATUTIL_VERSION "v2.3"
+#define DATUTIL_DATE "17 July 2004"
 
 
 /* --- The standard includes --- */
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "g:cro:a:f:lsxmi:zyvdA:V:C:R:F:M:Z:")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "g:crjo:a:f:lsxmi:zyvdA:V:C:R:F:M:Z:")) != EOF)
 	switch (c)
 	{
 		case 'g':
@@ -82,6 +82,9 @@ int main(int argc, char **argv)
 			break;
 		case 'r':
 			options->options|=OPTION_REMOVE_CLONES;
+			break;
+		case 'j':
+			options->options|=OPTION_NEBULA_JUKEBOX;
 			break;
 		case 'o':
 			options->save_name=optarg;
@@ -158,8 +161,8 @@ int main(int argc, char **argv)
 	if (errflg)
 	{
 		printf("Usage: datutil [-f <format>] [-o|a <outfile>] [-g <game> [-c]] [-s] [-r] [-l]\n");
-		printf("  [-x] [-m] [-i <info>] [-z] [-y] [-A <author>] [-V <version>] [-C <category>]\n");
-		printf("  [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>] [-v] <infile>\n\n");
+		printf("[-x] [-m] [-i <info>] [-z] [-y] [-A <author>] [-V <version>] [-C <category>]\n");
+		printf("[-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>] [-v] [-j] <infile>\n\n");
 		printf("Converts a dat to a different format. The output format can be specified with\nthe -f option (e.g. listinfo, romcenter2 and titlelist).\n");
 		printf("To specify the output filename use the -o option (or -a for append).\n\n");
 		printf("Individual games can be converted using the -g option (using -c will also\nconvert the clones). If required, the -s option can be used to sort the games\nby their parent name and the -r option can be used to remove clones. Use -l\nto convert all names to lowercase. The -x option can be used to generate SHA1\nor MD5 values when scanning ZIPs. To use MD5 rather than SHA1 (the default),\nspecify the -m option. The -i option will take missing info from another dat.\nThe -z and -y options are used to ignore funny sizes and missing years.\nFor a verbose log file (recommended), use the -v option.\n\n");

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.2 - 11/07/2004
+                         DatUtil v2.3 - 17/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -182,6 +182,7 @@ Defaults (behavior within DatLib that can not be switched off):
 Cleansing:
 
   -l  lower case game names and ROM names
+  -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
   -s  sort games by parent (sorted by parent name then game name)
   -i  include missing information from a 'reference' data file.
 
@@ -284,6 +285,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+17/07/2004  *** v2.3 ***
+
+            - Uses DatLib v1.5
+	    - Added the -j option for Nebula Jukebox (Z80 and Samples only).
 
 11/07/2004  *** v2.2 ***
 
