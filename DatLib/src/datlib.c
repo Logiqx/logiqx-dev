@@ -2270,12 +2270,14 @@ int fix_merging_phase_1(struct dat *dat)
 		{
 			curr_game->cloneof=0;
 			curr_game->game_fixes|=FLAG_GAME_CLONEOF;
+			curr_game->game_flags&=~FLAG_GAME_CLONEOF;
 		}
 
 		if (curr_game->romof && !strcmp(curr_game->name, curr_game->romof))
 		{
 			curr_game->romof=0;
 			curr_game->game_fixes|=FLAG_GAME_ROMOF;
+			curr_game->game_flags&=~FLAG_GAME_ROMOF;
 		}
 
 		/* --- Fix romof --- */
@@ -2292,6 +2294,7 @@ int fix_merging_phase_1(struct dat *dat)
 			{
 				curr_game->romof=0;
 				curr_game->game_fixes|=FLAG_GAME_ROMOF;
+				curr_game->game_flags&=~FLAG_GAME_ROMOF;
 			}
 			else
 			{
@@ -2307,6 +2310,7 @@ int fix_merging_phase_1(struct dat *dat)
 			{
 				curr_game->cloneof=0;
 				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
+				curr_game->game_flags&=~FLAG_GAME_CLONEOF;
 			}
 			else
 			{
@@ -2330,6 +2334,7 @@ int fix_merging_phase_1(struct dat *dat)
 			{
 				curr_game->sampleof=0;
 				curr_game->game_fixes|=FLAG_GAME_SAMPLEOF;
+				curr_game->game_flags&=~FLAG_GAME_SAMPLEOF;
 			}
 			else
 			{
@@ -2428,6 +2433,7 @@ int fix_merging_phase_1(struct dat *dat)
 			{
 				curr_rom->merge=0;
 				curr_rom->rom_fixes|=FLAG_ROM_MERGE;
+				curr_rom->rom_flags&=~FLAG_ROM_MERGE;
 			}
 		}
 	}
@@ -2538,6 +2544,7 @@ int fix_merging_phase_1(struct dat *dat)
 			{
 				curr_disk->merge=0;
 				curr_disk->disk_fixes|=FLAG_DISK_MERGE;
+				curr_disk->disk_flags&=~FLAG_DISK_MERGE;
 			}
 		}
 	}
