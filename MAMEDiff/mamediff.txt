@@ -272,7 +272,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 06/07/2004  *** v2.3 ***
 
-            - Compiled with DatLib v2.3 to fix a small issue with -d1/-d2/-d3.
+            - Compiled with DatLib v1.3 to fix a small issue with -d1/-d2/-d3.
               Problem only affected data files containing games without ROMs.
 
 05/07/2004  *** v2.2 ***
