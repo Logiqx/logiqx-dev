@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPIdent v2.2 - 22/07/2004
+                         ZIPIdent v2.3 - 13/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -181,6 +181,12 @@ matched against different games).
 
 History
 -------
+
+13/02/2005  *** v2.3 ***
+
+            - Uses DatLib v2.0.
+            - Uses the DatLib flag OPTION_KEEP_FULL_DETAILS (for ROM regions).
+            - Moved the macro FORMAT_GAME_NAME out of DatLib, into ZIPIdent.
 
 22/07/2004  *** v2.2 ***
 

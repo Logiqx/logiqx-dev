@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ZIPIDENT_VERSION "v2.2"
-#define ZIPIDENT_DATE "22 July 2004"
+#define ZIPIDENT_VERSION "v2.3"
+#define ZIPIDENT_DATE "13 February 2005"
 
 
 /* --- The standard includes --- */
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 
 	if (!errflg)
 	{
-		options->options=OPTION_LOWER_CASE|OPTION_SHOW_SUMMARY;
+		options->options=OPTION_LOWER_CASE|OPTION_KEEP_FULL_DETAILS|OPTION_SHOW_SUMMARY;
 		options->fn=st;
 	}
 

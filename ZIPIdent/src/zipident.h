@@ -91,6 +91,19 @@ int process_entries(FILE *, FILE *, struct dat *, struct game_match *, char *, s
 
 /* --- Useful macros --- */
 
+#define FORMAT_GAME_NAME(ST, GAME) \
+{ \
+	strcpy(ST, GAME->description); \
+	strcat(ST, " [name: "); \
+	strcat(ST, GAME->name); \
+	if (GAME->cloneof) \
+	{ \
+		strcat(ST, " - parent: "); \
+		strcat(ST, GAME->cloneof); \
+	} \
+	strcat(ST, "]"); \
+}
+
 #define MATCH_ROM \
 { \
 	match=0; \
