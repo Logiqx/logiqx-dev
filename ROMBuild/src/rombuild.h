@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
- * ROMBuild - Written by Logiqx (http://www.logiqx.com)
+ * ROMBuild - Written by Logiqx (http://www.logiqx.com/)
  *
  * A simple little utility for re-building ROMs
  * -------------------------------------------------------------------------- */
