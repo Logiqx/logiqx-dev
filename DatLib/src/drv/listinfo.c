@@ -628,6 +628,9 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\tdisk ( name %s ", curr_disk->name);
 
+			//if (curr_disk->crc!=0)
+				//fprintf(dat->out, "crc %08lx ", (unsigned long) curr_disk->crc);
+
 			if (curr_disk->sha1!=0)
 				fprintf(dat->out, "sha1 %s ", curr_disk->sha1);
 
