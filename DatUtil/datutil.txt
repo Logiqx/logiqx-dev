@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.8 - 26/10/2004
+                         DatUtil v2.9 - 25/11/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -286,6 +286,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+25/11/2004  *** v2.9 ***
+
+            - Uses DatLib v1.12.
+            - Improved the handling of CRC conflicts within the 'fix merging'.
 
 26/10/2004  *** v2.8 ***
 
