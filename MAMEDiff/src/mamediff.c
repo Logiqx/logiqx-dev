@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.5"
-#define MAMEDIFF_DATE "18 July 2004"
+#define MAMEDIFF_VERSION "v2.6"
+#define MAMEDIFF_DATE "21 July 2004"
 
 
 /* --- The standard includes --- */
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
-	int verbose=0, caesar=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0;
+	int verbose=0, caesar=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
 
 	struct options *options=0;
 	struct dat *dat1=0, *dat2=0;
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while ((c = getopt(argc, argv, "vcmsnd:rzb?MSNtT")) != EOF)
+	while ((c = getopt(argc, argv, "vcmsnd:rzbo:?MSNtT")) != EOF)
 	switch (c)
 	{
 		case 'v':
@@ -103,6 +103,14 @@ int main(int argc, char **argv)
 			break;
 		case 'z':
 			zeros++;
+			break;
+		case 'o':
+			if (!strcmp(optarg, "sample"))
+				object_type=OPTION_OBJECT_TYPE_SAMPLE;
+			else if (!strcmp(optarg, "disk"))
+				object_type=OPTION_OBJECT_TYPE_DISK;
+			else
+				errflg++;
 			break;
 		case '?':
 			errflg++;   /* User wants help! */
@@ -195,7 +203,7 @@ int main(int argc, char **argv)
 
 	if (errflg)
 	{
-		printf("Usage: mamediff [-v] | [[-m|-s|-n] [-d[1|2|3] [-r] [-z] [-b]]] <old> <new>\n\n");
+		printf("Usage: mamediff [-v] | [[-m|-s|-n] [-d[1|2|3] -o[disk|sample] [-r] [-z] [-b]]]\n       <old data file> <new data file 2>\n\n");
 		printf("Running MAMEDiff without specifying a type of ROM set will produce a summary of\nchanges made to the ROM sets of individual games. If you specify a type of ROM\nset, MAMEDiff will tell you which ZIP files need rebuilding (if you have them).\n\n");
 		printf("The three ROM set types are 'm'erged, 's'plit or 'n'on-merged.\n\n");
 		printf("Use verbose mode (the -v option) for a detailed report of ROM changes.\n\n");
@@ -209,9 +217,14 @@ int main(int argc, char **argv)
 
 	if (!errflg)
 	{
-		options->options=set_type|OPTION_SHOW_SUMMARY;
+		options->options=set_type|object_type|OPTION_SHOW_SUMMARY;
+
 		if (bios)
 			options->options|=OPTION_NON_SEPERATED_BIOS_ROMS;
+
+		if (zeros)
+			options->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+
 		options->fn=argv[optind];
 	}
 
@@ -239,7 +252,7 @@ int main(int argc, char **argv)
 		if (diff_type==0)
 			errflg=standard_compare(dat1, dat2, verbose, caesar, set_type);
 		else
-			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros);
+			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros, object_type);
 	}
 
 	/* --- Free memory --- */

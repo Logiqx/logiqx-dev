@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.5 - 18/07/2004
+                          MAMEDiff v2.6 - 21/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -189,11 +189,36 @@ When using the -d1, -d2 and -d3 options, there are two additional options:
 
 -b will include allow you to use non-separated BIOS ROMs just like ClrMamePro.
 
+-o can be used to change the object type (valid types are 'disk' or 'sample')
+   that the supplement is for (the default object type is 'rom').
+
 In order for the -d options to work, they interpret the clrmamepro header item
 'forcemerging' from the dats (to identify the styles of ROM merging that
 are supported by the emulators). Absense of this item is taken to mean that all
 types of merging are supported (i.e. ROMs can be in either parent or clone) and
 'split merging' is assumed as a default if you do not specify -m, -s or -n.
+
+
+5.4 ROM auditing using the -d1 option
+-------------------------------------
+
+You can scan audit ROMs to a certain degree with the -d1 option (by comparing
+a directory against a data file). This can be achieved with a command along
+the lines of:
+
+mamediff -s -d1 -r "E:\MAME\ROMs" "MAME v0.84.dat"
+
+The same principal can also be used for disks and samples (using the -o option
+of MAMEDiff as described earlier in this document).
+
+mamediff -m -d1 -r -o sample "E:\MAME\Samples" "MAME v0.84.dat"
+
+n.b. ClrMamePro seems to fully merges samples, hence the -m option being used.
+
+mamediff -s -d1 -o disk "E:\MAME\CHDs" "MAME v0.84.dat"
+
+n.b. Some CHDs are missing the '.chd' extension in the MAME XML output, hence
+     the -r option is not specified (since renames need to be ignored).
 
 
 6. Usage changes in v2.0
@@ -271,6 +296,16 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+21/07/2004  *** v2.6 ***
+
+            - Uses DatLib v1.7
+            - Added support for MESS XML.
+            - Avoids duplicate ROMs in MAMEDiff -d1/-d2/-d3 data files.
+            - Added support for disks and samples in the -d1/-d2/-d3 options.
+              Use '-o disk' or '-o sample' to specify the desired object type.
+              These options even work when comparing directories against dats!
+            - Added instructions to the readme about ROM/disk/sample auditing.
 
 18/07/2004  *** v2.5 ***
 
