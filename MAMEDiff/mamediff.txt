@@ -296,7 +296,10 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 xx/xx/xxxx  *** v2.15 ***
 
+            - Uses DatLib v2.1.
             - Now outputs a listing of game name comparisons (mamediff.out).
+            - Can identify listinfo files even if they only contain resources.
+            - Changed the error messages that are given when files are missing.
 
 13/02/2005  *** v2.14 ***
 
