@@ -378,7 +378,6 @@ History
 28/02/2005  *** v2.14 ***
 
             - Uses DatLib v2.2.
-            - Changed strtof to atof (for the guys compiling on NetBSD).
             - Added support for tab delimited files ('-f delimited').
             - Added save-support for RomCenter sublists ('-f sublist').
             - Added \t support to the listinfo driver (and tab delimited).
