@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.2 - xx/xx/xxxx
+                         DatUtil v2.2 - 11/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -128,18 +128,62 @@ information and exact details of the cleansing performed, use the '-v' option
 for a verbose log file.
 
 
+Cleansing dats
+--------------
+
+To cleanse a dat, simply run it through DatUtil and examine the log to see if
+anything was altered (alternatively, just compare the dats). When performing
+this kind of operation, you will normally want to use the -f option to retain
+the original format (e.g. datutil -f listinfo <dat to cleanse>).
+
+
+Including missing information
+-----------------------------
+
+The -i option will retrieve information from another dat and include it in the
+dat that you are working on. Basically, -i is meant for use with exactly
+matching dats rather than any arbitrary dat that might have a different game
+with the same name. The -i option is intended for two purposes:
+
+Purpose 1:
+
+After using datutil -g on multiple games, you will find that the parent/clone
+relationships have gone (since each game is saved as a standalone game after
+'fix merging'). If you want to add them back, you can use datutil -i:
+
+datutil -a new.dat -f listinfo -g ssf2 mame.dat
+datutil -a new.dat -f listinfo -g ssf2a mame.dat
+datutil -i mame.dat -f listinfo new.dat
+
+Under these circumstances, cloneof, romof and sampleof can be corrected.
+
+Purpose 2:
+
+Correct ROM details (size, MS5/SHA1, flags, etc), using ZIPs as reference:
+
+datutil -i <dir> -f listinfo <dat>
+
+Under these circumstances, size, crc, md5, sha1 and flags can be corrected.
+
+Note: The -i option is not intended for retrieving descriptions, years or
+manufacturers from another dat. Such an operation would be very unreliable
+if it just used a game name as a method of matching! The -i option is only
+intended fot the two purposes described above.
+
+
 Quick reference
 ---------------
 
 Defaults (behavior within DatLib that can not be switched off):
 
-  -   fix merging (used to be the -m option)    * Improved in DatUtil v2.0 *
-  -   remove duplicate ROMs/disks/samples       * New in DatUtil v2.0 *
+  -   fix merging (used to be the -m option)
+  -   remove duplicate ROMs/disks/samples
 
 Cleansing:
 
   -l  lower case game names and ROM names
   -s  sort games by parent (sorted by parent name then game name)
+  -i  include missing information from a 'reference' data file.
 
 Game selection:
 
@@ -163,11 +207,16 @@ Saving:
   -a  append to file
   -o  output to file
 
+MD5/SHA1:
+
+  -m  Use MD5 checksums rather than SHA1 (e.g. when using -x, -m can be used)
+
 Information:
 
-  -z  Do not show 'funny size' messages
-  -v  Verbose logging                      * New in DatUtil v2.0 *
-  -d  Show debug messages                  * New in DatUtil v2.0 *
+  -z  Do not show 'funny size' warnings
+  -y  Do not show 'missing year' warnings
+  -v  Verbose logging
+  -d  Show debug messages
 
 
 Dat features supported
@@ -176,6 +225,7 @@ Dat features supported
 DatUtil has its own internal representation for datfiles but in MAME Listinfo
 terms it supports:
 
+  Comments   // style comments before a game
   Games      game, resource, machine, name, description, year, manufacturer,
              rebuildto, cloneof, romof, sampleof
   ROMs       rom, name, merge, size, crc, md5, sha1, region, nodump, baddump
@@ -235,7 +285,7 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
-xx/xx/xxxx  *** v2.2 ***
+11/07/2004  *** v2.2 ***
 
             - Uses DatLib v1.4:
             - Added support for comments between games in CMPro data files.
