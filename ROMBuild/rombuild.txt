@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.5 - 28/02/2005
+                         ROMBuild v2.6 - 28/03/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,10 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+28/03/2005  *** v2.6 ***
+
+            Updated altbeast ROMs (Calice and System16) to match MAME v0.95.
 
 28/02/2005  *** v2.5 ***
 
