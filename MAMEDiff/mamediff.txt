@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.14 - 13/02/2005
+                          MAMEDiff v2.15 - xx/xx/xxxx
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,10 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+xx/xx/xxxx  *** v2.15 ***
+
+            - Now outputs a listing of game name comparisons (mamediff.out).
 
 13/02/2005  *** v2.14 ***
 

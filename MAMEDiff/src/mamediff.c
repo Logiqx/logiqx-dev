@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.14"
-#define MAMEDIFF_DATE "13 February 2005"
+#define MAMEDIFF_VERSION "v2.15"
+#define MAMEDIFF_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -54,9 +54,9 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
-	int verbose=0, caesar=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
+	int verbose=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
 
-	struct options *options=0;
+	struct options *options1=0, *options2=0;
 	struct dat *dat1=0, *dat2=0;
 
 	int old_syntax=0, errflg=0;
@@ -71,14 +71,11 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while ((c = getopt(argc, argv, "vcmsnd:rzbo:?MSNtT")) != EOF)
+	while ((c = getopt(argc, argv, "vmsnd:rzbo:?MSNtT")) != EOF)
 	switch (c)
 	{
 		case 'v':
 			verbose++;
-			break;
-		case 'c':
-			caesar++;
 			break;
 		case 'm':
 			errflg+=set_type;
@@ -213,33 +210,42 @@ int main(int argc, char **argv)
 
 	/* --- Allocate memory for user options --- */
 
-	STRUCT_CALLOC(options, 1, sizeof(struct options))
+	if (!errflg)
+		STRUCT_CALLOC(options1, 1, sizeof(struct options))
+
+	if (!errflg)
+		STRUCT_CALLOC(options2, 1, sizeof(struct options))
 
 	if (!errflg)
 	{
-		options->options=set_type|object_type|OPTION_SHOW_SUMMARY;
+		options1->options=set_type|object_type|OPTION_SHOW_SUMMARY;
+		options2->options=set_type|object_type|OPTION_SHOW_SUMMARY;
 
 		if (bios)
-			options->options|=OPTION_NON_SEPERATED_BIOS_ROMS;
+		{
+			options1->options|=OPTION_NON_SEPERATED_BIOS_ROMS;
+			options2->options|=OPTION_NON_SEPERATED_BIOS_ROMS;
+		}
 
 		if (zeros)
-			options->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+		{
+			options1->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+			options2->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+		}
 
-		options->fn=argv[optind];
+		options1->fn=argv[optind];
+		options2->fn=argv[optind+1];
 	}
 
 	/* --- Load the data files --- */
 
-	if (!errflg && (dat1=init_dat(options))==0)
+	if (!errflg && (dat1=init_dat(options1))==0)
 		errflg++;
 
 	if (!errflg)
-	{
 		printf("\n");
-		options->fn=argv[optind+1];
-	}
 
-	if (!errflg && (dat2=init_dat(options))==0)
+	if (!errflg && (dat2=init_dat(options2))==0)
 		errflg++;
 
 	if (!errflg)
@@ -250,7 +256,7 @@ int main(int argc, char **argv)
 	if (!errflg)
 	{
 		if (diff_type==0)
-			errflg=standard_compare(dat1, dat2, verbose, caesar, set_type);
+			errflg=standard_compare(dat1, dat2, verbose, set_type);
 		else
 			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros, object_type);
 	}
@@ -260,7 +266,8 @@ int main(int argc, char **argv)
 	free_dat(dat2);
 	free_dat(dat1);
 
-	FREE(options)
+	FREE(options2)
+	FREE(options1)
 
 	/* --- All done --- */
 
