@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ImgChk v2.4 - 17/08/2004
+                          ImgChk v2.5 - 28/02/2005
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
 
@@ -54,6 +54,11 @@ If you find any bugs please let me know about them.
 
 History
 -------
+
+28/02/2005  *** v2.5 ***
+
+            - Uses DatLib v2.2.
+            - Added support for tab delimited files.
 
 17/08/2004  *** v2.4 ***
 
