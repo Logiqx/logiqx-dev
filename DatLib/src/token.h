@@ -185,32 +185,41 @@ enum {
 
 #define BUFFER1_GET_TOKEN_TO_DELIMITER(DELIMITER) \
 { \
+	int escaped=0; \
 	char *tmp_ptr; \
 	unsigned long escaped_char; \
 \
-	while ((*(BUFFER1_PTR-1)=='\\' || *BUFFER1_PTR!=DELIMITER) && *BUFFER1_PTR!='\0') \
+	while ((escaped || *BUFFER1_PTR!=DELIMITER) && *BUFFER1_PTR!='\0') \
 	{ \
-		if (*(BUFFER1_PTR-1)=='\\') \
+		if (escaped) \
 		{ \
 			switch (*BUFFER1_PTR) \
 			{ \
 				case 'n' : *token_ptr++='\n'; BUFFER1_PTR++; break; \
+				case 't' : *token_ptr++='\t'; BUFFER1_PTR++; break; \
 				case '\\' : *token_ptr++='\\'; BUFFER1_PTR++; break; \
 				case '\"' : *token_ptr++='\"'; BUFFER1_PTR++; break; \
 				case 'x' : \
-						escaped_char=strtoul(++BUFFER1_PTR, &tmp_ptr, 16); \
+					escaped_char=strtoul(++BUFFER1_PTR, &tmp_ptr, 16); \
 					if (tmp_ptr-BUFFER1_PTR!=2) \
-							escaped_char=escaped_char>>(4*(tmp_ptr-BUFFER1_PTR-2)); \
+						escaped_char=escaped_char>>(4*(tmp_ptr-BUFFER1_PTR-2)); \
 					*token_ptr++=(unsigned char)escaped_char; \
 					BUFFER1_PTR+=2; \
 					break; \
-				default: fprintf(stderr, "Unrecognised escape sequence '\\%c'!", *BUFFER1_PTR); \
+				default: fprintf(stderr, "  Error: Unrecognised escape sequence '\\%c'!\n", *BUFFER1_PTR); \
+					BUFFER1_PTR++; \
 			} \
+			escaped=0; \
 		} \
 		else if (*BUFFER1_PTR!='\\') \
+		{ \
 			*token_ptr++=*BUFFER1_PTR++; \
+		} \
 		else \
+		{ \
+			escaped++; \
 			BUFFER1_PTR++; \
+		} \
 	} \
 	if (*BUFFER1_PTR==DELIMITER) \
 		BUFFER1_PTR++; \
@@ -224,10 +233,10 @@ enum {
 	while ((*BUFFER1_PTR==' ') || (*BUFFER1_PTR=='\t')) \
 		BUFFER1_PTR++; \
 \
-	if (*BUFFER1_PTR=='"') \
+	if (*BUFFER1_PTR=='\"') \
 	{ \
 		BUFFER1_PTR++; \
-		BUFFER1_GET_TOKEN_TO_DELIMITER('"')  \
+		BUFFER1_GET_TOKEN_TO_DELIMITER('\"')  \
 	} \
 	else \
 	{ \
