@@ -11,14 +11,13 @@
 
 /* --- My includes --- */
 
-#include "../macro.h"
 #include "../type.h"
 #include "../token.h"
 
 
 /* --- External structures --- */
 
-extern const struct token tokens[];
+extern const struct datlib_token datlib_tokens[];
 
 
 /* --- Is debugging enabled? --- */
@@ -429,6 +428,8 @@ int save_romcenter_250(struct dat *dat)
 
 	fprintf(dat->out, "\n[GAMES]");
 
+	/* --- For all games --- */
+
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
 		if (curr_game->game_flags & FLAG_GAME_NAME || curr_game->game_flags & FLAG_MACHINE_NAME)
@@ -436,14 +437,23 @@ int save_romcenter_250(struct dat *dat)
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				if (curr_game->cloneof)
-					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->game_cloneof->description);
+				{
+					fprintf(dat->out, "\n¬%s¬", curr_game->cloneof);
+
+					if (curr_game->game_cloneof)
+						fprintf(dat->out, "%s", curr_game->game_cloneof->description);
+					else
+						fprintf(dat->out, "%s (description unknown)", curr_game->cloneof);
+				}
 				else
+				{
 					fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
+				}
 	
 				fprintf(dat->out, "¬%s¬%s", curr_game->name, curr_game->description);
 
 				fprintf(dat->out, "¬%s", curr_rom->name);
-				if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
+				if (!strcmp(curr_rom->status, "baddump"))
 					fprintf(dat->out, "¬%08lx", (unsigned long)~curr_rom->crc);
 				else
 					fprintf(dat->out, "¬%08lx", (unsigned long)curr_rom->crc);
@@ -474,14 +484,23 @@ int save_romcenter_250(struct dat *dat)
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				if (curr_game->cloneof)
-					fprintf(dat->out, "\n¬%s¬%s", curr_game->cloneof, curr_game->game_cloneof->description);
+				{
+					fprintf(dat->out, "\n¬%s¬", curr_game->cloneof);
+
+					if (curr_game->game_cloneof)
+						fprintf(dat->out, "%s", curr_game->game_cloneof->description);
+					else
+						fprintf(dat->out, "%s (description unknown)", curr_game->cloneof);
+				}
 				else
+				{
 					fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
+				}
 	
 				fprintf(dat->out, "¬%s¬%s", curr_game->name, curr_game->description);
 
 				fprintf(dat->out, "¬%s", curr_rom->name);
-				if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
+				if (!strcmp(curr_rom->status, "baddump"))
 					fprintf(dat->out, "¬%08lx", (unsigned long)~curr_rom->crc);
 				else
 					fprintf(dat->out, "¬%08lx", (unsigned long)curr_rom->crc);
@@ -502,8 +521,9 @@ int save_romcenter_250(struct dat *dat)
 		}
 	}
 
-	dat->game_saved=FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME|FLAG_GAME_DESCRIPTION|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF;
-	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC|FLAG_ROM_NODUMP|FLAG_ROM_FUNNYSIZE|FLAG_ROM_BIOS;
+	dat->game_saved=FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME|
+			FLAG_GAME_DESCRIPTION|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF;
+	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC;
 
 	return(errflg);
 }
