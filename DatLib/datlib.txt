@@ -180,6 +180,8 @@ xx/xx/xxxx  *** v2.4 ***
 
             - Fixed another crash with datutil -X and 'forcemerging full'.
             - Changed the delimited format to use \N for NULLs.
+            - Changed the delimited format so that all types are 'game_*'.
+            - Changed the delimited format so that games include 'runnable'.
             - Added save support for a DISK section in the RomCenter format.
             - Added several aliases for the output formats (see DatUtil docs).
 
