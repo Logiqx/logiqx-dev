@@ -16,7 +16,7 @@
 
 /* --- External structures --- */
 
-extern const struct token tokens[];
+extern const struct datlib_token datlib_tokens[];
 
 
 /* --- Is debugging enabled? --- */
