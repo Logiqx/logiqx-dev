@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.5 - 22/07/2004
+                         DatUtil v2.6 - 30/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -285,6 +285,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+30/07/2004  *** v2.6 ***
+
+            - Uses DatLib v1.9.
+            - Added full support for disk 'merge' and 'flags' information.
 
 22/07/2004  *** v2.5 ***
 
