@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.1 - 22/02/2005
+                          DatLib v2.2 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -173,6 +173,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.2 ***
+
+            - Changed strtof to atof (for the guys compiling on NetBSD).
 
 22/02/2005  *** v2.1 ***
 

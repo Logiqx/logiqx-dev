@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.1"
-#define DATLIB_DATE "22 February 2005"
+#define DATLIB_VERSION "v2.2"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -1480,7 +1480,7 @@ int store_tokenized_dat(struct dat *dat)
 
 					else if (type==TOKEN_VIDEO_REFRESH)
 					{
-						curr_video->refresh=strtof(BUFFER2_PTR, NULL);
+						curr_video->refresh=atof(BUFFER2_PTR);
 
 						// Value may be zero so its presence needs remembering!
 						curr_video->video_flags|=FLAG_VIDEO_REFRESH;
