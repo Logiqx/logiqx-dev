@@ -459,9 +459,10 @@ struct ini_entry
 #define	OPTION_DAT_NO_MERGING		0x00400000	// Used by MAMEDiff
 #define	OPTION_NON_SEPERATED_BIOS_ROMS	0x00800000	// Used by MAMEDiff
 
-#define	OPTION_OBJECT_TYPE_ROM		0x01000000	// MAMEDiff -t option
-#define	OPTION_OBJECT_TYPE_DISK		0x02000000	// MAMEDiff -t option
-#define	OPTION_OBJECT_TYPE_SAMPLE	0x04000000	// MAMEDiff -t option
+#define	OPTION_OBJECT_TYPE_ROM		0x01000000	// MAMEDiff -o option
+#define	OPTION_OBJECT_TYPE_DISK		0x02000000	// MAMEDiff -o option
+#define	OPTION_OBJECT_TYPE_SAMPLE	0x04000000	// MAMEDiff -o option
+#define	OPTION_INCLUDE_NODUMPS_IN_ZIPS	0x08000000	// MAMEDiff -z option
 
 
 /* --- Parser Flags --- */
