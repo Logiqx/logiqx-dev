@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.11"
-#define DATUTIL_DATE "16 January 2005"
+#define DATUTIL_VERSION "v2.12"
+#define DATUTIL_DATE "13 February 2005"
 
 
 /* --- The standard includes --- */
@@ -70,18 +70,16 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "g:crjo:a:f:lsxmi:zyvdA:V:C:R:F:M:Z:")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:kjo:a:A:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
 	switch (c)
 	{
-		case 'g':
-			options->options|=OPTION_GAME;
-			options->game=optarg;
+		/* --- Saving --- */
+		case 'f':
+			LOWER(optarg);
+			options->save_format=optarg;
 			break;
-		case 'c':
-			options->options|=OPTION_GAME_AND_CLONES;
-			break;
-		case 'r':
-			options->options|=OPTION_REMOVE_CLONES;
+		case 'k':
+			options->options|=OPTION_KEEP_FULL_DETAILS;
 			break;
 		case 'j':
 			options->options|=OPTION_NEBULA_JUKEBOX;
@@ -94,37 +92,7 @@ int main(int argc, char **argv)
 			options->save_name=optarg;
 			options->save_mode="a";
 			break;
-		case 'f':
-			LOWER(optarg);
-			options->save_format=optarg;
-			break;
-		case 'l':
-			options->options|=OPTION_LOWER_CASE;
-			break;
-		case 's':
-			options->options|=OPTION_SORT_GAMES_BY_PARENT;
-			break;
-		case 'x':
-			options->options|=OPTION_EXTENDED_CHECKSUMS;
-			break;
-		case 'm':
-			options->options|=OPTION_MD5_CHECKSUMS;
-			break;
-		case 'i':
-			options->fn=optarg;
-			break;
-		case 'z':
-			options->options|=OPTION_IGNORE_FUNNY_SIZES;
-			break;
-		case 'y':
-			options->options|=OPTION_IGNORE_MISSING_YEARS;
-			break;
-		case 'v':
-			options->options|=OPTION_VERBOSE_LOGGING;
-			break;
-		case 'd':
-			options->options|=OPTION_SHOW_DEBUG_INFO;
-			break;
+		/* --- Header text --- */
 		case 'A':
 			options->clrmamepro.author=optarg;
 			break;
@@ -146,6 +114,54 @@ int main(int argc, char **argv)
 		case 'Z':
 			options->clrmamepro.forcezipping=optarg;
 			break;
+		/* --- Game selection --- */
+		case 'g':
+			options->options|=OPTION_GAME_SELECTION;
+			options->game_selection=optarg;
+			break;
+		case 'c':
+			options->options|=OPTION_CLONE_SELECTION;
+			break;
+		case 'G':
+			options->options|=OPTION_SOURCEFILE_SELECTION;
+			options->sourcefile_selection=optarg;
+			break;
+		case '!':
+			options->options|=OPTION_INVERT_SELECTION;
+			break;
+		case 'r':
+			options->options|=OPTION_REMOVE_CLONES;
+			break;
+		/* --- Cleansing --- */
+		case 'l':
+			options->options|=OPTION_LOWER_CASE;
+			break;
+		case 's':
+			options->options|=OPTION_SORT_GAMES_BY_PARENT;
+			break;
+		case 'i':
+			options->fn=optarg;
+			break;
+		case 'X':
+			options->options|=OPTION_FIX_MERGING_OFF;
+			break;
+		case 'D':
+			options->options|=OPTION_REMOVE_DUPLICATES_OFF;
+			break;
+		/* --- MD5/SHA1 --- */
+		case 'x':
+			options->options|=OPTION_EXTENDED_CHECKSUMS;
+			break;
+		case 'm':
+			options->options|=OPTION_MD5_CHECKSUMS;
+			break;
+		/* --- Information --- */
+		case 'v':
+			options->options|=OPTION_VERBOSE_LOGGING;
+			break;
+		case 'd':
+			options->options|=OPTION_SHOW_DEBUG_INFO;
+			break;
 		case '?':
 			errflg++;	/* User wants help! */
 			break;
@@ -160,13 +176,17 @@ int main(int argc, char **argv)
 
 	if (errflg)
 	{
-		printf("Usage: datutil [-f <format>] [-o|a <outfile>] [-g <game> [-c]] [-s] [-r] [-l]\n");
-		printf("[-x] [-m] [-i <info>] [-z] [-y] [-A <author>] [-V <version>] [-C <category>]\n");
-		printf("[-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>] [-v] [-j] <infile>\n\n");
-		printf("Converts a dat to a different format. The output format can be specified with\nthe -f option (e.g. listinfo, romcenter2 and titlelist).\n");
-		printf("To specify the output filename use the -o option (or -a for append).\n\n");
-		printf("Individual games can be converted using the -g option (using -c will also\nconvert the clones). If required, the -s option can be used to sort the games\nby their parent name and the -r option can be used to remove clones. Use -l\nto convert all names to lowercase. The -x option can be used to generate SHA1\nor MD5 values when scanning ZIPs. To use MD5 rather than SHA1 (the default),\nspecify the -m option. The -i option will take missing info from another dat.\nThe -z and -y options are used to ignore funny sizes and missing years.\nFor a verbose log file (recommended), use the -v option.\n\n");
-		printf("The -A, -V, -C, -R, -F, -M and -Z options are used to specify the data file\nheader fields.\n");
+		printf("The best tool for converting between different ROM manager data file formats!\n");
+		printf("For instructions on use, read the documentation that's been provided. Here is\n");
+		printf("a brief summary of the options... far greater detail is in the documentation.\n\n");
+
+		printf("Saving          [-f <output format>] [-k] [j] [-o|a <output file>]\n");
+		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
+		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
+		printf("Game Selection  [-g <game name> [-c] [-!]] [-G <sourcefile name> [-!]] [-r]\n");
+		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D]\n");
+		printf("MD5/SHA1        [-x] [-m]\n");
+		printf("Information     [-v] [-d]\n\n");
 	}
 
 	if (!errflg)

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.11 - 16/01/2005
+                         DatUtil v2.12 - 13/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -16,12 +16,12 @@ Load and Save:
 
   - MAME ListInfo (ClrMamePro, MAME, MESS, RAINE, Shark)
   - RomCenter 2.50
+  - MAME ListXML (MAME and MESS)
 
 Load only:
 
   - RomCenter 1.90
   - RomCenter 2.00
-  - MAME and MESS ListXML
   - Nebula Drivers
   - Calice Drivers
   - Zinc --list-sets
@@ -42,22 +42,24 @@ Distribution
 
 The home page for DatUtil is http://www.logiqx.com/
 
-Links can also be found at the following two sites:
+Links may also be found at the following two sites:
 
-ClrMamePro Home Page                    RomCenter Home Page        
-http://www.mameworld.net/clrmame        http://www.romcenter.com/
+ClrMamePro Home Page            RomCenter Home Page        
+http://www.clrmame.com/   http://www.romcenter.com/
 
 
-Converting dats
----------------
+Basic Conversion
+----------------
 
-It is possible to convert dats between ClrMamePro and RomCenter with ease. The
+It is possible to convert dats between different formats with ease. The
 most simple way to convert from one format to the other is like this:
 
   datutil <datfile>
 
-This will convert a ClrMamePro dat (listinfo) to a RomCenter datafile or
-a RomCenter datafile to a ClrMamePro dat. The new dat is called 'datutil.dat'.
+This will convert a ClrMamePro dat (listxml or listinfo) to RomCenter format
+or likewise, a RomCenter/ListXML datafile to listinfo format. The new dat is
+called 'datutil.dat'. Listinfo format is the preferred output format.
+
 If you want to specify a different output filename, use the '-o' option.
 
   e.g. datutil -o clrmame.dat romcenter.dat
@@ -68,45 +70,27 @@ useful when converting/extracting individual games (explained later).
 
 If you wish to specify the output format directly (for example, if you want
 DatUtil to clean up the dat and resave in the same format) you can use the '-f'
-option. Valid formats are 'listinfo', 'romcenter2' or 'titlelist'.
+option. Valid formats are 'listinfo', 'listxml', 'romcenter2' or 'titlelist'.
 
   e.g. datutil -f titlelist clrmame.dat
 
-If you just wish to convert/extract an individual game of the original dat
-you can use the -g option (and optionally -c for its clones as well).
+By default, non-essential details for ROM management are removed (e.g. chips
+and dipswitch information) but these can be retained using the -k option. Only
+the listinfo and listxml formats support all possible game details.
 
-  e.g. datutil -g sf2 -c romcenter.dat
+The option specific to the romdata format of Nebula Jukebox is -j. This allows
+you to save only the Z80 and Sample ROMs since the other ROMs are irrelevant.
 
-This would extract sf2 and all of its clones from romcenter.dat, saving them
-under the name datutil.dat (of course, the '-o', '-a' and '-f' options could
-be used in addition). This feature is useful for creating dats for an emulator
-that uses ROM sets like those in MAME (extract from the output of listinfo).
-When using -g and -c together you can specify a system such as neogeo or cpzn1
-to extract all games on that system.
+  e.g. datutil -j neogeo.dat
 
-If you wish to exclude clones from the newly saved dat, you can use the '-r'
-(remove clones) option.
 
-People converting dats for home computers will often wonder what the 'funny
-size' warnings are. This is intended for arcade dat creators so you can switch
-off the size checking using the '-z' option.
+Directory Scanning
+------------------
 
-To convert all game names, ROM names and ROM CRCs to lower case, use the '-l'
-option.
-
-By default, the 'improve merging' feature will ensure that CRCs match in
-the parent and its clones where they were previously a mixture of 00000000s and
-genuine CRCs. After the CRCs have been unified it will then specify that the
-ROMs can be merged and flag the 00000000 to xxxxxxxx conversions as bad dumps.
-This option will also remove bad parent references for cloneof/romof/sampleof
-and ensure that there are no clones of clones in the data file. Duplicate ROMs,
-disks and samples are also removed by default. In this instance, the
-definition of 'duplicate' is where there are two or more ROMs/disks/samples of
-the same name in the same game.
-
-The final option is '-s' for sorting the games before saving. This actually
-sorts games by their parent name first (n.b. name, not description) and then
-by the game name (n.b. name, not description).
+DatUtil can scan a directory and create a datfile for the ZIPs/subdirectories
+within it. Simply specify the directory name to scan (instead of a datfile) and
+DatUtil will generate the dat for you. Use the -x option to calculate SHA1 and
+MD5 values for zipped ROMs.
 
 
 Additional notes on conversion
@@ -131,13 +115,72 @@ information and exact details of the cleansing performed, use the '-v' option
 for a verbose log file.
 
 
-Cleansing dats
+Game Selection
 --------------
+
+If you just wish to convert/extract an individual game of the original dat
+you can use the -g option (and optionally -c for its clones as well).
+
+  e.g. datutil -g sf2 -c romcenter.dat
+
+This would extract sf2 and all of its clones from romcenter.dat, saving them
+under the name datutil.dat (of course, the '-o', '-a' and '-f' options could
+be used in addition). This feature is useful for creating dats for an emulator
+that uses ROM sets like those in MAME (extract from the output of listinfo).
+When using -g and -c together you can specify a system such as neogeo or cpzn1
+to extract all games on that system.
+
+If the datafile includes 'sourcefile' information (added to MAME in v0.85),
+you can select all games from an individual sourcefile using the -G option.
+
+Both the -g and -G options allow you to provide a list of game/sourcefile names
+in an external text file (put each entry on a seperate line). This is utilised
+by putting and @ symbol after the option. For example, if you have a text file
+called cpzn.txt that contains two lines (cpzn1 and cpzn2 in this case):
+
+  e.g. datutil -g @cpzn.txt -c listxml.dat
+
+The above example would select all cpzn1 and cpzn2 games from listxml.dat. One
+last thing to mention about the -g and -G options is that you can use the -!
+option to invert you selection (i.e. exclude games). This works for individual
+game/sourcefile names and lists of names provided through the @ symbol.
+
+If you wish to exclude clones from the newly saved dat, you can use the '-r'
+(remove clones) option.
+
+
+Cleansing
+---------
 
 To cleanse a dat, simply run it through DatUtil and examine the log to see if
 anything was altered (alternatively, just compare the dats). When performing
 this kind of operation, you will normally want to use the -f option to retain
 the original format (e.g. datutil -f listinfo <dat to cleanse>).
+
+To convert all game names, ROM names and ROM CRCs to lower case, use the '-l'
+option.
+
+By default, the 'fix merging' feature will ensure that CRCs match in
+the parent and its clones where they were previously a mixture of nodumps and
+genuine CRCs. After the CRCs have been unified it will then specify that the
+ROMs can be merged and flag the nodump to CRC converted ROM as a baddump.
+This option will also remove bad parent references for cloneof/romof/sampleof
+and ensure that there are no clones of clones in the data file. Duplicate ROMs,
+disks and samples are also removed by default. In this instance, the
+definition of 'duplicate' is where there are two or more ROMs/disks/samples of
+the same name in the same game.
+
+The default cleansing can be switched off (-X to switch off 'fix merging' and
+-D to fix off 'fix duplicates') but I would recommend that you do not do so
+as they are very useful. The only time that switching them off is necessary
+is when individual games are being extracted with -g and you need the original
+parent/merge details (which would be removed if 'fix merging' was left on).
+
+Note: When using -X, DatUtil will not be able to identify CRC/SHA1 conflicts.
+
+The final option is '-s' for sorting the games before saving. This actually
+sorts games by their parent name first (n.b. name, not description) and then
+by the game name (n.b. name, not description).
 
 
 Including missing information
@@ -160,6 +203,8 @@ datutil -i mame.dat -f listinfo new.dat
 
 Under these circumstances, cloneof, romof and sampleof can be corrected.
 
+N.B. It is possible to use the -X option and avoid the need for this method!
+
 Purpose 2:
 
 Correct ROM details (size, MS5/SHA1, flags, etc), using ZIPs as reference:
@@ -174,6 +219,29 @@ if it just used a game name as a method of matching! The -i option is only
 intended fot the two purposes described above.
 
 
+MD5 and SHA1
+------------
+
+DatUtil will output either MD5 or SHA1 but not both. Including MD5 and SHA1 in
+addition to CRCs would be pointless and cause a hugely oversized output file!
+By default DatUtil will output SHA1 values (in addition to CRC) but if you want
+to output MD5 instead (which I would advise against) then use the -m option.
+
+The directory scanner will by default not calculate SHA1 or MD5 information
+because it requires ZIP files to be unzipped and slows down the directory scan.
+If you require SHA1 information from a directory scan then use the -x option.
+If you require MD5 from a scan (rather than SHA1), just use -m and -x together. 
+
+
+Information and logging
+-----------------------
+
+DatUtil will only show summary information in its log file by default. If you
+require full details about fixes and errors, use the the -v (verbose) option.
+
+You should never need the -d option since that is for debugging DatUtil. ;)
+
+
 Quick reference
 ---------------
 
@@ -182,18 +250,13 @@ Defaults (behavior within DatLib that can not be switched off):
   -   fix merging (used to be the -m option)
   -   remove duplicate ROMs/disks/samples
 
-Cleansing:
+Saving:
 
-  -l  lower case game names and ROM names
+  -f  output format (listinfo, romcenter2, titlelist, etc)
+  -k  keep as much information as possible from the source file
   -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
-  -s  sort games by parent (sorted by parent name then game name)
-  -i  include missing information from a 'reference' data file.
-
-Game selection:
-
-  -g  game
-  -c  game and clones (for use with the -g option)
-  -r  remove clones
+  -o  output to file
+  -a  append to file
 
 Header text:
 
@@ -205,20 +268,29 @@ Header text:
   -M  merging (none, split or full)
   -Z  zipping (zip or unzip)
 
-Saving:
+Game selection:
 
-  -f  output format
-  -a  append to file
-  -o  output to file
+  -g  individual game selection. use the @ symbol to specify a file of names.
+  -c  include clones (for use with the -g option)
+  -G  select games from a specified sourcefile. the @ method is also supported.
+  -!  changes the -g and -G options (including the -c option) to exclude games
+  -r  remove clones
+
+Cleansing:
+
+  -l  lower case game names and ROM names
+  -s  sort games by parent (sorted by parent name then game name)
+  -i  include missing information from a 'reference' data file.
+  -X  fix merging off (do not use unless you understand the consequences!)
+  -D  remove duplicate ROMs/disks/samples (as above in terms of usage).
 
 MD5/SHA1:
 
+  -x  Calculate SHA1/MD5 when scanning files or ZIPs in a directory
   -m  Use MD5 checksums rather than SHA1 (e.g. when using -x, -m can be used)
 
 Information:
 
-  -z  Do not show 'funny size' warnings
-  -y  Do not show 'missing year' warnings
   -v  Verbose logging
   -d  Show debug messages
 
@@ -232,9 +304,15 @@ terms it supports:
   Comments   // style comments before a game
   Games      game, resource, machine, name, description, year, manufacturer,
              rebuildto, cloneof, romof, sampleof
-  ROMs       rom, name, merge, size, crc, md5, sha1, region, nodump, baddump
-  Disks      disk, name, md5, sha1, region
+  ROMs       rom, name, merge, size, crc, md5, sha1, status
+  Disks      disk, name, merge, md5, sha1, status
   Samples    sample, name
+
+These are the standard fields that are output. The -k option supports all of
+the fields in MAME and MESS (as per the full DTDs in the listxml output).
+
+DatUtil supports \\, \n, \xXX and \" inside listinfo objects and XML entities
+(e.g. &amp; &#X;) inside XML attributes/elements.
 
 Note: DatUtil does not support the 'archive' information in Raine's gameinfo
 or Shark's listinfo files as no ROM manager supports this property.
@@ -248,22 +326,11 @@ It is really easy to add support for a new format but if you can't code, drop
 me an e-mail and I might do it for you (if I think it is a useful addition).
 
 
-Other uses?
------------
-
-DatUtil can scan a directory and create a datfile for the ZIPs/subdirectories
-within it. Simply specify the directory name to scan (instead of a datfile) and
-DatUtil will generate the dat for you. Use the -x option to calculate SHA1 and
-MD5 values for zipped ROMs.
-
-For comparing two data files of any format supported by DatUtil, use MAMEDiff.
-You can find the latest version of MAMEDiff on my website.
-
-
 Thanks
 ------
 
-Thanks go to Eric Bole-Feysot and Pi for beta testing DatUtil.
+Thanks go to Eric Bole-Feysot for testing early versions of DatUtil and Pi for
+beta testing DatUtil during the full course of its life.
 
 
 Source
@@ -275,6 +342,11 @@ you make any useful changes then please send them to me so that I can
 include them in future releases.
 
 To compile this tool, you will need to get DatLib from http://www.logiqx.com/
+
+If you want to create a GUI, you will discover that DatUtil itself is little
+more than a command line interface for DatLib. A GUI should therefore be very
+easy to create but I would kindly request that you only implement the command
+line options from DatUtil in GUI form (no more, no less).
 
 
 Bug Reports
@@ -289,8 +361,37 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
+13/02/2005  *** v2.12 ***
+
+            - Uses DatLib v2.0.
+            - Compiled with GCC 3.4.2 (previously used GCC 3.2.3).
+            - Rewrote the manual, please read it from start to end. ;)
+            - Changed the summary of switches produced by DatUtil -?.
+            - Added the -k option to keep all details (chips, dips, etc).
+            - Added the -G option to select games from a specified sourcefile.
+            - Added the -! option so that -g and -G can be used as exclusions.
+            - Added the -X option to switch off 'fix merging' (use with -g).
+            - Added the -D option to switch off 'remove duplicates' (as above).
+            - Removed the -z and -y options as they are redundant now.
+
+            - DatLib v2.0 (enhancements relating to DatUtil):
+            - Added 'sourcefile' support to the listinfo and listxml drivers.
+            - Supports all known details in listinfo and listxml (-k option).
+            - N.b. ROM region is not loaded unless using the datutil -k option.
+            - Supports 'history' entries (when using the -k option).
+            - Added support for \\, \n, \xXX and \" in ListInfo (e.g. history).
+            - Improved entity handling (e.g. &amp; &#X;) in the ListXML parser.
+            - Supports 2 additional MESS objects (devices and extensions).
+            - DatLib can now save data in listxml format (MAME and MESS).
+            - Complemented CRCs are reported (should use flags nodump instead).
+            - Added checks for MD5 and SHA1 conflicts (CRCs already checked).
+            - Added support for external selection files with the @ symbol.
+            - Removed the hack made in DatLib v1.13 for Calice drivers.
+            - Removed funny size and missing year checks (pretty useless now).
+
 16/01/2005  *** v2.11 ***
 
+            - Uses DatLib v1.14.
             - Added support for the GNGEO romrc file.
             - Increased maximum ROM size to 64MB (used when scanning folders).
 
