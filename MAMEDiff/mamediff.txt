@@ -279,7 +279,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 	    - When using -d1/-d2/-d3, games without ROMs are now ignored.
             - When using -d1/-d2/-d3 and -z, no dumps that replace a real CRC
               are not considered a change now (the previous ROM is still fine).
-            - To use as for simple ROM verification, use the following syntax:
+            - To use for simple ROM verification, use the following syntax:
               mamediff -d1 -r [-z] <dir> <dat>
 
 04/07/2004  *** v2.1 ***
