@@ -116,7 +116,8 @@ History
 
 xx/xx/xxxx  *** v2.5 ***
 
-            Internal renames for Altered Beast (to match MAME v0.92).
+            Internal game renames for Altered Beast (to match MAME v0.92).
+            Internal ROM renames for a few CPS-2 games (to match MAME v0.92).
             Fixed a bug that caused the -l option to crash when listing ROMs.
 
 30/01/2005  *** v2.4 ***
