@@ -403,6 +403,7 @@ void output_delimited_string(FILE *out, unsigned char *ptr)
 		switch (*ptr)
 		{
 			case '\n' : fprintf(out, "\\n"); break;
+			case '\t' : fprintf(out, "\\t"); break;
 			case '\\' : fprintf(out, "\\\\"); break;
 			case '\"' : fprintf(out, "\\\""); break;
 			default: fprintf(out, "%c", *ptr);
