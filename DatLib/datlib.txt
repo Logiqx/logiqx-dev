@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.15 - xx/xx/xxxx
+                          DatLib v2.0 - 13/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -16,12 +16,12 @@ Load and Save:
 
   - MAME ListInfo (ClrMamePro, MAME, MESS, RAINE, Shark)
   - RomCenter 2.50
+  - MAME ListXML (MAME and MESS)
 
 Load only:
 
   - RomCenter 1.90
   - RomCenter 2.00
-  - MAME and MESS ListXML
   - Nebula Drivers
   - Calice Drivers
   - Zinc --list-sets
@@ -174,10 +174,29 @@ do anything with them but I am interested to hear them!
 History
 -------
 
-xx/xx/xxxx  *** v1.15 ***
+13/02/2005  *** v2.0 ***
 
+            - Compiled with GCC 3.4.2 (previously used GCC 3.2.3).
+            - Added 'sourcefile' support to the listinfo and listxml drivers.
+            - Now supports all known details in listinfo and listxml.
+            - Use the flag OPTION_KEEP_FULL_DETAILS to switch on full loading!
+            - N.b. ROM region is not loaded without OPTION_KEEP_FULL_DETAILS.
+            - Supports 'history' entries (when using OPTION_KEEP_FULL_DETAILS).
+            - Added support for \\, \n, \xXX and \" in ListInfo (e.g. history).
+            - Improved entity handling (e.g. &amp; &#X;) in the ListXML parser.
+            - Supports 2 additional MESS objects (devices and extensions).
+            - DatLib can now save data in listxml format (MAME and MESS).
+            - Changed the listxml and listinfo drivers to use simple macros.
+            - Changed the internal representation of baddump/nodump.
             - Complemented CRCs are reported (should use flags nodump instead).
-            - Removed the -i change for use with Calice drivers (unnecessary).
+            - Added checks for MD5 and SHA1 conflicts (CRCs already checked).
+            - Added OPTION_FIX_MERGING_OFF and OPTION_REMOVE_DUPLICATES_OFF.
+            - Added OPTION_SOURCEFILE_SELECTION and OPTION_INVERT_SELECTION.
+            - Added support for external selection files with the @ symbol.
+            - Renamed OPTION_GAME to OPTION_GAME_SELECTION.
+            - Renamed OPTION_GAME_AND_CLONES to OPTION_CLONE_SELECTION.
+            - Removed the hack made in DatLib v1.13 for Calice drivers.
+            - Removed funny size and missing year checks (pretty useless now).
 
 16/01/2005  *** v1.14 ***
 
