@@ -1,6 +1,7 @@
 @echo off
 
 copy %CAESAR%\data\games\multi\*.dat
+copy %CAESAR%\data\games\multi2\*.dat
 copy %CAESAR%\data\games\single\*.dat
 copy %CAESAR%\data\games\sound\*.dat
 copy %CAESAR%\data\games\linux\*.dat

@@ -190,6 +190,12 @@ int process_dat(char *fn)
 	i=0;
 	while(!errflg && ems[i].descr)
 	{
+		for (j=0; j<strlen(ems[i].descr); j++)
+		{
+			if (ems[i].descr[j]==' ')
+				ems[i].descr[j]='_';
+		}
+
 		printf("Validating %s details in ROMBuild...\n", ems[i].descr);
 		sprintf(base_fn, "%s.dat", ems[i].descr);
 
