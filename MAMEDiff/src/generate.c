@@ -100,11 +100,8 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 		}
 		else
 		{
-			if (curr_game_zip1->game->num_roms>0)
-			{
-				curr_game_zip1->flags|=GAME_ZIP_REMOVED;
-				num_game_zip_removals++;
-			}
+			curr_game_zip1->flags|=GAME_ZIP_REMOVED;
+			num_game_zip_removals++;
 		}
 	}
 
@@ -123,11 +120,8 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 		{
 			curr_game_zip1=0;
 
-			if (curr_game_zip2->game->num_roms>0)
-			{
-				curr_game_zip2->flags|=GAME_ZIP_ADDED;
-				num_game_zip_additions++;
-			}
+			curr_game_zip2->flags|=GAME_ZIP_ADDED;
+			num_game_zip_additions++;
 		}
 
 		for (j=0, curr_game_zip_rom2=curr_game_zip2->game_zip_roms; j<curr_game_zip2->num_game_zip_roms; j++, curr_game_zip_rom2++)
