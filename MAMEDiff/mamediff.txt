@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.15 - 22/02/2005
+                          MAMEDiff v2.16 - 28/02/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,12 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+28/02/2005  *** v2.16 ***
+
+            - Uses DatLib v2.2.
+            - Added support for tab delimited files.
+            - Fixed problem of unrecognised escape sequences looping forever!
 
 22/02/2005  *** v2.15 ***
 
