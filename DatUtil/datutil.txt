@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.16 - xx/xx/xxxx
+                         DatUtil v2.16 - 25/03/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -384,7 +384,7 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
-xx/xx/xxxx  *** v2.16 ***
+25/03/2005  *** v2.16 ***
 
             - Uses DatLib v2.4.
             - Fixed another crash with datutil -X and 'forcemerging full'.
