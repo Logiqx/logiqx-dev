@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.3"
-#define DATLIB_DATE "6 July 2004"
+#define DATLIB_VERSION "v1.4"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -190,7 +190,7 @@ int dir_scan(struct dat *dat)
 					{
 						while (!errflg && (zipent = readzip(zip)) != 0)
 						{
-							if (dat->options & OPTION_EXTENDED_CHECKSUMS)
+							if (dat->options->options & OPTION_EXTENDED_CHECKSUMS)
 							{
 								if (zipent->uncompressed_size && zipent->uncompressed_size<=MAX_ROM_SIZE)
 								{
@@ -440,6 +440,9 @@ int allocate_dat_memory(struct dat *dat)
 			dat->num_games++;
 		}
 
+		else if (type==TOKEN_GAME_COMMENT || type==TOKEN_RESOURCE_COMMENT || type==TOKEN_MACHINE_COMMENT)
+			dat->num_comments++;
+
 		else if (type==TOKEN_ROM_NAME && dat->num_games>0)
 			dat->num_roms++;
 
@@ -472,6 +475,18 @@ int allocate_dat_memory(struct dat *dat)
 			STRUCT_CALLOC(dat->game_zips, dat->num_games, sizeof(struct game_zip));
 			STRUCT_CALLOC(dat->game_zip_name_idx, dat->num_games, sizeof(struct game_zip_idx));
 		}
+	}
+
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d comments identified\n", dat->num_comments);
+		}
+
+		if (dat->num_comments>0)
+			STRUCT_CALLOC(dat->comments, dat->num_comments, sizeof(struct comment));
 	}
 
 	if (!errflg)
@@ -531,14 +546,16 @@ int allocate_dat_memory(struct dat *dat)
 
 int store_tokenized_dat(struct dat *dat)
 {
-	struct game *curr_game=0;
-	struct rom *curr_rom=0;
-	struct disk *curr_disk=0;
-	struct sample *curr_sample=0;
+	struct game *curr_game=dat->games;
+	struct comment *curr_comment=dat->comments;
+	struct rom *curr_rom=dat->roms;
+	struct disk *curr_disk=dat->disks;
+	struct sample *curr_sample=dat->samples;
 
+	struct comment *comments=0;
 	char type;
 
-	int errflg=0;
+	int num_comments=0, errflg=0;
 
 	if (datlib_debug)
 	{
@@ -547,7 +564,7 @@ int store_tokenized_dat(struct dat *dat)
 	}
 	else
 	{
-		if (!(dat->options & OPTION_LOAD_QUIETLY))
+		if (!(dat->options->options & OPTION_LOAD_QUIETLY))
 			printf("  Storing the tokenized dat within the actual dat structure...\n");
 	}
 
@@ -555,20 +572,13 @@ int store_tokenized_dat(struct dat *dat)
 
 	BUFFER2_REWIND
 
-	/* --- Initialise pointer variables --- */
-
-	curr_game=dat->games;
-	curr_rom=dat->roms;
-	curr_disk=dat->disks;
-	curr_sample=dat->samples;
-
 	/* --- Scan through all tokens and store everything in the actual dat structure --- */
 
 	while (BUFFER2_REMAINING && (type=*BUFFER2_PTR++)!=TOKEN_UNDEFINED)
 	{
 		/* --- ClrMamePro header --- */
 
-		if (!(dat->options & OPTION_GAME))
+		if (!(dat->options->options & OPTION_GAME))
 		{
 			if (type==TOKEN_CLRMAMEPRO_NAME)
 				dat->clrmamepro.name=BUFFER2_PTR;
@@ -594,7 +604,7 @@ int store_tokenized_dat(struct dat *dat)
 
 		/* --- RomCenter header --- */
 
-		if (!(dat->options & OPTION_GAME))
+		if (!(dat->options->options & OPTION_GAME))
 		{
 			if (type==TOKEN_ROMCENTER_CREDITS_AUTHOR)
 				dat->romcenter_credits.author=BUFFER2_PTR;
@@ -682,10 +692,10 @@ int store_tokenized_dat(struct dat *dat)
 						curr_rom->rom_flags|=FLAG_ROM_NODUMP;
 				}
 
-				else if (type==TOKEN_ROM_MD5)
+				else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
 					curr_rom->md5=BUFFER2_PTR;
 
-				else if (type==TOKEN_ROM_SHA1)
+				else if (type==TOKEN_ROM_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
 					curr_rom->sha1=BUFFER2_PTR;
 
 				else if (type==TOKEN_ROM_REGION)
@@ -723,10 +733,10 @@ int store_tokenized_dat(struct dat *dat)
 				if (type==TOKEN_DISK_NAME)
 					curr_disk++;
 
-				else if (type==TOKEN_DISK_MD5)
+				else if (type==TOKEN_DISK_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
 					curr_disk->md5=BUFFER2_PTR;
 
-				else if (type==TOKEN_DISK_SHA1)
+				else if (type==TOKEN_DISK_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
 					curr_disk->sha1=BUFFER2_PTR;
 
 				else if (type==TOKEN_DISK_REGION)
@@ -788,12 +798,50 @@ int store_tokenized_dat(struct dat *dat)
 				curr_game->game_flags|=FLAG_RESOURCE_NAME;
 			else if (type==TOKEN_MACHINE_NAME)
 				curr_game->game_flags|=FLAG_MACHINE_NAME;
+
+			/* --- Link in any comments that preceded the game --- */
+
+			if (comments)
+			{
+				curr_game->comments=comments;
+				curr_game->num_comments=num_comments;
+				comments=0;
+				num_comments=0;
+			}
+		}
+
+		/* --- Comments --- */
+
+		if (type==TOKEN_GAME_COMMENT)
+		{
+			if (comments==0)
+				comments=curr_comment;
+
+			curr_comment++->comment=BUFFER2_PTR;
+			num_comments++;
 		}
 
 		BUFFER2_ADVANCE_LINE
 	}
 
-	/* --- Merging --- */
+	/* --- Override the ClrMamePro header in the dat with user parameters --- */
+
+	if (dat->options->clrmamepro.name)
+		dat->clrmamepro.name=dat->options->clrmamepro.name;
+	if (dat->options->clrmamepro.description)
+		dat->clrmamepro.description=dat->options->clrmamepro.description;
+	if (dat->options->clrmamepro.category)
+		dat->clrmamepro.category=dat->options->clrmamepro.category;
+	if (dat->options->clrmamepro.version)
+		dat->clrmamepro.version=dat->options->clrmamepro.version;
+	if (dat->options->clrmamepro.author)
+		dat->clrmamepro.author=dat->options->clrmamepro.author;
+	if (dat->options->clrmamepro.forcemerging)
+		dat->clrmamepro.forcemerging=dat->options->clrmamepro.forcemerging;
+	if (dat->options->clrmamepro.forcezipping)
+		dat->clrmamepro.forcezipping=dat->options->clrmamepro.forcezipping;
+
+	/* --- Copy merge preferences between ClrMamePro and RomCenter headers --- */
 
 	if (dat->clrmamepro.forcemerging)
 	{
@@ -1005,7 +1053,7 @@ int single_game(struct dat *dat, char *game)
 		if (!strcmp(curr_game->name, game))
 			curr_game->match=1;
 
-		if (dat->options & OPTION_GAME_AND_CLONES)
+		if (dat->options->options & OPTION_GAME_AND_CLONES)
 		{
 			if (curr_game->cloneof && !strcmp(curr_game->cloneof, game))
 				curr_game->match=1;
@@ -1049,6 +1097,96 @@ int single_game(struct dat *dat, char *game)
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 		curr_game->match=0;
+
+	return(errflg);
+}
+
+int add_missing_info(struct dat *dat)
+{
+	struct game *curr_game=0;
+	struct rom *curr_rom=0;
+	struct game_idx *game_match=0;
+	struct rom_idx *rom_match=0;
+	uint32_t i, j;
+
+	int errflg=0;
+
+	if (datlib_debug)
+	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Adding missing information...\n");
+	}
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		game_match=bsearch((void *)curr_game->name, dat->options->info->game_name_idx, dat->options->info->num_games, sizeof(struct game_idx), find_game_by_name);
+
+		if (game_match)
+		{
+			if (game_match->game->cloneof && curr_game->cloneof==0)
+			{
+				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
+				curr_game->cloneof=game_match->game->cloneof;
+			}
+
+			if (game_match->game->romof && curr_game->romof==0)
+			{
+				curr_game->game_fixes|=FLAG_GAME_ROMOF;
+				curr_game->romof=game_match->game->romof;
+			}
+
+			if (game_match->game->sampleof && curr_game->sampleof==0)
+			{
+				curr_game->game_fixes|=FLAG_GAME_SAMPLEOF;
+				curr_game->sampleof=game_match->game->sampleof;
+			}
+
+			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
+			{
+				rom_match=bsearch((void *)curr_rom->name, game_match->game->rom_name_idx, game_match->game->num_roms, sizeof(struct rom_idx), find_rom_by_name);
+
+				if (rom_match)
+				{
+					if (rom_match->rom->crc==curr_rom->crc || rom_match->rom->crc==~curr_rom->crc)
+					{
+						if (rom_match->rom->size!=curr_rom->size)
+						{
+							curr_rom->rom_fixes|=FLAG_ROM_SIZE;
+							curr_rom->size=rom_match->rom->size;
+						}
+
+						if (rom_match->rom->crc!=curr_rom->crc)
+						{
+							curr_rom->rom_fixes|=FLAG_ROM_CRC;
+							curr_rom->crc=rom_match->rom->crc;
+
+							if (!(curr_rom->rom_flags & FLAG_ROM_BADDUMP))
+							{
+								curr_rom->rom_fixes|=FLAG_ROM_BADDUMP;
+								curr_rom->rom_flags|=FLAG_ROM_BADDUMP;
+							}
+						}
+
+						if ((rom_match->rom->md5 && curr_rom->md5==0) ||
+							(rom_match->rom->md5 && curr_rom->md5 &&
+							strcmp(rom_match->rom->md5, curr_rom->md5)))
+						{
+							curr_rom->rom_fixes|=FLAG_ROM_MD5;
+							curr_rom->md5=rom_match->rom->md5;
+						}
+
+						if ((rom_match->rom->sha1 && curr_rom->sha1==0) ||
+							(rom_match->rom->sha1 && curr_rom->sha1 &&
+							strcmp(rom_match->rom->sha1, curr_rom->sha1)))
+						{
+							curr_rom->rom_fixes|=FLAG_ROM_SHA1;
+							curr_rom->sha1=rom_match->rom->sha1;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return(errflg);
 }
@@ -1207,36 +1345,36 @@ int fix_merging(struct dat *dat)
 						{
 							curr_rom->merge=curr_rom->name;
 							curr_rom->rom_fixes|=FLAG_ROM_MERGE;
+						}
 
-							if (curr_rom->crc && !merge_rom->crc)
+						if (curr_rom->crc && !merge_rom->crc)
+						{
+							merge_rom->crc=curr_rom->crc;
+							merge_rom->rom_fixes|=FLAG_ROM_CRC;
+
+							if (merge_rom->rom_flags & FLAG_ROM_NODUMP)
 							{
-								merge_rom->crc=curr_rom->crc;
-								merge_rom->rom_fixes|=FLAG_ROM_CRC;
-
-								if (merge_rom->rom_flags & FLAG_ROM_NODUMP)
-								{
-									merge_rom->rom_flags&=~FLAG_ROM_NODUMP;
-									merge_rom->rom_fixes|=FLAG_ROM_NODUMP;
-								}
-
-								if (!(merge_rom->rom_flags & FLAG_ROM_BADDUMP))
-								{
-									merge_rom->rom_flags|=FLAG_ROM_BADDUMP;
-									merge_rom->rom_fixes|=FLAG_ROM_BADDUMP;
-								}
+								merge_rom->rom_flags&=~FLAG_ROM_NODUMP;
+								merge_rom->rom_fixes|=FLAG_ROM_NODUMP;
 							}
 
-							if (curr_rom->sha1 && !merge_rom->sha1)
+							if (!(merge_rom->rom_flags & FLAG_ROM_BADDUMP))
 							{
-								merge_rom->sha1=curr_rom->sha1;
-								merge_rom->rom_fixes|=FLAG_ROM_SHA1;
+								merge_rom->rom_flags|=FLAG_ROM_BADDUMP;
+								merge_rom->rom_fixes|=FLAG_ROM_BADDUMP;
 							}
+						}
 
-							if (curr_rom->md5 && !merge_rom->md5)
-							{
-								merge_rom->md5=curr_rom->md5;
-								merge_rom->rom_fixes|=FLAG_ROM_MD5;
-							}
+						if (curr_rom->sha1 && !merge_rom->sha1)
+						{
+							merge_rom->sha1=curr_rom->sha1;
+							merge_rom->rom_fixes|=FLAG_ROM_SHA1;
+						}
+
+						if (curr_rom->md5 && !merge_rom->md5)
+						{
+							merge_rom->md5=curr_rom->md5;
+							merge_rom->rom_fixes|=FLAG_ROM_MD5;
 						}
 
 						if (merge->game_flags & FLAG_RESOURCE_NAME)
@@ -1265,11 +1403,11 @@ int fix_merging(struct dat *dat)
 		{
 			struct game *merge=curr_game->merge;
 
-			while (!curr_rom->crc && curr_rom->merge && merge)
+			while (curr_rom->merge && merge)
 			{
 				struct rom *merge_rom;
 
-				for (k=0, merge_rom=merge->roms; !curr_rom->crc && k<merge->num_roms; k++, merge_rom++)
+				for (k=0, merge_rom=merge->roms; k<merge->num_roms; k++, merge_rom++)
 				{
 					if (!strcmp(curr_rom->name, merge_rom->name))
 					{
@@ -1503,6 +1641,9 @@ int summarise_dat(struct dat *dat)
 		if (curr_game->sampleof)
 			curr_game->game_flags|=FLAG_GAME_SAMPLEOF;
 
+		if (curr_game->comments)
+			curr_game->game_flags|=FLAG_GAME_COMMENTS;
+
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
 			if (curr_rom->name)
@@ -1629,7 +1770,10 @@ int report_warnings(struct dat *dat)
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
 		curr_game->game_warnings=(curr_game->game_flags ^ dat->game_flags) &
-			(FLAG_GAME_DESCRIPTION | FLAG_GAME_YEAR | FLAG_GAME_MANUFACTURER | FLAG_GAME_REBUILDTO);
+			(FLAG_GAME_DESCRIPTION | FLAG_GAME_MANUFACTURER | FLAG_GAME_REBUILDTO);
+
+		if (!(dat->options->options & OPTION_IGNORE_MISSING_YEARS))
+			curr_game->game_warnings|=((curr_game->game_flags ^ dat->game_flags) & FLAG_GAME_YEAR);
 
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
@@ -1640,7 +1784,7 @@ int report_warnings(struct dat *dat)
 				curr_rom->rom_warnings|=(curr_rom->rom_flags ^ dat->rom_flags) &
 					(FLAG_ROM_CRC | FLAG_ROM_MD5 | FLAG_ROM_SHA1);
 
-			if (!(dat->options & OPTION_IGNORE_FUNNY_SIZES))
+			if (!(dat->options->options & OPTION_IGNORE_FUNNY_SIZES))
 			{
 				int bits=0;
 
@@ -1749,7 +1893,7 @@ int report_warnings(struct dat *dat)
 		}
 	}
 
-	if ((dat->game_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings) && dat->options & OPTION_VERBOSE_LOGGING)
+	if ((dat->game_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings) && dat->options->options & OPTION_VERBOSE_LOGGING)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Warning Details\n");
@@ -1962,7 +2106,7 @@ int report_fixes(struct dat *dat)
 		}
 	}
 
-	if ((dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes) && dat->options & OPTION_VERBOSE_LOGGING)
+	if ((dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes) && dat->options->options & OPTION_VERBOSE_LOGGING)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Fix Details\n");
@@ -1978,32 +2122,28 @@ int report_fixes(struct dat *dat)
 				{
 					if (curr_game->game_fixes & FLAG_GAME_NAME)
 					{
-						if (curr_game->name)
-							fprintf(dat->log_file, "    Name changed to lower case.\n");
+						fprintf(dat->log_file, "    Name set/changed.\n");
 					}
 
 					if (curr_game->game_fixes & FLAG_MACHINE_NAME)
 					{
-						if (curr_game->name)
-							fprintf(dat->log_file, "    Name changed to lower case.\n");
+						fprintf(dat->log_file, "    Name set/changed.\n");
 					}
 
 					if (curr_game->game_fixes & FLAG_RESOURCE_NAME)
 					{
-						if (curr_game->name)
-							fprintf(dat->log_file, "    Name changed to lower case.\n");
+						fprintf(dat->log_file, "    Name set/changed.\n");
 					}
 
 					if (curr_game->game_fixes & FLAG_GAME_DESCRIPTION)
 					{
-						if (curr_game->description)
-							fprintf(dat->log_file, "    Description set to game name.\n");
+						fprintf(dat->log_file, "    Description set/changed.\n");
 					}
 
 					if (curr_game->game_fixes & FLAG_GAME_CLONEOF)
 					{
 						if (curr_game->cloneof)
-							fprintf(dat->log_file, "    Clone Of changed to lower case.\n");
+							fprintf(dat->log_file, "    Clone Of set/changed.\n");
 						else
 							if (curr_game->game_fixes & FLAG_GAME_CLONEOFCLONE)
 								fprintf(dat->log_file, "    Clone Of removed (clone of clone).\n");
@@ -2014,7 +2154,7 @@ int report_fixes(struct dat *dat)
 					if (curr_game->game_fixes & FLAG_GAME_ROMOF)
 					{
 						if (curr_game->romof)
-							fprintf(dat->log_file, "    ROM Of changed to lower case.\n");
+							fprintf(dat->log_file, "    ROM Of set/changed.\n");
 						else
 							fprintf(dat->log_file, "    ROM Of removed (invalid reference).\n");
 					}
@@ -2022,7 +2162,7 @@ int report_fixes(struct dat *dat)
 					if (curr_game->game_fixes & FLAG_GAME_SAMPLEOF)
 						{
 						if (curr_game->sampleof)
-							fprintf(dat->log_file, "    Sample Of changed to lower case.\n");
+							fprintf(dat->log_file, "    Sample Of set/changed.\n");
 						else
 							fprintf(dat->log_file, "    Sample Of removed (invalid reference).\n");
 					}
@@ -2034,8 +2174,7 @@ int report_fixes(struct dat *dat)
 					{
 						if (curr_rom->rom_fixes & FLAG_ROM_NAME)
 						{
-							if (curr_rom->name)
-								fprintf(dat->log_file, "    ROM %s - name changed to lower case.\n", curr_rom->name);
+							fprintf(dat->log_file, "    ROM %s - name set/changed.\n", curr_rom->name);
 						}
 
 						if (curr_rom->rom_fixes & FLAG_ROM_MERGE)
@@ -2046,9 +2185,42 @@ int report_fixes(struct dat *dat)
 								fprintf(dat->log_file, "    ROM %s - merge name removed (ROM name not in parent).\n", curr_rom->name);
 						}
 
+						if (curr_rom->rom_fixes & FLAG_ROM_SIZE)
+						{
+							fprintf(dat->log_file, "    ROM %s - size set/changed.\n", curr_rom->name);
+						}
+
+						if (curr_rom->rom_fixes & FLAG_ROM_CRC)
+						{
+							fprintf(dat->log_file, "    ROM %s - CRC set/changed.\n", curr_rom->name);
+						}
+
+						if (curr_rom->rom_fixes & FLAG_ROM_MD5)
+						{
+							if (curr_rom->md5)
+								fprintf(dat->log_file, "    ROM %s - MD5 set/changed.\n", curr_rom->name);
+						}
+
+						if (curr_rom->rom_fixes & FLAG_ROM_SHA1)
+						{
+							if (curr_rom->sha1)
+								fprintf(dat->log_file, "    ROM %s - SHA1 set/changed.\n", curr_rom->name);
+						}
+
+						if (curr_rom->rom_fixes & FLAG_ROM_BADDUMP)
+						{
+							if (curr_rom->rom_flags & FLAG_ROM_BADDUMP)
+								fprintf(dat->log_file, "    ROM %s - bad dump set.\n", curr_rom->name);
+							else
+								fprintf(dat->log_file, "    ROM %s - bad dump cleared.\n", curr_rom->name);
+						}
+
 						if (curr_rom->rom_fixes & FLAG_ROM_NODUMP)
 						{
-							fprintf(dat->log_file, "    ROM %s - CRC/MD5/SHA1 and 'status baddump' have been set.\n", curr_rom->name);
+							if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
+								fprintf(dat->log_file, "    ROM %s - no dump set.\n", curr_rom->name);
+							else
+								fprintf(dat->log_file, "    ROM %s - no dump cleared.\n", curr_rom->name);
 						}
 
 						if (curr_rom->rom_fixes & FLAG_ROM_DUPLICATE)
@@ -2064,8 +2236,7 @@ int report_fixes(struct dat *dat)
 					{
 						if (curr_disk->disk_fixes & FLAG_DISK_NAME)
 						{
-							if (curr_disk->name)
-								fprintf(dat->log_file, "    Disk %s - name changed to lower case.\n", curr_disk->name);
+							fprintf(dat->log_file, "    Disk %s - name set/changed.\n", curr_disk->name);
 						}
 
 						if (curr_disk->disk_fixes & FLAG_DISK_DUPLICATE)
@@ -2081,8 +2252,7 @@ int report_fixes(struct dat *dat)
 					{
 						if (curr_sample->sample_fixes & FLAG_SAMPLE_NAME)
 						{
-							if (curr_sample->name)
-								fprintf(dat->log_file, "    Sample %s - name changed to lower case.\n", curr_sample->name);
+							fprintf(dat->log_file, "    Sample %s - name set/changed.\n", curr_sample->name);
 						}
 
 						if (curr_sample->sample_fixes & FLAG_SAMPLE_DUPLICATE)
@@ -2130,7 +2300,7 @@ int rebuild_dat_indices(struct dat *dat)
 
 	/* --- Sort games by parent (if required) --- */
 
-	if (!errflg && dat->options & OPTION_SORT_GAMES_BY_PARENT)
+	if (!errflg && dat->options->options & OPTION_SORT_GAMES_BY_PARENT)
 	{
 		if (datlib_debug)
 		{
@@ -2204,7 +2374,7 @@ int rebuild_dat_indices(struct dat *dat)
 
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
-				//if (dat->options & OPTION_COMPLEMENT_BAD_CRCS && curr_rom->rom_flags & FLAG_ROM_BADDUMP)
+				//if (dat->options->options & OPTION_COMPLEMENT_BAD_CRCS && curr_rom->rom_flags & FLAG_ROM_BADDUMP)
 					//curr_rom->crc=~curr_rom->crc;
 
 				curr_rom->game=curr_game;
@@ -2288,18 +2458,18 @@ int build_zip_structures(struct dat *dat)
 
 	if (dat->dat_flags & (FLAG_DAT_FULL_MERGING|FLAG_DAT_SPLIT_MERGING|FLAG_DAT_NO_MERGING))
 	{
-		dat->options&=~(OPTION_DAT_FULL_MERGING|OPTION_DAT_SPLIT_MERGING|OPTION_DAT_NO_MERGING);
+		dat->options->options&=~(OPTION_DAT_FULL_MERGING|OPTION_DAT_SPLIT_MERGING|OPTION_DAT_NO_MERGING);
 
 		if (dat->dat_flags & FLAG_DAT_FULL_MERGING)
-			dat->options|=OPTION_DAT_FULL_MERGING;
+			dat->options->options|=OPTION_DAT_FULL_MERGING;
 		else if (dat->dat_flags & FLAG_DAT_SPLIT_MERGING)
-			dat->options|=OPTION_DAT_SPLIT_MERGING;
+			dat->options->options|=OPTION_DAT_SPLIT_MERGING;
 		else if (dat->dat_flags & FLAG_DAT_NO_MERGING)
-			dat->options|=OPTION_DAT_NO_MERGING;
+			dat->options->options|=OPTION_DAT_NO_MERGING;
 	}
 
-	if (!(dat->options & (OPTION_DAT_FULL_MERGING|OPTION_DAT_SPLIT_MERGING|OPTION_DAT_NO_MERGING)))
-		dat->options|=OPTION_DAT_SPLIT_MERGING;
+	if (!(dat->options->options & (OPTION_DAT_FULL_MERGING|OPTION_DAT_SPLIT_MERGING|OPTION_DAT_NO_MERGING)))
+		dat->options->options|=OPTION_DAT_SPLIT_MERGING;
 
 	/* --- Firstly, build the game_zip array and index --- */
 
@@ -2308,7 +2478,7 @@ int build_zip_structures(struct dat *dat)
 	
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (dat->options & OPTION_DAT_FULL_MERGING)
+		if (dat->options->options & OPTION_DAT_FULL_MERGING)
 		{
 			if (curr_game->cloneof==0)
 			{
@@ -2333,7 +2503,7 @@ int build_zip_structures(struct dat *dat)
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (dat->options & OPTION_DAT_FULL_MERGING)
+		if (dat->options->options & OPTION_DAT_FULL_MERGING)
 		{
 			if (curr_game->cloneof)
 				curr_game_zip_name_idx=bsearch((void *)curr_game->cloneof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
@@ -2349,7 +2519,7 @@ int build_zip_structures(struct dat *dat)
 
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
-			if (dat->options & OPTION_DAT_NO_MERGING)
+			if (dat->options->options & OPTION_DAT_NO_MERGING)
 			{
 				curr_game_zip_rom->game_zip=curr_game_zip;
 				curr_game_zip_rom->rom=curr_rom;
@@ -2429,14 +2599,14 @@ int build_zip_structures(struct dat *dat)
 	return(errflg);
 }
 
-struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
+struct dat *init_dat(struct options *options)
 {
 	struct dat *dat=0;
 	struct stat buf;
 	uint32_t i, line_length=0, num_lines=0;
 	int driver_matches=0, errflg=0;
 
-	if (options & OPTION_SHOW_DEBUG_INFO)
+	if (options->options & OPTION_SHOW_DEBUG_INFO)
 		datlib_debug=1;
 
 	if (datlib_debug)
@@ -2446,8 +2616,8 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 	}
 	else
 	{
-		if (!(options & OPTION_LOAD_QUIETLY))
-			printf("Processing %s:\n", fn);
+		if (!(options->options & OPTION_LOAD_QUIETLY))
+			printf("Processing %s:\n", options->fn);
 	}
 
 	/* --- Allocate memory for main dat structure --- */
@@ -2463,19 +2633,26 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 	/* --- Remember the user options --- */
 
 	if (!errflg)
+	{
+		/* --- Default extended checksum is SHA1 --- */
+
+		if (!(options->options & OPTION_MD5_CHECKSUMS))
+			options->options|=OPTION_SHA1_CHECKSUMS;
+
 		dat->options=options;
+	}
 
 	/* --- Open the log file --- */
 
-	if (!errflg && log_fn)
+	if (!errflg && options->log_fn)
 	{
 		if (datlib_debug)
 		{
 			printf("%-16s: ", "Datlib.init_dat");
-			printf("Creating log file (%s)...\n", log_fn);
+			printf("Creating log file (%s)...\n", options->log_fn);
 		}
 
-		dat->log_name=log_fn;
+		dat->log_name=options->log_fn;
 		FOPEN(dat->log_file, dat->log_name, "w")
 	}
 
@@ -2483,7 +2660,7 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 
 	if (!errflg)
 	{
-		dat->name=fn;
+		dat->name=options->fn;
 
 		if (stat(dat->name, &buf)!=0)
 		{
@@ -2548,7 +2725,7 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 		}
 		else
 		{
-			if (!(options & OPTION_LOAD_QUIETLY))
+			if (!(options->options & OPTION_LOAD_QUIETLY))
 			{
 				if (kb <= 1023)
 					printf("  Loading the file into memory (%.0f.%.0fKB)...\n", floor(kb), ceil(100*(kb-floor(kb))));
@@ -2649,21 +2826,21 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 
 			case 0:
 				if (!datlib_debug)
-					fprintf(stderr, "Can't identify type for '%s'\n", fn);
+					fprintf(stderr, "Can't identify type for '%s'\n", options->fn);
 				errflg++;
 				break;
 
 			/* --- If the is one driver match, the format is supported --- */
 
 			case 1:
-				if (!datlib_debug && !(options & OPTION_LOAD_QUIETLY))
+				if (!datlib_debug && !(options->options & OPTION_LOAD_QUIETLY))
 					printf("  Identified the file as being '%s' format.\n", dat->load->description);
 				break;
 
 			/* --- If more than one driver match, the format is unknown! --- */
 
 			default:
-				fprintf(stderr, "Can't identify type for '%s'. Matches more than one type.\n", fn);
+				fprintf(stderr, "Can't identify type for '%s'. Matches more than one type.\n", options->fn);
 				errflg++;
 				break;
 		}
@@ -2675,7 +2852,7 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 
 		for (i=0; drivers[i]; i++)
 		{
-			if (!(dat->save) && (strcmp(drivers[i]->description, dat->load->description)||dat->options & OPTION_GAME))
+			if (!(dat->save) && (strcmp(drivers[i]->description, dat->load->description)||options->options & OPTION_GAME))
 				dat->save=(struct driver *)drivers[i];
 		}
 	}
@@ -2719,10 +2896,10 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 	{
 		if (datlib_debug)
 			printf("%-16s: ", "Datlib.init_dat");
-		else if (!(options & OPTION_LOAD_QUIETLY))
+		else if (!(options->options & OPTION_LOAD_QUIETLY))
 			printf("  ");
 
-		if (!(options & OPTION_LOAD_QUIETLY))
+		if (!(options->options & OPTION_LOAD_QUIETLY))
 			printf("Calling the '%s' pre-parser/tokenizer...\n", dat->load->description);
 
 		errflg+=(dat->load->load)(dat);
@@ -2749,17 +2926,20 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 	if (!errflg)
 		errflg=store_tokenized_dat(dat);
 
-	if (!errflg && (options & OPTION_LOWER_CASE))
+	if (!errflg && (options->options & OPTION_LOWER_CASE))
 		errflg=lower_case(dat);
 
-	if (!errflg && (options & OPTION_REMOVE_CLONES))
+	if (!errflg && (options->options & OPTION_REMOVE_CLONES))
 		errflg=remove_clones(dat);
 
-	if (!errflg && (options & OPTION_GAME))
-		errflg=single_game(dat, game);
+	if (!errflg && (options->options & OPTION_GAME))
+		errflg=single_game(dat, options->game);
 
 	if (dat->num_games==0)
 		errflg++;
+
+	if (!errflg && dat->options->info)
+		errflg=add_missing_info(dat);
 
 	if (!errflg)
 		errflg=fix_descriptions(dat);
@@ -2789,7 +2969,7 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 
 	if (errflg)
 	{
-		if (!datlib_debug && !(options & OPTION_LOAD_QUIETLY))
+		if (!datlib_debug && !(options->options & OPTION_LOAD_QUIETLY))
 			printf("Aborted processing due to errors!\n");
 
 		dat=free_dat(dat);
@@ -2804,19 +2984,19 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
 	}
 	else if (!errflg)
 	{
-		if (!(options & OPTION_LOAD_QUIETLY))
+		if (!(options->options & OPTION_LOAD_QUIETLY))
 			printf("Processing complete!\n");
 
-		if (options & OPTION_SHOW_SUMMARY)
+		if (options->options & OPTION_SHOW_SUMMARY)
 			printf("\nLoaded %lu games (%lu parents, %lu clones, %lu others) and %lu resources.\n", (unsigned long)dat->num_games-dat->num_resources, (unsigned long)dat->num_parents, (unsigned long)dat->num_clones, (unsigned long)dat->num_others, (unsigned long)dat->num_resources);
 
-		if (log_fn)
+		if (options->log_fn)
 		{
 			if (dat->game_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings)
-				printf("\nNote: There are some warnings for this data file (see %s for details).\n", log_fn);
+				printf("\nNote: There are some warnings for this data file (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
-				printf("\nNote: Fixes were applied to the data file (see %s for details).\n", log_fn);
+				printf("\nNote: Fixes were applied to the data file (see %s for details).\n", options->log_fn);
 
 			printf("-------------------------------------------------------------------------------\n");
 		}
@@ -2830,16 +3010,16 @@ struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn)
  * Function to save data files
  * -------------------------------------------------------------------------- */
 
-int save_dat(struct dat *dat, char *save_name, char *save_mode, char *save_format)
+int save_dat(struct dat *dat)
 {
 	int i, errflg=0;
 	int lost=0;
 
-	if (save_format)
+	if (dat->options->save_format)
 	{
 		for (i=0, errflg=1; drivers[i]; i++)
 		{
-			if (drivers[i]->save_format && !strcmp(drivers[i]->save_format, save_format))
+			if (drivers[i]->save_format && !strcmp(drivers[i]->save_format, dat->options->save_format))
 			{
 				dat->save=(struct driver *)drivers[i];
 				errflg=0;
@@ -2847,20 +3027,20 @@ int save_dat(struct dat *dat, char *save_name, char *save_mode, char *save_forma
 		}
 
 		if (errflg)
-			fprintf(stderr, "Unrecognised output format '%s'\n", save_format);
+			fprintf(stderr, "Unrecognised output format '%s'\n", dat->options->save_format);
 	}
 
 	if (!errflg)
 	{
-		if (save_name && save_mode)
+		if (dat->options->save_name && dat->options->save_mode)
 		{
 			if (datlib_debug)
 			{
 				printf("%-16s: ", "Datlib.save_dat");
-				printf("Creating output file (%s)...\n", save_name);
+				printf("Creating output file (%s)...\n", dat->options->save_name);
 			}
 
-			FOPEN(dat->out, save_name, save_mode)
+			FOPEN(dat->out, dat->options->save_name, dat->options->save_mode)
 		}
 		else
 		{
@@ -2893,7 +3073,7 @@ int save_dat(struct dat *dat, char *save_name, char *save_mode, char *save_forma
 		}
 		else
 		{
-			printf("Saved %s in %s format.\n", save_name, dat->save->description);
+			printf("Saved %s in %s format.\n", dat->options->save_name, dat->save->description);
 		}
 
 		/* --- Report information that could not be saved (ignore flags that are derived by DatLib) --- */
@@ -2922,6 +3102,8 @@ int save_dat(struct dat *dat, char *save_name, char *save_mode, char *save_forma
 				{
 					fprintf(dat->log_file, "Game information that has been lost:\n\n");
 
+					if (lost & FLAG_GAME_COMMENTS)
+						fprintf(dat->log_file, "    Comments\n");
 					if (lost & FLAG_GAME_DESCRIPTION)
 						fprintf(dat->log_file, "    Description\n");
 					if (lost & FLAG_GAME_YEAR)
@@ -3135,6 +3317,13 @@ struct dat *free_dat(struct dat *dat)
 		FREE(dat->game_rom_crc_idx)
 		FREE(dat->game_rom_name_idx)
 		FREE(dat->roms)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of comments...\n");
+		}
+		FREE(dat->comments)
 
 		if (datlib_debug)
 		{

@@ -65,10 +65,10 @@ int load_mame_listxml(struct dat *dat)
 
 	if (datlib_debug)
 		printf("%-16s: ", "Datlib.init_dat");
-	else if (!(dat->options & OPTION_LOAD_QUIETLY))
+	else if (!(dat->options->options & OPTION_LOAD_QUIETLY))
 		printf("  ");
 
-	if (!(dat->options & OPTION_LOAD_QUIETLY))
+	if (!(dat->options->options & OPTION_LOAD_QUIETLY))
 		printf("Using 'xml2info' to convert 'MAME ListXML' to 'MAME ListInfo'...\n");
 
 	BUFFER1_REWIND
@@ -95,10 +95,10 @@ int load_mame_listxml(struct dat *dat)
 
 		if (datlib_debug)
 			printf("%-16s: ", "Datlib.init_dat");
-		else if (!(dat->options & OPTION_LOAD_QUIETLY))
+		else if (!(dat->options->options & OPTION_LOAD_QUIETLY))
 			printf("  ");
 
-		if (!(dat->options & OPTION_LOAD_QUIETLY))
+		if (!(dat->options->options & OPTION_LOAD_QUIETLY))
 			printf("Calling the 'MAME ListInfo' pre-parser/tokenizer...\n");
 
 		errflg=load_mame_listinfo(dat);

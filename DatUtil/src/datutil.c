@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.1"
-#define DATUTIL_DATE "4 July 2004"
+#define DATUTIL_VERSION "v2.2"
+#define DATUTIL_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
-	struct dat *dat=0;
+	struct dat *dat=0, *info=0;
 	struct options *options=0;
 
 	int errflg=0;
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "g:cro:a:f:lsxzvdA:V:C:R:F:M:Z:m")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "g:cro:a:f:lsxmi:zyvdA:V:C:R:F:M:Z:")) != EOF)
 	switch (c)
 	{
 		case 'g':
@@ -104,8 +104,17 @@ int main(int argc, char **argv)
 		case 'x':
 			options->options|=OPTION_EXTENDED_CHECKSUMS;
 			break;
+		case 'm':
+			options->options|=OPTION_MD5_CHECKSUMS;
+			break;
+		case 'i':
+			options->fn=optarg;
+			break;
 		case 'z':
 			options->options|=OPTION_IGNORE_FUNNY_SIZES;
+			break;
+		case 'y':
+			options->options|=OPTION_IGNORE_MISSING_YEARS;
 			break;
 		case 'v':
 			options->options|=OPTION_VERBOSE_LOGGING;
@@ -137,12 +146,6 @@ int main(int argc, char **argv)
 		case '?':
 			errflg++;	/* User wants help! */
 			break;
-
-		/* --- Support original switches for backwards compatibility --- */
-
-		case 'm':
-			printf("Note: You no longer need to specify the -m option as it is now automatic!\n\n");
-			break;
 	}
 
 	/* --- The user must specify either one or two dat files --- */
@@ -155,13 +158,12 @@ int main(int argc, char **argv)
 	if (errflg)
 	{
 		printf("Usage: datutil [-f <format>] [-o|a <outfile>] [-g <game> [-c]] [-s] [-r] [-l]\n");
-		printf("               [-x] [-A <author>] [-V <version>] [-C <category>] [-R <refname>]\n");
-		printf("               [-F <full name>] [-M <merging>] [-Z <zipping>] [-z] [-v] <dat>\n\n");
-		printf("Converts a dat to a different format. The output format can be specified with\nthe -f option (e.g. listinfo, romcenter2 and titlelist).\n\n");
+		printf("  [-x] [-m] [-i <info>] [-z] [-y] [-A <author>] [-V <version>] [-C <category>]\n");
+		printf("  [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>] [-v] <infile>\n\n");
+		printf("Converts a dat to a different format. The output format can be specified with\nthe -f option (e.g. listinfo, romcenter2 and titlelist).\n");
 		printf("To specify the output filename use the -o option (or -a for append).\n\n");
-		printf("Individual games can be converted using the -g option (using -c will also\nconvert the clones). If required, the -s option can be used to sort the games\nby their parent name and the -r option can be used to remove clones.\nThe -x option can be used to generate SHA1 and MD5 values when scanning ZIPs.\nUse -l to convert all names to lowercase and -z to ignore funny sizes!\n\n");
-		printf("The -A, -V, -C, -R, -F, -M and -Z options are used to specify the data file\nheader fields.\n\n");
-		printf("For a verbose log file (recommended), use the -v option.\n");
+		printf("Individual games can be converted using the -g option (using -c will also\nconvert the clones). If required, the -s option can be used to sort the games\nby their parent name and the -r option can be used to remove clones. Use -l\nto convert all names to lowercase. The -x option can be used to generate SHA1\nor MD5 values when scanning ZIPs. To use MD5 rather than SHA1 (the default),\nspecify the -m option. The -i option will take missing info from another dat.\nThe -z and -y options are used to ignore funny sizes and missing years.\nFor a verbose log file (recommended), use the -v option.\n\n");
+		printf("The -A, -V, -C, -R, -F, -M and -Z options are used to specify the data file\nheader fields.\n");
 	}
 
 	if (!errflg)
@@ -170,30 +172,26 @@ int main(int argc, char **argv)
 
 		options->options|=OPTION_SHOW_SUMMARY;
 
-		/* --- Initialise the dat --- */
+		/* --- If using an 'info' dat, load it into memory --- */
 
-		if (!errflg && (dat=init_dat(argv[optind], options->options, options->game, "datutil.log"))==0)
-			errflg++;
-
-		/* --- Set the ClrMamePro details in the dat --- */
-
-		if (!errflg)
+		if (options->fn)
 		{
-			if (options->clrmamepro.name)
-				dat->clrmamepro.name=options->clrmamepro.name;
-			if (options->clrmamepro.description)
-				dat->clrmamepro.description=options->clrmamepro.description;
-			if (options->clrmamepro.category)
-				dat->clrmamepro.category=options->clrmamepro.category;
-			if (options->clrmamepro.version)
-				dat->clrmamepro.version=options->clrmamepro.version;
-			if (options->clrmamepro.author)
-				dat->clrmamepro.author=options->clrmamepro.author;
-			if (options->clrmamepro.forcemerging)
-				dat->clrmamepro.forcemerging=options->clrmamepro.forcemerging;
-			if (options->clrmamepro.forcezipping)
-				dat->clrmamepro.forcezipping=options->clrmamepro.forcezipping;
+			if ((info=init_dat(options))==0)
+				errflg++;
+			else
+			{
+				printf("\n");
+				options->info=info;
+			}
 		}
+
+		/* --- User must have specified an input name --- */
+
+		options->fn=argv[optind];
+
+		/* --- Log name for DatUtil --- */
+
+		options->log_fn="datutil.log";
 
 		/* --- If the user didn't specify an output name, use datutil.dat --- */
 
@@ -205,14 +203,22 @@ int main(int argc, char **argv)
 		if (!(options->save_mode))
 			options->save_mode="w";
 
+		/* --- Initialise the main dat --- */
+
+		if (!errflg && (dat=init_dat(options))==0)
+			errflg++;
+
 		/* --- Save dat from memory --- */
 
 		if (!errflg)
-			errflg=save_dat(dat, options->save_name, options->save_mode, options->save_format);
+			errflg=save_dat(dat);
 
-		/* --- Release dat from memory --- */
+		/* --- Release dat(s) from memory --- */
 
 		dat=free_dat(dat);
+
+		if (info)
+			info=free_dat(info);
 	}
 
 	if (datlib_debug)

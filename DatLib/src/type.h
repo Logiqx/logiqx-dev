@@ -16,6 +16,14 @@
 #include "macro.h"
 
 
+/* --- Comment Structures --- */
+
+struct comment
+{
+	char *comment;
+};
+
+
 /* --- ROM Structures --- */
 
 struct rom
@@ -126,6 +134,8 @@ struct game
 	struct game *parent;
 	struct game *merge;
 
+	struct comment *comments;
+
 	struct rom *roms;
 	struct rom_idx *rom_name_idx;
 	struct rom_idx *rom_crc_idx;
@@ -136,6 +146,7 @@ struct game
 	struct sample *samples;
 	struct sample_idx *sample_name_idx;
 
+	uint32_t num_comments;
 	uint32_t num_roms;
 	uint32_t num_disks;
 	uint32_t num_samples;
@@ -248,6 +259,24 @@ struct romcenter_emulator
 };
 
 
+/* --- Options --- */
+
+struct options
+{
+	char *fn;
+	char *log_fn;
+	struct dat *info;
+
+	struct clrmamepro clrmamepro;
+	uint32_t options;
+	char *game;
+
+	char *save_name;
+	char *save_mode;
+	char *save_format;
+};
+
+
 /* --- Dat Structure --- */
 
 struct dat
@@ -256,7 +285,7 @@ struct dat
 
 	char *name;
 
-	uint32_t options;
+	struct options *options;
 
 	struct driver *load;
 	struct driver *save;
@@ -294,6 +323,8 @@ struct dat
 	struct game_idx *game_crc_idx;
 	struct game_idx *game_score_idx;
 
+	struct comment *comments;
+
 	struct rom *roms;
 	struct rom_idx *game_rom_name_idx;
 	struct rom_idx *game_rom_crc_idx;
@@ -313,6 +344,7 @@ struct dat
 
 	struct game_zip_rom *game_zip_roms;
 
+	uint32_t num_comments;
 	uint32_t num_games, num_resources, num_machines;
 	uint32_t num_roms, num_resource_roms, num_machine_roms;
 	uint32_t num_disks, num_resource_disks, num_machine_disks;
@@ -362,22 +394,27 @@ struct ini_entry
 #define OPTION_LOAD_QUIETLY		0x00000001	// Tool specific
 #define OPTION_SHOW_SUMMARY		0x00000002	// Tool specific
 
-#define OPTION_IGNORE_FUNNY_SIZES	0x00000010	// DatUtil -z option
-#define OPTION_VERBOSE_LOGGING		0x00000020	// DatUtil -v option
-#define OPTION_SHOW_DEBUG_INFO		0x00000040	// DatUtil -d option
+#define OPTION_VERBOSE_LOGGING		0x00000010	// DatUtil -v option
+#define OPTION_SHOW_DEBUG_INFO		0x00000020	// DatUtil -d option
+#define OPTION_IGNORE_FUNNY_SIZES	0x00000040	// DatUtil -z option
+#define OPTION_IGNORE_MISSING_YEARS	0x00000080	// DatUtil -y option
 
 #define OPTION_LOWER_CASE		0x00000100	// DatUtil -l option
 #define OPTION_SORT_GAMES_BY_PARENT	0x00000200	// DatUtil -s option
 #define OPTION_GAME			0x00000400	// DatUtil -g option
 #define OPTION_GAME_AND_CLONES		0x00000800	// DatUtil -c option
+
 #define OPTION_REMOVE_CLONES		0x00001000	// DatUtil -r option
-#define OPTION_EXTENDED_CHECKSUMS	0x00002000	// DatUtil -x option
+
+#define OPTION_EXTENDED_CHECKSUMS	0x00010000	// DatUtil -x option
+#define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil -x option
+#define OPTION_MD5_CHECKSUMS		0x00040000	// DatUtil -x option
 
 //#define OPTION_COMPLEMENT_BAD_CRCS	0x00004000	// For testing purposes!
 
-#define	OPTION_DAT_FULL_MERGING		0x00010000	// Used by MAMEDiff
-#define	OPTION_DAT_SPLIT_MERGING	0x00020000	// Used by MAMEDiff
-#define	OPTION_DAT_NO_MERGING		0x00040000	// Used by MAMEDiff
+#define	OPTION_DAT_FULL_MERGING		0x00100000	// Used by MAMEDiff
+#define	OPTION_DAT_SPLIT_MERGING	0x00200000	// Used by MAMEDiff
+#define	OPTION_DAT_NO_MERGING		0x00400000	// Used by MAMEDiff
 
 
 /* --- Parser Flags --- */
@@ -405,6 +442,7 @@ struct ini_entry
 #define FLAG_GAME_ROMOF			0x0100
 #define FLAG_GAME_SAMPLEOF		0x0200
 #define FLAG_GAME_CLONEOFCLONE		0x0400
+#define FLAG_GAME_COMMENTS		0x0800
 
 
 /* --- ROM Flags --- */

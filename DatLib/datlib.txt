@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.3 - 06/07/2004
+                          DatLib v1.4 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -171,9 +171,18 @@ do anything with them but I am interested to hear them!
 History
 -------
 
+xx/xx/xxxx  *** v1.4 ***
+
+            - Added support for comments before games in CMPro data files.
+            - Added an option to ignore missing year information.
+            - Changed the way that parameters are passed to init_dat().
+            - Changed the way that parameters are passed to save_dat().
+            - Only SHA1 _or_ MD5 will be processed now. Using both is silly!
+            - Added function to extract missing info from another dat/dir.
+
 06/07/2004  *** v1.3 ***
 
-            - Fixed a build_zip_structures() problem occuring with empty ZIPs.
+            - Fixed a build_zip_structures() problem occurring with empty ZIPs.
 
 05/07/2004  *** v1.2 ***
 

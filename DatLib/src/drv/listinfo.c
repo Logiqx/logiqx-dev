@@ -107,6 +107,15 @@ int load_mame_listinfo(struct dat *dat)
 		else if (!strcmp(TOKEN, "clrmamepro"))
 			game_type=FLAG_CLRMAMEPRO_HEADER;
 
+		/* --- Comments --- */
+
+		if (!strcmp(TOKEN, "//"))
+		{
+			strcpy(TOKEN, BUFFER1_PTR);
+			BUFFER2_PUT_TOKEN(TOKEN_GAME_COMMENT)
+			TOKEN[0]='\0';
+		}
+
 		/* --- Elements of a ClrMamePro header that we are interested in --- */
 
 		if (game_type==FLAG_CLRMAMEPRO_HEADER)
@@ -424,6 +433,7 @@ int load_mess_listinfo(struct dat *dat)
 int save_mame_listinfo(struct dat *dat)
 {
 	struct game *curr_game=0;
+	struct comment *curr_comment=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
 	struct sample *curr_sample=0;
@@ -515,6 +525,14 @@ int save_mame_listinfo(struct dat *dat)
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
+		if (curr_game->comments!=0)
+		{
+			for (j=0, curr_comment=curr_game->comments; j<dat->games[i].num_comments; j++, curr_comment++)
+				fprintf(dat->out, "//%s\n", curr_comment->comment);
+
+			fprintf(dat->out, "\n");
+		}
+
 		if (curr_game->game_flags & FLAG_GAME_NAME)
 			fprintf(dat->out, "game (\n");
 		else if (curr_game->game_flags & FLAG_RESOURCE_NAME)
@@ -642,7 +660,8 @@ int save_mame_listinfo(struct dat *dat)
 	}
 
 	dat->game_saved=FLAG_GAME_NAME|FLAG_RESOURCE_NAME|FLAG_MACHINE_NAME|FLAG_GAME_DESCRIPTION|FLAG_GAME_YEAR|
-		        FLAG_GAME_MANUFACTURER|FLAG_GAME_REBUILDTO|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF|FLAG_GAME_SAMPLEOF;
+		        FLAG_GAME_MANUFACTURER|FLAG_GAME_REBUILDTO|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF|FLAG_GAME_SAMPLEOF|
+			FLAG_GAME_COMMENTS;
 	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC|FLAG_ROM_MD5|FLAG_ROM_SHA1|
 	               FLAG_ROM_REGION|FLAG_ROM_BADDUMP|FLAG_ROM_NODUMP|FLAG_ROM_FUNNYSIZE|FLAG_ROM_BIOS;
 	dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MD5|FLAG_DISK_SHA1|FLAG_DISK_REGION;

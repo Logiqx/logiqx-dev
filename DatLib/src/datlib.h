@@ -12,8 +12,8 @@
 /* --- Function prototypes for use by external tools --- */
 
 void display_datlib_version(void);
-struct dat *init_dat(char *fn, uint32_t options, char *game, char *log_fn);
-int save_dat(struct dat *dat, char *save_name, char *save_mode, char *save_format);
+struct dat *init_dat(struct options *options);
+int save_dat(struct dat *dat);
 struct dat *free_dat(struct dat *dat);
 
 int rom_crc_idx_sort_function(const void *idx1, const void *idx2);

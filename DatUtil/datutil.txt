@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.1 - 04/07/2004
+                         DatUtil v2.2 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -235,7 +235,19 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
+xx/xx/xxxx  *** v2.2 ***
+
+            - Uses DatLib v1.4:
+            - Added support for comments between games in CMPro data files.
+            - Added an option to ignore missing year information (-y).
+            - Added an option to select MD5 usage rather than SHA1 (-m).
+              Note that '-m' was previously used for the 'fix merging' option!
+            - Added an option to include missing info from another dat (-i).
+              Games: cloneof, romof, sampleof (good after using the -g option).
+              ROMs: size, crc, md5, sha1, flags (good for adding SHA1, etc).
+
 04/07/2004  *** v2.1 ***
+
             - Added a message to say that the -m option is not required now.
             - Uses DatLib v1.1:
             - ClrMamePro/RomCenter header is now ignored when using OPTION_GAME.
@@ -245,6 +257,7 @@ History
             - n.b. SHA1/MD5 used to be calculated by default in DatUtil v2.0.
 
 02/07/2004  *** v2.0 ***
+
             Wow, I never thought I'd get around to this rewrite but here it is!
 
 -------------------------------------------------------------------------------

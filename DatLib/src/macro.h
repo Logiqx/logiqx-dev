@@ -172,7 +172,7 @@
 \
 		if (fread(PTR, 1, NUM, in)!=NUM) \
 		{ \
-			fprintf(stderr, "Error reading %d bytes from %s\n", NUM, fn); \
+			fprintf(stderr, "Error reading %d bytes from %s\n", NUM, FN); \
 			errflg++; \
 		} \
 	} \
