@@ -396,7 +396,7 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 	int errflg=0;
 
 	if (!errflg)
-		STRUCT_CALLOC(game_changes, dat1->num_games+dat2->num_games, sizeof(struct game_change))
+		STRUCT_CALLOC(game_changes, dat1->num_games+dat1->num_resources+dat2->num_games+dat2->num_resources, sizeof(struct game_change))
 
 	if (!errflg)
 		STRUCT_CALLOC(rom_changes, dat1->num_roms+dat2->num_roms, sizeof(struct rom_change))

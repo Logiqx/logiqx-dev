@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.12 - 25/11/2004
+                          MAMEDiff v2.13 - 16/01/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,14 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+16/01/2005  *** v2.13 ***
+
+            - Uses DatLib v1.14.
+            - Added support for Calice drivers (DatLib v1.13).
+            - Added support for the GNGEO romrc file.
+            - Increased maximum ROM size to 64MB (used when scanning folders).
+            - Fixed a memory allocation bug that could cause a hang sometimes.
 
 25/11/2004  *** v2.12 ***
 
