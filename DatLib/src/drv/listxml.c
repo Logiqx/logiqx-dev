@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <dirent.h>
 
 
 /* --- My includes --- */
@@ -43,6 +44,29 @@ int identify_mame_listxml(struct dat *dat)
 			xml++;
 
 		if (xml && !strcmp(TOKEN, "<mame>"))
+			match++;
+
+		BUFFER1_ADVANCE_LINE
+	}
+
+	return(match);
+}
+
+int identify_mess_listxml(struct dat *dat)
+{
+	uint32_t i;
+	int xml=0, match=0;
+
+	BUFFER1_REWIND
+
+	for (i=0; i<100 && BUFFER1_REMAINING; i++)
+	{
+		BUFFER1_GET_TOKEN
+
+		if (!strcmp(TOKEN, "<?xml"))
+			xml++;
+
+		if (xml && !strcmp(TOKEN, "<mess>"))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
@@ -107,10 +131,66 @@ int load_mame_listxml(struct dat *dat)
 	return(errflg);
 }
 
+int load_mess_listxml(struct dat *dat)
+{
+	FILE *out=0;
+	char *ptr;
+	int errflg=0;
+
+	BUFFER1_REWIND
+	BUFFER2_REWIND
+
+	FOPEN(out, "datlib.tmp", "w")
+
+	while (!errflg && BUFFER1_REMAINING)
+	{
+		strcpy(TOKEN, BUFFER1_PTR);
+
+		while ((ptr=strstr(TOKEN, "mess")))
+		{
+			*(ptr++)='m';
+			*(ptr++)='a';
+			*(ptr++)='m';
+			*(ptr++)='e';
+		}
+
+		while ((ptr=strstr(TOKEN, "machine")))
+		{
+			*(ptr++)='g';
+			*(ptr++)='a';
+			*(ptr++)='m';
+			*(ptr++)='e';
+			strcpy(ptr, ptr+3);
+			ptr[strlen(ptr)+0]='\0';
+			ptr[strlen(ptr)+1]='\0';
+			ptr[strlen(ptr)+2]='\0';
+		}
+
+		fprintf(out, "%s\n", TOKEN);
+
+		BUFFER1_ADVANCE_LINE
+	}
+
+	FCLOSE(out)
+
+	dat->name="datlib.tmp";
+
+	errflg=load_mame_listxml(dat);
+
+	unlink(dat->name);
+
+	return(errflg);
+}
+
 
 /* --- Save --- */
 
 int save_mame_listxml(struct dat *dat)
+{
+	return(0);
+}
+
+int save_mess_listxml(struct dat *dat)
 {
 	return(0);
 }

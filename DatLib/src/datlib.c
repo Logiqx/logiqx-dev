@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v1.7"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "21 July 2004"
 
 
 /* --- Standard includes --- */
@@ -2983,7 +2983,7 @@ int build_zip_structures(struct dat *dat)
 				{
 					if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_rom->merge==0) ||
 						(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
-						(curr_game->romof==0 || curr_rom->merge==0)))
+						(curr_game->cloneof==0 || curr_rom->merge==0)))
 					{
 						curr_game_zip_rom->game_zip=curr_game_zip_name_idx->game_zip;
 						curr_game_zip_rom->rom=curr_rom;
@@ -3018,7 +3018,7 @@ int build_zip_structures(struct dat *dat)
 				{
 					if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_disk->merge==0) ||
 						(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
-						(curr_game->romof==0 || curr_disk->merge==0)))
+						(curr_game->cloneof==0 || curr_disk->merge==0)))
 					{
 						curr_game_zip_disk->game_zip=curr_game_zip_name_idx->game_zip;
 						curr_game_zip_disk->disk=curr_disk;
@@ -3070,7 +3070,7 @@ int build_zip_structures(struct dat *dat)
 			{
 				if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_sample->merge==0) ||
 					(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
-					(curr_game->sampleof==0 || curr_sample->merge==0)))
+					(curr_game->cloneof==0 || curr_sample->merge==0)))
 				{
 					curr_game_zip_sample->game_zip=curr_game_zip_name_idx->game_zip;
 					curr_game_zip_sample->sample=curr_sample;
@@ -3547,7 +3547,10 @@ struct dat *init_dat(struct options *options)
 		errflg=single_game(dat, options->game);
 
 	if (dat->num_games==0)
+	{
+		fprintf(stderr, "  Error - No games were loaded.\n");
 		errflg++;
+	}
 
 	if (!errflg && dat->options->info)
 		errflg=add_missing_info(dat);

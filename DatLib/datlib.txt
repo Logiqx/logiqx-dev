@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.7 - xx/xx/xxxx
+                          DatLib v1.7 - 21/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -171,10 +171,12 @@ do anything with them but I am interested to hear them!
 History
 -------
 
-xx/xx/xxxx  *** v1.7 ***
+21/07/2004  *** v1.7 ***
 
-            - Now avoids duplicate ROMs getting into the game_zip structures.
+            - Added support for MESS XML.
             - Added disks and samples to the game_zip structures.
+            - Now avoids duplicate ROMs getting into the game_zip structures.
+            - Added OPTION_INCLUDE_NODUMPS_IN_ZIPS for game_zip structures.
             - Directory scanner now supports CHDs (when in a game directory).
             - Directory scanner can spoof samples (OPTION_OBJECT_TYPE_SAMPLE).
             - Improved 'fix merging' (where clone ROMs are not in the parent).
