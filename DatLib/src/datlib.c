@@ -2470,7 +2470,12 @@ int rebuild_dat_indices(struct dat *dat)
 
 int game_zip_rom_sort_function(const void *zip_rom1, const void *zip_rom2)
 {
-	return(strcmp(((struct game_zip_rom *)zip_rom1)->game_zip->game->name, ((struct game_zip_rom *)zip_rom2)->game_zip->game->name));
+	int diff=strcmp(((struct game_zip_rom *)zip_rom1)->game_zip->game->name, ((struct game_zip_rom *)zip_rom2)->game_zip->game->name);
+
+	if (diff==0)
+		diff=strcmp(((struct game_zip_rom *)zip_rom1)->rom->name, ((struct game_zip_rom *)zip_rom2)->rom->name);
+
+	return(diff);
 }
 
 int build_zip_structures(struct dat *dat)
@@ -2480,9 +2485,9 @@ int build_zip_structures(struct dat *dat)
 
 	struct game_zip *curr_game_zip, *orig_game_zip;
 	struct game_zip_idx *curr_game_zip_name_idx;
-	struct game_zip_rom *curr_game_zip_rom;
+	struct game_zip_rom *curr_game_zip_rom, *orig_game_zip_rom;
 
-	uint32_t i, j, num_game_zips;
+	uint32_t i, j, num_game_zips, num_game_zip_roms;
 
 	int errflg=0;
 
@@ -2588,9 +2593,33 @@ int build_zip_structures(struct dat *dat)
 		}
 	}
 
-	/* --- Finally, link the game_zip_roms into the game_zips --- */
+	/* --- Sort the game_zip_roms --- */
 
 	qsort(dat->game_zip_roms, dat->num_game_zip_roms, sizeof(struct game_zip_rom), game_zip_rom_sort_function);
+
+	/* --- Remove duplicate game_zip_roms --- */
+
+	curr_game_zip_rom=dat->game_zip_roms;
+	num_game_zip_roms=dat->num_game_zip_roms;
+
+	for (i=0, orig_game_zip_rom=dat->game_zip_roms; i<num_game_zip_roms; i++, orig_game_zip_rom++)
+	{
+		if (i>0 && !strcmp((orig_game_zip_rom-1)->game_zip->game->name, curr_game_zip_rom->game_zip->game->name) &&
+			 !strcmp((orig_game_zip_rom-1)->rom->name, curr_game_zip_rom->rom->name))
+		{
+			curr_game_zip_rom->game_zip->num_game_zip_roms-=1;
+			dat->num_game_zip_roms-=1;
+		}
+		else
+		{
+			if (curr_game_zip_rom!=orig_game_zip_rom)
+				memcpy(curr_game_zip_rom, orig_game_zip_rom, sizeof(struct game_zip_rom));
+
+			curr_game_zip_rom++;
+		}
+	}
+
+	/* --- Finally, link the game_zip_roms into the game_zips --- */
 
 	for (i=0, curr_game_zip_rom=dat->game_zip_roms; i<dat->num_game_zip_roms; i++, curr_game_zip_rom++)
 	{
