@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.13 - 04/01/2005
+                          DatLib v1.14 - 16/01/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -25,6 +25,7 @@ Load only:
   - Nebula Drivers
   - Calice Drivers
   - Zinc --list-sets
+  - GNGEO romrc
   - ClrMame Log
   - Folder Scan (subdirectories and zips)
 
@@ -172,6 +173,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+16/01/2005  *** v1.14 ***
+
+            - Added support for the GNGEO romrc file.
+            - Increased maximum ROM size to 64MB (used when scanning folders).
 
 04/01/2005  *** v1.13 ***
 

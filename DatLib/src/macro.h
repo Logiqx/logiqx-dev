@@ -12,7 +12,7 @@
 
 /* --- The few hard limits that exist in DatLib and the external tools --- */
 
-#define MAX_ROM_SIZE         1<<24   /* 16MB */
+#define MAX_ROM_SIZE         1<<26   /* 64MB */
 #define MAX_ZIP_ENTRIES      100
 #define MAX_STRING_LENGTH    1024
 #define MAX_FILENAME_LENGTH  1024
