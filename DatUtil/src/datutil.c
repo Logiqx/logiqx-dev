@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.12"
-#define DATUTIL_DATE "13 February 2005"
+#define DATUTIL_VERSION "v2.13"
+#define DATUTIL_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 
 /* --- Dat library includes --- */
@@ -51,10 +52,11 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
+	struct stat buf;
 	struct dat *dat=0, *info=0;
 	struct options *options=0;
 
-	int errflg=0;
+	int test=0, errflg=0;
 
 	/* --- Display version information --- */
 
@@ -70,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:kjo:a:A:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:kjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -91,6 +93,9 @@ int main(int argc, char **argv)
 		case 'a':
 			options->save_name=optarg;
 			options->save_mode="a";
+			break;
+		case 't':
+			test++;
 			break;
 		/* --- Header text --- */
 		case 'A':
@@ -180,10 +185,10 @@ int main(int argc, char **argv)
 		printf("For instructions on use, read the documentation that's been provided. Here is\n");
 		printf("a brief summary of the options... far greater detail is in the documentation.\n\n");
 
-		printf("Saving          [-f <output format>] [-k] [j] [-o|a <output file>]\n");
+		printf("Saving          [-f <output format>] [-k] [j] [-o|a <output file>] [-t]\n");
 		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
 		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
-		printf("Game Selection  [-g <game name> [-c] [-!]] [-G <sourcefile name> [-!]] [-r]\n");
+		printf("Game Selection  [-g <game name> [-c]] [-G <sourcefile name>] [-!] [-r]\n");
 		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");
 		printf("Information     [-v] [-d]\n\n");
@@ -234,7 +239,12 @@ int main(int argc, char **argv)
 		/* --- Save dat from memory --- */
 
 		if (!errflg)
-			errflg=save_dat(dat);
+		{
+			if (test==0)
+				errflg=save_dat(dat);
+			else
+				printf("No data file has been saved since 'test mode' is being used.\n");
+		}
 
 		/* --- Release dat(s) from memory --- */
 
@@ -242,6 +252,11 @@ int main(int argc, char **argv)
 
 		if (info)
 			info=free_dat(info);
+
+		/* --- Delete the log file if it is empty --- */
+
+		if (stat(options->log_fn, &buf)==0 && buf.st_size==0)
+			unlink(options->log_fn);
 	}
 
 	if (datlib_debug)
