@@ -4,8 +4,8 @@
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.2"
-#define IMGCHK_DATE "22 July 2004"
+#define IMGCHK_VERSION "v2.3"
+#define IMGCHK_DATE "4 August 2004"
 
 
 /* --- The standard includes --- */
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 
 int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 {
-	int report_unknown=0, report_missing=0, allow_clones=1, allow_resources=1;
+	int report_unknown=0, report_missing=0, allow_clones=1, allow_resources=1, allow_alternates=0;
 	char *img_ext=0;
 
 	struct stat buf;
@@ -131,16 +131,19 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 	if (find_ini_value(ini, section, "AllowResources"))
 		allow_resources=atoi(find_ini_value(ini, section, "AllowResources"));
 
+	if (find_ini_value(ini, section, "AllowAlternates"))
+		allow_alternates=atoi(find_ini_value(ini, section, "AllowAlternates"));
+
 	if ((find_ini_value(ini, section, "ZipFile") && (stat(find_ini_value(ini, section, "ZipFile"), &buf) == 0)) ||
 		(find_ini_value(ini, section, "Directory") && (stat(find_ini_value(ini, section, "Directory"), &buf) == 0)))
 	{
 		printf("\nTesting %s...\n", section);
 
 		if (find_ini_value(ini, section, "ZipFile"))
-			check_zip(dat, find_ini_value(ini, section, "ZipFile"), img_ext, report_unknown, report_missing, allow_clones, allow_resources);
+			check_zip(dat, find_ini_value(ini, section, "ZipFile"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
 
 		if (find_ini_value(ini, section, "Directory"))
-			check_dir(dat, find_ini_value(ini, section, "Directory"), img_ext, report_unknown, report_missing, allow_clones, allow_resources);
+			check_dir(dat, find_ini_value(ini, section, "Directory"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
 
 		for (i=0; report_missing && i<dat->num_games; i++)
 		{
@@ -163,7 +166,7 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
  * Read file names from ZIP file
  * -------------------------------------------------------------------------- */
 
-int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources)
+int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
 {
 	ZIP *zip;
 	struct zipent *zipent;
@@ -183,6 +186,14 @@ int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int 
 				*strstr(st, img_ext)='\0';
 
 			game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+
+			if (game_idx==0 && allow_alternates==1)
+			{
+				if (strrchr(st, '_'))
+					*strrchr(st, '_')='\0';
+
+				game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+			}
 
 			if (game_idx==0)
 			{
@@ -216,7 +227,7 @@ int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int 
  * Read file names from directory
  * -------------------------------------------------------------------------- */
 
-int check_dir(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources)
+int check_dir(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
 {
 	DIR *dirp=0;                                    
 	struct dirent *direntp;                       
@@ -239,6 +250,14 @@ int check_dir(struct dat *dat, char *fn, char *img_ext, int report_unknown, int 
 					*strstr(st, img_ext)='\0';
 
 				game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+
+				if (game_idx==0 && allow_alternates==1)
+				{
+					if (strrchr(st, '_'))
+						*strrchr(st, '_')='\0';
+
+					game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+				}
 
 				if (game_idx==0)
 				{

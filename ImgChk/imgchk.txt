@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ImgChk v2.2 - 22/07/2004
+                          ImgChk v2.3 - 04/08/2004
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
 
@@ -60,6 +60,11 @@ people like Roman, xRay1 and Eldio who will also find it useful.
 
 History
 -------
+
+04/08/2004  *** v2.3 ***
+
+            - Uses DatLib v1.9.
+            - Added an 'AllowAlternates' option for CrashTest snapshots.
 
 22/07/2004  *** v2.2 ***
 
