@@ -41,7 +41,7 @@ $(OBJ)/mamediff.o: $(SRC)/mamediff.c $(SRC)/mamediff.h $(SRC)/compare.h $(SRC)/g
 	@echo Compiling $@...
 	$(CC) $(CFLAGS) $< -c -o $@
 
-$(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h $(DLSRC)/datlib.h $(DLSRC)/macro.h $(DLSRC)/type.h
+$(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h $(SRC)/mamediff.h $(DLSRC)/datlib.h $(DLSRC)/macro.h $(DLSRC)/type.h
 	@echo Compiling $@...
 	$(CC) $(CFLAGS) $< -c -o $@
 
