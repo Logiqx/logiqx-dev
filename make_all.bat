@@ -6,13 +6,13 @@ cd DatUtil
 @make
 @cd ..
 
-@cd "Limited Edition"
-
-cd AVI2CDVC
+cd ImgChk
 @make
 @cd ..
 
-cd ImgChk
+@cd "Limited Edition"
+
+cd AVI2CDVC
 @make
 @cd ..
 

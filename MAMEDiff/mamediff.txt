@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.9 - 02/08/2004
+                          MAMEDiff v2.10 - 18/08/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+18/08/2004  *** v2.10 ***
+
+            - Uses DatLib v1.10.
+            - Better handling of 'clones of clones' when loading data files.
 
 02/08/2004  *** v2.9 ***
 

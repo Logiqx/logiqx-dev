@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.9"
-#define DATLIB_DATE "30 July 2004"
+#define DATLIB_VERSION "v1.10"
+#define DATLIB_DATE "18 August 2004"
 
 
 /* --- Standard includes --- */
@@ -1392,6 +1392,7 @@ int fix_descriptions(struct dat *dat)
 int fix_merging(struct dat *dat)
 {
 	struct game *curr_game=0;
+	struct game *parent_game=0;
 	struct game_idx *curr_game_name_idx=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
@@ -1431,6 +1432,12 @@ int fix_merging(struct dat *dat)
 
 		if (curr_game->romof)
 		{
+			if (curr_game->cloneof && strcmp(curr_game->romof, curr_game->cloneof))
+			{
+				curr_game->romof=curr_game->cloneof;
+				curr_game->game_fixes|=FLAG_GAME_ROMOF;
+			}
+
 			if ((game_match=bsearch((void *)curr_game->romof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name))==0)
 			{
 				curr_game->romof=0;
@@ -1485,20 +1492,25 @@ int fix_merging(struct dat *dat)
 		{
 			if (curr_game->game_cloneof->game_cloneof)
 			{
+				parent_game=curr_game->game_cloneof;
+
+				while (parent_game->game_cloneof)
+					parent_game=parent_game->game_cloneof;
+
 				if (curr_game->romof && !strcmp(curr_game->romof, curr_game->cloneof))
 				{
-					curr_game->romof=0;
-					curr_game->game_romof=0;
+					curr_game->romof=parent_game->name;
+					curr_game->game_romof=parent_game;
 					curr_game->game_fixes|=FLAG_GAME_ROMOF;
 				}
 
-				curr_game->game_cloneof->num_clones--;
-
-				curr_game->cloneof=0;
-				curr_game->game_cloneof=0;
+				curr_game->cloneof=parent_game->name;
+				curr_game->game_cloneof=parent_game;
 				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
-
 				curr_game->game_fixes|=FLAG_GAME_CLONEOFCLONE;
+
+				curr_game->game_cloneof->num_clones--;
+				parent_game->num_clones++;
 			}
 		}
 	}
@@ -2650,18 +2662,25 @@ int report_fixes(struct dat *dat)
 					if (curr_game->game_fixes & FLAG_GAME_CLONEOF)
 					{
 						if (curr_game->cloneof)
-							fprintf(dat->log_file, "    Clone Of set/changed.\n");
-						else
+						{
 							if (curr_game->game_fixes & FLAG_GAME_CLONEOFCLONE)
-								fprintf(dat->log_file, "    Clone Of removed (clone of clone).\n");
+								fprintf(dat->log_file, "    Clone Of changed (clone of clone).\n");
 							else
-								fprintf(dat->log_file, "    Clone Of removed (invalid reference).\n");
+								fprintf(dat->log_file, "    Clone Of set/changed.\n");
+						}
+						else
+							fprintf(dat->log_file, "    Clone Of removed (invalid reference).\n");
 					}
 
 					if (curr_game->game_fixes & FLAG_GAME_ROMOF)
 					{
 						if (curr_game->romof)
-							fprintf(dat->log_file, "    ROM Of set/changed.\n");
+						{
+							if (curr_game->game_fixes & FLAG_GAME_CLONEOFCLONE)
+								fprintf(dat->log_file, "    ROM Of changed (clone of clone).\n");
+							else
+								fprintf(dat->log_file, "    ROM Of set/changed.\n");
+						}
 						else
 							fprintf(dat->log_file, "    ROM Of removed (invalid reference).\n");
 					}

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.9 - 30/07/2004
+                          DatLib v1.10 - 18/08/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+18/08/2004  *** v1.10 ***
+
+            - Better handling of 'clones of clones' when loading data files.
 
 30/07/2004  *** v1.9 ***
 
