@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ROMInfo v2.2 - 22/07/2004
+                          ROMInfo v2.3 - 28/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -73,6 +73,12 @@ D-Zine who prompted me to write this and came up with the ZIP file idea.
 
 History
 -------
+
+28/02/2005  *** v2.3 ***
+
+            - Uses DatLib v2.2.
+            - Added support for tab delimited files.
+            - Fixed problem of unrecognised escape sequences looping forever!
 
 22/07/2004  *** v2.2 ***
 
