@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.5 - xx/xx/xxxx
+                         ROMBuild v2.5 - 28/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 History
 -------
 
-xx/xx/xxxx  *** v2.5 ***
+28/02/2005  *** v2.5 ***
 
             Internal game renames for Altered Beast (to match MAME v0.92).
             Internal ROM renames for a few CPS-2 games (to match MAME v0.92).
