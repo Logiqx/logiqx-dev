@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.11 - 26/10/2004
+                          DatLib v1.12 - 25/11/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -171,6 +171,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+25/11/2004  *** v1.12 ***
+
+            - Improved the handling of CRC conflicts within the 'fix merging'.
 
 26/10/2004  *** v1.11 ***
 

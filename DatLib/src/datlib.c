@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.11"
-#define DATLIB_DATE "26 October 2004"
+#define DATLIB_VERSION "v1.12"
+#define DATLIB_DATE "25 November 2004"
 
 
 /* --- Standard includes --- */
@@ -1550,7 +1550,8 @@ int fix_merging(struct dat *dat)
 
 				for (k=0, merge_rom=game_romof->roms; k<game_romof->num_roms; k++, merge_rom++)
 				{
-					if (!strcmp(curr_rom->name, merge_rom->name))
+					if (!strcmp(curr_rom->name, merge_rom->name) &&
+						(curr_rom->crc==merge_rom->crc || curr_rom->crc==~merge_rom->crc || !merge_rom->crc || !curr_rom->crc ))
 					{
 						if (!curr_rom->merge || strcmp(curr_rom->merge, curr_rom->name))
 						{
@@ -1620,7 +1621,8 @@ int fix_merging(struct dat *dat)
 
 				for (k=0, merge_rom=game_romof->roms; k<game_romof->num_roms; k++, merge_rom++)
 				{
-					if (!strcmp(curr_rom->name, merge_rom->name))
+					if (!strcmp(curr_rom->name, merge_rom->name) &&
+						(curr_rom->crc==merge_rom->crc || curr_rom->crc==~merge_rom->crc || !merge_rom->crc || !curr_rom->crc ))
 					{
 						if (!curr_rom->crc && merge_rom->crc)
 						{
@@ -1674,7 +1676,8 @@ int fix_merging(struct dat *dat)
 
 				for (k=0, merge_disk=game_romof->disks; k<game_romof->num_disks; k++, merge_disk++)
 				{
-					if (!strcmp(curr_disk->name, merge_disk->name))
+					if (!strcmp(curr_disk->name, merge_disk->name) &&
+						(curr_disk->crc==merge_disk->crc || curr_disk->crc==~merge_disk->crc || !merge_disk->crc || !curr_disk->crc ))
 					{
 						if (!curr_disk->merge || strcmp(curr_disk->merge, curr_disk->name))
 						{
@@ -1743,7 +1746,8 @@ int fix_merging(struct dat *dat)
 
 				for (k=0, merge_disk=game_romof->disks; k<game_romof->num_disks; k++, merge_disk++)
 				{
-					if (!strcmp(curr_disk->name, merge_disk->name))
+					if (!strcmp(curr_disk->name, merge_disk->name) &&
+						(curr_disk->crc==merge_disk->crc || curr_disk->crc==~merge_disk->crc || !merge_disk->crc || !curr_disk->crc ))
 					{
 						if (!curr_disk->crc && merge_disk->crc)
 						{
@@ -2170,30 +2174,34 @@ int report_warnings(struct dat *dat)
 					dat->rom_name_idx[j].rom->rom_warnings|=FLAG_ROM_CONFLICT;
 				}
 
-				if (dat->rom_name_idx[i].rom->sha1 && !dat->rom_name_idx[j].rom->sha1)
+				if (!(dat->rom_name_idx[i].rom->rom_warnings & FLAG_ROM_CONFLICT) &&
+					!(dat->rom_name_idx[j].rom->rom_warnings & FLAG_ROM_CONFLICT))
 				{
-					dat->rom_name_idx[j].rom->sha1=dat->rom_name_idx[i].rom->sha1;
-					dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_SHA1;
-					dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_SHA1;
-				}
-				else if (!dat->rom_name_idx[i].rom->sha1 && dat->rom_name_idx[j].rom->sha1)
-				{
-					dat->rom_name_idx[i].rom->sha1=dat->rom_name_idx[j].rom->sha1;
-					dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_SHA1;
-					dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_SHA1;
-				}
+					if (dat->rom_name_idx[i].rom->sha1 && !dat->rom_name_idx[j].rom->sha1)
+					{
+						dat->rom_name_idx[j].rom->sha1=dat->rom_name_idx[i].rom->sha1;
+						dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_SHA1;
+						dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_SHA1;
+					}
+					else if (!dat->rom_name_idx[i].rom->sha1 && dat->rom_name_idx[j].rom->sha1)
+					{
+						dat->rom_name_idx[i].rom->sha1=dat->rom_name_idx[j].rom->sha1;
+						dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_SHA1;
+						dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_SHA1;
+					}
 
-				if (dat->rom_name_idx[i].rom->md5 && !dat->rom_name_idx[j].rom->md5)
-				{
-					dat->rom_name_idx[j].rom->md5=dat->rom_name_idx[i].rom->md5;
-					dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_MD5;
-					dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_MD5;
-				}
-				else if (!dat->rom_name_idx[i].rom->md5 && dat->rom_name_idx[j].rom->md5)
-				{
-					dat->rom_name_idx[i].rom->md5=dat->rom_name_idx[j].rom->md5;
-					dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_MD5;
-					dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_MD5;
+					if (dat->rom_name_idx[i].rom->md5 && !dat->rom_name_idx[j].rom->md5)
+					{
+						dat->rom_name_idx[j].rom->md5=dat->rom_name_idx[i].rom->md5;
+						dat->rom_name_idx[j].rom->rom_fixes|=FLAG_ROM_MD5;
+						dat->rom_name_idx[j].rom->rom_flags|=FLAG_ROM_MD5;
+					}
+					else if (!dat->rom_name_idx[i].rom->md5 && dat->rom_name_idx[j].rom->md5)
+					{
+						dat->rom_name_idx[i].rom->md5=dat->rom_name_idx[j].rom->md5;
+						dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_MD5;
+						dat->rom_name_idx[i].rom->rom_flags|=FLAG_ROM_MD5;
+					}
 				}
 			}
 		}
@@ -2251,30 +2259,34 @@ int report_warnings(struct dat *dat)
 					dat->disk_name_idx[j].disk->disk_warnings|=FLAG_DISK_CONFLICT;
 				}
 
-				if (dat->disk_name_idx[i].disk->sha1 && !dat->disk_name_idx[j].disk->sha1)
+				if (!(dat->disk_name_idx[i].disk->disk_warnings & FLAG_DISK_CONFLICT) &&
+					!(dat->disk_name_idx[j].disk->disk_warnings & FLAG_DISK_CONFLICT))
 				{
-					dat->disk_name_idx[j].disk->sha1=dat->disk_name_idx[i].disk->sha1;
-					dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_SHA1;
-					dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_SHA1;
-				}
-				else if (!dat->disk_name_idx[i].disk->sha1 && dat->disk_name_idx[j].disk->sha1)
-				{
-					dat->disk_name_idx[i].disk->sha1=dat->disk_name_idx[j].disk->sha1;
-					dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_SHA1;
-					dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_SHA1;
-				}
+					if (dat->disk_name_idx[i].disk->sha1 && !dat->disk_name_idx[j].disk->sha1)
+					{
+						dat->disk_name_idx[j].disk->sha1=dat->disk_name_idx[i].disk->sha1;
+						dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_SHA1;
+						dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_SHA1;
+					}
+					else if (!dat->disk_name_idx[i].disk->sha1 && dat->disk_name_idx[j].disk->sha1)
+					{
+						dat->disk_name_idx[i].disk->sha1=dat->disk_name_idx[j].disk->sha1;
+						dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_SHA1;
+						dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_SHA1;
+					}
 
-				if (dat->disk_name_idx[i].disk->md5 && !dat->disk_name_idx[j].disk->md5)
-				{
-					dat->disk_name_idx[j].disk->md5=dat->disk_name_idx[i].disk->md5;
-					dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_MD5;
-					dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_MD5;
-				}
-				else if (!dat->disk_name_idx[i].disk->md5 && dat->disk_name_idx[j].disk->md5)
-				{
-					dat->disk_name_idx[i].disk->md5=dat->disk_name_idx[j].disk->md5;
-					dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_MD5;
-					dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_MD5;
+					if (dat->disk_name_idx[i].disk->md5 && !dat->disk_name_idx[j].disk->md5)
+					{
+						dat->disk_name_idx[j].disk->md5=dat->disk_name_idx[i].disk->md5;
+						dat->disk_name_idx[j].disk->disk_fixes|=FLAG_DISK_MD5;
+						dat->disk_name_idx[j].disk->disk_flags|=FLAG_DISK_MD5;
+					}
+					else if (!dat->disk_name_idx[i].disk->md5 && dat->disk_name_idx[j].disk->md5)
+					{
+						dat->disk_name_idx[i].disk->md5=dat->disk_name_idx[j].disk->md5;
+						dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_MD5;
+						dat->disk_name_idx[i].disk->disk_flags|=FLAG_DISK_MD5;
+					}
 				}
 			}
 		}
