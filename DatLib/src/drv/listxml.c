@@ -361,7 +361,8 @@ int load_mess_listxml(struct dat *dat)
 int specify_mame_listxml(struct dat *dat)
 {
 	if (strcmp(dat->options->save_format, "listxml") &&
-		strcmp(dat->options->save_format, "xml"))
+		strcmp(dat->options->save_format, "xml") &&
+		strcmp(dat->options->save_format, "lx"))
 		return(0);
 	else
 		return(1);
