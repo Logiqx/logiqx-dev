@@ -1,0 +1,96 @@
+-------------------------------------------------------------------------------
+                          AVI2CDVC v2.0 - xx/xx/xxxx
+
+                   Written by Logiqx (http://www.logiqx.com/)
+-------------------------------------------------------------------------------
+
+1. Introduction
+---------------
+
+When capturing DV source on a PC it is usually stamped with the FourCC 'dvsd'
+and it therefore gets processed with the default DV codec of your PC (usually
+Microsoft). I prefer to use the Canopus codec and in order to do this you must
+change the FourCC to 'cdvc'. AVI2CDVC will allow you to quickly change the
+FourCC of your AVI files and is also quite powerful in that it can change
+all AVIs in a given directory, recursively processing all sub directories too
+if you so desire.
+
+
+2. Basic Usage
+--------------
+
+This tool is for use from the command line so place avi2cdvc.exe in your path.
+
+   e.g. Extract avi2cdvc.exe into c:\windows
+
+The way to change the FourCC of a single AVI file is by using this syntax:
+
+	avi2cdvc test.avi
+
+Similarly, you can also change all AVIs in a single directory with:
+
+	avi2cdvc h:\captures\advc-50
+
+
+3. Advanced Usage
+-----------------
+
+You can process multiple files and/or directories and optionally use wildcards:
+
+	avi2cdvc test1.avi test2.avi test3.avi
+or
+	avi2cdvc test*.avi
+
+You can recursively process all AVIs in a given directory using this syntax:
+
+	avi2cdvc -r h:\captures\advc-50
+
+You can change the FourCC of AVIs to any code that you desire with this syntax:
+
+	avi2cdvc -f svcd test.avi
+
+
+4. Tips
+-------
+
+I have a shortcut on my desktop that fixes all of the AVIs under my capture
+directory. This is very useful and is simply:
+
+	avi2cdvc -r h:\captures\advc-50
+
+You might find a similar shortcut useful too!
+
+
+5. Warnings
+-----------
+
+Be very careful with the recursive update facility, if you change any non-DV
+AVIs to 'svcd' they will be unusable unless you turn them back to their correct
+FourCC using the '-f' option. Do not blame me if you make an error!
+
+
+6. Source
+---------
+
+I have included source for anyone who is interested or wants to see exactly how
+it works. All that I ask is that you notify me if you make any changes that you
+then distribute. Please give credit where it is due and do not distribute your
+modifications without the source code or a readme.
+
+To compile this tool, you will need to get DatLib from http://www.logiqx.com/
+
+
+7. Bug reports
+--------------
+
+If you find any bugs please let me know about them.
+
+
+8. History
+----------
+
+xx/xx/xxxx  v2.0   Recompiled to use DatLib.
+
+15/05/2003  v1.01  First public release.
+
+06/04/2003  v1.00  First version (for my own use).
