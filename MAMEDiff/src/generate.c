@@ -655,7 +655,10 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 					/* --- Break link to parent as changes dats do not use merging --- */
 
 					curr_game->cloneof=0;
+					curr_game->game_flags&=~FLAG_GAME_CLONEOF;
+
 					curr_game->romof=0;
+					curr_game->game_flags&=~FLAG_GAME_ROMOF;
 
 					FORMAT_GAME_NAME(st, curr_game);
 					fprintf(changes_log, "%s\n\n", st);
@@ -796,6 +799,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						(diff_type==2 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE))
 					{
 						curr_rom->merge=0;
+						curr_rom->rom_flags&=~FLAG_ROM_MERGE;
 
 						FORMAT_LISTINFO_ROM(st, curr_rom)
 
@@ -816,6 +820,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
 					{
 						curr_disk->merge=0;
+						curr_disk->disk_flags&=~FLAG_DISK_MERGE;
 
 						FORMAT_LISTINFO_DISK(st, curr_disk)
 
@@ -836,6 +841,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 						(diff_type==2 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE))
 					{
 						curr_sample->merge=0;
+						// No such flag! curr_sample->sample_flags&=~FLAG_SAMPLE_MERGE;
 
 						FORMAT_LISTINFO_SAMPLE(st, curr_sample)
 
