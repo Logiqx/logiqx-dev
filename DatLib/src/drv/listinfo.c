@@ -38,7 +38,7 @@ int identify_mame_listinfo(struct dat *dat)
 	{
 		BUFFER1_GET_TOKEN
 
-		if (!strcmp(TOKEN, "game"))
+		if (!strcmp(TOKEN, "game") || !strcmp(TOKEN, "resource"))
 		{
 			if (BUFFER1_REMAINING)
 				BUFFER1_GET_TOKEN
