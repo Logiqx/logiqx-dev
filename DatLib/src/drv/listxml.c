@@ -174,12 +174,6 @@ int identify_mess_listxml(struct dat *dat)
 	} \
 }
 
-#define BUFFER2_GET_TOKEN \
-{ \
-	strcpy(TOKEN, BUFFER2_PTR); \
-	BUFFER2_PTR+=strlen(TOKEN)+1; \
-}
-
 int load_mame_listxml(struct dat *dat)
 {
 	int game_type=0, errflg=0;
