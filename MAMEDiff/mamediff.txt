@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.10 - 18/08/2004
+                          MAMEDiff v2.11 - 26/10/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+26/10/2004  *** v2.11 ***
+
+            - Uses DatLib v1.11.
+            - Added a parser for the ZiNc --list-sets.
 
 18/08/2004  *** v2.10 ***
 

@@ -500,7 +500,7 @@ int standard_compare(struct dat *dat1, struct dat *dat2, int verbose, int caesar
 			{
 				while (strcmp(games_idx1[j].game->name, game_changes[i].game1->name))
 					j++;
-				fprintf(grep, "grep \"%s,m$\" */*.map\n", games_idx1[j].game->name);
+				fprintf(grep, "grep \",%s,m$\" */*.map\n", games_idx1[j].game->name);
 			}
 		}
 
