@@ -13177,86 +13177,6 @@ struct Rom raine_roms[] =
 {
 	{
 		FULL_COPY,
-		{"snowbroa", "ch0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroa", "ch1", 131072, 0x76347256, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroa", "ch2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroa", "ch3", 131072, 0x34024aef, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbros", "ch0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbros", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbros", "ch1", 131072, 0x76347256, 0, 131072},
-		{"snowbros", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbros", "ch2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbros", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbros", "ch3", 131072, 0x34024aef, 0, 131072},
-		{"snowbros", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbrob", "ch0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbrob", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbrob", "ch1", 131072, 0x76347256, 0, 131072},
-		{"snowbrob", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbrob", "ch2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbrob", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbrob", "ch3", 131072, 0x34024aef, 0, 131072},
-		{"snowbrob", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroj", "ch0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbroj", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroj", "ch1", 131072, 0x76347256, 0, 131072},
-		{"snowbroj", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroj", "ch2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbroj", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
-	},
-	{
-		FULL_COPY,
-		{"snowbroj", "ch3", 131072, 0x34024aef, 0, 131072},
-		{"snowbroj", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
-	},
-	{
-		FULL_COPY,
 		{"ainferno", "c45-01",    65536, 0xb7e4001b, 0, 65536},
 		{"ainferno", "c45-01.5", 131072, 0x052997b2, 0, 65536},
 	},
@@ -13395,7 +13315,7 @@ struct Emulator ems[] =
 	{"pcslomo", "PCSloMo v0.24 Final", pcslomo_roms},
 	{"qsound", "QSound Player v2", qsound_player_roms},
 	{"rage", "RAGE v0.9", rage_roms},
-	{"raine", "RAINE v0.40.4", raine_roms},
+	{"raine", "RAINE v0.41.1", raine_roms},
 	{"rcps", "RCPS", rcps_roms},
 	{"replay", "Replay v0.04", replay_roms},
 	{"retrocade", "Retrocade v1.2 b2", retrocade_roms},

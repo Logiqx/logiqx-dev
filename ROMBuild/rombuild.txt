@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.0 - 02/07/2004
+                         ROMBuild v2.1 - 10/09/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,10 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+10/09/2004  *** v2.1 ***
+
+            Removed the Snow Bros conversions for RAINE (now uses MAME ROMs).
 
 02/07/2004  *** v2.0 ***
 
