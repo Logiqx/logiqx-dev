@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.2"
-#define DATLIB_DATE "5 July 2004"
+#define DATLIB_VERSION "v1.3"
+#define DATLIB_DATE "6 July 2004"
 
 
 /* --- Standard includes --- */
@@ -952,7 +952,9 @@ int remove_clones(struct dat *dat)
 		}
 		else
 		{
-			memcpy(curr_game, orig_game, sizeof(struct game));
+			if (curr_game!=orig_game)
+				memcpy(curr_game, orig_game, sizeof(struct game));
+
 			curr_game++;
 		}
 	}
@@ -1038,7 +1040,9 @@ int single_game(struct dat *dat, char *game)
 		}
 		else
 		{
-			memcpy(curr_game, orig_game, sizeof(struct game));
+			if (curr_game!=orig_game)
+				memcpy(curr_game, orig_game, sizeof(struct game));
+
 			curr_game++;
 		}
 	}
@@ -2268,7 +2272,7 @@ int build_zip_structures(struct dat *dat)
 	struct game_zip_idx *curr_game_zip_name_idx;
 	struct game_zip_rom *curr_game_zip_rom;
 
-	uint32_t i, j;
+	uint32_t i, j, num_game_zips;
 
 	int errflg=0;
 
@@ -2388,16 +2392,24 @@ int build_zip_structures(struct dat *dat)
 
 	curr_game_zip=dat->game_zips;
 	curr_game_zip_name_idx=dat->game_zip_name_idx;
+	num_game_zips=dat->num_game_zips;
 
-	for (i=0, orig_game_zip=dat->game_zips; i<dat->num_game_zips; i++, orig_game_zip++)
+	for (i=0, orig_game_zip=dat->game_zips; i<num_game_zips; i++, orig_game_zip++)
 	{
 		if (orig_game_zip->num_game_zip_roms==0)
 		{
-			dat->num_game_zip_roms-=1;
+			dat->num_game_zips-=1;
 		}
 		else
 		{
-			memcpy(curr_game_zip, orig_game_zip, sizeof(struct game_zip));
+			if (curr_game_zip!=orig_game_zip)
+			{
+				memcpy(curr_game_zip, orig_game_zip, sizeof(struct game_zip));
+
+				for (j=0, curr_game_zip_rom=curr_game_zip->game_zip_roms; j<curr_game_zip->num_game_zip_roms; j++, curr_game_zip_rom++)
+					curr_game_zip_rom->game_zip=curr_game_zip;
+			}
+
 			curr_game_zip_name_idx++->game_zip=curr_game_zip++;
 		}
 	}
