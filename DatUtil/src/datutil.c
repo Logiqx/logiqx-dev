@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 		printf("Saving          [-f <output format>] [-k] [j] [-o|a <output file>] [-t]\n");
 		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
 		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
-		printf("Game Selection  [-g <game name> [-c]] [-G <sourcefile name>] [-!] [-r]\n");
+		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
 		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");
 		printf("Information     [-v] [-d]\n\n");
