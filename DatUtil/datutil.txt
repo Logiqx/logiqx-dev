@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.13 - xx/xx/xxxx
+                         DatUtil v2.13 - 22/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -372,7 +372,7 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
-xx/xx/xxxx  *** v2.13 ***
+22/02/2005  *** v2.13 ***
 
             - Uses DatLib v2.1.
             - Added a test option (-t) where nothing is actually saved.
