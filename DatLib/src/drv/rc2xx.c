@@ -338,7 +338,7 @@ int save_romcenter_250(struct dat *dat)
 
 	int i, j;
 
-	int errflg=0;
+	int errflg=0, invalid=0;
 
 	/* --- Copy ClrMamePro header to RomCenter header --- */
 
@@ -438,21 +438,41 @@ int save_romcenter_250(struct dat *dat)
 			{
 				if (curr_game->cloneof)
 				{
+					if (strchr(curr_game->cloneof, '¬'))
+						invalid++;
+
 					fprintf(dat->out, "\n¬%s¬", curr_game->cloneof);
 
 					if (curr_game->game_cloneof)
+					{
+						if (strchr(curr_game->game_cloneof->description, '¬'))
+							invalid++;
+
 						fprintf(dat->out, "%s", curr_game->game_cloneof->description);
+					}
 					else
+					{
 						fprintf(dat->out, "%s (description unknown)", curr_game->cloneof);
+					}
 				}
 				else
 				{
 					fprintf(dat->out, "\n¬%s¬%s", curr_game->name, curr_game->description);
 				}
 	
+				if (strchr(curr_game->name, '¬'))
+					invalid++;
+
+				if (strchr(curr_game->description, '¬'))
+					invalid++;
+
 				fprintf(dat->out, "¬%s¬%s", curr_game->name, curr_game->description);
 
+				if (strchr(curr_rom->name, '¬'))
+					invalid++;
+
 				fprintf(dat->out, "¬%s", curr_rom->name);
+
 				if (!strcmp(curr_rom->status, "baddump"))
 					fprintf(dat->out, "¬%08lx", (unsigned long)~curr_rom->crc);
 				else
@@ -460,14 +480,28 @@ int save_romcenter_250(struct dat *dat)
 				fprintf(dat->out, "¬%lu", (unsigned long)curr_rom->size);
 	
 				if (curr_game->romof)
+				{
+					if (strchr(curr_game->romof, '¬'))
+						invalid++;
+
 					fprintf(dat->out, "¬%s", curr_game->romof);
+				}
 				else
+				{
 					fprintf(dat->out, "¬");
+				}
 	
 				if (curr_rom->merge)
+				{
+					if (strchr(curr_rom->merge, '¬'))
+						invalid++;
+
 					fprintf(dat->out, "¬%s", curr_rom->merge);
+				}
 				else
+				{
 					fprintf(dat->out, "¬");
+				}
 	
 				fprintf(dat->out, "¬");
 			}
@@ -524,6 +558,12 @@ int save_romcenter_250(struct dat *dat)
 	dat->game_saved=FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME|
 			FLAG_GAME_DESCRIPTION|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF;
 	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC;
+
+	if (invalid)
+	{
+		printf("Error - data file is invalid because some games or ROMs contain the '¬' symbol!\n");
+		errflg++;
+	}
 
 	return(errflg);
 }
