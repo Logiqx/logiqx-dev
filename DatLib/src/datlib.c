@@ -235,7 +235,7 @@ int dir_scan(struct dat *dat)
 
 	int errflg=0;
 
-	if (!datlib_debug)
+	if (!datlib_debug && !(dat->options->options & OPTION_LOAD_QUIETLY))
 		printf("  Scanning directory and writing details to datlib.tmp...\n");
 
 	FOPEN(out, "datlib.tmp", "w")
