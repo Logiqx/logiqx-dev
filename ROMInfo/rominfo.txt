@@ -78,7 +78,6 @@ History
 
             - Uses DatLib v2.2.
             - Added support for tab delimited files.
-            - Fixed problem of unrecognised escape sequences looping forever!
 
 22/07/2004  *** v2.2 ***
 
