@@ -180,6 +180,8 @@ xx/xx/xxxx  *** v2.4 ***
 
             - Fixed another crash with datutil -X and 'forcemerging full'.
             - Changed the delimited format to use \N for NULLs.
+            - Added save support for a DISK section in the RomCenter format.
+            - Added several aliases for the output formats (see DatUtil docs).
 
 07/03/2005  *** v2.3 ***
 
