@@ -79,12 +79,12 @@ option. Valid formats are 'listinfo', 'listxml', 'romcenter2', 'delimited',
 
 There are a number of aliases for each format:
 
-  listinfo    listinfo info clrmamepro clrmame cmpro cmp
-  listxml     listxml xml
+  listinfo    listinfo info li clrmamepro clrmame cmpro cmp cm
+  listxml     listxml xml lx
   romcenter2  romcenter2 rc2 romcenter rc
   delimited   delimited tab text
   titlelist   titlelist titles
-  sublist     sublist rcsublist rclist
+  sublist     sublist sub rcsublist rcsub
 
 By default, non-essential details for ROM management are removed (e.g. chips
 and dipswitch information) but these can be retained using the -k option. Only
@@ -389,6 +389,8 @@ xx/xx/xxxx  *** v2.16 ***
             - Uses DatLib v2.4.
             - Fixed another crash with datutil -X and 'forcemerging full'.
             - Changed the delimited format to use \N for NULLs.
+            - Changed the delimited format so that all types are 'game_*'.
+            - Changed the delimited format so that games include 'runnable'.
             - Added save support for a DISK section in the RomCenter format.
             - Added several aliases for the output formats (see notes above).
 
