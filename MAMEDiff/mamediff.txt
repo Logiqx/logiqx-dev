@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.1 - 05/07/2004
+                          MAMEDiff v2.3 - 06/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -269,6 +269,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+06/07/2004  *** v2.3 ***
+
+            - Compiled with DatLib v2.3 to fix a small issue with -d1/-d2/-d3.
+              Problem only affected data files containing games without ROMs.
 
 05/07/2004  *** v2.2 ***
 
