@@ -40,6 +40,19 @@ int load_romcenter_sublist(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_romcenter_sublist(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "sublist") &&
+		strcmp(dat->options->save_format, "rcsublist") &&
+		strcmp(dat->options->save_format, "rclist"))
+		return(0);
+	else
+		return(1);
+}
+
+
 /* --- Save --- */
 
 int save_romcenter_sublist(struct dat *dat)

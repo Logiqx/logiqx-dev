@@ -230,6 +230,14 @@ int load_clrmame_log(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_clrmame_log(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_clrmame_log(struct dat *dat)

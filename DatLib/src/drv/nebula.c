@@ -144,6 +144,14 @@ int load_nebula_driver(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_nebula_driver(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_nebula_driver(struct dat *dat)

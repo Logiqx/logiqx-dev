@@ -329,6 +329,25 @@ int load_romcenter_200(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_romcenter_250(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "romcenter2") &&
+		strcmp(dat->options->save_format, "rc2") &&
+		strcmp(dat->options->save_format, "romcenter") &&
+		strcmp(dat->options->save_format, "rc"))
+		return(0);
+	else
+		return(1);
+}
+
+int specify_romcenter_200(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_romcenter_250(struct dat *dat)

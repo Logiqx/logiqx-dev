@@ -400,6 +400,19 @@ int load_tab_delimited(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_tab_delimited(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "delimited") &&
+		strcmp(dat->options->save_format, "tab") &&
+		strcmp(dat->options->save_format, "text"))
+		return(0);
+	else
+		return(1);
+}
+
+
 /* --- Save --- */
 
 void output_delimited_string(FILE *out, unsigned char *ptr)

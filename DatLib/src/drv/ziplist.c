@@ -115,6 +115,14 @@ int load_ziplist(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_ziplist(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_ziplist(struct dat *dat)

@@ -356,6 +356,23 @@ int load_mess_listxml(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_mame_listxml(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "listxml") &&
+		strcmp(dat->options->save_format, "xml"))
+		return(0);
+	else
+		return(1);
+}
+
+int specify_mess_listxml(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 #define OUTPUT_XML_STRING(STRING) \

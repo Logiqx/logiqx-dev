@@ -180,6 +180,14 @@ int load_zinc_list_sets(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_zinc_list_sets(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_zinc_list_sets(struct dat *dat)

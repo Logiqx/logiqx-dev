@@ -124,6 +124,14 @@ int load_gngeo_romrc(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_gngeo_romrc(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_gngeo_romrc(struct dat *dat)

@@ -42,6 +42,18 @@ int load_title_list(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_title_list(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "titlelist") &&
+		strcmp(dat->options->save_format, "titles"))
+		return(0);
+	else
+		return(1);
+}
+
+
 /* --- Save --- */
 
 int save_title_list(struct dat *dat)

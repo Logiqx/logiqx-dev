@@ -177,6 +177,14 @@ int load_calice_driver(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_calice_driver(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_calice_driver(struct dat *dat)

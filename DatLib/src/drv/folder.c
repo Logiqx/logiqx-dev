@@ -70,6 +70,14 @@ int load_folder_scan(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_folder_scan(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_folder_scan(struct dat *dat)

@@ -106,6 +106,14 @@ int load_allzip(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_allzip(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_allzip(struct dat *dat)

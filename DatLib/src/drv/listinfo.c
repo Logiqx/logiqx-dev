@@ -423,6 +423,27 @@ int load_mess_listinfo(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_mame_listinfo(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "listinfo") &&
+		strcmp(dat->options->save_format, "info") &&
+		strcmp(dat->options->save_format, "clrmamepro") &&
+		strcmp(dat->options->save_format, "clrmame") &&
+		strcmp(dat->options->save_format, "cmpro") &&
+		strcmp(dat->options->save_format, "cmp"))
+		return(0);
+	else
+		return(1);
+}
+
+int specify_mess_listinfo(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 void output_info_string(FILE *out, unsigned char *ptr)

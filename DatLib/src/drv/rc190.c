@@ -225,6 +225,14 @@ int load_romcenter_190(struct dat *dat)
 }
 
 
+/* --- Specify --- */
+
+int specify_romcenter_190(struct dat *dat)
+{
+	return(0);
+}
+
+
 /* --- Save --- */
 
 int save_romcenter_190(struct dat *dat)
