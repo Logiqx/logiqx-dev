@@ -2264,7 +2264,7 @@ int build_zip_structures(struct dat *dat)
 	struct game *curr_game;
 	struct rom *curr_rom;
 
-	struct game_zip *curr_game_zip;
+	struct game_zip *curr_game_zip, *orig_game_zip;
 	struct game_zip_idx *curr_game_zip_name_idx;
 	struct game_zip_rom *curr_game_zip_rom;
 
@@ -2383,6 +2383,26 @@ int build_zip_structures(struct dat *dat)
 			curr_game_zip->game_zip_roms=curr_game_zip_rom;
 		}
 	}
+
+	/* --- Remove empty ZIPs --- */
+
+	curr_game_zip=dat->game_zips;
+	curr_game_zip_name_idx=dat->game_zip_name_idx;
+
+	for (i=0, orig_game_zip=dat->game_zips; i<dat->num_game_zips; i++, orig_game_zip++)
+	{
+		if (orig_game_zip->num_game_zip_roms==0)
+		{
+			dat->num_game_zip_roms-=1;
+		}
+		else
+		{
+			memcpy(curr_game_zip, orig_game_zip, sizeof(struct game_zip));
+			curr_game_zip_name_idx++->game_zip=curr_game_zip++;
+		}
+	}
+
+	qsort(dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), game_zip_name_idx_sort_function);
 
 	/* --- Display it for testing purposes! --- */
 

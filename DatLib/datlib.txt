@@ -171,10 +171,13 @@ do anything with them but I am interested to hear them!
 History
 -------
 
-05/07/2004  *** v1.1 ***
+05/07/2004  *** v1.2 ***
+
             - Removed ROM size limit when extended checksums are not being used.
+            - Empty ZIPs are not loaded into the game_zip structures now. 
 
 04/07/2004  *** v1.1 ***
+
             - ClrMamePro/RomCenter header is now ignored when using OPTION_GAME.
             - Removed a warning when you try using 'datutil -g <resource> -c'.
             - Added debug information to identify spurious warnings like above.
@@ -182,4 +185,5 @@ History
             - You must use OPTION_EXTENDED_CHECKSUMS, as used by 'datutil -x'.
 
 02/07/2004  *** v1.0 ***
+
             - First public release.
