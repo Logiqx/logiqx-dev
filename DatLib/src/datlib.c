@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.0"
-#define DATLIB_DATE "13 February 2005"
+#define DATLIB_VERSION "v2.1"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -341,7 +341,7 @@ int dir_scan(struct dat *dat)
 						}
 						else
 						{
-							fprintf(stderr, "Error getting attributes of %s\n", sdirentp->d_name);
+							fprintf(stderr, "File not found - '%s'.\n", sdirentp->d_name);
 						}
 					}
 
@@ -352,7 +352,7 @@ int dir_scan(struct dat *dat)
 		}
 		else
 		{
-			fprintf(stderr, "Error getting attributes of %s\n", direntp->d_name);
+			fprintf(stderr, "File not found - '%s'.\n", direntp->d_name);
 		}
 	}
 
@@ -544,7 +544,7 @@ int load_game_selections(struct dat *dat)
 	{
 		if (*dat->options->game_selection=='@' && stat(fn, &buf)!=0)
 		{
-			fprintf(stderr, "Error reading properties of '%s'\n", fn);
+			fprintf(stderr, "File not found - '%s'.\n", fn);
 			errflg++;
 		}
 	}
@@ -609,12 +609,16 @@ int load_game_selections(struct dat *dat)
 
 	if (!errflg)
 	{
-		for (i=0, ptr=dat->options->game_selection_buffer; i<fs+1; i++, ptr++)
+		for (i=0, ptr=dat->options->game_selection_buffer; i<fs; i++, ptr++)
 		{
-			if (i==fs || *ptr=='\r' || *ptr=='\n')
+			if (*ptr=='\r' || *ptr=='\n' || *ptr=='\t' || *ptr==',')
 				*ptr='\0';
-			if (i==0 || (*(ptr-1)==0 && *ptr!=0))
+			else if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
 				dat->options->num_game_selections++;
+		}
+		if (i==fs)
+		{
+			*ptr='\0';
 		}
 
 		STRUCT_CALLOC(dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx))
@@ -627,9 +631,14 @@ int load_game_selections(struct dat *dat)
 		for (i=0, ptr=dat->options->game_selection_buffer, curr_game_selection=dat->options->game_selections;
 			i<fs; i++, ptr++)
 		{
-			if (i==0 || (*(ptr-1)==0 && *ptr!=0))
+			if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
 				curr_game_selection++->st=ptr;
 		}
+		if (i==fs)
+		{
+			*ptr='\0';
+		}
+
 
 		qsort(dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), st_idx_sort_function);
 	}
@@ -653,7 +662,7 @@ int load_sourcefile_selections(struct dat *dat)
 	{
 		if (*dat->options->sourcefile_selection=='@' && stat(fn, &buf)!=0)
 		{
-			fprintf(stderr, "Error reading properties of '%s'\n", fn);
+			fprintf(stderr, "File not found - '%s'.\n", fn);
 			errflg++;
 		}
 	}
@@ -717,12 +726,16 @@ int load_sourcefile_selections(struct dat *dat)
 
 	if (!errflg)
 	{
-		for (i=0, ptr=dat->options->sourcefile_selection_buffer; i<fs+1; i++, ptr++)
+		for (i=0, ptr=dat->options->sourcefile_selection_buffer; i<fs; i++, ptr++)
 		{
-			if (i==fs || *ptr=='\r' || *ptr=='\n')
+			if (*ptr=='\r' || *ptr=='\n' || *ptr=='\t' || *ptr==',')
 				*ptr='\0';
-			if (i==0 || (*(ptr-1)==0 && *ptr!=0))
+			else if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
 				dat->options->num_sourcefile_selections++;
+		}
+		if (i==fs)
+		{
+			*ptr='\0';
 		}
 
 		STRUCT_CALLOC(dat->options->sourcefile_selections, dat->options->num_sourcefile_selections, sizeof(struct st_idx))
@@ -735,7 +748,7 @@ int load_sourcefile_selections(struct dat *dat)
 		for (i=0, ptr=dat->options->sourcefile_selection_buffer, curr_sourcefile_selection=dat->options->sourcefile_selections;
 			i<fs; i++, ptr++)
 		{
-			if (i==0 || (*(ptr-1)==0 && *ptr!=0))
+			if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
 				curr_sourcefile_selection++->st=ptr;
 		}
 
@@ -1994,6 +2007,7 @@ int game_sourcefile_selections(struct dat *dat)
 	struct game *orig_game=0;
 	struct game *curr_game=0;
 	struct game *curr_parent;
+	struct st_idx *st_idx;
 	uint32_t num_games=dat->num_games;
 	uint32_t i, match_value=1;
 
@@ -2037,25 +2051,37 @@ int game_sourcefile_selections(struct dat *dat)
 
 		if (dat->options->options & OPTION_SOURCEFILE_SELECTION && curr_game->sourcefile)
 		{
-			if (bsearch((void *)curr_game->sourcefile, dat->options->sourcefile_selections, dat->options->num_sourcefile_selections, sizeof(struct st_idx), find_st)!=0)
+			if ((st_idx=bsearch((void *)curr_game->sourcefile, dat->options->sourcefile_selections, dat->options->num_sourcefile_selections, sizeof(struct st_idx), find_st))!=0)
+			{
 				curr_game->match=match_value;
+				st_idx->flags|=FLAG_STRING_INDEX_USED;
+			}
 		}
 
 		/* --- game names are less simple, iterations need to be handled --- */
 
 		if (dat->options->options & OPTION_GAME_SELECTION)
 		{
-			if (bsearch((void *)curr_game->name, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st)!=0)
+			if ((st_idx=bsearch((void *)curr_game->name, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st))!=0)
+			{
 				curr_game->match=match_value;
+				st_idx->flags|=FLAG_STRING_INDEX_USED;
+			}
 
 			if (dat->options->options & OPTION_CLONE_SELECTION)
 			{
 				if (curr_game->cloneof &&
-					bsearch((void *)curr_game->cloneof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st)!=0)
+					(st_idx=bsearch((void *)curr_game->cloneof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st))!=0)
+				{
 					curr_game->match=match_value;
+					st_idx->flags|=FLAG_STRING_INDEX_USED;
+				}
 				if (curr_game->romof &&
-					bsearch((void *)curr_game->romof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st)!=0)
+					(st_idx=bsearch((void *)curr_game->romof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st))!=0)
+				{
 					curr_game->match=match_value;
+					st_idx->flags|=FLAG_STRING_INDEX_USED;
+				}
 
 				/* --- Support clones of clones (i.e. work up the tree to find the match) --- */
 
@@ -2067,11 +2093,18 @@ int game_sourcefile_selections(struct dat *dat)
 				while (curr_game->match!=match_value && curr_parent)
 				{
 					if (curr_parent->cloneof &&
-						bsearch((void *)curr_parent->cloneof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st)!=0)
+						(st_idx=bsearch((void *)curr_parent->cloneof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st))!=0)
+					{
 						curr_game->match=match_value;
+						st_idx->flags|=FLAG_STRING_INDEX_USED;
+					}
+
 					if (curr_parent->romof &&
-						bsearch((void *)curr_parent->romof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st)!=0)
+						(st_idx=bsearch((void *)curr_parent->romof, dat->options->game_selections, dat->options->num_game_selections, sizeof(struct st_idx), find_st))!=0)
+					{
 						curr_game->match=match_value;
+						st_idx->flags|=FLAG_STRING_INDEX_USED;
+					}
 
 					if (curr_game->match!=match_value && curr_parent->cloneof && (game_match=bsearch((void *)curr_parent->cloneof, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
 						curr_parent=game_match->game;
@@ -3333,6 +3366,8 @@ int fix_merging_phase_2(struct dat *dat)
 
 int report_warnings(struct dat *dat)
 {
+	struct st_idx *st_idx;
+	struct game_idx *curr_game_name_idx=0;
 	struct game *curr_game=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
@@ -3354,9 +3389,30 @@ int report_warnings(struct dat *dat)
 
 	/* --- Calculate warnings --- */
 
+	for (i=0, st_idx=dat->options->game_selections; i<dat->options->num_game_selections; i++, st_idx++)
+	{
+		if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+			dat->game_selection_warnings|=FLAG_BAD_GAME_SELECTION;
+	}
+
+	for (i=0, st_idx=dat->options->sourcefile_selections; i<dat->options->num_sourcefile_selections; i++, st_idx++)
+	{
+		if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+			dat->sourcefile_selection_warnings|=FLAG_BAD_SOURCEFILE_SELECTION;
+	}
+
+	for (i=0, curr_game_name_idx=dat->game_name_idx; i<dat->num_games; i++, curr_game_name_idx++)
+	{
+		if (i>0 && !strcmp(curr_game_name_idx->game->name, (curr_game_name_idx-1)->game->name))
+		{
+			curr_game_name_idx->game->game_warnings|=FLAG_GAME_DUPLICATE;
+			(curr_game_name_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE;
+		}
+	}
+
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		curr_game->game_warnings=(curr_game->game_flags ^ dat->game_flags) &
+		curr_game->game_warnings|=(curr_game->game_flags ^ dat->game_flags) &
 			(FLAG_GAME_DESCRIPTION | FLAG_GAME_MANUFACTURER | FLAG_GAME_REBUILDTO);
 
 		for (j=0, curr_biosset=curr_game->biossets; j<curr_game->num_biossets; j++, curr_biosset++)
@@ -3437,6 +3493,10 @@ int report_warnings(struct dat *dat)
 	if (datlib_debug)
 	{
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Game selection warnings=%04x\n", dat->game_selection_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Sourcefile selection warnings=%04x\n", dat->sourcefile_selection_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Game warnings=%04x\n", dat->game_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment warnings=%04x\n", dat->comment_warnings);
@@ -3471,13 +3531,23 @@ int report_warnings(struct dat *dat)
 		printf("Reporting warnings...\n");
 	}
 
-	if (dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings ||
 		dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Warning Summary\n");
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n\n");
+
+		if (dat->game_selection_warnings & FLAG_BAD_GAME_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid game selections were provided to -g.\n\n");
+		}
+
+		if (dat->sourcefile_selection_warnings & FLAG_BAD_SOURCEFILE_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid sourcefile selections were provided to -G.\n\n");
+		}
 
 		/* --- Games --- */
 
@@ -3491,6 +3561,8 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing Manufacturer\n");
 			if (dat->game_warnings & FLAG_GAME_REBUILDTO)
 				fprintf(dat->log_file, "    Missing Rebuild To\n");
+			if (dat->game_warnings & FLAG_GAME_DUPLICATE)
+				fprintf(dat->log_file, "    Duplicate\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -3614,7 +3686,7 @@ int report_warnings(struct dat *dat)
 		}
 	}
 
-	if ((dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings ||
 		dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings) &&
 		dat->options->options & OPTION_VERBOSE_LOGGING)
@@ -3622,6 +3694,32 @@ int report_warnings(struct dat *dat)
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Warning Details\n");
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n\n");
+
+		if (dat->game_selection_warnings & FLAG_BAD_GAME_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid game selections provided to -g:\n\n");
+
+			for (i=0, st_idx=dat->options->game_selections; i<dat->options->num_game_selections; i++, st_idx++)
+			{
+				if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+					fprintf(dat->log_file, "    %s\n", st_idx->st);
+			}
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		if (dat->sourcefile_selection_warnings & FLAG_BAD_SOURCEFILE_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid sourcefile selections provided to -G:\n\n");
+
+			for (i=0, st_idx=dat->options->sourcefile_selections; i<dat->options->num_sourcefile_selections; i++, st_idx++)
+			{
+				if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+					fprintf(dat->log_file, "    %s\n", st_idx->st);
+			}
+
+			fprintf(dat->log_file, "\n");
+		}
 
 		for (i=0, curr_game=dat->games; dat->log_file && i<dat->num_games; i++, curr_game++)
 		{
@@ -3640,6 +3738,8 @@ int report_warnings(struct dat *dat)
 						fprintf(dat->log_file, "    Missing Manufacturer\n");
 					if (curr_game->game_warnings & FLAG_GAME_REBUILDTO)
 						fprintf(dat->log_file, "    Missing Rebuild To\n");
+					if (curr_game->game_warnings & FLAG_GAME_DUPLICATE)
+						fprintf(dat->log_file, "    Duplicate\n");
 				}
 
 				if (curr_game->biosset_warnings)
@@ -4710,7 +4810,7 @@ struct dat *init_dat(struct options *options)
 
 		if (stat(dat->name, &buf)!=0)
 		{
-			fprintf(stderr, "Error reading properties of %s\n", dat->name);
+			fprintf(stderr, "File not found - '%s'.\n", dat->name);
 			errflg++;
 		}
 	}
@@ -4737,7 +4837,7 @@ struct dat *init_dat(struct options *options)
 
 				if (stat(dat->name, &buf)!=0)
 				{
-					fprintf(stderr, "Error reading properties of %s\n", dat->name);
+					fprintf(stderr, "File not found - '%s'.\n", dat->name);
 					errflg++;
 				}
 			}
@@ -4908,7 +5008,7 @@ struct dat *init_dat(struct options *options)
 		{
 			if (!(dat->save) &&
 				(strcmp(datlib_drivers[i]->description, dat->load->description) ||
-				options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION))
+				options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_REMOVE_CLONES))
 			)
 				dat->save=(struct datlib_driver *)datlib_drivers[i];
 		}
@@ -4992,9 +5092,13 @@ struct dat *init_dat(struct options *options)
 	if (!errflg && (options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		errflg=game_sourcefile_selections(dat);
 
-	if (dat->num_games==0)
+	if (!errflg && dat->num_games==0)
 	{
-		fprintf(stderr, "  Error - No games were loaded.\n");
+		if (dat->options->game_selection || dat->options->sourcefile_selection)
+			fprintf(stderr, "  Error - No games were loaded (check your game/sourcefile selections).\n");
+		else
+			fprintf(stderr, "  Error - No games were loaded.\n");
+
 		errflg++;
 	}
 
@@ -5055,8 +5159,8 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings)
-				printf("\nNote: There are some warnings for this data file (see %s for details).\n", options->log_fn);
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings)
+				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
 				printf("\nNote: Fixes were applied to the data file (see %s for details).\n", options->log_fn);
