@@ -5021,7 +5021,7 @@ struct dat *init_dat(struct options *options)
 
 	if (!errflg)
 	{
-		for (i=0; datlib_drivers[i]; i++)
+		for (i=datlib_driver_matches=0; datlib_drivers[i]; i++)
 		{
 			if ((datlib_drivers[i]->identify)(dat))
 			{
@@ -5036,19 +5036,16 @@ struct dat *init_dat(struct options *options)
 				datlib_driver_matches++;
 			}
 		}
-	}
 
-	/* --- Check if data file was identified successfully --- */
+		/* --- Check if data file was identified successfully --- */
 
-	if (!errflg)
-	{
 		switch (datlib_driver_matches)
 		{
 			/* --- If no datlib_drivers match, the format is not supported --- */
 
 			case 0:
 				if (!datlib_debug)
-					fprintf(stderr, "Can't identify type for '%s'\n", options->fn);
+					fprintf(stderr, "Can't identify format of '%s'\n", options->fn);
 				errflg++;
 				break;
 
@@ -5062,11 +5059,13 @@ struct dat *init_dat(struct options *options)
 			/* --- If more than one datlib_driver match, the format is unknown! --- */
 
 			default:
-				fprintf(stderr, "Can't identify type for '%s'. Matches more than one type.\n", options->fn);
+				fprintf(stderr, "Can't identify format of '%s'. Matches more than one type.\n", options->fn);
 				errflg++;
 				break;
 		}
 	}
+
+	/* --- Default save format --- */
 
 	if (!errflg)
 	{
@@ -5079,6 +5078,53 @@ struct dat *init_dat(struct options *options)
 				options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_REMOVE_CLONES))
 			)
 				dat->save=(struct datlib_driver *)datlib_drivers[i];
+		}
+	}
+
+	/* --- For all supported datlib_drivers, check which one has been specified --- */
+
+	if (!errflg && dat->options->save_format)
+	{
+		for (i=datlib_driver_matches=0; datlib_drivers[i]; i++)
+		{
+			if ((datlib_drivers[i]->specify)(dat))
+			{
+				if (datlib_debug)
+				{
+					printf("%-16s: ", "Datlib.init_dat");
+					printf("Specified the save format as being '%s'.\n", datlib_drivers[i]->description);
+				}
+
+				dat->save=(struct datlib_driver *)datlib_drivers[i];
+
+				datlib_driver_matches++;
+			}
+		}
+
+		/* --- Check if data file was identified successfully --- */
+
+		switch (datlib_driver_matches)
+		{
+			/* --- If no datlib_drivers match, the format is not supported --- */
+
+			case 0:
+				fprintf(stderr, "Unrecognised output format '%s'\n", options->save_format);
+				errflg++;
+				break;
+
+			/* --- If the is one datlib_driver match, the format is supported --- */
+
+			case 1:
+				if (!datlib_debug && !(options->options & OPTION_LOAD_QUIETLY))
+					printf("  Specified the save format as being '%s'.\n", dat->save->description);
+				break;
+
+			/* --- If more than one datlib_driver match, the format is unknown! --- */
+
+			default:
+				fprintf(stderr, "Can't identify save format '%s'. Matches more than one type.\n", options->save_format);
+				errflg++;
+				break;
 		}
 	}
 
@@ -5250,23 +5296,7 @@ struct dat *init_dat(struct options *options)
 
 int save_dat(struct dat *dat)
 {
-	int i, errflg=0;
-	int lost=0;
-
-	if (dat->options->save_format)
-	{
-		for (i=0, errflg=1; datlib_drivers[i]; i++)
-		{
-			if (datlib_drivers[i]->save_format && !strcmp(datlib_drivers[i]->save_format, dat->options->save_format))
-			{
-				dat->save=(struct datlib_driver *)datlib_drivers[i];
-				errflg=0;
-			}
-		}
-
-		if (errflg)
-			fprintf(stderr, "Unrecognised output format '%s'\n", dat->options->save_format);
-	}
+	int lost=0, errflg=0;
 
 	if (!errflg)
 	{
@@ -5496,7 +5526,7 @@ int save_dat(struct dat *dat)
 					if (lost & FLAG_DISK_INDEX)
 						fprintf(dat->log_file, "    Index\n");
 					if (lost & FLAG_DISK_STATUS)
-						fprintf(dat->log_file, "    Status (may have used zero and complemented CRCs instead)\n");
+						fprintf(dat->log_file, "    Status (may have used zero and complemented checksums instead)\n");
 
 					fprintf(dat->log_file, "\n");
 				}

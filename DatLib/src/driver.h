@@ -14,33 +14,30 @@
 struct datlib_driver
 {
 	char *description;
-
-	char *save_format;
-
 	uint8_t safety;
 
 	int (*identify)(struct dat *);
 	int (*load)(struct dat *);
+	int (*specify)(struct dat *);
 	int (*save)(struct dat *);
 };
 
 
 /* --- Driver macros --- */
 
-#define DECLARE_DRIVER(NAME, DESCRIPTION, SAVE_FORMAT, SAFETY) \
+#define DECLARE_DRIVER(NAME, DESCRIPTION, SAFETY) \
 int identify_##NAME(struct dat *); \
 int load_##NAME(struct dat *); \
+int specify_##NAME(struct dat *); \
 int save_##NAME(struct dat *); \
 struct datlib_driver datlib_driver_##NAME = \
 { \
 	DESCRIPTION, \
-\
-	SAVE_FORMAT, \
-\
 	SAFETY, \
 \
 	identify_##NAME, \
 	load_##NAME, \
+	specify_##NAME, \
 	save_##NAME \
 };
 
