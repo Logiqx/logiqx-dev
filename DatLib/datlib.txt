@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.0 - 13/02/2005
+                          DatLib v2.1 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -173,6 +173,18 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.1 ***
+
+            - Made selections more flexible (can now use commas as a delimiter).
+            - Added warnings for invalid game/sourcefile selections (-g and -G).
+            - Added warning messages for duplicated games (i.e. same game name).
+            - Can identify listinfo files even if they only contain resources.
+            - The 'remove clones' option will retain the original dat format.
+            - Fixed a crash caused by empty selection files (the '@' syntax).
+            - Saving a RomCenter datafile will now report an error if the '¬'
+              symbol is used in the game or ROM details (i.e. the dat is bad).
+            - Changed the error messages that are given when files are missing.
 
 13/02/2005  *** v2.0 ***
 
