@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.13 - 16/01/2005
+                          MAMEDiff v2.14 - 13/02/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+13/02/2005  *** v2.14 ***
+
+            - Uses DatLib v2.0.
+            - Supports the DatLib v2.0 method of handling baddump/nodump ROMs.
 
 16/01/2005  *** v2.13 ***
 

@@ -21,6 +21,7 @@
 
 /* --- MAMEDiff definitions and macros --- */
 
+#include "mamediff.h"
 #include "generate.h"
 
 
@@ -89,11 +90,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_rom2=curr_game_zip2->game_zip_roms;
 					!found && k<curr_game_zip2->num_game_zip_roms; k++, curr_game_zip_rom2++)
 				{
-					if ((curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP ||
+					if ((!strcmp(curr_game_zip_rom2->rom->status, "nodump") ||
 						curr_game_zip_rom1->rom->crc==curr_game_zip_rom2->rom->crc ||
 						curr_game_zip_rom1->rom->crc==~curr_game_zip_rom2->rom->crc) &&
 						curr_game_zip_rom1->rom->size==curr_game_zip_rom2->rom->size &&
-						((renames==0 && !(curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP)) ||
+						((renames==0 && strcmp(curr_game_zip_rom2->rom->status, "nodump")) ||
 						 !strcmp(curr_game_zip_rom1->rom->name, curr_game_zip_rom2->rom->name)))
 					{
 						found++;
@@ -127,9 +128,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_disk2=curr_game_zip2->game_zip_disks;
 					!found && k<curr_game_zip2->num_game_zip_disks; k++, curr_game_zip_disk2++)
 				{
-					if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
+					if ((!strcmp(curr_game_zip_disk2->disk->status, "nodump") ||
 						curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
-						((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
+						((renames==0 && strcmp(curr_game_zip_disk2->disk->status, "nodump")) ||
 						 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
 					{
 						found++;
@@ -226,11 +227,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_rom1=curr_game_zip1->game_zip_roms;
 					!found && k<curr_game_zip1->num_game_zip_roms; k++, curr_game_zip_rom1++)
 				{
-					if ((curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP ||
+					if ((!strcmp(curr_game_zip_rom2->rom->status, "nodump") ||
 						curr_game_zip_rom1->rom->crc==curr_game_zip_rom2->rom->crc ||
 						curr_game_zip_rom1->rom->crc==~curr_game_zip_rom2->rom->crc) &&
 						curr_game_zip_rom1->rom->size==curr_game_zip_rom2->rom->size &&
-						((renames==0 && !(curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP)) ||
+						((renames==0 && strcmp(curr_game_zip_rom2->rom->status, "nodump")) ||
 						 !strcmp(curr_game_zip_rom1->rom->name, curr_game_zip_rom2->rom->name)))
 					{
 						found++;
@@ -255,11 +256,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 					for (k=0, curr_rom=curr_game->roms; !found && k<curr_game->num_roms; k++, curr_rom++)
 					{
-						if ((curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP ||
+						if ((!strcmp(curr_game_zip_rom2->rom->status, "nodump") ||
 							curr_rom->crc==curr_game_zip_rom2->rom->crc ||
 							curr_rom->crc==~curr_game_zip_rom2->rom->crc) &&
 							curr_rom->size==curr_game_zip_rom2->rom->size &&
-							((renames==0 && !(curr_game_zip_rom2->rom->rom_flags & FLAG_ROM_NODUMP)) ||
+							((renames==0 && strcmp(curr_game_zip_rom2->rom->status, "nodump")) ||
 							!strcmp(curr_rom->name, curr_game_zip_rom2->rom->name)))
 						{
 							found++;
@@ -304,9 +305,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				for (k=0, curr_game_zip_disk1=curr_game_zip1->game_zip_disks;
 					!found && k<curr_game_zip1->num_game_zip_disks; k++, curr_game_zip_disk1++)
 				{
-					if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
+					if ((!strcmp(curr_game_zip_disk2->disk->status, "nodump") ||
 						curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
-						((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
+						((renames==0 && strcmp(curr_game_zip_disk2->disk->status, "nodump")) ||
 						 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
 					{
 						found++;
@@ -331,9 +332,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 					for (k=0, curr_disk=curr_game->disks; !found && k<curr_game->num_disks; k++, curr_disk++)
 					{
-						if ((curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP ||
+						if ((!strcmp(curr_game_zip_disk2->disk->status, "nodump") ||
 							curr_disk->crc==curr_game_zip_disk2->disk->crc) &&
-							((renames==0 && !(curr_game_zip_disk2->disk->disk_flags & FLAG_DISK_NODUMP)) ||
+							((renames==0 && strcmp(curr_game_zip_disk2->disk->status, "nodump")) ||
 							!strcmp(curr_disk->name, curr_game_zip_disk2->disk->name)))
 						{
 							found++;
@@ -672,7 +673,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 							curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED ||
 							(diff_type==2 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE))
 						{
-							if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
+							if (!strcmp(curr_rom->status, "nodump"))
 								fprintf(changes_log, "  ROM: %12s (%7lu bytes, no dump available)", curr_rom->name, (unsigned long) curr_rom->size);
 							else
 								fprintf(changes_log, "  ROM: %12s (%7lu bytes, crc %08lx)", curr_rom->name, (unsigned long) curr_rom->size, (unsigned long) curr_rom->crc);
@@ -697,7 +698,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 							curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED ||
 							(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
 						{
-							if (curr_disk->disk_flags & FLAG_DISK_NODUMP)
+							if (!strcmp(curr_disk->status, "nodump"))
 								fprintf(changes_log, "  Disk: %12s (no dump available)", curr_disk->name);
 							else
 							{
