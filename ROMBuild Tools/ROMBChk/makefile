@@ -33,7 +33,7 @@ $(sort $(OBJDIRS)):
 	$(MD) $@
 
 #
-# Compiling of seperate modules
+# Compiling of separate modules
 #
 
 $(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h $(DLSRC)/datlib.h $(DLSRC)/macro.h $(DLSRC)/type.h $(DLSRC)/misc/getopt.h $(DLSRC)/mame/unzip.h $(LOGIQX)/dev/rombuild/src/rombuild.h

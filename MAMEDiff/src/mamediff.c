@@ -207,7 +207,7 @@ int main(int argc, char **argv)
 		printf("Running MAMEDiff without specifying a type of ROM set will produce a summary of\nchanges made to the ROM sets of individual games. If you specify a type of ROM\nset, MAMEDiff will tell you which ZIP files need rebuilding (if you have them).\n\n");
 		printf("The three ROM set types are 'm'erged, 's'plit or 'n'on-merged.\n\n");
 		printf("Use verbose mode (the -v option) for a detailed report of ROM changes.\n\n");
-		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -b option is for use if you like to have non-seperated BIOS ROMs.\n");
+		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -b option is for use if you like to have non-separated BIOS ROMs.\n");
 		exit (1);
 	}
 

@@ -32,7 +32,7 @@ $(sort $(OBJDIRS)):
 	$(MD) $@
 
 #
-# Compiling of seperate modules
+# Compiling of separate modules
 #
 
 $(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h $(DLSRC)/macro.h $(DLSRC)/misc/getopt.h

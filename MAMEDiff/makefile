@@ -34,7 +34,7 @@ $(sort $(OBJDIRS)):
 	$(MD) $@
 
 #
-# Compiling of seperate modules
+# Compiling of separate modules
 #
 
 $(OBJ)/mamediff.o: $(SRC)/mamediff.c $(SRC)/mamediff.h $(SRC)/compare.h $(SRC)/generate.h $(DLSRC)/datlib.h $(DLSRC)/macro.h $(DLSRC)/type.h $(DLSRC)/misc/getopt.h

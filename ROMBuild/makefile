@@ -35,7 +35,7 @@ $(sort $(OBJDIRS)):
 	$(MD) $@
 
 #
-# Compiling of seperate modules
+# Compiling of separate modules
 #
 
 $(OBJ)/rombuild.o: $(SRC)/rombuild.c $(SRC)/rombuild.h $(DLSRC)/macro.h $(DLSRC)/misc/getopt.h $(DLSRC)/mame/unzip.h

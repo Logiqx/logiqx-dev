@@ -54,7 +54,7 @@ $(sort $(DLOBJDIRS)):
 	$(MD) $@
 
 #
-# Compiling of seperate modules
+# Compiling of separate modules
 #
 
 $(DLOBJ)/datlib.o: $(DLSRC)/datlib.c $(DLSRC)/datlib.h $(DLSRC)/driver.h $(DLINCS)

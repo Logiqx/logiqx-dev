@@ -134,7 +134,7 @@ If the datafile includes 'sourcefile' information (added to MAME in v0.85),
 you can select all games from an individual sourcefile using the -G option.
 
 Both the -g and -G options allow you to provide a list of game/sourcefile names
-in an external text file (put each entry on a seperate line). This is utilised
+in an external text file (put each entry on a separate line). This is utilised
 by putting and @ symbol after the option. For example, if you have a text file
 called cpzn.txt that contains two lines (cpzn1 and cpzn2 in this case):
 
