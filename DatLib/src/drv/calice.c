@@ -75,14 +75,14 @@ int load_calice_driver(struct dat *dat)
 		{
 			/* --- Remove leading spaces and tabs --- */
 
-			while (*BUFFER1_PTR==' ' || *BUFFER1_PTR=='\t' || *BUFFER1_PTR=='"')
+			while (*BUFFER1_PTR==' ' || *BUFFER1_PTR=='\t' || *BUFFER1_PTR=='\"')
 				BUFFER1_PTR++;
 
 			strcpy(TOKEN, BUFFER1_PTR);
 
 			/* --- Remove trailing spaces --- */
 
-			while (TOKEN[strlen(TOKEN)-1]==' ' || TOKEN[strlen(TOKEN)-1]=='"')
+			while (TOKEN[strlen(TOKEN)-1]==' ' || TOKEN[strlen(TOKEN)-1]=='\"')
 				TOKEN[strlen(TOKEN)-1]='\0';
 
 			strcpy(description, TOKEN);

@@ -103,7 +103,7 @@ int identify_mess_listxml(struct dat *dat)
 			} \
 			else if (!strncmp(read_ptr, "&quot;", 6)) \
 			{ \
-				*write_ptr++='"'; \
+				*write_ptr++='\"'; \
 				read_ptr+=6; \
 			} \
 			else \
@@ -147,8 +147,8 @@ int identify_mess_listxml(struct dat *dat)
 	if (strstr(BUFFER1_PTR, TOKEN)) \
 	{ \
 		strcpy(TOKEN, strstr(BUFFER1_PTR, TOKEN)+strlen(TOKEN)+1); \
-		if (strchr(TOKEN, '"')) \
-			*strchr(TOKEN, '"')='\0'; \
+		if (strchr(TOKEN, '\"')) \
+			*strchr(TOKEN, '\"')='\0'; \
 		CONVERT_XML_STRING \
 		BUFFER2_PUT_TOKEN(TYPE) \
 	} \
@@ -375,7 +375,7 @@ int load_mess_listxml(struct dat *dat)
 			case '>': \
 				fprintf(dat->out, "&gt;"); \
 				break; \
-			case '"': \
+			case '\"': \
 				fprintf(dat->out, "&quot;"); \
 				break; \
 			default: \
