@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v2.3"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "7 March 2005"
 
 
 /* --- Standard includes --- */
