@@ -1,67 +1,67 @@
-cd "DatLib"
+cd DatLib
 @make
 @cd ..
 
-cd "DatUtil"
+cd DatUtil
 @make
 @cd ..
 
-cd "Limited Edition"
+@cd "Limited Edition"
 
-cd "AVI2CDVC"
+cd AVI2CDVC
 @make
 @cd ..
 
-cd "ImgChk"
+cd ImgChk
 @make
 @cd ..
 
-cd "ZIPFind"
-@make
-@cd ..
-
-@cd ..
-
-cd "MAMEDiff"
-@make
-@cd ..
-
-cd "ROMBuild"
-@make
-@cd ..
-
-cd "ROMBuild Tools"
-
-cd "ROMBChk"
-@make
-@cd ..
-
-cd "ROMDiff"
+cd ZIPFind
 @make
 @cd ..
 
 @cd ..
 
-cd "ROMInfo"
+cd MAMEDiff
 @make
 @cd ..
 
-cd "WWW and FTP"
-
-cd "FileChk"
+cd ROMBuild
 @make
 @cd ..
 
-cd "FileList"
+@cd "ROMBuild Tools"
+
+cd ROMBChk
 @make
 @cd ..
 
-cd "ZIPList"
+cd ROMDiff
 @make
 @cd ..
 
 @cd ..
 
-cd "ZIPIdent"
+cd ROMInfo
+@make
+@cd ..
+
+@cd "WWW and FTP"
+
+cd FileChk
+@make
+@cd ..
+
+cd FileList
+@make
+@cd ..
+
+cd ZIPList
+@make
+@cd ..
+
+@cd ..
+
+cd ZIPIdent
 @make
 @cd ..
