@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.12 - 13/02/2005
+                         DatUtil v2.13 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -142,6 +142,11 @@ called cpzn.txt that contains two lines (cpzn1 and cpzn2 in this case):
 
 The above example would select all cpzn1 and cpzn2 games from listxml.dat.
 
+In addition to external data files, multiple games/sourcefiles can be specified
+on the command line using commas:
+
+  e.g. datutil -g cpzn1,cpzn2 -c listxml.dat
+
 I should also mention that game names including spaces do not require quotes
 around them when using the @ method. If you are specifying them on the command
 line then yes, they do require quotes.
@@ -262,6 +267,7 @@ Saving:
   -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
   -o  output to file
   -a  append to file
+  -t  test mode - no data file is actually saved (just loaded and cleansed)
 
 Header text:
 
@@ -365,6 +371,22 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+xx/xx/xxxx  *** v2.13 ***
+
+            - Uses DatLib v2.1.
+            - Added a test option (-t) where nothing is actually saved.
+            - Log file is now automatically deleted if it is empty.
+            - Made selections more flexible (can now use commas as a delimiter).
+            - Added warnings for invalid game/sourcefile selections (-g and -G).
+            - Added warning messages for duplicated games (i.e. same game name).
+            - Can identify listinfo files even if they only contain resources.
+            - The 'remove clones' option will retain the original dat format.
+            - Fixed a crash caused by empty selection files (the '@' syntax).
+            - Saving a RomCenter datafile will now report an error if the '¬'
+              symbol is used in the game or ROM details (i.e. the dat is bad).
+            - Changed the error messages that are given when files are missing.
+            - Changed the command line help a little bit (explanation of -!).
 
 13/02/2005  *** v2.12 ***
 
