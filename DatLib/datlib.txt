@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.14 - 16/01/2005
+                          DatLib v1.15 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -173,6 +173,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v1.15 ***
+
+            - Complemented CRCs are reported (should use flags nodump instead).
+            - Removed the -i change for use with Calice drivers (unnecessary).
 
 16/01/2005  *** v1.14 ***
 

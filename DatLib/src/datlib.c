@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.14"
-#define DATLIB_DATE "16 January 2005"
+#define DATLIB_VERSION "v1.15"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -1320,8 +1320,7 @@ int add_missing_info(struct dat *dat)
 
 				if (rom_match)
 				{
-					if (rom_match->rom->crc==curr_rom->crc || rom_match->rom->crc==~curr_rom->crc ||
-						curr_rom->rom_flags & FLAG_ROM_NODUMP)
+					if (rom_match->rom->crc==curr_rom->crc || rom_match->rom->crc==~curr_rom->crc)
 					{
 						if (rom_match->rom->size!=curr_rom->size)
 						{
@@ -1334,12 +1333,7 @@ int add_missing_info(struct dat *dat)
 							curr_rom->rom_fixes|=FLAG_ROM_CRC;
 							curr_rom->crc=rom_match->rom->crc;
 
-							if (curr_rom->rom_flags & FLAG_ROM_NODUMP)
-							{
-								curr_rom->rom_fixes|=FLAG_ROM_NODUMP;
-								curr_rom->rom_flags&=~FLAG_ROM_NODUMP;
-							}
-							else if (!(curr_rom->rom_flags & FLAG_ROM_BADDUMP))
+							if (!(curr_rom->rom_flags & FLAG_ROM_BADDUMP))
 							{
 								curr_rom->rom_fixes|=FLAG_ROM_BADDUMP;
 								curr_rom->rom_flags|=FLAG_ROM_BADDUMP;
@@ -2173,8 +2167,7 @@ int report_warnings(struct dat *dat)
 						dat->rom_name_idx[i].rom->rom_fixes|=FLAG_ROM_BADDUMP;
 					}
 				}
-				else if (dat->rom_name_idx[i].rom->crc != dat->rom_name_idx[j].rom->crc &&
-					dat->rom_name_idx[i].rom->crc != ~dat->rom_name_idx[j].rom->crc)
+				else if (dat->rom_name_idx[i].rom->crc != dat->rom_name_idx[j].rom->crc)
 				{
 					dat->rom_name_idx[i].rom->rom_warnings|=FLAG_ROM_CONFLICT;
 					dat->rom_name_idx[j].rom->rom_warnings|=FLAG_ROM_CONFLICT;
@@ -2258,8 +2251,7 @@ int report_warnings(struct dat *dat)
 						dat->disk_name_idx[i].disk->disk_fixes|=FLAG_DISK_BADDUMP;
 					}
 				}
-				else if (dat->disk_name_idx[i].disk->crc != dat->disk_name_idx[j].disk->crc &&
-					dat->disk_name_idx[i].disk->crc != ~dat->disk_name_idx[j].disk->crc)
+				else if (dat->disk_name_idx[i].disk->crc != dat->disk_name_idx[j].disk->crc)
 				{
 					dat->disk_name_idx[i].disk->disk_warnings|=FLAG_DISK_CONFLICT;
 					dat->disk_name_idx[j].disk->disk_warnings|=FLAG_DISK_CONFLICT;
