@@ -1119,7 +1119,10 @@ int add_missing_info(struct dat *dat)
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		game_match=bsearch((void *)curr_game->name, dat->options->info->game_name_idx, dat->options->info->num_games, sizeof(struct game_idx), find_game_by_name);
+		if (dat->dat_flags & FLAG_DAT_FULL_MERGING && curr_game->cloneof)
+			game_match=bsearch((void *)curr_game->cloneof, dat->options->info->game_name_idx, dat->options->info->num_games, sizeof(struct game_idx), find_game_by_name);
+		else
+			game_match=bsearch((void *)curr_game->name, dat->options->info->game_name_idx, dat->options->info->num_games, sizeof(struct game_idx), find_game_by_name);
 
 		if (game_match)
 		{
