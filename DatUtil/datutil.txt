@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.14 - 28/02/2005
+                         DatUtil v2.15 - 07/03/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -374,6 +374,12 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+07/03/2005  *** v2.15 ***
+
+            - Uses DatLib v2.3.
+            - Fixed a problem with counting parents (happened with DatUtil -X).
+            - This also avoids a crash with datutil -X and 'forcemerging full'.
 
 28/02/2005  *** v2.14 ***
 
