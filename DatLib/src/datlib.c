@@ -584,13 +584,13 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_games>0)
 		{
-			STRUCT_CALLOC(dat->games, dat->num_games, sizeof(struct game));
-			STRUCT_CALLOC(dat->game_name_idx, dat->num_games, sizeof(struct game_idx));
-			STRUCT_CALLOC(dat->game_crc_idx, dat->num_games, sizeof(struct game_idx));
-			STRUCT_CALLOC(dat->game_score_idx, dat->num_games, sizeof(struct game_idx));
+			STRUCT_CALLOC(dat->games, dat->num_games, sizeof(struct game))
+			STRUCT_CALLOC(dat->game_name_idx, dat->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_crc_idx, dat->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_score_idx, dat->num_games, sizeof(struct game_idx))
 
-			STRUCT_CALLOC(dat->game_zips, dat->num_games, sizeof(struct game_zip));
-			STRUCT_CALLOC(dat->game_zip_name_idx, dat->num_games, sizeof(struct game_zip_idx));
+			STRUCT_CALLOC(dat->game_zips, dat->num_games, sizeof(struct game_zip))
+			STRUCT_CALLOC(dat->game_zip_name_idx, dat->num_games, sizeof(struct game_zip_idx))
 		}
 	}
 
@@ -603,7 +603,7 @@ int allocate_dat_memory(struct dat *dat)
 		}
 
 		if (dat->num_comments>0)
-			STRUCT_CALLOC(dat->comments, dat->num_comments, sizeof(struct comment));
+			STRUCT_CALLOC(dat->comments, dat->num_comments, sizeof(struct comment))
 	}
 
 	if (!errflg)
@@ -616,13 +616,13 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_roms>0)
 		{
-			STRUCT_CALLOC(dat->roms, dat->num_roms, sizeof(struct rom));
-			STRUCT_CALLOC(dat->game_rom_name_idx, dat->num_roms, sizeof(struct rom_idx));
-			STRUCT_CALLOC(dat->game_rom_crc_idx, dat->num_roms, sizeof(struct rom_idx));
-			STRUCT_CALLOC(dat->rom_name_idx, dat->num_roms, sizeof(struct rom_idx));
-			STRUCT_CALLOC(dat->rom_crc_idx, dat->num_roms, sizeof(struct rom_idx));
+			STRUCT_CALLOC(dat->roms, dat->num_roms, sizeof(struct rom))
+			STRUCT_CALLOC(dat->game_rom_name_idx, dat->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->game_rom_crc_idx, dat->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->rom_name_idx, dat->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->rom_crc_idx, dat->num_roms, sizeof(struct rom_idx))
 
-			STRUCT_CALLOC(dat->game_zip_roms, dat->num_roms, sizeof(struct game_zip_rom));
+			STRUCT_CALLOC(dat->game_zip_roms, dat->num_roms, sizeof(struct game_zip_rom))
 		}
 	}
 
@@ -636,11 +636,13 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_disks>0)
 		{
-			STRUCT_CALLOC(dat->disks, dat->num_disks, sizeof(struct disk));
-			STRUCT_CALLOC(dat->game_disk_name_idx, dat->num_disks, sizeof(struct disk_idx));
-			STRUCT_CALLOC(dat->game_disk_crc_idx, dat->num_disks, sizeof(struct disk_idx));
-			STRUCT_CALLOC(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx));
-			STRUCT_CALLOC(dat->disk_crc_idx, dat->num_disks, sizeof(struct disk_idx));
+			STRUCT_CALLOC(dat->disks, dat->num_disks, sizeof(struct disk))
+			STRUCT_CALLOC(dat->game_disk_name_idx, dat->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->game_disk_crc_idx, dat->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->disk_crc_idx, dat->num_disks, sizeof(struct disk_idx))
+
+			STRUCT_CALLOC(dat->game_zip_disks, dat->num_disks, sizeof(struct game_zip_disk))
 		}
 	}
 
@@ -654,9 +656,11 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_samples>0)
 		{
-			STRUCT_CALLOC(dat->samples, dat->num_samples, sizeof(struct sample));
-			STRUCT_CALLOC(dat->game_sample_name_idx, dat->num_samples, sizeof(struct sample_idx));
-			STRUCT_CALLOC(dat->sample_name_idx, dat->num_samples, sizeof(struct sample_idx));
+			STRUCT_CALLOC(dat->samples, dat->num_samples, sizeof(struct sample))
+			STRUCT_CALLOC(dat->game_sample_name_idx, dat->num_samples, sizeof(struct sample_idx))
+			STRUCT_CALLOC(dat->sample_name_idx, dat->num_samples, sizeof(struct sample_idx))
+
+			STRUCT_CALLOC(dat->game_zip_samples, dat->num_samples, sizeof(struct game_zip_sample))
 		}
 	}
 
@@ -2861,16 +2865,41 @@ int game_zip_rom_sort_function(const void *zip_rom1, const void *zip_rom2)
 	return(diff);
 }
 
+int game_zip_disk_sort_function(const void *zip_disk1, const void *zip_disk2)
+{
+	int diff=strcmp(((struct game_zip_disk *)zip_disk1)->game_zip->game->name, ((struct game_zip_disk *)zip_disk2)->game_zip->game->name);
+
+	if (diff==0)
+		diff=strcmp(((struct game_zip_disk *)zip_disk1)->disk->name, ((struct game_zip_disk *)zip_disk2)->disk->name);
+
+	return(diff);
+}
+
+int game_zip_sample_sort_function(const void *zip_sample1, const void *zip_sample2)
+{
+	int diff=strcmp(((struct game_zip_sample *)zip_sample1)->game_zip->game->name, ((struct game_zip_sample *)zip_sample2)->game_zip->game->name);
+
+	if (diff==0)
+		diff=strcmp(((struct game_zip_sample *)zip_sample1)->sample->name, ((struct game_zip_sample *)zip_sample2)->sample->name);
+
+	return(diff);
+}
+
 int build_zip_structures(struct dat *dat)
 {
 	struct game *curr_game;
 	struct rom *curr_rom;
+	struct disk *curr_disk;
+	struct sample *curr_sample;
 
 	struct game_zip *curr_game_zip, *orig_game_zip;
 	struct game_zip_idx *curr_game_zip_name_idx;
 	struct game_zip_rom *curr_game_zip_rom, *orig_game_zip_rom;
+	struct game_zip_disk *curr_game_zip_disk, *orig_game_zip_disk;
+	struct game_zip_sample *curr_game_zip_sample, *orig_game_zip_sample;
 
-	uint32_t i, j, num_game_zips, num_game_zip_roms;
+	uint32_t num_game_zips, num_game_zip_roms, num_game_zip_disks, num_game_zip_samples;
+	uint32_t i, j;
 
 	int errflg=0;
 
@@ -2882,7 +2911,7 @@ int build_zip_structures(struct dat *dat)
 		printf("Creating zip structures...\n");
 	}
 
-	/* --- Firstly, override user merging if 'forcemerging' is used in the data file --- */
+	/* --- Override user merging if 'forcemerging' is used in the data file --- */
 
 	if (dat->dat_flags & (FLAG_DAT_FULL_MERGING|FLAG_DAT_SPLIT_MERGING|FLAG_DAT_NO_MERGING))
 	{
@@ -2906,21 +2935,9 @@ int build_zip_structures(struct dat *dat)
 	
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (dat->options->options & OPTION_DAT_FULL_MERGING)
-		{
-			if (curr_game->cloneof==0)
-			{
-				curr_game_zip_name_idx++->game_zip=curr_game_zip;
-				curr_game_zip++->game=curr_game;
-				dat->num_game_zips++;
-			}
-		}
-		else
-		{
-			curr_game_zip_name_idx++->game_zip=curr_game_zip;
-			curr_game_zip++->game=curr_game;
-			dat->num_game_zips++;
-		}
+		curr_game_zip_name_idx++->game_zip=curr_game_zip;
+		curr_game_zip++->game=curr_game;
+		dat->num_game_zips++;
 	}
 
 	qsort(dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), game_zip_name_idx_sort_function);
@@ -2928,22 +2945,20 @@ int build_zip_structures(struct dat *dat)
 	/* --- Once the game_zip array has been built, do the game_zip_roms --- */
 
 	curr_game_zip_rom=dat->game_zip_roms;
+	curr_game_zip_disk=dat->game_zip_disks;
+	curr_game_zip_sample=dat->game_zip_samples;
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (dat->options->options & OPTION_DAT_FULL_MERGING)
+		if ((dat->options->options & OPTION_DAT_FULL_MERGING) &&
+			(curr_game->romof && !(curr_game->game_romof->game_flags & FLAG_RESOURCE_NAME)))
 		{
-			if (curr_game->cloneof)
-				curr_game_zip_name_idx=bsearch((void *)curr_game->cloneof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
-			else
-				curr_game_zip_name_idx=bsearch((void *)curr_game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
+			curr_game_zip_name_idx=bsearch((void *)curr_game->romof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
 		}
 		else
 		{
 			curr_game_zip_name_idx=bsearch((void *)curr_game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
 		}
-
-		curr_game_zip=curr_game_zip_name_idx->game_zip;
 
 		for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 		{
@@ -2951,10 +2966,10 @@ int build_zip_structures(struct dat *dat)
 			{
 				if (!(curr_game->game_flags & FLAG_RESOURCE_NAME))
 				{
-					curr_game_zip_rom->game_zip=curr_game_zip;
+					curr_game_zip_rom->game_zip=curr_game_zip_name_idx->game_zip;
 					curr_game_zip_rom->rom=curr_rom;
 
-					curr_game_zip->num_game_zip_roms++;
+					curr_game_zip_name_idx->game_zip->num_game_zip_roms++;
 					dat->num_game_zip_roms++;
 					curr_game_zip_rom++;
 				}
@@ -2963,14 +2978,87 @@ int build_zip_structures(struct dat *dat)
 			{
 				if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_rom->merge==0) ||
 					(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
-					(curr_game->cloneof==0 || curr_rom->merge==0)))
+					(curr_game->romof==0 || curr_rom->merge==0)))
 				{
-					curr_game_zip_rom->game_zip=curr_game_zip;
+					curr_game_zip_rom->game_zip=curr_game_zip_name_idx->game_zip;
 					curr_game_zip_rom->rom=curr_rom;
 
-					curr_game_zip->num_game_zip_roms++;
+					curr_game_zip_name_idx->game_zip->num_game_zip_roms++;
 					dat->num_game_zip_roms++;
 					curr_game_zip_rom++;
+				}
+			}
+		}
+
+		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
+		{
+			if (dat->options->options & OPTION_DAT_NO_MERGING)
+			{
+				if (!(curr_game->game_flags & FLAG_RESOURCE_NAME))
+				{
+					curr_game_zip_disk->game_zip=curr_game_zip_name_idx->game_zip;
+					curr_game_zip_disk->disk=curr_disk;
+
+					curr_game_zip_name_idx->game_zip->num_game_zip_disks++;
+					dat->num_game_zip_disks++;
+					curr_game_zip_disk++;
+				}
+			}
+			else
+			{
+				if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_disk->merge==0) ||
+					(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
+					(curr_game->romof==0 || curr_disk->merge==0)))
+				{
+					curr_game_zip_disk->game_zip=curr_game_zip_name_idx->game_zip;
+					curr_game_zip_disk->disk=curr_disk;
+
+					curr_game_zip_name_idx->game_zip->num_game_zip_disks++;
+					dat->num_game_zip_disks++;
+					curr_game_zip_disk++;
+				}
+			}
+		}
+	}
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		if ((dat->options->options & OPTION_DAT_FULL_MERGING) &&
+			(curr_game->sampleof && !(curr_game->game_sampleof->game_flags & FLAG_RESOURCE_NAME)))
+		{
+			curr_game_zip_name_idx=bsearch((void *)curr_game->sampleof, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
+		}
+		else
+		{
+			curr_game_zip_name_idx=bsearch((void *)curr_game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
+		}
+
+		for (j=0, curr_sample=curr_game->samples; j<curr_game->num_samples; j++, curr_sample++)
+		{
+			if (dat->options->options & OPTION_DAT_NO_MERGING)
+			{
+				if (!(curr_game->game_flags & FLAG_RESOURCE_NAME))
+				{
+					curr_game_zip_sample->game_zip=curr_game_zip_name_idx->game_zip;
+					curr_game_zip_sample->sample=curr_sample;
+
+					curr_game_zip_name_idx->game_zip->num_game_zip_samples++;
+					dat->num_game_zip_samples++;
+					curr_game_zip_sample++;
+				}
+			}
+			else
+			{
+				if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_sample->merge==0) ||
+					(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
+					(curr_game->sampleof==0 || curr_sample->merge==0)))
+				{
+					curr_game_zip_sample->game_zip=curr_game_zip_name_idx->game_zip;
+					curr_game_zip_sample->sample=curr_sample;
+
+					curr_game_zip_name_idx->game_zip->num_game_zip_samples++;
+					dat->num_game_zip_samples++;
+					curr_game_zip_sample++;
 				}
 			}
 		}
@@ -2979,6 +3067,8 @@ int build_zip_structures(struct dat *dat)
 	/* --- Sort the game_zip_roms --- */
 
 	qsort(dat->game_zip_roms, dat->num_game_zip_roms, sizeof(struct game_zip_rom), game_zip_rom_sort_function);
+	qsort(dat->game_zip_disks, dat->num_game_zip_disks, sizeof(struct game_zip_disk), game_zip_disk_sort_function);
+	qsort(dat->game_zip_samples, dat->num_game_zip_samples, sizeof(struct game_zip_disk), game_zip_disk_sort_function);
 
 	/* --- Remove duplicate game_zip_roms --- */
 
@@ -3002,16 +3092,83 @@ int build_zip_structures(struct dat *dat)
 		}
 	}
 
-	/* --- Finally, link the game_zip_roms into the game_zips --- */
+	/* --- Link the game_zip_roms into the game_zips --- */
 
 	for (i=0, curr_game_zip_rom=dat->game_zip_roms; i<dat->num_game_zip_roms; i++, curr_game_zip_rom++)
 	{
 		if (i==0 || strcmp(curr_game_zip_rom->game_zip->game->name, (curr_game_zip_rom-1)->game_zip->game->name))
 		{
 			curr_game_zip_name_idx=bsearch((void *)curr_game_zip_rom->game_zip->game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
-			curr_game_zip=curr_game_zip_name_idx->game_zip;
 
-			curr_game_zip->game_zip_roms=curr_game_zip_rom;
+			curr_game_zip_name_idx->game_zip->game_zip_roms=curr_game_zip_rom;
+		}
+	}
+
+	/* --- Remove duplicate game_zip_disks --- */
+
+	curr_game_zip_disk=dat->game_zip_disks;
+	num_game_zip_disks=dat->num_game_zip_disks;
+
+	for (i=0, orig_game_zip_disk=dat->game_zip_disks; i<num_game_zip_disks; i++, orig_game_zip_disk++)
+	{
+		if (i>0 && !strcmp((orig_game_zip_disk-1)->game_zip->game->name, curr_game_zip_disk->game_zip->game->name) &&
+			 !strcmp((orig_game_zip_disk-1)->disk->name, curr_game_zip_disk->disk->name))
+		{
+			curr_game_zip_disk->game_zip->num_game_zip_disks-=1;
+			dat->num_game_zip_disks-=1;
+		}
+		else
+		{
+			if (curr_game_zip_disk!=orig_game_zip_disk)
+				memcpy(curr_game_zip_disk, orig_game_zip_disk, sizeof(struct game_zip_disk));
+
+			curr_game_zip_disk++;
+		}
+	}
+
+	/* --- Link the game_zip_disks into the game_zips --- */
+
+	for (i=0, curr_game_zip_disk=dat->game_zip_disks; i<dat->num_game_zip_disks; i++, curr_game_zip_disk++)
+	{
+		if (i==0 || strcmp(curr_game_zip_disk->game_zip->game->name, (curr_game_zip_disk-1)->game_zip->game->name))
+		{
+			curr_game_zip_name_idx=bsearch((void *)curr_game_zip_disk->game_zip->game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
+
+			curr_game_zip_name_idx->game_zip->game_zip_disks=curr_game_zip_disk;
+		}
+	}
+
+	/* --- Remove duplicate game_zip_samples --- */
+
+	curr_game_zip_sample=dat->game_zip_samples;
+	num_game_zip_samples=dat->num_game_zip_samples;
+
+	for (i=0, orig_game_zip_sample=dat->game_zip_samples; i<num_game_zip_samples; i++, orig_game_zip_sample++)
+	{
+		if (i>0 && !strcmp((orig_game_zip_sample-1)->game_zip->game->name, curr_game_zip_sample->game_zip->game->name) &&
+			 !strcmp((orig_game_zip_sample-1)->sample->name, curr_game_zip_sample->sample->name))
+		{
+			curr_game_zip_sample->game_zip->num_game_zip_samples-=1;
+			dat->num_game_zip_samples-=1;
+		}
+		else
+		{
+			if (curr_game_zip_sample!=orig_game_zip_sample)
+				memcpy(curr_game_zip_sample, orig_game_zip_sample, sizeof(struct game_zip_sample));
+
+			curr_game_zip_sample++;
+		}
+	}
+
+	/* --- Link the game_zip_samples into the game_zips --- */
+
+	for (i=0, curr_game_zip_sample=dat->game_zip_samples; i<dat->num_game_zip_samples; i++, curr_game_zip_sample++)
+	{
+		if (i==0 || strcmp(curr_game_zip_sample->game_zip->game->name, (curr_game_zip_sample-1)->game_zip->game->name))
+		{
+			curr_game_zip_name_idx=bsearch((void *)curr_game_zip_sample->game_zip->game->name, dat->game_zip_name_idx, dat->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
+
+			curr_game_zip_name_idx->game_zip->game_zip_samples=curr_game_zip_sample;
 		}
 	}
 
@@ -3023,7 +3180,7 @@ int build_zip_structures(struct dat *dat)
 
 	for (i=0, orig_game_zip=dat->game_zips; i<num_game_zips; i++, orig_game_zip++)
 	{
-		if (orig_game_zip->num_game_zip_roms==0)
+		if (orig_game_zip->num_game_zip_roms==0 && orig_game_zip->num_game_zip_disks==0 && orig_game_zip->num_game_zip_samples==0)
 		{
 			dat->num_game_zips-=1;
 		}
@@ -3051,6 +3208,12 @@ int build_zip_structures(struct dat *dat)
 
 		for (j=0, curr_game_zip_rom=curr_game_zip->game_zip_roms; j<curr_game_zip->num_game_zip_roms; j++, curr_game_zip_rom++)
 			printf("   r: %s (%08lx)\n", curr_game_zip_rom->rom->name, (unsigned long) curr_game_zip_rom->rom->crc);
+
+		for (j=0, curr_game_zip_disk=curr_game_zip->game_zip_disks; j<curr_game_zip->num_game_zip_disks; j++, curr_game_zip_disk++)
+			printf("   d: %s\n", curr_game_zip_disk->disk->name);
+
+		for (j=0, curr_game_zip_sample=curr_game_zip->game_zip_samples; j<curr_game_zip->num_game_zip_samples; j++, curr_game_zip_sample++)
+			printf("   s: %s\n", curr_game_zip_sample->sample->name);
 	}*/
 
 	return(errflg);
@@ -3085,7 +3248,7 @@ struct dat *init_dat(struct options *options)
 		printf("Allocating memory for dat structure (%lu bytes)...\n", (unsigned long)sizeof(struct dat));
 	}
 
-	STRUCT_CALLOC(dat, 1, sizeof(struct dat));
+	STRUCT_CALLOC(dat, 1, sizeof(struct dat))
 
 	/* --- Remember the user options --- */
 
@@ -3761,6 +3924,7 @@ struct dat *free_dat(struct dat *dat)
 			printf("%-16s: ", "Datlib.free_dat");
 			printf("Freeing memory of samples and sample indices...\n");
 		}
+		FREE(dat->game_zip_samples)
 		FREE(dat->sample_name_idx)
 		FREE(dat->game_sample_name_idx)
 		FREE(dat->samples)
@@ -3770,6 +3934,7 @@ struct dat *free_dat(struct dat *dat)
 			printf("%-16s: ", "Datlib.free_dat");
 			printf("Freeing memory of disks and disk indices...\n");
 		}
+		FREE(dat->game_zip_disks)
 		FREE(dat->disk_crc_idx)
 		FREE(dat->disk_name_idx)
 		FREE(dat->game_disk_crc_idx)

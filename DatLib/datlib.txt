@@ -173,12 +173,13 @@ History
 
 xx/xx/xxxx  *** v1.7 ***
 
-            - Avoids duplicate ROMs in MAMEDiff dats using -m and -d1/-d2/-d3.
+            - Now avoids duplicate ROMs getting into the game_zip structures.
+            - Added disks and samples to the game_zip structures.
             - Directory scanner now supports CHDs (when in a game directory).
             - Directory scanner can spoof samples (OPTION_OBJECT_TYPE_SAMPLE).
-            - Improved 'fix merging' where clone ROMs are not in the parent.
-            - Improved 'fix merging' to work for disks (SHA1/MD5 can be copied).
-            - Added check for SHA1/MD5 conflicts of disks.
+            - Improved 'fix merging' (where clone ROMs are not in the parent).
+            - Enhanced 'fix merging' to work for disks (SHA1/MD5 are copied).
+            - Added check for SHA1/MD5 conflicts of disks across clones.
 
 18/07/2004  *** v1.6 ***
 

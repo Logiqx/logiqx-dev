@@ -207,6 +207,32 @@ struct game_zip_rom
 	uint32_t flags;
 };
 
+struct game_zip_disk
+{
+	/* --- Fields that are calculated by DatLib */
+
+	struct game_zip *game_zip;
+
+	struct disk *disk;
+
+	/* --- Fields that are specific to external tools */
+
+	uint32_t flags;
+};
+
+struct game_zip_sample
+{
+	/* --- Fields that are calculated by DatLib */
+
+	struct game_zip *game_zip;
+
+	struct sample *sample;
+
+	/* --- Fields that are specific to external tools */
+
+	uint32_t flags;
+};
+
 struct game_zip
 {
 	/* --- Fields that are calculated by DatLib */
@@ -214,8 +240,12 @@ struct game_zip
 	struct game *game;
 
 	struct game_zip_rom *game_zip_roms;
+	struct game_zip_disk *game_zip_disks;
+	struct game_zip_sample *game_zip_samples;
 
 	uint32_t num_game_zip_roms;
+	uint32_t num_game_zip_disks;
+	uint32_t num_game_zip_samples;
 
 	/* --- Fields that are specific to external tools */
 
@@ -351,8 +381,9 @@ struct dat
 
 	struct game_zip *game_zips;
 	struct game_zip_idx *game_zip_name_idx;
-
 	struct game_zip_rom *game_zip_roms;
+	struct game_zip_disk *game_zip_disks;
+	struct game_zip_sample *game_zip_samples;
 
 	uint32_t num_comments;
 	uint32_t num_games, num_resources, num_machines;
@@ -362,6 +393,8 @@ struct dat
 
 	uint32_t num_game_zips;
 	uint32_t num_game_zip_roms;
+	uint32_t num_game_zip_disks;
+	uint32_t num_game_zip_samples;
 
 	uint32_t num_parents, num_clones, num_others;
 
