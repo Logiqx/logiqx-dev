@@ -922,8 +922,8 @@ int report_required_rebuilds(FILE *out, struct dat *dat, uint16_t child_game_fla
 
 			if (!found)
 			{
-				if (game_changes[i].game1->parent)
-					rebuild_list[num_rebuilds++].game=game_changes[i].game1->parent;
+				if (game_changes[i].game1->game_cloneof)
+					rebuild_list[num_rebuilds++].game=game_changes[i].game1->game_cloneof;
 				else
 					rebuild_list[num_rebuilds++].game=game_changes[i].game1;
 			}
