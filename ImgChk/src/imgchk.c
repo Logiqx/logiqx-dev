@@ -1,11 +1,11 @@
 /* --------------------------------------------------------------------------
- * ImgChk - Written by Logiqx (http://www.logiqx.com)
+ * ImgChk - Written by Logiqx (http://www.logiqx.com/)
  *
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.3"
-#define IMGCHK_DATE "4 August 2004"
+#define IMGCHK_VERSION "v2.4"
+#define IMGCHK_DATE "17 August 2004"
 
 
 /* --- The standard includes --- */
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	printf("===============================================================================\n");
 	printf("ImgChk %s (%s) - using ", IMGCHK_VERSION, IMGCHK_DATE);
 	display_datlib_version();
-	printf("Written by Logiqx (http://www.logiqx.com)\n");
+	printf("Written by Logiqx (http://www.logiqx.com/)\n");
 	printf("===============================================================================\n");
 
 	/* --- Allocate memory for user options --- */
@@ -166,50 +166,18 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
  * Read file names from ZIP file
  * -------------------------------------------------------------------------- */
 
-int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+int check_zip(struct dat *dat, char *zip_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
 {
 	ZIP *zip;
 	struct zipent *zipent;
-	struct game_idx *game_idx;
-
-	char st[MAX_STRING_LENGTH+1];
 
 	int errflg=0;
 
-	if ((zip=openzip(fn)))
+	if ((zip=openzip(zip_fn)))
 	{
 		while ((zipent=readzip(zip)))
 		{
-			strcpy(st, zipent->name);
-
-			if (strstr(st, img_ext))
-				*strstr(st, img_ext)='\0';
-
-			game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-
-			if (game_idx==0 && allow_alternates==1)
-			{
-				if (strrchr(st, '_'))
-					*strrchr(st, '_')='\0';
-
-				game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-			}
-
-			if (game_idx==0)
-			{
-				if (report_unknown)
-					printf("   Unknown: %s\n", zipent->name);
-			}
-			else
-			{
-				game_idx->game->match++;
-
-				if (allow_clones==0 && game_idx->game->cloneof)
-					printf("   Clone: %s\n", zipent->name);
-
-				if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
-					printf("   Resource: %s\n", zipent->name);
-			}
+			check_img(dat, zipent->name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
 		}
 	}
 	else
@@ -227,64 +195,88 @@ int check_zip(struct dat *dat, char *fn, char *img_ext, int report_unknown, int 
  * Read file names from directory
  * -------------------------------------------------------------------------- */
 
-int check_dir(struct dat *dat, char *fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+int check_dir(struct dat *dat, char *dir_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
 {
 	DIR *dirp=0;                                    
 	struct dirent *direntp;                       
 
-	struct game_idx *game_idx;
-
-	char st[MAX_STRING_LENGTH+1];
-
 	int errflg=0;
 
-	if ((dirp=opendir(fn)))
+	if ((dirp=opendir(dir_fn)))
 	{
 		while ((direntp=readdir(dirp)))
 		{
 			if (strcmp(direntp->d_name, ".") && strcmp(direntp->d_name, ".."))
 			{
-				strcpy(st, direntp->d_name);
-
-				if (strstr(st, img_ext))
-					*strstr(st, img_ext)='\0';
-
-				game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-
-				if (game_idx==0 && allow_alternates==1)
-				{
-					if (strrchr(st, '_'))
-						*strrchr(st, '_')='\0';
-
-					game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
-				}
-
-				if (game_idx==0)
-				{
-					if (report_unknown)
-						printf("   Unknown: %s\n", direntp->d_name);
-				}
-				else
-				{
-					game_idx->game->match++;
-
-					if (allow_clones==0 && game_idx->game->cloneof)
-						printf("   Clone: %s\n", direntp->d_name);
-
-					if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
-						printf("   Resource: %s\n", direntp->d_name);
-				}
+				check_img(dat, direntp->d_name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
 			}
 		}
 	}
 	else
 	{
-		fprintf(stderr, "Could not open directory '%s'.\n", fn);
+		fprintf(stderr, "Could not open directory '%s'.\n", dir_fn);
 		errflg++;
 	}
 
 	if (dirp)
 		closedir(dirp);
+
+	return(errflg);
+}
+
+/* --------------------------------------------------------------------------
+ * Check an image
+ * -------------------------------------------------------------------------- */
+
+int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+{
+	struct game_idx *game_idx=0;
+	char st[MAX_STRING_LENGTH+1];
+
+	int errflg=0;
+
+	if (strstr(img_fn, img_ext))
+	{
+		strcpy(st, img_fn);
+		*strstr(st, img_ext)='\0';
+
+		game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+
+		if (game_idx!=0)
+		{
+			game_idx->game->match++;
+		}
+
+		if (game_idx==0 && allow_alternates==1)
+		{
+			if (strrchr(st, '-'))
+				*strrchr(st, '-')='\0';
+
+			game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+		}
+
+		if (game_idx==0 && allow_alternates==1)
+		{
+			if (strrchr(st, '_'))
+				*strrchr(st, '_')='\0';
+
+			game_idx=bsearch(&st, dat->game_name_idx, dat->num_games, sizeof(struct game_idx), find_game_by_name);
+		}
+	}
+
+	if (game_idx==0)
+	{
+		if (report_unknown && !strstr(img_fn, ".txt"))
+			printf("   Unknown: %s\n", img_fn);
+	}
+	else
+	{
+		if (allow_clones==0 && game_idx->game->cloneof)
+			printf("   Clone: %s\n", img_fn);
+
+		if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
+			printf("   Resource: %s\n", img_fn);
+	}
 
 	return(errflg);
 }

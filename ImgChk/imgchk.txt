@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ImgChk v2.3 - 04/08/2004
+                          ImgChk v2.4 - 17/08/2004
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
 
@@ -29,9 +29,10 @@ Usage
 Limitations
 -----------
 
-1) It does not generate a log file (you must do this yourself).
+1) It does not generate a log file (just use it as described above).
 
 2) It is not possible to specify 'ignore masks' for the unknown file check.
+   By default ImgChk will ignore any files with an extension of '.txt'.
 
 
 Source
@@ -51,15 +52,15 @@ Bug reports
 If you find any bugs please let me know about them.
 
 
-Future
-------
-
-Who knows if there is one! I only created this as a favour to John IV and for
-people like Roman, xRay1 and Eldio who will also find it useful.
-
-
 History
 -------
+
+17/08/2004  *** v2.4 ***
+
+            - Uses DatLib v1.9.
+            - Improved 'AllowAlternates' (now supports '-' and '_' characters).
+            - Automatically ignores '.txt' files within directories and zips.
+            - Added all of the CrashTest snapshots to the INI file.
 
 04/08/2004  *** v2.3 ***
 
