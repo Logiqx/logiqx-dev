@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.6 - 21/07/2004
+                          MAMEDiff v2.7 - 22/07/2004
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -55,9 +55,6 @@ mame -listinfo >listinfo.txt
 Alternatively, you can use newer listxml option which is now a part of MAME:
 
 mame -listxml >listinfo.xml
-
-Note: In order to use XML files with MAMEDiff, you will need xml2info in your
-      path.
 
 
 3.1. To generate a summary of changes
@@ -297,9 +294,15 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 11. History
 -----------
 
+22/07/2004  *** v2.7 ***
+
+            - Uses DatLib v1.8.
+            - Removed the need for xml2info by adding my own MAME XML parser.
+            - A nice side effect is that names like "Alien³: The Gun" work now!
+
 21/07/2004  *** v2.6 ***
 
-            - Uses DatLib v1.7
+            - Uses DatLib v1.7.
             - Added support for MESS XML.
             - Avoids duplicate ROMs in MAMEDiff -d1/-d2/-d3 data files.
             - Added support for disks and samples in the -d1/-d2/-d3 options.
@@ -310,13 +313,13 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 18/07/2004  *** v2.5 ***
 
             - Added -b option (non-separated BIOS) for use with the -dX modes.
-	    - Added sample and disk support to the standard comparison modes.
+            - Added sample and disk support to the standard comparison modes.
               i.e. Running MAMEDiff without options or in verbose mode (-v).
 
 11/07/2004  *** v2.4 ***
 
             - Updated the source to use the new functions of DatLib v1.4.
-	    - There is no functional change within MAMEDiff though.
+            - There is no functional change within MAMEDiff though.
 
 06/07/2004  *** v2.3 ***
 
@@ -329,7 +332,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
               fault and crash MAMEDiff.
             - Made a couple of changes so that MAMEDiff can be used as a batch
               tool for ROM auditing (i.e. compare a directory against a dat):
-	    - When using -d1/-d2/-d3, games without ROMs are now ignored.
+            - When using -d1/-d2/-d3, games without ROMs are now ignored.
             - When using -d1/-d2/-d3 and -z, no dumps that replace a real CRC
               are not considered a change now (the previous ROM is still fine).
             - To use for simple ROM verification, use the following syntax:
@@ -352,7 +355,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
             - Better internal 'fix merging' results in more accurate output.
             - The prefix 'Neo-Geo' is no longer added to Neo-Geo games.
             - Supports full-width game descriptions now (i.e. >100 characters).
-	    - Replaced -M, -S, -N, -t, -T options with -d1, -d2, -d3, -r, -z.
+            - Replaced -M, -S, -N, -t, -T options with -d1, -d2, -d3, -r, -z.
               Read the documentation for full details of the new options.
             - Update and supplement dats will be different, hopefully better!
 

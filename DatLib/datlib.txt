@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.7 - 21/07/2004
+                          DatLib v1.8 - 22/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ Load only:
 
   - RomCenter 1.90
   - RomCenter 2.00
-  - MAME ListXML (xml2info.exe must be in your path for this feature to work)
+  - MAME and MESS ListXML
   - Nebula Drivers
   - ClrMame Log
   - Folder Scan (subdirectories and zips)
@@ -170,6 +170,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+22/07/2004  *** v1.8 ***
+
+            - Removed the need for xml2info by adding my own MAME XML parser.
+            - A nice side effect is that names like "Alien³: The Gun" work now!
 
 21/07/2004  *** v1.7 ***
 

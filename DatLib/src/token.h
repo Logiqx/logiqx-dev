@@ -87,6 +87,66 @@ enum {
 
 #define TOKEN (dat->token)
 
+#define CONVERT_XML_CHARACTERS \
+{ \
+	char *ptr; \
+\
+	if ((ptr=strstr(TOKEN, "&amp;"))) \
+	{ \
+		*ptr='&'; \
+		strcpy(ptr+1, ptr+5); \
+	} \
+	if ((ptr=strstr(TOKEN, "&lt;"))) \
+	{ \
+		*ptr='<'; \
+		strcpy(ptr+1, ptr+4); \
+	} \
+	if ((ptr=strstr(TOKEN, "&gt;"))) \
+	{ \
+		*ptr='>'; \
+		strcpy(ptr+1, ptr+4); \
+	} \
+	if ((ptr=strstr(TOKEN, "&#"))) \
+	{ \
+		if (strchr(ptr, ';')) \
+		{ \
+			*ptr=(char)atoi(strstr(TOKEN, "&#")+2); \
+			strcpy(ptr+1, strchr(ptr, ';')+1); \
+		} \
+	} \
+}
+
+#define GET_XML_ATTRIBUTE(ATTRIBUTE) \
+{ \
+	sprintf(TOKEN, " %s=", ATTRIBUTE); \
+\
+	if (strstr(BUFFER1_PTR, TOKEN)) \
+	{ \
+		strcpy(TOKEN, strstr(BUFFER1_PTR, TOKEN)+strlen(TOKEN)+1); \
+		if (strchr(TOKEN, '"')) \
+			*strchr(TOKEN, '"')='\0'; \
+		CONVERT_XML_CHARACTERS \
+	} \
+	else \
+	{ \
+		*TOKEN='\0'; \
+	} \
+}
+
+#define GET_XML_ELEMENT \
+{ \
+	if (strchr(BUFFER1_PTR, '>')) \
+	{ \
+		strcpy(TOKEN, strchr(BUFFER1_PTR, '>')+1); \
+		if (strchr(TOKEN, '<')) \
+			*strchr(TOKEN, '<')='\0'; \
+		CONVERT_XML_CHARACTERS \
+	} \
+	else \
+	{ \
+		*TOKEN='\0'; \
+	} \
+}
 
 /* --- Buffer handling routines (buffer 1) --- */
 

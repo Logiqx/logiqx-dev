@@ -80,52 +80,147 @@ int identify_mess_listxml(struct dat *dat)
 
 int load_mame_listxml(struct dat *dat)
 {
-	FILE *in;
-	char cmd[MAX_STRING_LENGTH+1];
-
-	int errflg=0;
-
-	/* --- Use xml2info to do the hard work --- */
-
-	if (datlib_debug)
-		printf("%-16s: ", "Datlib.init_dat");
-	else if (!(dat->options->options & OPTION_LOAD_QUIETLY))
-		printf("  ");
-
-	if (!(dat->options->options & OPTION_LOAD_QUIETLY))
-		printf("Using 'xml2info' to convert 'MAME ListXML' to 'MAME ListInfo'...\n");
+	int game_type=0, errflg=0;
 
 	BUFFER1_REWIND
 
-	sprintf(cmd, "xml2info <%s", dat->name);
-	POPEN(in, cmd, "r")
-
-	while (!errflg && fgets(TOKEN, dat->token_size, in))
+	while (!errflg && BUFFER1_REMAINING)
 	{
-		REMOVE_CR_LF(TOKEN)
+		if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
+		{
+			if (strstr(BUFFER1_PTR, "<game "))
+			{
+				if (strstr(BUFFER1_PTR, "runnable=\"no\""))
+					game_type=FLAG_RESOURCE_NAME;
+				else
+					game_type=FLAG_GAME_NAME;
+			}
+			else
+			{
+				game_type=FLAG_MACHINE_NAME;
+			}
 
-		BUFFER1_PUT_TOKEN(TOKEN_UNDEFINED)
-	}
+			if (game_type==FLAG_GAME_NAME)
+			{
+				GET_XML_ATTRIBUTE("name")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_NAME)
 
-	PCLOSE(in)
+				GET_XML_ATTRIBUTE("cloneof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_CLONEOF)
 
-	/* --- Now that buffer 1 contains MAME ListInfo, use the DatLib parser --- */
+				GET_XML_ATTRIBUTE("romof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
 
-	if (!errflg)
-	{
-		/* --- Firstly, clear the end of the buffer that still contains some XML --- */
+				GET_XML_ATTRIBUTE("sampleof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_SAMPLEOF)
+			}
+			if (game_type==FLAG_MACHINE_NAME)
+			{
+				GET_XML_ATTRIBUTE("name")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_MACHINE_NAME)
 
-		memset(BUFFER1_PTR, 0, dat->buffer1_end-BUFFER1_PTR);
+				GET_XML_ATTRIBUTE("cloneof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_MACHINE_CLONEOF)
 
-		if (datlib_debug)
-			printf("%-16s: ", "Datlib.init_dat");
-		else if (!(dat->options->options & OPTION_LOAD_QUIETLY))
-			printf("  ");
+				GET_XML_ATTRIBUTE("romof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_MACHINE_ROMOF)
 
-		if (!(dat->options->options & OPTION_LOAD_QUIETLY))
-			printf("Calling the 'MAME ListInfo' pre-parser/tokenizer...\n");
+				GET_XML_ATTRIBUTE("sampleof")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_MACHINE_SAMPLEOF)
+			}
+			else if (game_type==FLAG_RESOURCE_NAME)
+			{
+				GET_XML_ATTRIBUTE("name")
+				if (*TOKEN)
+					BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_NAME)
+			}
+		}
+		else if (strstr(BUFFER1_PTR, "<rom "))
+		{
+			GET_XML_ATTRIBUTE("name")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
 
-		errflg=load_mame_listinfo(dat);
+			GET_XML_ATTRIBUTE("merge")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_MERGE)
+
+			GET_XML_ATTRIBUTE("size")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+
+			GET_XML_ATTRIBUTE("crc")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+			GET_XML_ATTRIBUTE("sha1")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SHA1)
+
+			GET_XML_ATTRIBUTE("md5")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_MD5)
+
+			GET_XML_ATTRIBUTE("region")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_REGION)
+
+			GET_XML_ATTRIBUTE("status")
+			if (*TOKEN)
+			{
+				if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+					BUFFER2_PUT_TOKEN(TOKEN_ROM_FLAGS)
+			}
+		}
+		else if (strstr(BUFFER1_PTR, "<disk "))
+		{
+			GET_XML_ATTRIBUTE("name")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_DISK_NAME)
+
+			GET_XML_ATTRIBUTE("sha1")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_DISK_SHA1)
+
+			GET_XML_ATTRIBUTE("md5")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_DISK_MD5)
+
+			GET_XML_ATTRIBUTE("region")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_DISK_REGION)
+		}
+		else if (strstr(BUFFER1_PTR, "<sample "))
+		{
+			GET_XML_ATTRIBUTE("name")
+			if (*TOKEN)
+				BUFFER2_PUT_TOKEN(TOKEN_SAMPLE_NAME)
+		}
+		else if (strstr(BUFFER1_PTR, "<description>"))
+		{
+			GET_XML_ELEMENT
+			BUFFER2_PUT_TOKEN(TOKEN_GAME_DESCRIPTION)
+		}
+		else if (strstr(BUFFER1_PTR, "<year>"))
+		{
+			GET_XML_ELEMENT
+			BUFFER2_PUT_TOKEN(TOKEN_GAME_YEAR)
+		}
+		else if (strstr(BUFFER1_PTR, "<manufacturer>"))
+		{
+			GET_XML_ELEMENT
+			BUFFER2_PUT_TOKEN(TOKEN_GAME_MANUFACTURER)
+		}
+
+		BUFFER1_ADVANCE_LINE
 	}
 
 	return(errflg);
@@ -133,53 +228,7 @@ int load_mame_listxml(struct dat *dat)
 
 int load_mess_listxml(struct dat *dat)
 {
-	FILE *out=0;
-	char *ptr;
-	int errflg=0;
-
-	BUFFER1_REWIND
-	BUFFER2_REWIND
-
-	FOPEN(out, "datlib.tmp", "w")
-
-	while (!errflg && BUFFER1_REMAINING)
-	{
-		strcpy(TOKEN, BUFFER1_PTR);
-
-		while ((ptr=strstr(TOKEN, "mess")))
-		{
-			*(ptr++)='m';
-			*(ptr++)='a';
-			*(ptr++)='m';
-			*(ptr++)='e';
-		}
-
-		while ((ptr=strstr(TOKEN, "machine")))
-		{
-			*(ptr++)='g';
-			*(ptr++)='a';
-			*(ptr++)='m';
-			*(ptr++)='e';
-			strcpy(ptr, ptr+3);
-			ptr[strlen(ptr)+0]='\0';
-			ptr[strlen(ptr)+1]='\0';
-			ptr[strlen(ptr)+2]='\0';
-		}
-
-		fprintf(out, "%s\n", TOKEN);
-
-		BUFFER1_ADVANCE_LINE
-	}
-
-	FCLOSE(out)
-
-	dat->name="datlib.tmp";
-
-	errflg=load_mame_listxml(dat);
-
-	unlink(dat->name);
-
-	return(errflg);
+	return(load_mame_listxml(dat));
 }
 
 
