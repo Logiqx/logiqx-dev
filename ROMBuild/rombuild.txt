@@ -116,8 +116,9 @@ History
 
 06/01/2005  *** v2.3 ***
 
-            Removed ZiNc v0.9 from the source.
-            Internal renames of tnzs and clones to match MAME v0.90.
+            Removed ZiNc v0.9 from the source (superceded by v1.0.2).
+            Removed WinKawaks v1.49 from the source (superceded by v1.52).
+            Internal renames of tnzs and clone ROMs to match MAME v0.90.
             Added an extra option for the benefit of CAESAR.
 
 26/10/2004  *** v2.2 ***
