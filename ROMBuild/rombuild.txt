@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.2 - 26/10/2004
+                         ROMBuild v2.3 - 06/01/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,12 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+06/01/2005  *** v2.3 ***
+
+            Removed ZiNc v0.9 from the source.
+            Internal renames of tnzs and clones to match MAME v0.90.
+            Added an extra option for the benefit of CAESAR.
 
 26/10/2004  *** v2.2 ***
 

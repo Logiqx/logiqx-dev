@@ -517,97 +517,97 @@ struct Rom tnzs_roms[] =
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz17", 65536, 0x9784d443, 0, 65536},
-		{"tnzs", "b53_11.38", 65536, 0x9784d443, 0, 65536},
+		{"tnzsj", "b53_11.38", 65536, 0x9784d443, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz18", 65536, 0xd0c447fd, 0, 65536},
-		{"tnzs", "b53_10.32", 131072, 0xa73745c6, 0, 65536},
+		{"tnzsj", "b53_10.32", 131072, 0xa73745c6, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz2", 65536, 0x4ca902fa, 0, 65536},
-		{"tnzs", "b53-02.2", 131072, 0x095d0dc0, 0, 65536},
+		{"tnzsj", "b53-02.2", 131072, 0x095d0dc0, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz3", 65536, 0x8de4c673, 0, 65536},
-		{"tnzs", "b53-03.3", 131072, 0x74acfb9b, 0, 65536},
+		{"tnzsj", "b53-03.3", 131072, 0x74acfb9b, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz4", 65536, 0x3d6ee15c, 0, 65536},
-		{"tnzs", "b53-04.4", 131072, 0x59d2aef6, 0, 65536},
+		{"tnzsj", "b53-04.4", 131072, 0x59d2aef6, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz5", 65536, 0x13b708ea, 0, 65536},
-		{"tnzs", "b53-05.5", 131072, 0xedbb9581, 0, 65536},
+		{"tnzsj", "b53-05.5", 131072, 0xedbb9581, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz6", 65536, 0x8f123170, 0, 65536},
-		{"tnzs", "b53-06.6", 131072, 0x92f35ed9, 0, 65536},
+		{"tnzsj", "b53-06.6", 131072, 0x92f35ed9, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz7", 65536, 0x772baddb, 0, 65536},
-		{"tnzs", "b53-07.7", 131072, 0x2bf199e8, 0, 65536},
+		{"tnzsj", "b53-07.7", 131072, 0x2bf199e8, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz8", 65536, 0x2edffcce, 0, 65536},
-		{"tnzs", "b53-08.8", 131072, 0xc3519c2a, 0, 65536},
+		{"tnzsj", "b53-08.8", 131072, 0xc3519c2a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz9", 65536, 0xc7332040, 0, 65536},
-		{"tnzs", "b53-01.1", 131072, 0x9800c54d, 65536, 65536},
+		{"tnzsj", "b53-01.1", 131072, 0x9800c54d, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz10", 65536, 0x708005ac, 0, 65536},
-		{"tnzs", "b53-02.2", 131072, 0x095d0dc0, 65536, 65536},
+		{"tnzsj", "b53-02.2", 131072, 0x095d0dc0, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz11", 65536, 0x7fe204da, 0, 65536},
-		{"tnzs", "b53-03.3", 131072, 0x74acfb9b, 65536, 65536},
+		{"tnzsj", "b53-03.3", 131072, 0x74acfb9b, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz12", 65536, 0x943a744d, 0, 65536},
-		{"tnzs", "b53-04.4", 131072, 0x59d2aef6, 65536, 65536},
+		{"tnzsj", "b53-04.4", 131072, 0x59d2aef6, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz13", 65536, 0x81ed38cb, 0, 65536},
-		{"tnzs", "b53-05.5", 131072, 0xedbb9581, 65536, 65536},
+		{"tnzsj", "b53-05.5", 131072, 0xedbb9581, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz14", 65536, 0x03ee1f1b, 0, 65536},
-		{"tnzs", "b53-06.6", 131072, 0x92f35ed9, 65536, 65536},
+		{"tnzsj", "b53-06.6", 131072, 0x92f35ed9, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz15", 65536, 0xfbeda025, 0, 65536},
-		{"tnzs", "b53-07.7", 131072, 0x2bf199e8, 65536, 65536},
+		{"tnzsj", "b53-07.7", 131072, 0x2bf199e8, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz16", 65536, 0x665c76f1, 0, 65536},
-		{"tnzs", "b53-08.8", 131072, 0xc3519c2a, 65536, 65536},
+		{"tnzsj", "b53-08.8", 131072, 0xc3519c2a, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz19", 65536, 0xaf3e83d5, 0, 65536},
-		{"tnzs", "b53_10.32", 131072, 0xa73745c6, 65536, 65536},
+		{"tnzsj", "b53_10.32", 131072, 0xa73745c6, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz1", 65536, 0xd87fabab, 0, 65536},
-		{"tnzs", "b53-01.1", 131072, 0x9800c54d, 0, 65536},
+		{"tnzsj", "b53-01.1", 131072, 0x9800c54d, 0, 65536},
 		patch_nz1
 	},
 	{0}
@@ -6778,21 +6778,6 @@ struct Rom s11emu_roms[] =
 	{0}
 };
 
-struct Rom zinc_roms[] =
-{
-	/*{
-		EVEN_COPY,
-		{"tk2b", "wavebh", 2097152, 0x344c0c89, 0, 2097152},
-		{"tekken2a", "tes1wavb.8k", 4194304, 0xbee9a7e6, 0, 2097152},
-	},
-	{
-		ODD_COPY,
-		{"tk2b", "wavebl", 2097152, 0x4b8c5195, 0, 2097152},
-		{"tekken2a", "tes1wavb.8k", 4194304, 0xbee9a7e6, 0, 2097152},
-	},*/
-	{0}
-};
-
 struct Rom callus_roms[] =
 {
 	{
@@ -7970,12 +7955,12 @@ struct Rom shark_roms[] =
 	{
 		FULL_COPY,
 		{"tnzs2",    "ns_c-11a.rom",  65536, 0x6d5fb32e,     0, 65536},
-		{"tnzs2",    "ns_c-11.rom",  131072, 0x3c1dae7b,     0, 65536},
+		{"tnzso",   "ns_c-11.rom",  131072, 0x3c1dae7b,     0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs2",    "ns_c-11b.rom",  65536, 0xf7fe8b90,     0, 65536},
-		{"tnzs2",    "ns_c-11.rom",  131072, 0x3c1dae7b, 65536, 65536},
+		{"tnzso",   "ns_c-11.rom",  131072, 0x3c1dae7b, 65536, 65536},
 	},
 	{0}
 };
@@ -14015,7 +14000,7 @@ struct Emulator ems[] =
 	{"pcslomo", "PCSloMo v0.24 Final", pcslomo_roms},
 	{"qsound", "QSound Player v2", qsound_player_roms},
 	{"rage", "RAGE v0.9", rage_roms},
-	{"raine", "RAINE v0.41.1", raine_roms},
+	{"raine", "RAINE v0.42.3", raine_roms},
 	{"rcps", "RCPS", rcps_roms},
 	{"replay", "Replay v0.04", replay_roms},
 	{"retrocade", "Retrocade v1.2 b2", retrocade_roms},
@@ -14038,6 +14023,5 @@ struct Emulator ems[] =
 	{"xcade", "Xcade v0.85", xcade_roms},
 	{"xpac", "XPac Beta 1-2-3", xpac_roms},
 	{"zem", "ZEM v0.001", zem_roms},
-	{"zinc", "Zinc v0.9", zinc_roms},
 	{""}
 };

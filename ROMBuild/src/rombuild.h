@@ -71,6 +71,7 @@ void list_ems();
 void list_games(int);
 void list_roms(int, int);
 void full_list();
+void tab_list();
 int rebuild_roms(int, int, char *, char *);
 int scan_dir(char *, struct Cache *rom_cache);
 int copy_region(char *, struct Cache *cache);

@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ROMBUILD_VERSION "v2.2"
-#define ROMBUILD_DATE "26 October 2004"
+#define ROMBUILD_VERSION "v2.3"
+#define ROMBUILD_DATE "6 January 2005"
 
 
 /* --- The standard includes --- */
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	int emulator_idx=-1;
 	int game_idx=-1;
 
-	int list=0, fulllist=0;
+	int list=0, fulllist=0, tablist=0;
 	int errflg=0;
 
 	printf("===============================================================================\n");
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while ((c = getopt(argc, argv, "i:o:l?L")) != EOF)
+	while ((c = getopt(argc, argv, "i:o:lLT?")) != EOF)
 	switch (c)
 	{
 		case 'i':
@@ -94,13 +94,16 @@ int main(int argc, char **argv)
 		case 'L':
 			fulllist++;
 			break;
+		case 'T':
+			tablist++;
+			break;
 		case '?':
 			errflg++;   /* User wants help! */
 	}
 
 	/* --- Display the help page if required --- */
 
-	if (!list && !fulllist && argc-optind<1)
+	if (!list && !fulllist && !tablist && argc-optind<1)
 		errflg++;
 
 	if (errflg)
@@ -145,7 +148,12 @@ int main(int argc, char **argv)
 		full_list();
 	}
 
-	if (!errflg && !list && !fulllist)
+	if (!errflg && tablist)
+	{
+		tab_list();
+	}
+
+	if (!errflg && !list && !fulllist && !tablist)
 	{
 		errflg=rebuild_roms(emulator_idx, game_idx, in_dir, out_dir);
 	}
@@ -261,6 +269,27 @@ void full_list()
 				printf("%s,", ems[i].id);
 				printf("%s,", ems[i].roms[j].local.game);
 				printf("%s,%ld,%08lx\n", ems[i].roms[j].local.rom, ems[i].roms[j].local.size, ems[i].roms[j].local.crc);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void tab_list()
+{
+	int i=0, j;
+
+	while(ems[i].descr)
+	{
+		j=0;
+		while (ems[i].roms[j].local.game)
+		{
+			if (j==0 || strcmp(ems[i].roms[j].local.rom, ems[i].roms[j-1].local.rom))
+			{
+				printf("%s\t", ems[i].descr);
+				printf("%s\t", ems[i].roms[j].local.game);
+				printf("%s\t%ld\t%08lx\n", ems[i].roms[j].local.rom, ems[i].roms[j].local.size, ems[i].roms[j].local.crc);
 			}
 			j++;
 		}
