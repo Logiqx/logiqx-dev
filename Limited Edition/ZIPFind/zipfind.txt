@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPFind v2.0 - 02/07/2004
+                         ZIPFind v2.1 - 11/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -109,10 +109,17 @@ what it does already!
 History
 -------
 
+11/07/2004  *** v2.1 ***
+
+            - Updated the source to use the new functions of DatLib v1.4.
+	    - There is no functional change within ZIPFind though.
+
 02/07/2004  *** v2.0 ***
+
             Modified to use DatLib - there are no game or ROM limits anymore!
             Also supports all DatLib formats (ListInfo, XML, RomCenter, etc).
             Note: For XML support to work, you need xml2info.exe in your path.
 
 02/02/2003  *** v1.00 ***
+
             First public release.
