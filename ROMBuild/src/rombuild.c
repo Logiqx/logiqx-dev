@@ -242,7 +242,8 @@ void list_roms(int emulator_idx, int game_idx)
 
 	printf("Supported ROMs (of %s/%s):\n\n", ems[i].id, ems[i].roms[j].local.game);
 
-	while (!strcmp(ems[i].roms[j].local.game, ems[i].roms[game_idx].local.game))
+	while (ems[i].roms[j].local.game && ems[i].roms[game_idx].local.game &&
+		!strcmp(ems[i].roms[j].local.game, ems[i].roms[game_idx].local.game))
 	{
 		if (j==0 || strcmp(ems[i].roms[j].local.rom, ems[i].roms[j-1].local.rom))
 		{
