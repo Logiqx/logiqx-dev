@@ -20,7 +20,35 @@
 
 struct comment
 {
-	char *comment;
+	char *text;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t comment_flags;
+	uint8_t comment_warnings;
+	uint8_t comment_fixes;
+};
+
+
+/* --- BIOS Set Structures --- */
+
+struct biosset
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+	char *description;
+	char *_default;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t biosset_flags;
+	uint8_t biosset_warnings;
+	uint8_t biosset_fixes;
 };
 
 
@@ -31,12 +59,17 @@ struct rom
 	/* --- Fields that appear in data files */
 
 	char *name;
-	char *merge;
+	char *bios;
 	uint32_t size;
 	uint32_t crc;
 	char *md5;
 	char *sha1;
+	char *merge;
 	char *region;
+	uint32_t offset;
+	char *status;
+	char *dispose;
+	char *soundonly;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -64,10 +97,12 @@ struct disk
 	/* --- Fields that appear in data files */
 
 	char *name;
-	char *merge;
 	char *md5;
 	char *sha1;
+	char *merge;
 	char *region;
+	uint32_t index;
+	char *status;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -75,9 +110,9 @@ struct disk
 
 	uint32_t crc;
 
-	uint8_t disk_flags;
-	uint8_t disk_warnings;
-	uint8_t disk_fixes;
+	uint16_t disk_flags;
+	uint16_t disk_warnings;
+	uint16_t disk_fixes;
 
 	/* --- Fields that are specific to external tools */
 
@@ -119,6 +154,192 @@ struct sample_idx
 };
 
 
+/* --- Chip Structures --- */
+
+struct chip
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+	char *type;
+	char *soundonly;
+	uint32_t clock;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t chip_flags;
+	uint8_t chip_warnings;
+	uint8_t chip_fixes;
+};
+
+
+/* --- Video Structures --- */
+
+struct video
+{
+	/* --- Fields that appear in data files */
+
+	char *screen;
+	char *orientation;
+	uint16_t width;
+	uint16_t height;
+	uint16_t aspectx;
+	uint16_t aspecty;
+	float refresh;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t video_flags;
+	uint8_t video_warnings;
+	uint8_t video_fixes;
+};
+
+
+/* --- Sound Structures --- */
+
+struct sound
+{
+	/* --- Fields that appear in data files */
+
+	uint8_t channels;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t sound_flags;
+	uint8_t sound_warnings;
+	uint8_t sound_fixes;
+};
+
+
+/* --- Input Structures --- */
+
+struct input
+{
+	/* --- Fields that appear in data files */
+
+	char *service;
+	char *tilt;
+	uint8_t players;
+	char *control;
+	uint8_t buttons;
+	uint8_t coins;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t input_flags;
+	uint8_t input_warnings;
+	uint8_t input_fixes;
+};
+
+
+/* --- Dipswitch Structures --- */
+
+struct dipvalue
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+	char *_default;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct dipswitch *dipswitch;
+
+	uint8_t dipvalue_flags;
+	uint8_t dipvalue_warnings;
+	uint8_t dipvalue_fixes;
+};
+
+struct dipswitch
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	struct dipvalue *dipvalues;
+
+	uint32_t num_dipvalues;
+
+	uint8_t dipswitch_flags;
+	uint8_t dipswitch_warnings;
+	uint8_t dipswitch_fixes;
+};
+
+
+/* --- Driver Structures --- */
+
+struct driver
+{
+	/* --- Fields that appear in data files */
+
+	char *status;
+	char *emulation;
+	char *color;
+	char *sound;
+	char *graphic;
+	char *cocktail;
+	char *protection;
+	uint32_t palettesize;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t driver_flags;
+	uint8_t driver_warnings;
+	uint8_t driver_fixes;
+};
+
+
+/* --- Dipswitch Structures --- */
+
+struct extension
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct device *device;
+
+	uint8_t extension_flags;
+	uint8_t extension_warnings;
+	uint8_t extension_fixes;
+};
+
+struct device
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	struct extension *extensions;
+
+	uint32_t num_extensions;
+
+	uint8_t device_flags;
+	uint8_t device_warnings;
+	uint8_t device_fixes;
+};
+
+
 /* --- Game Structures --- */
 
 struct game
@@ -126,13 +347,16 @@ struct game
 	/* --- Fields that appear in data files */
 
 	char *name;
-	char *description;
-	char *year;
-	char *manufacturer;
-	char *rebuildto;
+	char *sourcefile;
 	char *cloneof;
 	char *romof;
 	char *sampleof;
+	char *description;
+	char *year;
+	char *manufacturer;
+	char *history;
+
+	char *rebuildto;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -141,6 +365,8 @@ struct game
 	struct game *game_sampleof;
 
 	struct comment *comments;
+
+	struct biosset *biossets;
 
 	struct rom *roms;
 	struct rom_idx *rom_name_idx;
@@ -153,10 +379,36 @@ struct game
 	struct sample *samples;
 	struct sample_idx *sample_name_idx;
 
+	struct chip *chips;
+
+	struct video *videos;
+
+	struct sound *sounds;
+
+	struct input *inputs;
+
+	struct dipswitch *dipswitches;
+	struct dipvalue *dipvalues;
+
+	struct driver *drivers;
+
+	struct device *devices;
+	struct extension *extensions;
+
 	uint32_t num_comments;
+	uint32_t num_biossets;
 	uint32_t num_roms;
 	uint32_t num_disks;
 	uint32_t num_samples;
+	uint32_t num_chips;
+	uint32_t num_videos;
+	uint32_t num_sounds;
+	uint32_t num_inputs;
+	uint32_t num_dipswitches;
+	uint32_t num_dipvalues;
+	uint32_t num_drivers;
+	uint32_t num_devices;
+	uint32_t num_extensions;
 
 	uint32_t size;
 	uint32_t crc;
@@ -164,19 +416,55 @@ struct game
 	uint32_t num_clones;
 
 	uint16_t game_flags;
+
+	uint8_t comment_flags;
+	uint8_t biosset_flags;
 	uint16_t rom_flags;
-	uint8_t disk_flags;
+	uint16_t disk_flags;
 	uint8_t sample_flags;
+	uint8_t chip_flags;
+	uint8_t video_flags;
+	uint8_t sound_flags;
+	uint8_t input_flags;
+	uint8_t dipswitch_flags;
+	uint8_t dipvalue_flags;
+	uint8_t driver_flags;
+	uint8_t device_flags;
+	uint8_t extension_flags;
 
 	uint16_t game_warnings;
+
+	uint8_t comment_warnings;
+	uint8_t biosset_warnings;
 	uint16_t rom_warnings;
-	uint8_t disk_warnings;
+	uint16_t disk_warnings;
 	uint8_t sample_warnings;
+	uint8_t chip_warnings;
+	uint8_t video_warnings;
+	uint8_t sound_warnings;
+	uint8_t input_warnings;
+	uint8_t dipswitch_warnings;
+	uint8_t dipvalue_warnings;
+	uint8_t driver_warnings;
+	uint8_t device_warnings;
+	uint8_t extension_warnings;
 
 	uint16_t game_fixes;
+
+	uint8_t comment_fixes;
+	uint8_t biosset_fixes;
 	uint16_t rom_fixes;
-	uint8_t disk_fixes;
+	uint16_t disk_fixes;
 	uint8_t sample_fixes;
+	uint8_t chip_fixes;
+	uint8_t video_fixes;
+	uint8_t sound_fixes;
+	uint8_t input_fixes;
+	uint8_t dipswitch_fixes;
+	uint8_t dipvalue_fixes;
+	uint8_t driver_fixes;
+	uint8_t device_fixes;
+	uint8_t extension_fixes;
 
 	/* --- Fields that are specific to external tools */
 
@@ -298,6 +586,11 @@ struct romcenter_emulator
 
 /* --- Options --- */
 
+struct st_idx
+{
+	char *st;
+};
+
 struct options
 {
 	char *fn;
@@ -306,7 +599,16 @@ struct options
 
 	struct clrmamepro clrmamepro;
 	uint32_t options;
-	char *game;
+
+	char *game_selection;
+	char *game_selection_buffer;
+	struct st_idx *game_selections;
+	uint32_t num_game_selections;
+
+	char *sourcefile_selection;
+	char *sourcefile_selection_buffer;
+	struct st_idx *sourcefile_selections;
+	uint32_t num_sourcefile_selections;
 
 	char *save_name;
 	char *save_mode;
@@ -324,8 +626,8 @@ struct dat
 
 	struct options *options;
 
-	struct driver *load;
-	struct driver *save;
+	struct datlib_driver *load;
+	struct datlib_driver *save;
 
 	char *log_name;
 	FILE *log_file;
@@ -362,6 +664,8 @@ struct dat
 
 	struct comment *comments;
 
+	struct biosset *biossets;
+
 	struct rom *roms;
 	struct rom_idx *game_rom_name_idx;
 	struct rom_idx *game_rom_crc_idx;
@@ -378,6 +682,22 @@ struct dat
 	struct sample_idx *game_sample_name_idx;
 	struct sample_idx *sample_name_idx;
 
+	struct chip *chips;
+
+	struct video *videos;
+
+	struct sound *sounds;
+
+	struct input *inputs;
+
+	struct dipswitch *dipswitches;
+	struct dipvalue *dipvalues;
+
+	struct driver *drivers;
+
+	struct device *devices;
+	struct extension *extensions;
+
 	struct game_zip *game_zips;
 	struct game_zip_idx *game_zip_name_idx;
 	struct game_zip_rom *game_zip_roms;
@@ -385,10 +705,20 @@ struct dat
 	struct game_zip_sample *game_zip_samples;
 
 	uint32_t num_comments;
+	uint32_t num_biossets;
 	uint32_t num_games, num_resources, num_machines;
 	uint32_t num_roms, num_resource_roms, num_machine_roms;
 	uint32_t num_disks, num_resource_disks, num_machine_disks;
 	uint32_t num_samples, num_resource_samples, num_machine_samples;
+	uint32_t num_chips;
+	uint32_t num_videos;
+	uint32_t num_sounds;
+	uint32_t num_inputs;
+	uint32_t num_dipswitches;
+	uint32_t num_dipvalues;
+	uint32_t num_drivers;
+	uint32_t num_devices;
+	uint32_t num_extensions;
 
 	uint32_t num_game_zips;
 	uint32_t num_game_zip_roms;
@@ -400,24 +730,68 @@ struct dat
 	uint16_t dat_flags;
 
 	uint16_t game_flags;
+	uint8_t comment_flags;
+	uint8_t biosset_flags;
 	uint16_t rom_flags;
-	uint8_t disk_flags;
+	uint16_t disk_flags;
 	uint8_t sample_flags;
+	uint8_t chip_flags;
+	uint8_t video_flags;
+	uint8_t sound_flags;
+	uint8_t input_flags;
+	uint8_t dipswitch_flags;
+	uint8_t dipvalue_flags;
+	uint8_t driver_flags;
+	uint8_t device_flags;
+	uint8_t extension_flags;
 
 	uint16_t game_warnings;
+	uint8_t comment_warnings;
+	uint8_t biosset_warnings;
 	uint16_t rom_warnings;
-	uint8_t disk_warnings;
+	uint16_t disk_warnings;
 	uint8_t sample_warnings;
+	uint8_t chip_warnings;
+	uint8_t video_warnings;
+	uint8_t sound_warnings;
+	uint8_t input_warnings;
+	uint8_t dipswitch_warnings;
+	uint8_t dipvalue_warnings;
+	uint8_t driver_warnings;
+	uint8_t device_warnings;
+	uint8_t extension_warnings;
 
 	uint16_t game_fixes;
+	uint8_t comment_fixes;
+	uint8_t biosset_fixes;
 	uint16_t rom_fixes;
-	uint8_t disk_fixes;
+	uint16_t disk_fixes;
 	uint8_t sample_fixes;
+	uint8_t chip_fixes;
+	uint8_t video_fixes;
+	uint8_t sound_fixes;
+	uint8_t input_fixes;
+	uint8_t dipswitch_fixes;
+	uint8_t dipvalue_fixes;
+	uint8_t driver_fixes;
+	uint8_t device_fixes;
+	uint8_t extension_fixes;
 
 	uint16_t game_saved;
+	uint8_t comment_saved;
+	uint8_t biosset_saved;
 	uint16_t rom_saved;
-	uint8_t disk_saved;
+	uint16_t disk_saved;
 	uint8_t sample_saved;
+	uint8_t chip_saved;
+	uint8_t video_saved;
+	uint8_t sound_saved;
+	uint8_t input_saved;
+	uint8_t dipswitch_saved;
+	uint8_t dipvalue_saved;
+	uint8_t driver_saved;
+	uint8_t device_saved;
+	uint8_t extension_saved;
 };
 
 
@@ -435,19 +809,22 @@ struct ini_entry
 
 #define OPTION_LOAD_QUIETLY		0x00000001	// Tool specific
 #define OPTION_SHOW_SUMMARY		0x00000002	// Tool specific
+#define OPTION_VERBOSE_LOGGING		0x00000004	// DatUtil -v option
+#define OPTION_SHOW_DEBUG_INFO		0x00000008	// DatUtil -d option
 
-#define OPTION_VERBOSE_LOGGING		0x00000010	// DatUtil -v option
-#define OPTION_SHOW_DEBUG_INFO		0x00000020	// DatUtil -d option
-#define OPTION_IGNORE_FUNNY_SIZES	0x00000040	// DatUtil -z option
-#define OPTION_IGNORE_MISSING_YEARS	0x00000080	// DatUtil -y option
+#define OPTION_FIX_MERGING_OFF		0x00000010	// DatUtil -x option
+#define OPTION_REMOVE_DUPLICATES_OFF	0x00000020	// DatUtil -d option
+#define OPTION_LOWER_CASE		0x00000040	// DatUtil -l option
+#define OPTION_SORT_GAMES_BY_PARENT	0x00000080	// DatUtil -s option
 
-#define OPTION_LOWER_CASE		0x00000100	// DatUtil -l option
-#define OPTION_SORT_GAMES_BY_PARENT	0x00000200	// DatUtil -s option
-#define OPTION_GAME			0x00000400	// DatUtil -g option
-#define OPTION_GAME_AND_CLONES		0x00000800	// DatUtil -c option
+#define OPTION_GAME_SELECTION		0x00000100	// DatUtil -g option
+#define OPTION_CLONE_SELECTION		0x00000200	// DatUtil -c option
+#define OPTION_SOURCEFILE_SELECTION	0x00000400	// DatUtil -G option
+#define OPTION_INVERT_SELECTION		0x00000800	// DatUtil -! option
 
 #define OPTION_REMOVE_CLONES		0x00001000	// DatUtil -r option
-#define OPTION_NEBULA_JUKEBOX		0x00002000	// DatUtil -j option
+#define OPTION_KEEP_FULL_DETAILS	0x00002000	// DatUtil -k option
+#define OPTION_NEBULA_JUKEBOX		0x00004000	// DatUtil -j option
 
 #define OPTION_EXTENDED_CHECKSUMS	0x00010000	// DatUtil -x option
 #define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil default
@@ -481,52 +858,141 @@ struct ini_entry
 #define	FLAG_GAME_NAME			0x0001
 #define	FLAG_RESOURCE_NAME		0x0002
 #define	FLAG_MACHINE_NAME		0x0004
-#define FLAG_GAME_DESCRIPTION		0x0008
-#define FLAG_GAME_YEAR			0x0010
-#define FLAG_GAME_MANUFACTURER		0x0020
-#define FLAG_GAME_REBUILDTO		0x0040
-#define FLAG_GAME_CLONEOF		0x0080
-#define FLAG_GAME_ROMOF			0x0100
-#define FLAG_GAME_SAMPLEOF		0x0200
-#define FLAG_GAME_CLONEOFCLONE		0x0400
-#define FLAG_GAME_COMMENTS		0x0800
+#define FLAG_GAME_SOURCEFILE		0x0008
+#define FLAG_GAME_CLONEOF		0x0010
+#define FLAG_GAME_ROMOF			0x0020
+#define FLAG_GAME_SAMPLEOF		0x0040
+#define FLAG_GAME_DESCRIPTION		0x0080
+#define FLAG_GAME_YEAR			0x0100
+#define FLAG_GAME_MANUFACTURER		0x0200
+#define FLAG_GAME_HISTORY		0x0400
+
+#define FLAG_GAME_REBUILDTO		0x1000
+
+#define FLAG_GAME_CLONEOFCLONE		0x4000
+
+
+/* --- Comment Flags --- */
+
+#define FLAG_COMMENT_TEXT		0x01
+
+
+/* --- BIOS Set Flags --- */
+
+#define FLAG_BIOSSET_NAME		0x01
+#define FLAG_BIOSSET_DESCRIPTION	0x02
+#define FLAG_BIOSSET_DEFAULT		0x04
 
 
 /* --- ROM Flags --- */
 
 #define FLAG_ROM_NAME			0x0001
-#define FLAG_ROM_MERGE			0x0002
+#define FLAG_ROM_BIOS			0x0002
 #define FLAG_ROM_SIZE			0x0004
 #define FLAG_ROM_CRC			0x0008
 #define FLAG_ROM_MD5			0x0010
 #define FLAG_ROM_SHA1			0x0020
-#define FLAG_ROM_REGION			0x0040
-#define	FLAG_ROM_BADDUMP		0x0080
-#define	FLAG_ROM_NODUMP			0x0100
-#define FLAG_ROM_DUPLICATE		0x0200
-#define FLAG_ROM_CONFLICT		0x0400
-#define FLAG_ROM_FUNNYSIZE		0x0800
-#define FLAG_ROM_BIOS			0x1000
+#define FLAG_ROM_MERGE			0x0040
+#define FLAG_ROM_REGION			0x0080
+#define FLAG_ROM_OFFSET			0x0100
+#define FLAG_ROM_STATUS			0x0200
+#define FLAG_ROM_DISPOSE		0x0400
+#define FLAG_ROM_SOUNDONLY		0x0800
+
+#define FLAG_ROM_DUPLICATE		0x1000
+#define FLAG_ROM_SIZE_CONFLICT		0x2000
+#define FLAG_ROM_CRC_CONFLICT		0x4000
+#define FLAG_ROM_SHA1_MD5_CONFLICT	0x8000
 
 
 /* --- Disk Flags --- */
 
 #define FLAG_DISK_NAME			0x0001
-#define FLAG_DISK_MERGE			0x0002
-#define FLAG_DISK_MD5			0x0004
-#define FLAG_DISK_SHA1			0x0008
+#define FLAG_DISK_MD5			0x0002
+#define FLAG_DISK_SHA1			0x0004
+#define FLAG_DISK_MERGE			0x0008
 #define FLAG_DISK_REGION		0x0010
-#define	FLAG_DISK_BADDUMP		0x0020
-#define	FLAG_DISK_NODUMP		0x0040
-#define FLAG_DISK_DUPLICATE		0x0080
-#define FLAG_DISK_CONFLICT		0x0100
-#define FLAG_DISK_BIOS			0x0200
+#define FLAG_DISK_INDEX			0x0020
+#define FLAG_DISK_STATUS		0x0040
+
+#define FLAG_DISK_DUPLICATE		0x1000
+#define FLAG_DISK_SIZE_CONFLICT		0x2000
+#define FLAG_DISK_CRC_CONFLICT		0x4000
+#define FLAG_DISK_SHA1_MD5_CONFLICT	0x8000
 
 
 /* --- Sample Flags --- */
 
 #define FLAG_SAMPLE_NAME		0x01
+
 #define FLAG_SAMPLE_DUPLICATE		0x02
+
+
+/* --- Chip Flags --- */
+
+#define FLAG_CHIP_NAME			0x01
+#define FLAG_CHIP_TYPE			0x02
+#define FLAG_CHIP_SOUNDONLY		0x04
+#define FLAG_CHIP_CLOCK			0x08
+
+
+/* --- Video Flags --- */
+
+#define FLAG_VIDEO_SCREEN		0x01
+#define FLAG_VIDEO_ORIENTATION		0x02
+#define FLAG_VIDEO_WIDTH		0x04
+#define FLAG_VIDEO_HEIGHT		0x08
+#define FLAG_VIDEO_ASPECTX		0x10
+#define FLAG_VIDEO_ASPECTY		0x20
+#define FLAG_VIDEO_REFRESH		0x40
+
+
+/* --- Sound Flags --- */
+
+#define FLAG_SOUND_CHANNELS		0x01
+
+
+/* --- Input Flags --- */
+
+#define FLAG_INPUT_SERVICE		0x01
+#define FLAG_INPUT_TILT			0x02
+#define FLAG_INPUT_PLAYERS		0x04
+#define FLAG_INPUT_CONTROL		0x08
+#define FLAG_INPUT_BUTTONS		0x10
+#define FLAG_INPUT_COINS		0x20
+
+
+/* --- Dipswitch Flags --- */
+
+#define FLAG_DIPSWITCH_NAME		0x01
+
+
+/* --- Dipvalue Flags --- */
+
+#define FLAG_DIPVALUE_NAME		0x01
+#define FLAG_DIPVALUE_DEFAULT		0x02
+
+
+/* --- Driver Flags --- */
+
+#define FLAG_DRIVER_STATUS		0x01
+#define FLAG_DRIVER_EMULATION		0x02
+#define FLAG_DRIVER_COLOR		0x04
+#define FLAG_DRIVER_SOUND		0x08
+#define FLAG_DRIVER_GRAPHIC		0x10
+#define FLAG_DRIVER_COCKTAIL		0x20
+#define FLAG_DRIVER_PROTECTION		0x40
+#define FLAG_DRIVER_PALETTESIZE		0x80
+
+
+/* --- Device Flags --- */
+
+#define FLAG_DEVICE_NAME		0x01
+
+
+/* --- Extension Flags --- */
+
+#define FLAG_EXTENSION_NAME		0x01
 
 
 #endif /* _DATLIB_TYPE_H_ */
