@@ -183,11 +183,43 @@ enum {
 	} \
 }
 
+#define BUFFER1_GET_TOKEN_TO_DELIMITER(DELIMITER) \
+{ \
+	char *tmp_ptr; \
+	unsigned long escaped_char; \
+\
+	while ((*(BUFFER1_PTR-1)=='\\' || *BUFFER1_PTR!=DELIMITER) && *BUFFER1_PTR!='\0') \
+	{ \
+		if (*(BUFFER1_PTR-1)=='\\') \
+		{ \
+			switch (*BUFFER1_PTR) \
+			{ \
+				case 'n' : *token_ptr++='\n'; BUFFER1_PTR++; break; \
+				case '\\' : *token_ptr++='\\'; BUFFER1_PTR++; break; \
+				case '\"' : *token_ptr++='\"'; BUFFER1_PTR++; break; \
+				case 'x' : \
+						escaped_char=strtoul(++BUFFER1_PTR, &tmp_ptr, 16); \
+					if (tmp_ptr-BUFFER1_PTR!=2) \
+							escaped_char=escaped_char>>(4*(tmp_ptr-BUFFER1_PTR-2)); \
+					*token_ptr++=(unsigned char)escaped_char; \
+					BUFFER1_PTR+=2; \
+					break; \
+				default: fprintf(stderr, "Unrecognised escape sequence '\\%c'!", *BUFFER1_PTR); \
+			} \
+		} \
+		else if (*BUFFER1_PTR!='\\') \
+			*token_ptr++=*BUFFER1_PTR++; \
+		else \
+			BUFFER1_PTR++; \
+	} \
+	if (*BUFFER1_PTR==DELIMITER) \
+		BUFFER1_PTR++; \
+	*token_ptr='\0';  \
+}
+
 #define BUFFER1_GET_TOKEN \
 { \
 	char *token_ptr=TOKEN; \
-	char *tmp_ptr; \
-	unsigned long escaped_char; \
 \
 	while ((*BUFFER1_PTR==' ') || (*BUFFER1_PTR=='\t')) \
 		BUFFER1_PTR++; \
@@ -195,33 +227,7 @@ enum {
 	if (*BUFFER1_PTR=='"') \
 	{ \
 		BUFFER1_PTR++; \
-		while ((*(BUFFER1_PTR-1)=='\\' || *BUFFER1_PTR!='"') && *BUFFER1_PTR!='\0') \
-		{ \
-			if (*(BUFFER1_PTR-1)=='\\') \
-			{ \
-				switch (*BUFFER1_PTR) \
-				{ \
-					case 'n' : *token_ptr++='\n'; BUFFER1_PTR++; break; \
-					case '\\' : *token_ptr++='\\'; BUFFER1_PTR++; break; \
-					case '\"' : *token_ptr++='\"'; BUFFER1_PTR++; break; \
-					case 'x' : \
-						escaped_char=strtoul(++BUFFER1_PTR, &tmp_ptr, 16); \
-						if (tmp_ptr-BUFFER1_PTR!=2) \
-							escaped_char=escaped_char>>(4*(tmp_ptr-BUFFER1_PTR-2)); \
-						*token_ptr++=(unsigned char)escaped_char; \
-						BUFFER1_PTR+=2; \
-						break; \
-					default: fprintf(stderr, "Unrecognised escape sequence '\\%c'!", *BUFFER1_PTR); \
-				} \
-			} \
-			else if (*BUFFER1_PTR!='\\') \
-				*token_ptr++=*BUFFER1_PTR++; \
-			else \
-				BUFFER1_PTR++; \
-		} \
-		if (*BUFFER1_PTR=='"') \
-			BUFFER1_PTR++; \
-		*token_ptr='\0';  \
+		BUFFER1_GET_TOKEN_TO_DELIMITER('"')  \
 	} \
 	else \
 	{ \
