@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.13 - 22/02/2005
+                         DatUtil v2.14 - 28/02/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -17,6 +17,7 @@ Load and Save:
   - MAME ListInfo (ClrMamePro, MAME, MESS, RAINE, Shark)
   - RomCenter 2.50
   - MAME ListXML (MAME and MESS)
+  - Tab Delimited
 
 Load only:
 
@@ -32,6 +33,7 @@ Load only:
 Save only:
 
   - Title List (for listing game titles - used by CPS-2 readme and RAINE docs)
+  - RomCenter Sublist
 
 Adding support for additional formats is really easy too. If you do add support
 for a new format please let me know and send me a copy of the code!
@@ -70,7 +72,8 @@ useful when converting/extracting individual games (explained later).
 
 If you wish to specify the output format directly (for example, if you want
 DatUtil to clean up the dat and resave in the same format) you can use the '-f'
-option. Valid formats are 'listinfo', 'listxml', 'romcenter2' or 'titlelist'.
+option. Valid formats are 'listinfo', 'listxml', 'romcenter2', 'delimited',
+'titlelist' or 'sublist'.
 
   e.g. datutil -f titlelist clrmame.dat
 
@@ -262,7 +265,7 @@ Defaults:
 
 Saving:
 
-  -f  output format (listinfo, romcenter2, titlelist, etc)
+  -f  output format (listinfo, listxml, romcenter2, delimited, sublist, etc)
   -k  keep as much information as possible from the source file
   -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
   -o  output to file
@@ -371,6 +374,15 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+28/02/2005  *** v2.14 ***
+
+            - Uses DatLib v2.2.
+            - Changed strtof to atof (for the guys compiling on NetBSD).
+            - Added support for tab delimited files ('-f delimited').
+            - Added save-support for RomCenter sublists ('-f sublist').
+            - Added \t support to the listinfo driver (and tab delimited).
+            - Fixed problem of unrecognised escape sequences looping forever!
 
 22/02/2005  *** v2.13 ***
 
