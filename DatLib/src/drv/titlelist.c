@@ -16,7 +16,7 @@
 
 /* --- External structures --- */
 
-extern const struct token tokens[];
+extern const struct datlib_token datlib_tokens[];
 
 int game_parent_sort_function(const void *game1, const void *game2);
 
@@ -80,9 +80,17 @@ int save_title_list(struct dat *dat)
 	/* --- User only wants the titles so don't report other details that are not saved! --- */
 
 	dat->game_saved=0xffff;
+	dat->biosset_saved=0xff;
 	dat->rom_saved=0xffff;
 	dat->disk_saved=0xff;
 	dat->sample_saved=0xff;
+	dat->chip_saved=0xff;
+	dat->video_saved=0xff;
+	dat->sound_saved=0xff;
+	dat->input_saved=0xff;
+	dat->dipswitch_saved=0xff;
+	dat->dipvalue_saved=0xff;
+	dat->driver_saved=0xff;
 
 	return(errflg);
 }
