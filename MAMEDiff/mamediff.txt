@@ -298,6 +298,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
             - Uses DatLib v1.9.
             - Added full support for disk 'merge' and 'flags' information.
+            - Made use of the DatLib FORMAT_LISTINFO_XXXXXX macros throughout.
 
 22/07/2004  *** v2.7 ***
 
