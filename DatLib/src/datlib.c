@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v1.5"
-#define DATLIB_DATE "17 July 2004"
+#define DATLIB_VERSION "v1.6"
+#define DATLIB_DATE "18 July 2004"
 
 
 /* --- Standard includes --- */
@@ -300,6 +300,22 @@ int rom_name_idx_sort_function(const void *idx1, const void *idx2)
 	return(result);
 }
 
+int disk_crc_idx_sort_function(const void *idx1, const void *idx2)
+{
+	int result=0;
+
+	if (((struct disk_idx *)idx2)->disk->crc > ((struct disk_idx *)idx1)->disk->crc)
+		result=-1;
+
+	if (((struct disk_idx *)idx2)->disk->crc < ((struct disk_idx *)idx1)->disk->crc)
+		result=1;
+
+	if (result==0)
+		result=strcmp(((struct disk_idx *)idx1)->disk->name, ((struct disk_idx *)idx2)->disk->name);
+
+	return(result);
+}
+
 int disk_name_idx_sort_function(const void *idx1, const void *idx2)
 {
 	return(strcmp(((struct disk_idx *)idx1)->disk->name, ((struct disk_idx *)idx2)->disk->name));
@@ -521,7 +537,9 @@ int allocate_dat_memory(struct dat *dat)
 		{
 			STRUCT_CALLOC(dat->disks, dat->num_disks, sizeof(struct disk));
 			STRUCT_CALLOC(dat->game_disk_name_idx, dat->num_disks, sizeof(struct disk_idx));
+			STRUCT_CALLOC(dat->game_disk_crc_idx, dat->num_disks, sizeof(struct disk_idx));
 			STRUCT_CALLOC(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx));
+			STRUCT_CALLOC(dat->disk_crc_idx, dat->num_disks, sizeof(struct disk_idx));
 		}
 	}
 
@@ -734,10 +752,20 @@ int store_tokenized_dat(struct dat *dat)
 					curr_disk++;
 
 				else if (type==TOKEN_DISK_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
+				{
 					curr_disk->md5=BUFFER2_PTR;
 
+					curr_disk->crc=crc32(0, NULL, 0);
+					curr_disk->crc=crc32(curr_disk->crc, curr_disk->md5, strlen(curr_disk->md5));
+				}
+
 				else if (type==TOKEN_DISK_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
+				{
 					curr_disk->sha1=BUFFER2_PTR;
+
+					curr_disk->crc=crc32(0, NULL, 0);
+					curr_disk->crc=crc32(curr_disk->crc, curr_disk->sha1, strlen(curr_disk->sha1));
+				}
 
 				else if (type==TOKEN_DISK_REGION)
 					curr_disk->region=BUFFER2_PTR;
@@ -2290,7 +2318,9 @@ int rebuild_dat_indices(struct dat *dat)
 	struct rom_idx *curr_rom_name_idx=0;
 
 	struct disk *curr_disk=0;
+	struct disk_idx *curr_game_disk_crc_idx=0;
 	struct disk_idx *curr_game_disk_name_idx=0;
+	struct disk_idx *curr_disk_crc_idx=0;
 	struct disk_idx *curr_disk_name_idx=0;
 
 	struct sample *curr_sample=0;
@@ -2350,7 +2380,9 @@ int rebuild_dat_indices(struct dat *dat)
 	curr_rom_crc_idx=dat->rom_crc_idx;
 	curr_rom_name_idx=dat->rom_name_idx;
 
+	curr_game_disk_crc_idx=dat->game_disk_crc_idx;
 	curr_game_disk_name_idx=dat->game_disk_name_idx;
+	curr_disk_crc_idx=dat->disk_crc_idx;
 	curr_disk_name_idx=dat->disk_name_idx;
 
 	curr_game_sample_name_idx=dat->game_sample_name_idx;
@@ -2394,16 +2426,20 @@ int rebuild_dat_indices(struct dat *dat)
 
 		if (curr_game->num_disks)
 		{
+			curr_game->disk_crc_idx=curr_game_disk_crc_idx;
 			curr_game->disk_name_idx=curr_game_disk_name_idx;
 
 			for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 			{
 				curr_disk->game=curr_game;
 
+				curr_game_disk_crc_idx++->disk=curr_disk;
 				curr_game_disk_name_idx++->disk=curr_disk;
+				curr_disk_crc_idx++->disk=curr_disk;
 				curr_disk_name_idx++->disk=curr_disk;
 			}
 
+			qsort(curr_game->disk_crc_idx, curr_game->num_disks, sizeof(struct disk_idx), disk_crc_idx_sort_function);
 			qsort(curr_game->disk_name_idx, curr_game->num_disks, sizeof(struct disk_idx), disk_name_idx_sort_function);
 		}
 
@@ -2425,6 +2461,7 @@ int rebuild_dat_indices(struct dat *dat)
 
 	qsort(dat->rom_crc_idx, dat->num_roms, sizeof(struct rom_idx), rom_crc_idx_sort_function);
 	qsort(dat->rom_name_idx, dat->num_roms, sizeof(struct rom_idx), rom_name_idx_sort_function);
+	qsort(dat->disk_crc_idx, dat->num_disks, sizeof(struct disk_idx), disk_crc_idx_sort_function);
 	qsort(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx), disk_name_idx_sort_function);
 	qsort(dat->sample_name_idx, dat->num_samples, sizeof(struct sample_idx), sample_name_idx_sort_function);
 
@@ -2524,16 +2561,21 @@ int build_zip_structures(struct dat *dat)
 		{
 			if (dat->options->options & OPTION_DAT_NO_MERGING)
 			{
-				curr_game_zip_rom->game_zip=curr_game_zip;
-				curr_game_zip_rom->rom=curr_rom;
+				if (!(curr_game->game_flags & FLAG_RESOURCE_NAME))
+				{
+					curr_game_zip_rom->game_zip=curr_game_zip;
+					curr_game_zip_rom->rom=curr_rom;
 
-				curr_game_zip->num_game_zip_roms++;
-				dat->num_game_zip_roms++;
-				curr_game_zip_rom++;
+					curr_game_zip->num_game_zip_roms++;
+					dat->num_game_zip_roms++;
+					curr_game_zip_rom++;
+				}
 			}
 			else
 			{
-				if (curr_rom->merge==0)
+				if ((!(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS) && curr_rom->merge==0) ||
+					(dat->options->options & OPTION_NON_SEPERATED_BIOS_ROMS &&
+					(curr_game->cloneof==0 || curr_rom->merge==0)))
 				{
 					curr_game_zip_rom->game_zip=curr_game_zip;
 					curr_game_zip_rom->rom=curr_rom;
@@ -3243,6 +3285,17 @@ int find_rom_by_name(const void *name, const void *rom_idx)
 	return(strcmp((char *)name, ((struct rom_idx *)rom_idx)->rom->name));
 }
 
+int find_disk_by_crc(const void *crc, const void *disk_idx)
+{
+	if (*((uint32_t *)crc) < ((struct disk_idx *)disk_idx)->disk->crc)
+		return(-1);
+
+	if (*((uint32_t *)crc) > ((struct disk_idx *)disk_idx)->disk->crc)
+		return(1);
+
+	return(0);
+}
+
 int find_disk_by_name(const void *name, const void *disk_idx)
 {
 	return(strcmp((char *)name, ((struct disk_idx *)disk_idx)->disk->name));
@@ -3305,7 +3358,9 @@ struct dat *free_dat(struct dat *dat)
 			printf("%-16s: ", "Datlib.free_dat");
 			printf("Freeing memory of disks and disk indices...\n");
 		}
+		FREE(dat->disk_crc_idx)
 		FREE(dat->disk_name_idx)
+		FREE(dat->game_disk_crc_idx)
 		FREE(dat->game_disk_name_idx)
 		FREE(dat->disks)
 

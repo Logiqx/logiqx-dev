@@ -72,6 +72,8 @@ struct disk
 
 	struct game *game;
 
+	uint32_t crc;
+
 	uint8_t disk_flags;
 	uint8_t disk_warnings;
 	uint8_t disk_fixes;
@@ -142,6 +144,7 @@ struct game
 
 	struct disk *disks;
 	struct disk_idx *disk_name_idx;
+	struct disk_idx *disk_crc_idx;
 
 	struct sample *samples;
 	struct sample_idx *sample_name_idx;
@@ -333,7 +336,9 @@ struct dat
 
 	struct disk *disks;
 	struct disk_idx *game_disk_name_idx;
+	struct disk_idx *game_disk_crc_idx;
 	struct disk_idx *disk_name_idx;
+	struct disk_idx *disk_crc_idx;
 
 	struct sample *samples;
 	struct sample_idx *game_sample_name_idx;
@@ -414,6 +419,7 @@ struct ini_entry
 #define	OPTION_DAT_FULL_MERGING		0x00100000	// Used by MAMEDiff
 #define	OPTION_DAT_SPLIT_MERGING	0x00200000	// Used by MAMEDiff
 #define	OPTION_DAT_NO_MERGING		0x00400000	// Used by MAMEDiff
+#define	OPTION_NON_SEPERATED_BIOS_ROMS	0x00800000	// Used by MAMEDiff
 
 
 /* --- Parser Flags --- */

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v1.5 - 17/07/2004
+                          DatLib v1.6 - 18/07/2004
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -170,6 +170,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+18/07/2004  *** v1.6 ***
+
+	    - Added disk CRCs for MAMEDiff (CRC is calculated using MD5/SHA1).
+	    - Added OPTION_NON_SEPERATED_BIOS_ROMS for MAMEDiff -d1/-d2/-d3.
 
 17/07/2004  *** v1.5 ***
 
