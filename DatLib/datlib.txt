@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.4 - 25/03/2005
+                          DatLib v2.5 - 10/04/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+10/04/2005  *** v2.5 ***
+
+            - Excludes disks from RomCenter data files (datutil -k to override).
 
 25/03/2005  *** v2.4 ***
 

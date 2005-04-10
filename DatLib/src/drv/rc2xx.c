@@ -575,10 +575,13 @@ int save_romcenter_250(struct dat *dat)
 		}
 	}
 
-	if (dat->num_disks)
+	if (dat->num_disks && dat->options->options & OPTION_KEEP_FULL_DETAILS)
+	{
 		fprintf(dat->out, "\n[DISKS]");
+		dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MERGE|FLAG_DISK_SHA1;
+	}
 
-	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	for (i=0, curr_game=dat->games; dat->options->options & OPTION_KEEP_FULL_DETAILS && i<dat->num_games; i++, curr_game++)
 	{
 		for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
 		{
@@ -626,7 +629,6 @@ int save_romcenter_250(struct dat *dat)
 	dat->game_saved=FLAG_GAME_NAME|FLAG_MACHINE_NAME|FLAG_RESOURCE_NAME|
 			FLAG_GAME_DESCRIPTION|FLAG_GAME_CLONEOF|FLAG_GAME_ROMOF;
 	dat->rom_saved=FLAG_ROM_NAME|FLAG_ROM_MERGE|FLAG_ROM_SIZE|FLAG_ROM_CRC;
-	dat->disk_saved=FLAG_DISK_NAME|FLAG_DISK_MERGE|FLAG_DISK_SHA1;
 
 	if (invalid)
 	{

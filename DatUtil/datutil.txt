@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.16 - 25/03/2005
+                         DatUtil v2.17 - 10/04/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -383,6 +383,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+10/04/2005  *** v2.17 ***
+
+            - Uses DatLib v2.5.
+            - Excludes disks from RomCenter data files (-k will include them).
 
 25/03/2005  *** v2.16 ***
 
