@@ -283,6 +283,11 @@ void tab_list()
 
 	while(ems[i].descr)
 	{
+		/* --- CAESAR uses underscores in dat names --- */
+
+		while(strchr(ems[i].descr, ' '))
+			*strchr(ems[i].descr, ' ')='_';
+
 		j=0;
 		while (ems[i].roms[j].local.game)
 		{
