@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.5"
-#define DATLIB_DATE "10 April 2005"
+#define DATLIB_VERSION "v2.6"
+#define DATLIB_DATE "31 August 2005"
 
 
 /* --- Standard includes --- */
@@ -2260,11 +2260,12 @@ int fix_merging_phase_1(struct dat *dat)
 {
 	struct game *curr_game=0;
 	struct game *parent_game=0;
+	struct game **game_stack=0;
 	struct game_idx *curr_game_name_idx=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
 	struct sample *curr_sample=0;
-	uint32_t i, j, k;
+	uint32_t i, j, k, stack_idx;
 
 	int errflg=0;
 
@@ -2377,31 +2378,67 @@ int fix_merging_phase_1(struct dat *dat)
 
 	/* --- Fix clones of clones --- */
 
+	STRUCT_CALLOC(game_stack, dat->num_games, sizeof(struct game *))
+
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
-		if (curr_game->game_cloneof)
+		stack_idx=0;
+
+		game_stack[stack_idx++]=curr_game;
+
+		if (curr_game->game_cloneof) // i.e. curr_game is a clone
 		{
-			if (curr_game->game_cloneof->game_cloneof)
+			if (curr_game->game_cloneof->game_cloneof) // i.e. curr_game is a clone of a clone
 			{
+				/* --- Walk through the parents --- */
+
 				parent_game=curr_game->game_cloneof;
 
 				while (parent_game->game_cloneof)
-					parent_game=parent_game->game_cloneof;
-
-				if (curr_game->romof && !strcmp(curr_game->romof, curr_game->cloneof))
 				{
-					curr_game->romof=parent_game->name;
-					curr_game->game_romof=parent_game;
-					curr_game->game_fixes|=FLAG_GAME_ROMOF;
+					game_stack[stack_idx++]=parent_game;
+
+					/* --- Detect infinite loops and fix them! --- */
+
+					for (j=0; j<stack_idx; j++)
+					{
+						if (parent_game->game_cloneof==game_stack[j])
+						{
+							parent_game->cloneof=0;
+							parent_game->game_cloneof=0;
+							parent_game->game_fixes|=FLAG_GAME_CLONEOF;
+
+							parent_game->romof=0;
+							parent_game->game_romof=0;
+							parent_game->game_fixes|=FLAG_GAME_ROMOF;
+						}
+					}
+
+					if (parent_game->game_cloneof)
+						parent_game=parent_game->game_cloneof;
 				}
 
-				curr_game->cloneof=parent_game->name;
-				curr_game->game_cloneof=parent_game;
-				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
-				curr_game->game_fixes|=FLAG_GAME_CLONEOFCLONE;
+				/* --- Only if the cloneof has changed (may not change due to infinite loops) --- */
+
+				if (parent_game!=curr_game->game_cloneof)
+				{
+					if (curr_game->romof && !strcmp(curr_game->romof, curr_game->cloneof))
+					{
+						curr_game->romof=parent_game->name;
+						curr_game->game_romof=parent_game;
+						curr_game->game_fixes|=FLAG_GAME_ROMOF;
+					}
+
+					curr_game->cloneof=parent_game->name;
+					curr_game->game_cloneof=parent_game;
+					curr_game->game_fixes|=FLAG_GAME_CLONEOF;
+					curr_game->game_fixes|=FLAG_GAME_CLONEOFCLONE;
+				}
 			}
 		}
 	}
+
+	FREE(game_stack)
 
 	/* --- First ROM pass corrects merge names and pushes CRCs upwards --- */
 

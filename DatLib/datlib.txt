@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.5 - 10/04/2005
+                          DatLib v2.6 - 31/08/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+31/08/2005  *** v2.6 ***
+
+            - Fixed a 'hang' that occurred with circular cloneof relationships.
 
 10/04/2005  *** v2.5 ***
 
