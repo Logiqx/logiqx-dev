@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.16 - 28/02/2005
+                          MAMEDiff v2.17 - 31/08/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+31/08/2005  *** v2.17 ***
+
+            - Uses DatLib v2.6.
+            - Fixed a 'hang' that occurred with circular cloneof relationships.
 
 28/02/2005  *** v2.16 ***
 
