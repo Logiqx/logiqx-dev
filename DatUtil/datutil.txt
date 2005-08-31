@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.17 - 10/04/2005
+                         DatUtil v2.18 - 31/08/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -383,6 +383,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+31/08/2005  *** v2.18 ***
+
+            - Uses DatLib v2.6.
+            - Fixed a 'hang' that occurred with circular cloneof relationships.
 
 10/04/2005  *** v2.17 ***
 
