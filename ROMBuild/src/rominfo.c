@@ -11569,51 +11569,6 @@ struct Rom rage_roms[] =
 	{0}
 };
 
-struct Rom m1_roms[] =
-{
-	{
-		FULL_COPY,
-		{"roboarmy", "032-v1.bin", 524288, 0xdaff9896, 0, 524288},
-		{"roboarmy", "032-v1.bin", 1048576, 0x63791533, 0, 524288},
-	},
-	{
-		FULL_COPY,
-		{"roboarmy", "032-v3.bin", 524288, 0xb69c1da5, 0, 524288},
-		{"roboarmy", "032-v2.bin", 1048576, 0xeb95de70, 0, 524288},
-	},
-	{
-		FULL_COPY,
-		{"roboarmy", "032-v2.bin", 524288, 0x8781b1bc, 0, 524288},
-		{"roboarmy", "032-v1.bin", 1048576, 0x63791533, 524288, 524288},
-	},
-	{
-		FULL_COPY,
-		{"roboarmy", "032-v4.bin", 524288, 0x2c929c17, 0, 524288},
-		{"roboarmy", "032-v2.bin", 1048576, 0xeb95de70, 524288, 524288},
-	},
-	{
-		FULL_COPY,
-		{"sengoku2", "040-v1.bin", 1048576, 0xb3725ced, 0, 1048576},
-		{"sengoku2", "040-v1.bin", 2097152, 0x71cb4b5d, 0, 1048576},
-	},
-	{
-		FULL_COPY,
-		{"sengoku2", "040-v2.bin", 1048576, 0xb5e70a0e, 0, 1048576},
-		{"sengoku2", "040-v1.bin", 2097152, 0x71cb4b5d, 1048576, 1048576},
-	},
-	{
-		FULL_COPY,
-		{"von2", "srom2.u23", 2097152, 0x89f21281, 0, 2097152},
-		{"von2", "mpr20664.23", 4194304, 0x89220782, 2097152, 2097152},
-	},
-	{
-		FULL_COPY,
-		{"von2", "srom4.u23", 2097152, 0xb7c1bebf, 0, 2097152},
-		{"von2", "mpr20666.25", 4194304, 0x3ecb2606, 2097152, 2097152},
-	},
-	{0}
-};
-
 struct Rom hoot_roms[] =
 {
 	{
@@ -12149,7 +12104,6 @@ struct Emulator ems[] =
 	{"junofirst", "Juno First v1.23", junofirst_roms},
 	{"kem", "KEM v1.1", kem_roms},
 	{"kungfu", "Kung Fu Master v0.0000001a", kungfu_roms},
-	{"m1", "M1 v0.7.5a3", m1_roms},
 	{"m72", "M72 v0.33b", m72_roms},
 	{"magex", "MageX v0.8a", magex_roms},
 	{"mge", "MGE v0.471", mge_roms},
@@ -12164,7 +12118,7 @@ struct Emulator ems[] =
 	{"pcslomo", "PCSloMo v0.24 Final", pcslomo_roms},
 	{"qsound", "QSound Player v2", qsound_player_roms},
 	{"rage", "RAGE v0.9", rage_roms},
-	{"raine", "RAINE v0.42.4", raine_roms},
+	{"raine", "RAINE v0.43.0", raine_roms},
 	{"rcps", "RCPS", rcps_roms},
 	{"replay", "Replay v0.04", replay_roms},
 	{"retrocade", "Retrocade v1.2 b2", retrocade_roms},

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ROMBuild v2.6 - 28/03/2005
+                         ROMBuild v2.7 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -113,6 +113,10 @@ CAESAR (which although by me, without it I'd never have created ROMBuild).
 
 History
 -------
+
+xx/xx/xxxx  *** v2.7 ***
+
+            Removed M1 ROMs since they are now MAME compatible (M1 v0.7.6)!
 
 28/03/2005  *** v2.6 ***
 
