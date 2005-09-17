@@ -281,12 +281,6 @@ int load_romcenter_250(struct dat *dat)
 							strcpy(TOKEN, parent_name);
 							BUFFER2_PUT_TOKEN(TOKEN_GAME_CLONEOF)
 						}
-
-						if (*romof_name)
-						{
-							strcpy(TOKEN, romof_name);
-							BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
-						}
 					}
 					else
 					{
@@ -314,6 +308,12 @@ int load_romcenter_250(struct dat *dat)
 
 				strcpy(TOKEN, rom_crc);
 				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+				if (*romof_name)
+				{
+					strcpy(TOKEN, romof_name);
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
+				}
 			}
 		}
 
