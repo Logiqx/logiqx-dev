@@ -53,7 +53,7 @@ int identify_nebula_driver(struct dat *dat)
 
 int load_nebula_driver(struct dat *dat)
 {
-	int in_rom_section=0, errflg=0;
+	int in_rom_section=0, neogeo=0, parent=0, errflg=0;
 
 	BUFFER1_REWIND
 	BUFFER2_REWIND
@@ -78,12 +78,62 @@ int load_nebula_driver(struct dat *dat)
 				in_rom_section=1;
 			else
 				in_rom_section=0;
+
+			if (in_rom_section && neogeo && !parent)
+			{
+				sprintf(TOKEN, "neogeo");
+				BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
+			}
+
+			parent=0;
+		}
+
+		else if (!strcmp(TOKEN, "system:"))
+		{
+			BUFFER1_GET_TOKEN
+			UPPER(TOKEN)
+
+			if (!strcmp(TOKEN, "NEO"))
+				neogeo++;
+			else
+				neogeo=0;
 		}
 
 		else if (!strcmp(TOKEN, "romname:"))
 		{
 			BUFFER1_GET_TOKEN
 			BUFFER2_PUT_TOKEN(TOKEN_GAME_NAME)
+
+			if (neogeo)
+			{
+				sprintf(TOKEN, "neo-geo.rom");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+				sprintf(TOKEN, "131072");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+				sprintf(TOKEN, "9036d879");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+				sprintf(TOKEN, "sfix.sfx");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+				sprintf(TOKEN, "131072");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+				sprintf(TOKEN, "354029fc");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+				sprintf(TOKEN, "sm1.sm1");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+				sprintf(TOKEN, "131072");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+				sprintf(TOKEN, "97cf998b");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+				sprintf(TOKEN, "000-lo.lo");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+				sprintf(TOKEN, "65536");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+				sprintf(TOKEN, "e09e253c");
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+			}
 		}
 
 		else if (!strcmp(TOKEN, "game:"))
@@ -108,6 +158,8 @@ int load_nebula_driver(struct dat *dat)
 			BUFFER1_GET_TOKEN
 			BUFFER2_PUT_TOKEN(TOKEN_GAME_CLONEOF)
 			BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
+
+			parent++;
 		}
 
 		else if (in_rom_section && strchr(TOKEN, ',') && *TOKEN!=',')
@@ -138,6 +190,43 @@ int load_nebula_driver(struct dat *dat)
 		}
 
 		BUFFER1_ADVANCE_LINE
+	}
+
+	sprintf(TOKEN, "neogeo");
+	BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_NAME)
+
+	sprintf(TOKEN, "Neo-Geo");
+	BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_DESCRIPTION)
+
+	if (neogeo)
+	{
+		sprintf(TOKEN, "neo-geo.rom");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+		sprintf(TOKEN, "131072");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+		sprintf(TOKEN, "9036d879");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+		sprintf(TOKEN, "sfix.sfx");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+		sprintf(TOKEN, "131072");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+		sprintf(TOKEN, "354029fc");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+		sprintf(TOKEN, "sm1.sm1");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+		sprintf(TOKEN, "131072");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+		sprintf(TOKEN, "97cf998b");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+
+		sprintf(TOKEN, "000-lo.lo");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+		sprintf(TOKEN, "65536");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+		sprintf(TOKEN, "e09e253c");
+		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
 	}
 
 	return(errflg);
