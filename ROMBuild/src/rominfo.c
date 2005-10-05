@@ -364,6 +364,31 @@ struct Rom invadersaver_roms[] =
 	{0}
 };
 
+struct Rom side_roms[] =
+{
+	{
+		FULL_COPY,
+		{"invaders",  "invaders.rom", 8192, 0xb64ca815,     0, 2048},
+		{"invaders",  "invaders.h",   2048, 0x734f5ad8,     0, 2048},
+	},
+	{
+		FULL_COPY,
+		{"invaders",  "invaders.rom", 8192, 0xb64ca815,  2048, 2048},
+		{"invaders",  "invaders.g",   2048, 0x6bfaca4a,     0, 2048},
+	},
+	{
+		FULL_COPY,
+		{"invaders",  "invaders.rom", 8192, 0xb64ca815,  4096, 2048},
+		{"invaders",  "invaders.f",   2048, 0x0ccead96,     0, 2048},
+	},
+	{
+		FULL_COPY,
+		{"invaders",  "invaders.rom", 8192, 0xb64ca815,  6144, 2048},
+		{"invaders",  "invaders.e",   2048, 0x14e538b0,     0, 2048},
+	},
+	{0}
+};
+
 struct Rom vbemusaver_roms[] =
 {
 	{
@@ -10562,206 +10587,6 @@ struct Rom nebula_jukebox_roms[] =
 	{0}
 };
 
-struct Rom nebula_roms[] =
-{
-	{
-		FULL_COPY,
-		{"2020bb", "030-c3.bin", 524288, 0x6a87ae30, 0, 524288},
-		{"2020bb", "030-c3.bin", 1048576, 0x47fddfee, 0, 524288},
-	},
-	{
-		FULL_COPY,
-		{"2020bb", "030-c4.bin", 524288, 0xbef75dd0, 0, 524288},
-		{"2020bb", "030-c4.bin", 1048576, 0x780d1c4e, 0, 524288},
-	},
-	{
-		FULL_COPY,
-		{"2020bbh", "030-c3.bin", 524288, 0x6a87ae30, 0, 524288},
-		{"2020bbh", "030-c3.bin", 1048576, 0x47fddfee, 0, 524288},
-	},
-	{
-		FULL_COPY,
-		{"2020bbh", "030-c4.bin", 524288, 0xbef75dd0, 0, 524288},
-		{"2020bbh", "030-c4.bin", 1048576, 0x780d1c4e, 0, 524288},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "09.bin", 131072, 0xc3e83c69, 0, 131072},
-		{"dynwar", "tkm-5.7a", 524288, 0xf64bb6a0, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "11.bin", 131072, 0x29eaf490, 0, 131072},
-		{"dynwar", "tkm-1.8a", 524288, 0x44f7661e, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "13.bin", 131072, 0x0273d87d, 0, 131072},
-		{"dynwar", "tkm-8.9a", 524288, 0x21fe6274, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "15.bin", 131072, 0xd36cdb91, 0, 131072},
-		{"dynwar", "tkm-4.10a", 524288, 0xa54c515d, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "24.bin", 131072, 0xc6909b6f, 0, 131072},
-		{"dynwar", "tkm-6.3a", 524288, 0x0bf228cb, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "26.bin", 131072, 0x07fc714b, 0, 131072},
-		{"dynwar", "tkm-2.4a", 524288, 0xca5c687c, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "28.bin", 131072, 0xaf62bf07, 0, 131072},
-		{"dynwar", "tkm-3.6a", 524288, 0xf9fe6591, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "38.bin", 131072, 0xcd7923ed, 0, 131072},
-		{"dynwar", "tkm-7.5a", 524288, 0x1255dfb1, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "40.bin", 131072, 0x1586dbf3, 0, 131072},
-		{"dynwar", "tkm-9.8h", 524288, 0x93654bcf, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "01.bin", 131072, 0x187b2886, 0, 131072},
-		{"dynwar", "tkm-5.7a", 524288, 0xf64bb6a0, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "03.bin", 131072, 0x7bf51337, 0, 131072},
-		{"dynwar", "tkm-1.8a", 524288, 0x44f7661e, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "05.bin", 131072, 0x339378b8, 0, 131072},
-		{"dynwar", "tkm-8.9a", 524288, 0x21fe6274, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "07.bin", 131072, 0xe04af054, 0, 131072},
-		{"dynwar", "tkm-4.10a", 524288, 0xa54c515d, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "17.bin", 131072, 0x2e2f8320, 0, 131072},
-		{"dynwar", "tkm-6.3a", 524288, 0x0bf228cb, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "19.bin", 131072, 0x7114e5c6, 0, 131072},
-		{"dynwar", "tkm-2.4a", 524288, 0xca5c687c, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "21.bin", 131072, 0x523f462a, 0, 131072},
-		{"dynwar", "tkm-3.6a", 524288, 0xf9fe6591, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "32.bin", 131072, 0x21a0a453, 0, 131072},
-		{"dynwar", "tkm-7.5a", 524288, 0x1255dfb1, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "34.bin", 131072, 0x8f663d00, 0, 131072},
-		{"dynwar", "tkm-9.8h", 524288, 0x93654bcf, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "10.bin", 131072, 0xff28f8d0, 0, 131072},
-		{"dynwar", "tkm-5.7a", 524288, 0xf64bb6a0, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "12.bin", 131072, 0x38652339, 0, 131072},
-		{"dynwar", "tkm-1.8a", 524288, 0x44f7661e, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "16.bin", 131072, 0x381608ae, 0, 131072},
-		{"dynwar", "tkm-4.10a", 524288, 0xa54c515d, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "25.bin", 131072, 0x152ea74a, 0, 131072},
-		{"dynwar", "tkm-6.3a", 524288, 0x0bf228cb, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "27.bin", 131072, 0xa27e81fa, 0, 131072},
-		{"dynwar", "tkm-2.4a", 524288, 0xca5c687c, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "29.bin", 131072, 0x6b41f82d, 0, 131072},
-		{"dynwar", "tkm-3.6a", 524288, 0xf9fe6591, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "39.bin", 131072, 0xbc09b360, 0, 131072},
-		{"dynwar", "tkm-7.5a", 524288, 0x1255dfb1, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"dw", "41.bin", 131072, 0x1aae69a4, 0, 131072},
-		{"dynwar", "tkm-9.8h", 524288, 0x93654bcf, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "02.bin", 131072, 0xcc83c02f, 0, 131072},
-		{"dynwar", "tkm-5.7a", 524288, 0xf64bb6a0, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "04.bin", 131072, 0x4951bc0f, 0, 131072},
-		{"dynwar", "tkm-1.8a", 524288, 0x44f7661e, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "06.bin", 131072, 0x6f9edd75, 0, 131072},
-		{"dynwar", "tkm-8.9a", 524288, 0x21fe6274, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "08.bin", 131072, 0xb475d4e9, 0, 131072},
-		{"dynwar", "tkm-4.10a", 524288, 0xa54c515d, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "18.bin", 131072, 0x1833f932, 0, 131072},
-		{"dynwar", "tkm-6.3a", 524288, 0x0bf228cb, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "20.bin", 131072, 0x002796dc, 0, 131072},
-		{"dynwar", "tkm-2.4a", 524288, 0xca5c687c, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "22.bin", 131072, 0x52145369, 0, 131072},
-		{"dynwar", "tkm-3.6a", 524288, 0xf9fe6591, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "33.bin", 131072, 0x89de1533, 0, 131072},
-		{"dynwar", "tkm-7.5a", 524288, 0x1255dfb1, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"dw", "35.bin", 131072, 0x9db93d7a, 0, 131072},
-		{"dynwar", "tkm-9.8h", 524288, 0x93654bcf, 262144, 131072},
-	},
-	{0}
-};
-
 struct Rom rcps_roms[] =
 {
 	// MAME v0.80 Changes
@@ -12109,7 +11934,6 @@ struct Emulator ems[] =
 	{"mge", "MGE v0.471", mge_roms},
 	{"mimic", "Mimic v2.11", mimic_roms},
 	{"modeler", "Modeler v0.9.3a", modeler_roms},
-	{"nebula", "Nebula v2.24", nebula_roms},
 	{"nebula_jukebox", "Nebula Jukebox v2.9", nebula_jukebox_roms},
 	{"neoragex", "NeoRAGEx v0.6b", neoragex_roms},
 	{"pacsaver", "Pac Saver v1.00a", pacsaver_roms},
@@ -12118,7 +11942,7 @@ struct Emulator ems[] =
 	{"pcslomo", "PCSloMo v0.24 Final", pcslomo_roms},
 	{"qsound", "QSound Player v2", qsound_player_roms},
 	{"rage", "RAGE v0.9", rage_roms},
-	{"raine", "RAINE v0.43.0", raine_roms},
+	{"raine", "RAINE v0.43.2", raine_roms},
 	{"rcps", "RCPS", rcps_roms},
 	{"replay", "Replay v0.04", replay_roms},
 	{"retrocade", "Retrocade v1.2 b2", retrocade_roms},
@@ -12128,6 +11952,7 @@ struct Emulator ems[] =
 	{"salamander", "Salamander Arcade Emulator Preview", salamander_roms},
 	{"segasystemc2", "Sega System C2 Emulator v0.2b", segasystemc2_roms},
 	{"shark", "Shark v3.1f", shark_roms},
+	{"side", "SIDE", side_roms},
 	{"sideway", "Sideway v0.22a", sideway_roms},
 	{"sonson", "SonSon Emulator v0.1", sonson_roms},
 	{"sparcade", "Sparcade v2.33b", sparcade_roms},
