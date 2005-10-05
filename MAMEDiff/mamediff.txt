@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.18 - 17/09/2005
+                          MAMEDiff v2.19 - 05/10/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,12 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+05/10/2005  *** v2.19 ***
+
+            - Uses DatLib v2.8.
+            - Improved the logerror() function (used for reporting ZIP errors).
+            - Added support for M1's XML format (when it becomes available).
 
 17/09/2005  *** v2.18 ***
 
