@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.19 - 17/09/2005
+                         DatUtil v2.20 - 05/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -383,6 +383,12 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+05/10/2005  *** v2.20 ***
+
+            - Uses DatLib v2.8.
+            - Improved the logerror() function (used for reporting ZIP errors).
+            - Added support for M1's XML format (when it becomes available).
 
 17/09/2005  *** v2.19 ***
 
