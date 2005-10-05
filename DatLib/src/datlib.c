@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.7"
-#define DATLIB_DATE "17 September 2005"
+#define DATLIB_VERSION "v2.8"
+#define DATLIB_DATE "5 October 2005"
 
 
 /* --- Standard includes --- */

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.7 - 17/09/2005
+                          DatLib v2.8 - 05/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+05/10/2005  *** v2.8 ***
+
+            - Improved the logerror() function (used for reporting ZIP errors).
+            - Added support for M1's XML format (when it becomes available).
 
 17/09/2005  *** v2.7 ***
 

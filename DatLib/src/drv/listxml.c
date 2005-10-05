@@ -1,5 +1,6 @@
 /* --------------------------------------------------------------------------
- * MAME ListXML - Load only
+ * MAME ListXML - Load and Save
+ * MESS ListXML - Load only
  * -------------------------------------------------------------------------- */
 
 /* --- Standard includes --- */
@@ -17,8 +18,6 @@
 /* --- External structures --- */
 
 extern const struct datlib_token datlib_tokens[];
-
-int load_mame_listinfo(struct dat *dat);
 
 
 /* --- Is debugging enabled? --- */
