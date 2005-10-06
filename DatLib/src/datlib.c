@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.8"
-#define DATLIB_DATE "5 October 2005"
+#define DATLIB_VERSION "v2.9"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -1210,6 +1210,14 @@ int store_tokenized_dat(struct dat *dat)
 				else if (type==TOKEN_ROM_SIZE)
 				{
 					curr_rom->size=strtoul(BUFFER2_PTR, NULL, 10);
+
+					// Value may be zero so its presence needs remembering!
+					curr_rom->rom_flags|=FLAG_ROM_SIZE;
+				}
+
+				else if (type==TOKEN_ROM_SIZE_HEX)
+				{
+					curr_rom->size=strtoul(BUFFER2_PTR, NULL, 16);
 
 					// Value may be zero so its presence needs remembering!
 					curr_rom->rom_flags|=FLAG_ROM_SIZE;

@@ -180,8 +180,8 @@ int load_nebula_driver(struct dat *dat)
 
 			/* --- Third field is the ROM size (in hex) --- */
 
-			sprintf(TOKEN, "%ld", strtoul(strtok(NULL, ","), NULL, 16));
-			BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+			strcpy(TOKEN, strtok(NULL, ","));
+			BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE_HEX)
 
 			/* --- Fourth field is the ROM CRC --- */
 

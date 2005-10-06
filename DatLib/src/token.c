@@ -61,6 +61,7 @@ const struct datlib_token datlib_tokens[] =
 	{TOKEN_ROM_NAME, "ROM_NAME"},
 	{TOKEN_ROM_BIOS, "ROM_BIOS"},
 	{TOKEN_ROM_SIZE, "ROM_SIZE"},
+	{TOKEN_ROM_SIZE_HEX, "ROM_SIZE_HEX"},
 	{TOKEN_ROM_CRC, "ROM_CRC"},
 	{TOKEN_ROM_MD5, "ROM_MD5"},
 	{TOKEN_ROM_SHA1, "ROM_SHA1"},

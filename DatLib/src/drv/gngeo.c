@@ -55,7 +55,6 @@ int identify_gngeo_romrc(struct dat *dat)
 
 int load_gngeo_romrc(struct dat *dat)
 {
-	unsigned long size;
 	int in_rom_section=0, errflg=0;
 
 	BUFFER1_REWIND
@@ -111,9 +110,7 @@ int load_gngeo_romrc(struct dat *dat)
 				BUFFER1_GET_TOKEN
 
 				BUFFER1_GET_TOKEN
-				size=strtoul(TOKEN, NULL, 16);
-				sprintf(TOKEN, "%lu", size);
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE);
+				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE_HEX);
 			}
 		}
 
