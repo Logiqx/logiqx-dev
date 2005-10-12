@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.20 - 05/10/2005
+                         DatUtil v2.21 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -383,6 +383,12 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+xx/xx/xxxx  *** v2.20 ***
+
+            - Uses DatLib v2.9.
+            - Added better support for file formats that use hex ROM sizes.
+            - M1 XML now uses hex for ROM sizes. Changed driver accordingly.
 
 05/10/2005  *** v2.20 ***
 

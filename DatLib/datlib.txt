@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.8 - 05/10/2005
+                          DatLib v2.9 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.9 ***
+
+            - Added better support for file formats that use hex ROM sizes.
+            - M1 XML now uses hex for ROM sizes. Changed driver accordingly.
 
 05/10/2005  *** v2.8 ***
 

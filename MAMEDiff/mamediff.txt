@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.19 - 05/10/2005
+                          MAMEDiff v2.20 - xx/xx/xxxx
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,12 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+xx/xx/xxxx  *** v2.20 ***
+
+            - Uses DatLib v2.9.
+            - Added better support for file formats that use hex ROM sizes.
+            - M1 XML now uses hex for ROM sizes. Changed driver accordingly.
 
 05/10/2005  *** v2.19 ***
 
