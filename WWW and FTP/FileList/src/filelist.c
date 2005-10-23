@@ -88,10 +88,10 @@ int scan_dir(char *dir, int images)
 int file_details(char *fn, struct stat *buf, int images)
 {
 	FILE *in=0;
-	unsigned char byte;
+	unsigned char marker;
 	char st[MAX_FILENAME_LENGTH+1];
-	long width=0, height=0;
-	int i, file_format=0, errflg=0;
+	long width=0, height=0, block_length;
+	int file_format=0, errflg=0;
 
 	strcpy(st, fn);
 	*strrchr(st, '/')='\t';
@@ -113,20 +113,10 @@ int file_details(char *fn, struct stat *buf, int images)
 		if (file_format==PNG_FORMAT)
 		{
 			fseek(in, 16, 0);
-			for (i=0; i<4; i++)
-			{
-				width=width<<8;
-				fread(&byte, 1, 1, in);
-				width|=byte;
-			}
-			
-			for (i=0; i<4; i++)
-			{
-				height=height<<8;
-				fread(&byte, 1, 1, in);
-				height|=byte;
-			}
 
+			width=((fgetc(in)<<8 | fgetc(in))<<8 | fgetc(in))<<8 | fgetc(in);
+			height=((fgetc(in)<<8 | fgetc(in))<<8 | fgetc(in))<<8 | fgetc(in);
+			
 			if (st[1]=='\t')
 				printf("%s\t%ld\t%ld\t%ld\n", st, (long)buf->st_size, width, height);
 			else
@@ -135,21 +125,28 @@ int file_details(char *fn, struct stat *buf, int images)
 
 		else if (file_format==JPG_FORMAT)
 		{
-			fseek(in, 163, 0);
-			for (i=0; i<2; i++)
+			if (fgetc(in)==0xff && fgetc(in)==0xd8)
 			{
-				height=height<<8;
-				fread(&byte, 1, 1, in);
-				height|=byte;
-			}
-			
-			for (i=0; i<2; i++)
-			{
-				width=width<<8;
-				fread(&byte, 1, 1, in);
-				width|=byte;
-			}
+				while (fgetc(in)==0xff)
+				{
+					marker=fgetc(in);
 
+					block_length=fgetc(in)<<8 | fgetc(in);
+
+					if (marker==0xc0)
+					{
+						fgetc(in);
+
+						height=fgetc(in)<<8 | fgetc(in);
+						width=fgetc(in)<<8 | fgetc(in);
+
+						fseek(in, -5, SEEK_CUR);
+					}
+
+					fseek(in, block_length-2, SEEK_CUR);
+				}
+			}
+					
 			if (st[1]=='\t')
 				printf("%s\t%ld\t%ld\t%ld\n", st, (long)buf->st_size, width, height);
 			else
