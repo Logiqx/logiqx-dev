@@ -3551,7 +3551,8 @@ int report_warnings(struct dat *dat)
 
 	for (i=0, curr_game_idx=dat->game_crc_idx; i<dat->num_games; i++, curr_game_idx++)
 	{
-		if (i>0 && curr_game_idx->game->crc==(curr_game_idx-1)->game->crc)
+		if (i>0 && curr_game_idx->game->crc && (curr_game_idx-1)->game->crc &&
+			curr_game_idx->game->crc==(curr_game_idx-1)->game->crc)
 		{
 			curr_game_idx->game->game_warnings|=FLAG_GAME_DUPLICATE_CRC;
 			(curr_game_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE_CRC;
