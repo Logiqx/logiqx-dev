@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v2.9"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "28 October 2005"
 
 
 /* --- Standard includes --- */
@@ -459,6 +459,22 @@ int game_name_idx_sort_function(const void *idx1, const void *idx2)
 	return(result);
 }
 
+int game_description_idx_sort_function(const void *idx1, const void *idx2)
+{
+	int result=strcmp(((struct game_idx *)idx1)->game->description, ((struct game_idx *)idx2)->game->description);
+
+	if (result==0)
+	{
+		if (((struct game_idx *)idx2)->game->crc > ((struct game_idx *)idx1)->game->crc)
+			result=-1;
+
+		if (((struct game_idx *)idx2)->game->crc < ((struct game_idx *)idx1)->game->crc)
+			result=1;
+	}
+
+	return(result);
+}
+
 int game_score_idx_sort_function(const void *idx1, const void *idx2)
 {
 	if (((struct game_idx *)idx2)->game->score < ((struct game_idx *)idx1)->game->score)
@@ -856,6 +872,7 @@ int allocate_dat_memory(struct dat *dat)
 		{
 			STRUCT_CALLOC(dat->games, dat->num_games, sizeof(struct game))
 			STRUCT_CALLOC(dat->game_name_idx, dat->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_description_idx, dat->num_games, sizeof(struct game_idx))
 			STRUCT_CALLOC(dat->game_crc_idx, dat->num_games, sizeof(struct game_idx))
 			STRUCT_CALLOC(dat->game_score_idx, dat->num_games, sizeof(struct game_idx))
 
@@ -3480,7 +3497,7 @@ int fix_merging_phase_2(struct dat *dat)
 int report_warnings(struct dat *dat)
 {
 	struct st_idx *st_idx;
-	struct game_idx *curr_game_name_idx=0;
+	struct game_idx *curr_game_idx=0;
 	struct game *curr_game=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
@@ -3514,12 +3531,30 @@ int report_warnings(struct dat *dat)
 			dat->sourcefile_selection_warnings|=FLAG_BAD_SOURCEFILE_SELECTION;
 	}
 
-	for (i=0, curr_game_name_idx=dat->game_name_idx; i<dat->num_games; i++, curr_game_name_idx++)
+	for (i=0, curr_game_idx=dat->game_name_idx; i<dat->num_games; i++, curr_game_idx++)
 	{
-		if (i>0 && !strcmp(curr_game_name_idx->game->name, (curr_game_name_idx-1)->game->name))
+		if (i>0 && !strcmp(curr_game_idx->game->name, (curr_game_idx-1)->game->name))
 		{
-			curr_game_name_idx->game->game_warnings|=FLAG_GAME_DUPLICATE;
-			(curr_game_name_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE;
+			curr_game_idx->game->game_warnings|=FLAG_GAME_DUPLICATE_NAME;
+			(curr_game_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE_NAME;
+		}
+	}
+
+	for (i=0, curr_game_idx=dat->game_description_idx; i<dat->num_games; i++, curr_game_idx++)
+	{
+		if (i>0 && !strcmp(curr_game_idx->game->description, (curr_game_idx-1)->game->description))
+		{
+			curr_game_idx->game->game_warnings|=FLAG_GAME_DUPLICATE_DESCRIPTION;
+			(curr_game_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE_DESCRIPTION;
+		}
+	}
+
+	for (i=0, curr_game_idx=dat->game_crc_idx; i<dat->num_games; i++, curr_game_idx++)
+	{
+		if (i>0 && curr_game_idx->game->crc==(curr_game_idx-1)->game->crc)
+		{
+			curr_game_idx->game->game_warnings|=FLAG_GAME_DUPLICATE_CRC;
+			(curr_game_idx-1)->game->game_warnings|=FLAG_GAME_DUPLICATE_CRC;
 		}
 	}
 
@@ -3674,8 +3709,12 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing Manufacturer\n");
 			if (dat->game_warnings & FLAG_GAME_REBUILDTO)
 				fprintf(dat->log_file, "    Missing Rebuild To\n");
-			if (dat->game_warnings & FLAG_GAME_DUPLICATE)
-				fprintf(dat->log_file, "    Duplicate\n");
+			if (dat->game_warnings & FLAG_GAME_DUPLICATE_NAME)
+				fprintf(dat->log_file, "    Duplicate Name\n");
+			if (dat->game_warnings & FLAG_GAME_DUPLICATE_DESCRIPTION)
+				fprintf(dat->log_file, "    Duplicate Description\n");
+			if (dat->game_warnings & FLAG_GAME_DUPLICATE_CRC)
+				fprintf(dat->log_file, "    Duplicate CRC (i.e. all ROMs match another game)\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -3851,8 +3890,12 @@ int report_warnings(struct dat *dat)
 						fprintf(dat->log_file, "    Missing Manufacturer\n");
 					if (curr_game->game_warnings & FLAG_GAME_REBUILDTO)
 						fprintf(dat->log_file, "    Missing Rebuild To\n");
-					if (curr_game->game_warnings & FLAG_GAME_DUPLICATE)
-						fprintf(dat->log_file, "    Duplicate\n");
+					if (curr_game->game_warnings & FLAG_GAME_DUPLICATE_NAME)
+						fprintf(dat->log_file, "    Duplicate Name\n");
+					if (curr_game->game_warnings & FLAG_GAME_DUPLICATE_DESCRIPTION)
+						fprintf(dat->log_file, "    Duplicate Description\n");
+					if (curr_game->game_warnings & FLAG_GAME_DUPLICATE_CRC)
+						fprintf(dat->log_file, "    Duplicate CRC (i.e. all ROMs match another game)\n");
 				}
 
 				if (curr_game->biosset_warnings)
@@ -4345,6 +4388,7 @@ int rebuild_dat_indices(struct dat *dat)
 	struct game *curr_game=0;
 	struct game_idx *curr_game_crc_idx=0;
 	struct game_idx *curr_game_name_idx=0;
+	struct game_idx *curr_game_description_idx=0;
 	struct game_idx *curr_game_score_idx=0;
 
 	struct rom *curr_rom=0;
@@ -4390,17 +4434,20 @@ int rebuild_dat_indices(struct dat *dat)
 
 	curr_game_crc_idx=dat->game_crc_idx;
 	curr_game_name_idx=dat->game_name_idx;
+	curr_game_description_idx=dat->game_description_idx;
 	curr_game_score_idx=dat->game_score_idx;
 	
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
 		curr_game_crc_idx++->game=curr_game;
 		curr_game_name_idx++->game=curr_game;
+		curr_game_description_idx++->game=curr_game;
 		curr_game_score_idx++->game=curr_game;
 	}
 
 	qsort(dat->game_crc_idx, dat->num_games, sizeof(struct game_idx), game_crc_idx_sort_function);
 	qsort(dat->game_name_idx, dat->num_games, sizeof(struct game_idx), game_name_idx_sort_function);
+	qsort(dat->game_description_idx, dat->num_games, sizeof(struct game_idx), game_description_idx_sort_function);
 	qsort(dat->game_score_idx, dat->num_games, sizeof(struct game_idx), game_score_idx_sort_function);
 
 	/* --- Generate ROM/disk/sample indexes --- */
@@ -5968,6 +6015,7 @@ struct dat *free_dat(struct dat *dat)
 		FREE(dat->game_zips)
 		FREE(dat->game_score_idx)
 		FREE(dat->game_crc_idx)
+		FREE(dat->game_description_idx)
 		FREE(dat->game_name_idx)
 		FREE(dat->games)
 

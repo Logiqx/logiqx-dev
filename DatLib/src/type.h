@@ -661,6 +661,7 @@ struct dat
 
 	struct game *games;
 	struct game_idx *game_name_idx;
+	struct game_idx *game_description_idx;
 	struct game_idx *game_crc_idx;
 	struct game_idx *game_score_idx;
 
@@ -883,11 +884,12 @@ struct ini_entry
 #define FLAG_GAME_YEAR			0x0100
 #define FLAG_GAME_MANUFACTURER		0x0200
 #define FLAG_GAME_HISTORY		0x0400
+#define FLAG_GAME_REBUILDTO		0x0800
 
-#define FLAG_GAME_REBUILDTO		0x1000
-
-#define FLAG_GAME_CLONEOFCLONE		0x4000
-#define FLAG_GAME_DUPLICATE		0x8000
+#define FLAG_GAME_CLONEOFCLONE		0x1000
+#define FLAG_GAME_DUPLICATE_NAME	0x2000
+#define FLAG_GAME_DUPLICATE_DESCRIPTION	0x4000
+#define FLAG_GAME_DUPLICATE_CRC		0x8000
 
 
 /* --- Comment Flags --- */
