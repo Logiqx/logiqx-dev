@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.9 - 28/10/2005
+                          DatLib v2.10 - 31/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+31/10/2005  *** v2.10 ***
+
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
+            - Added OPTION_ALWAYS_QUOTE for DatUtil (the '-q' option).
 
 28/10/2005  *** v2.9 ***
 

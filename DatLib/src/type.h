@@ -831,6 +831,7 @@ struct ini_entry
 #define OPTION_REMOVE_CLONES		0x00001000	// DatUtil -r option
 #define OPTION_KEEP_FULL_DETAILS	0x00002000	// DatUtil -k option
 #define OPTION_NEBULA_JUKEBOX		0x00004000	// DatUtil -j option
+#define OPTION_ALWAYS_QUOTE		0x00008000	// DatUtil -q option
 
 #define OPTION_EXTENDED_CHECKSUMS	0x00010000	// DatUtil -x option
 #define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil default

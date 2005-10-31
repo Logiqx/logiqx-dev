@@ -41,7 +41,7 @@ int identify_mame_listxml(struct dat *dat)
 		if (!strcmp(TOKEN, "<?xml"))
 			xml++;
 
-		if (xml && !strcmp(TOKEN, "<mame>"))
+		if (xml && (!strcmp(TOKEN, "<mame>") || !strcmp(TOKEN, "<mame")))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
@@ -64,7 +64,7 @@ int identify_mess_listxml(struct dat *dat)
 		if (!strcmp(TOKEN, "<?xml"))
 			xml++;
 
-		if (xml && !strcmp(TOKEN, "<mess>"))
+		if (xml && (!strcmp(TOKEN, "<mess>") || !strcmp(TOKEN, "<mess")))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
