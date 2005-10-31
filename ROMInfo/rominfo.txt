@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ROMInfo v2.3 - 28/02/2005
+                          ROMInfo v2.4 - 31/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -73,6 +73,11 @@ D-Zine who prompted me to write this and came up with the ZIP file idea.
 
 History
 -------
+
+31/10/2005  *** v2.4 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
 
 28/02/2005  *** v2.3 ***
 
