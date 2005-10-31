@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ImgChk v2.5 - 28/02/2005
+                          ImgChk v2.6 - 31/10/2005
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
 
@@ -54,6 +54,11 @@ If you find any bugs please let me know about them.
 
 History
 -------
+
+31/10/2005  *** v2.6 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
 
 28/02/2005  *** v2.5 ***
 
