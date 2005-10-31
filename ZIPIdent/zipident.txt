@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPIdent v2.4 - 28/02/2005
+                         ZIPIdent v2.5 - 31/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -181,6 +181,11 @@ matched against different games).
 
 History
 -------
+
+31/10/2005  *** v2.5 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
 
 28/02/2005  *** v2.4 ***
 
