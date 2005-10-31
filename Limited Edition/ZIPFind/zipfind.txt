@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPFind v2.2 - 22/07/2004
+                         ZIPFind v2.3 - 31/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -108,6 +108,11 @@ what it does already!
 
 History
 -------
+
+31/10/2005  *** v2.3 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
 
 22/07/2004  *** v2.2 ***
 
