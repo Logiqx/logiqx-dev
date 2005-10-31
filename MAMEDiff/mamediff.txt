@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.20 - 28/10/2005
+                          MAMEDiff v2.21 - 31/10/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -294,12 +294,15 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 11. History
 -----------
 
+31/10/2005  *** v2.21 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
+
 28/10/2005  *** v2.20 ***
 
             - Uses DatLib v2.9.
-            - Added better support for file formats that use hex ROM sizes.
-            - M1 XML now uses hex for ROM sizes. Changed driver accordingly.
-            - Now reports duplicate game descriptions and CRCs (i.e. ROMs).
+            - M1 XML will use hex for ROM sizes. Changed driver accordingly.
 
 05/10/2005  *** v2.19 ***
 
