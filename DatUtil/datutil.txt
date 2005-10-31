@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.21 - 28/10/2005
+                         DatUtil v2.22 - 31/10/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -275,6 +275,7 @@ Defaults:
 Saving:
 
   -f  output format (listinfo, listxml, romcenter2, delimited, sublist, etc)
+  -q  always use quotes around strings (only applies to listinfo output)
   -k  keep as much information as possible from the source file
   -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
   -o  output to file
@@ -383,6 +384,12 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+31/10/2005  *** v2.10 ***
+
+            - Uses DatLib v2.10.
+            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
+            - Added the '-q' option (to save Listinfo with quotes throughout).
 
 28/10/2005  *** v2.20 ***
 

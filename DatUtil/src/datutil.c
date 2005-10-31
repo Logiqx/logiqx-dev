@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.21"
-#define DATUTIL_DATE "28 October 2005"
+#define DATUTIL_VERSION "v2.22"
+#define DATUTIL_DATE "31 October 2005"
 
 
 /* --- The standard includes --- */
@@ -72,13 +72,16 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:kjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
 		case 'f':
 			LOWER(optarg);
 			options->save_format=optarg;
+			break;
+		case 'q':
+			options->options|=OPTION_ALWAYS_QUOTE;
 			break;
 		case 'k':
 			options->options|=OPTION_KEEP_FULL_DETAILS;
@@ -185,7 +188,7 @@ int main(int argc, char **argv)
 		printf("For instructions on use, read the documentation that's been provided. Here is\n");
 		printf("a brief summary of the options... far greater detail is in the documentation.\n\n");
 
-		printf("Saving          [-f <output format>] [-k] [j] [-o|a <output file>] [-t]\n");
+		printf("Saving          [-f <output format>] [-q] [-k] [-j] [-o|a <output file>] [-t]\n");
 		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
 		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
 		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
