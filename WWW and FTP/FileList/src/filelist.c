@@ -125,6 +125,9 @@ int file_details(char *fn, struct stat *buf, int images)
 
 		else if (file_format==JPG_FORMAT)
 		{
+			// Took the basic principal from a message forum...
+			// http://forum.java.sun.com/thread.jspa?threadID=554733&messageID=2717319
+
 			if (fgetc(in)==0xff && fgetc(in)==0xd8)
 			{
 				while (fgetc(in)==0xff)
