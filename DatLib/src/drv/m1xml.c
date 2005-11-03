@@ -40,7 +40,7 @@ int identify_m1_xml(struct dat *dat)
 		if (!strcmp(TOKEN, "<?xml"))
 			xml++;
 
-		if (xml && !strcmp(TOKEN, "<m1"))
+		if (xml && (!strcmp(TOKEN, "<m1>") || !strcmp(TOKEN, "<m1")))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
@@ -178,7 +178,7 @@ int load_m1_xml(struct dat *dat)
 		else if (strstr(BUFFER1_PTR, "<rom "))
 		{
 			GET_XML_ATTRIBUTE("name", TOKEN_ROM_NAME) 
-			GET_XML_ATTRIBUTE("size", TOKEN_ROM_SIZE_HEX) 
+			GET_XML_ATTRIBUTE("size", TOKEN_ROM_SIZE) 
 			GET_XML_ATTRIBUTE("crc", TOKEN_ROM_CRC) 
 			GET_XML_ATTRIBUTE("sha1", TOKEN_ROM_SHA1) 
 		}

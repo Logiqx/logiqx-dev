@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.21 - 31/10/2005
+                          MAMEDiff v2.22 - xx/xx/xxxx
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+xx/xx/xxxx  *** v2.22 ***
+
+            - Uses DatLib v2.11.
+            - M1 XML will not use hex for ROM sizes after all... changed back!
 
 31/10/2005  *** v2.21 ***
 

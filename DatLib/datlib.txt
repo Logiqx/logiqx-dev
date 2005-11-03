@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.10 - 31/10/2005
+                          DatLib v2.11 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,10 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+xx/xx/xxxx  *** v2.11 ***
+
+            - M1 XML will not use hex for ROM sizes after all... changed back!
 
 31/10/2005  *** v2.10 ***
 
