@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.22 - 31/10/2005
+                         DatUtil v2.23 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -385,13 +385,18 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
-31/10/2005  *** v2.10 ***
+xx/xx/xxxx  *** v2.23 ***
+
+            - Uses DatLib v2.11.
+            - M1 XML will not use hex for ROM sizes after all... changed back!
+
+31/10/2005  *** v2.22 ***
 
             - Uses DatLib v2.10.
             - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
             - Added the '-q' option (to save Listinfo with quotes throughout).
 
-28/10/2005  *** v2.20 ***
+28/10/2005  *** v2.21 ***
 
             - Uses DatLib v2.9.
             - M1 XML will use hex for ROM sizes. Changed driver accordingly.
