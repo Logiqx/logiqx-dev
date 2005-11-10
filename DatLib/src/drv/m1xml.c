@@ -162,6 +162,7 @@ int load_m1_xml(struct dat *dat)
 			GET_XML_ATTRIBUTE("name", TOKEN_GAME_NAME)
 			GET_XML_ATTRIBUTE("romof", TOKEN_GAME_CLONEOF)
 			GET_XML_ATTRIBUTE("romof", TOKEN_GAME_ROMOF)
+			GET_XML_ATTRIBUTE("board", TOKEN_GAME_BOARD)
 		}
 		else if (strstr(BUFFER1_PTR, "<description>"))
 		{
