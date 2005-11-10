@@ -24,6 +24,25 @@ extern const struct datlib_token datlib_tokens[];
 extern int datlib_debug;
 
 
+/* --- Hard-coded resources --- */
+
+struct resource_rom
+{
+	char *rom_name;
+	uint32_t rom_size;
+	uint32_t rom_crc;
+};
+
+struct resource_rom neogeo_rom[] =
+{
+	{"neo-geo.rom", 131072, 0x9036d879},
+	{"sfix.sfx", 131072, 0x354029fc},
+	{"sm1.sm1", 131072, 0x97cf998b},
+	{"000-lo.lo", 65536, 0xe09e253c},
+	{0, 0, 0}
+};
+
+
 /* --- Identification --- */
 
 int identify_nebula_driver(struct dat *dat)
@@ -53,7 +72,7 @@ int identify_nebula_driver(struct dat *dat)
 
 int load_nebula_driver(struct dat *dat)
 {
-	int in_rom_section=0, neogeo=0, parent=0, errflg=0;
+	int i, in_rom_section=0, neogeo=0, parent=0, errflg=0;
 
 	BUFFER1_REWIND
 	BUFFER2_REWIND
@@ -79,10 +98,28 @@ int load_nebula_driver(struct dat *dat)
 			else
 				in_rom_section=0;
 
-			if (in_rom_section && neogeo && !parent)
+			if (!(dat->options->options & OPTION_NEBULA_JUKEBOX) && in_rom_section && neogeo)
 			{
-				sprintf(TOKEN, "neogeo");
-				BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
+				if (!strcmp(TOKEN, "[z80]"))
+				{
+					for (i=0; neogeo_rom[i].rom_name!=0; i++)
+					{
+						strcpy(TOKEN, neogeo_rom[i].rom_name);
+						BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
+
+						sprintf(TOKEN, "%lu", (unsigned long)neogeo_rom[i].rom_size);
+						BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+
+						sprintf(TOKEN, "%08lx", (unsigned long)neogeo_rom[i].rom_crc);
+						BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+					}
+				}
+
+				if (!parent)
+				{
+					sprintf(TOKEN, "neogeo");
+					BUFFER2_PUT_TOKEN(TOKEN_GAME_ROMOF)
+				}
 			}
 
 			parent=0;
@@ -103,37 +140,6 @@ int load_nebula_driver(struct dat *dat)
 		{
 			BUFFER1_GET_TOKEN
 			BUFFER2_PUT_TOKEN(TOKEN_GAME_NAME)
-
-			if (neogeo)
-			{
-				sprintf(TOKEN, "neo-geo.rom");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-				sprintf(TOKEN, "131072");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-				sprintf(TOKEN, "9036d879");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
-
-				sprintf(TOKEN, "sfix.sfx");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-				sprintf(TOKEN, "131072");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-				sprintf(TOKEN, "354029fc");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
-
-				sprintf(TOKEN, "sm1.sm1");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-				sprintf(TOKEN, "131072");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-				sprintf(TOKEN, "97cf998b");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
-
-				sprintf(TOKEN, "000-lo.lo");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-				sprintf(TOKEN, "65536");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-				sprintf(TOKEN, "e09e253c");
-				BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
-			}
 		}
 
 		else if (!strcmp(TOKEN, "game:"))
@@ -192,41 +198,25 @@ int load_nebula_driver(struct dat *dat)
 		BUFFER1_ADVANCE_LINE
 	}
 
-	sprintf(TOKEN, "neogeo");
-	BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_NAME)
-
-	sprintf(TOKEN, "Neo-Geo");
-	BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_DESCRIPTION)
-
-	if (neogeo)
+	if (!(dat->options->options & OPTION_NEBULA_JUKEBOX))
 	{
-		sprintf(TOKEN, "neo-geo.rom");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-		sprintf(TOKEN, "131072");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-		sprintf(TOKEN, "9036d879");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+		sprintf(TOKEN, "neogeo");
+		BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_NAME)
 
-		sprintf(TOKEN, "sfix.sfx");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-		sprintf(TOKEN, "131072");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-		sprintf(TOKEN, "354029fc");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+		sprintf(TOKEN, "Neo-Geo");
+		BUFFER2_PUT_TOKEN(TOKEN_RESOURCE_DESCRIPTION)
 
-		sprintf(TOKEN, "sm1.sm1");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-		sprintf(TOKEN, "131072");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-		sprintf(TOKEN, "97cf998b");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+		for (i=0; neogeo_rom[i].rom_name!=0; i++)
+		{
+			strcpy(TOKEN, neogeo_rom[i].rom_name);
+			BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
 
-		sprintf(TOKEN, "000-lo.lo");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
-		sprintf(TOKEN, "65536");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
-		sprintf(TOKEN, "e09e253c");
-		BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+			sprintf(TOKEN, "%lu", (unsigned long)neogeo_rom[i].rom_size);
+			BUFFER2_PUT_TOKEN(TOKEN_ROM_SIZE)
+
+			sprintf(TOKEN, "%08lx", (unsigned long)neogeo_rom[i].rom_crc);
+			BUFFER2_PUT_TOKEN(TOKEN_ROM_CRC)
+		}
 	}
 
 	return(errflg);
