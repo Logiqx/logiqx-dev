@@ -150,6 +150,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("manufacturer", TOKEN_GAME_MANUFACTURER)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("history", TOKEN_GAME_HISTORY)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("rebuildto", TOKEN_GAME_REBUILDTO)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("board", TOKEN_GAME_BOARD)
 		}
 
 		/* --- Resources --- */
@@ -163,6 +164,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("manufacturer", TOKEN_RESOURCE_MANUFACTURER)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("history", TOKEN_RESOURCE_HISTORY)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("rebuildto", TOKEN_RESOURCE_REBUILDTO)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("board", TOKEN_RESOURCE_BOARD)
 		}
 
 		/* --- Machines --- */
@@ -179,6 +181,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("manufacturer", TOKEN_MACHINE_MANUFACTURER)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("history", TOKEN_MACHINE_HISTORY)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("rebuildto", TOKEN_MACHINE_REBUILDTO)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("board", TOKEN_MACHINE_BOARD)
 		}
 
 		if (game_type==FLAG_GAME_NAME || game_type==FLAG_RESOURCE_NAME || game_type==FLAG_MACHINE_NAME)
@@ -353,6 +356,7 @@ int load_mame_listinfo(struct dat *dat)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("control", TOKEN_INPUT_CONTROL)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
 				}
 			}
 
@@ -393,6 +397,8 @@ int load_mame_listinfo(struct dat *dat)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
 				}
 			}
 
@@ -406,6 +412,18 @@ int load_mame_listinfo(struct dat *dat)
 
 					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("extension", TOKEN_EXTENSION_NAME)
+				}
+			}
+
+			/* --- Archives --- */
+
+			else if (!strcmp(TOKEN, "archive"))
+			{
+				while (strchr(BUFFER1_PTR, ')') && BUFFER1_REMAINING && strcmp(TOKEN, ")"))
+				{
+					BUFFER1_GET_TOKEN
+
+					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
 				}
 			}
 		}
@@ -584,6 +602,7 @@ int save_mame_listinfo(struct dat *dat)
 	struct driver *curr_driver=0;
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
+	struct archive *curr_archive=0;
 
 	uint32_t ordering=LOGIQX_ORDERING, i, j, k;
 	int errflg=0;
@@ -721,6 +740,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		OUTPUT_QUOTED_STRING(game, history, "\thistory", FLAG_GAME_HISTORY)
 		OUTPUT_SMART_STRING(game, rebuildto, "\trebuildto", FLAG_GAME_REBUILDTO)
+		OUTPUT_QUOTED_STRING(game, board, "\tboard", FLAG_GAME_BOARD)
 
 		/* --- BIOS Set information --- */
 
@@ -846,6 +866,7 @@ int save_mame_listinfo(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG(input, coins, "coins", FLAG_INPUT_COINS)
 			OUTPUT_UNQUOTED_STRING(input, service, "service", FLAG_INPUT_SERVICE)
 			OUTPUT_UNQUOTED_STRING(input, tilt, "tilt", FLAG_INPUT_TILT)
+			OUTPUT_UNSIGNED_LONG(input, dipswitches, "dipswitches", FLAG_INPUT_DIPSWITCHES)
 
 			fprintf(dat->out, ")\n");
 		}
@@ -881,6 +902,8 @@ int save_mame_listinfo(struct dat *dat)
 			OUTPUT_UNQUOTED_STRING(driver, cocktail, "cocktail", FLAG_DRIVER_COCKTAIL)
 			OUTPUT_UNQUOTED_STRING(driver, protection, "protection", FLAG_DRIVER_PROTECTION)
 			OUTPUT_UNSIGNED_LONG(driver, palettesize, "palettesize", FLAG_DRIVER_PALETTESIZE)
+			OUTPUT_UNSIGNED_LONG(driver, colordeep, "colordeep", FLAG_DRIVER_COLORDEEP)
+			OUTPUT_QUOTED_STRING(driver, credits, "credits", FLAG_DRIVER_CREDITS)
 
 			fprintf(dat->out, ")\n");
 		}
@@ -900,6 +923,19 @@ int save_mame_listinfo(struct dat *dat)
 
 			fprintf(dat->out, ")\n");
 		}
+
+		/* --- Archive information --- */
+
+		if (curr_game->archives)
+			fprintf(dat->out, "\tarchive ( ");
+
+		for (j=0, curr_archive=curr_game->archives; j<curr_game->num_archives; j++, curr_archive++)
+		{
+			OUTPUT_QUOTED_STRING(archive, name, "name", FLAG_ARCHIVE_NAME)
+		}
+
+		if (curr_game->archives)
+			fprintf(dat->out, ")\n");
 
 		fprintf(dat->out, ")\n\n");
 	}

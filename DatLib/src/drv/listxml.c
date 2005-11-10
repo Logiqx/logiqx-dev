@@ -198,11 +198,13 @@ int load_mame_listxml(struct dat *dat)
 				GET_XML_ATTRIBUTE("romof", TOKEN_GAME_ROMOF)
 				GET_XML_ATTRIBUTE("sampleof", TOKEN_GAME_SAMPLEOF)
 				GET_XML_ATTRIBUTE("rebuildto", TOKEN_GAME_REBUILDTO)
+				GET_XML_ATTRIBUTE("board", TOKEN_GAME_BOARD)
 			}
 			else if (game_type==FLAG_RESOURCE_NAME)
 			{
 				GET_XML_ATTRIBUTE("name", TOKEN_RESOURCE_NAME) 
 				GET_XML_ATTRIBUTE("sourcefile", TOKEN_RESOURCE_SOURCEFILE) 
+				GET_XML_ATTRIBUTE("board", TOKEN_RESOURCE_BOARD) 
 			}
 			if (game_type==FLAG_MACHINE_NAME)
 			{
@@ -211,6 +213,7 @@ int load_mame_listxml(struct dat *dat)
 				GET_XML_ATTRIBUTE("cloneof", TOKEN_MACHINE_CLONEOF) 
 				GET_XML_ATTRIBUTE("romof", TOKEN_MACHINE_ROMOF) 
 				GET_XML_ATTRIBUTE("sampleof", TOKEN_MACHINE_SAMPLEOF)
+				GET_XML_ATTRIBUTE("board", TOKEN_MACHINE_BOARD)
 			}
 		}
 		else if (strstr(BUFFER1_PTR, "<description>"))
@@ -313,6 +316,7 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("control", TOKEN_INPUT_CONTROL)
 			GET_XML_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
 			GET_XML_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
+			GET_XML_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
 		}
 		else if (strstr(BUFFER1_PTR, "<dipswitch "))
 		{
@@ -333,6 +337,8 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
 			GET_XML_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
 			GET_XML_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
+			GET_XML_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
+			GET_XML_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
 		}
 		else if (strstr(BUFFER1_PTR, "<device "))
 		{
@@ -341,6 +347,10 @@ int load_mame_listxml(struct dat *dat)
 		else if (strstr(BUFFER1_PTR, "<extension "))
 		{
 			GET_XML_ATTRIBUTE("name", TOKEN_EXTENSION_NAME)
+		}
+		else if (strstr(BUFFER1_PTR, "<archive "))
+		{
+			GET_XML_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
 		}
 
 		BUFFER1_ADVANCE_LINE
@@ -472,6 +482,7 @@ int save_mame_listxml(struct dat *dat)
 	struct driver *curr_driver=0;
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
+	struct archive *curr_archive=0;
 
 	uint32_t i, j, k;
 	int errflg=0;
@@ -509,6 +520,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t<!ATTLIST %s sampleof CDATA #IMPLIED>\n", game_type);
 	if (dat->game_flags & FLAG_GAME_REBUILDTO)
 		fprintf(dat->out, "\t\t<!ATTLIST %s rebuildto (#PCDATA)>\n", game_type);
+	if (dat->game_flags & FLAG_GAME_BOARD)
+		fprintf(dat->out, "\t\t<!ATTLIST %s board (#PCDATA)>\n", game_type);
 
 	if (dat->comment_flags & FLAG_COMMENT_TEXT)
 		fprintf(dat->out, "\t\t<!ELEMENT comment (#PCDATA)>\n");
@@ -574,6 +587,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST input control CDATA #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST input buttons CDATA #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST input coins CDATA #IMPLIED>\n");
+	if (dat->input_flags & FLAG_INPUT_DIPSWITCHES)
+		fprintf(dat->out, "\t\t\t<!ATTLIST input dipswitches CDATA #IMPLIED>\n");
 
 	fprintf(dat->out, "\t\t<!ELEMENT dipswitch (dipvalue*)>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST dipswitch name CDATA #REQUIRED>\n");
@@ -590,6 +605,10 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver cocktail (good|imperfect|preliminary) #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver protection (good|imperfect|preliminary) #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver palettesize CDATA #REQUIRED>\n");
+	if (dat->driver_flags & FLAG_DRIVER_COLORDEEP)
+		fprintf(dat->out, "\t\t\t<!ATTLIST driver colordeep CDATA #REQUIRED>\n");
+	if (dat->driver_flags & FLAG_DRIVER_CREDITS)
+		fprintf(dat->out, "\t\t\t<!ATTLIST driver credits CDATA #IMPLIED>\n");
 
 	if (dat->num_machines>0)
 	{
@@ -597,6 +616,12 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, "\t\t\t<!ATTLIST device name CDATA #REQUIRED>\n");
 		fprintf(dat->out, "\t\t\t<!ELEMENT extension EMPTY>\n");
 		fprintf(dat->out, "\t\t\t\t<!ATTLIST extension name CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_archives>0)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT archive EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST archive name CDATA #REQUIRED>\n");
 	}
 
 	fprintf(dat->out, "]>\n\n");
@@ -618,6 +643,8 @@ int save_mame_listxml(struct dat *dat)
 		OUTPUT_STRING_ATTRIBUTE(game, cloneof, "cloneof", FLAG_GAME_CLONEOF)
 		OUTPUT_STRING_ATTRIBUTE(game, romof, "romof", FLAG_GAME_ROMOF)
 		OUTPUT_STRING_ATTRIBUTE(game, sampleof, "sampleof", FLAG_GAME_SAMPLEOF)
+		OUTPUT_STRING_ATTRIBUTE(game, rebuildto, "rebuildto", FLAG_GAME_REBUILDTO)
+		OUTPUT_STRING_ATTRIBUTE(game, board, "board", FLAG_GAME_BOARD)
 
 		fprintf(dat->out, ">\n");
 
@@ -628,7 +655,6 @@ int save_mame_listxml(struct dat *dat)
 		OUTPUT_STRING_ELEMENT(game, year, "\t\t", "year", FLAG_GAME_YEAR)
 		OUTPUT_STRING_ELEMENT(game, manufacturer, "\t\t", "manufacturer", FLAG_GAME_MANUFACTURER)
 		OUTPUT_STRING_ELEMENT(game, history, "\t\t", "history", FLAG_GAME_HISTORY)
-		OUTPUT_STRING_ELEMENT(game, rebuildto, "\t\t", "rebuildto", FLAG_GAME_REBUILDTO)
 
 		/* --- BIOS Set information --- */
 
@@ -747,6 +773,7 @@ int save_mame_listxml(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(input, coins, "coins", FLAG_INPUT_COINS)
 			OUTPUT_STRING_ATTRIBUTE(input, service, "service", FLAG_INPUT_SERVICE)
 			OUTPUT_STRING_ATTRIBUTE(input, tilt, "tilt", FLAG_INPUT_TILT)
+			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(input, dipswitches, "dipswitches", FLAG_INPUT_DIPSWITCHES)
 
 			fprintf(dat->out, "/>\n");
 		}
@@ -786,6 +813,8 @@ int save_mame_listxml(struct dat *dat)
 			OUTPUT_STRING_ATTRIBUTE(driver, cocktail, "cocktail", FLAG_DRIVER_COCKTAIL)
 			OUTPUT_STRING_ATTRIBUTE(driver, protection, "protection", FLAG_DRIVER_PROTECTION)
 			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(driver, palettesize, "palettesize", FLAG_DRIVER_PALETTESIZE)
+			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(driver, colordeep, "colordeep", FLAG_DRIVER_COLORDEEP)
+			OUTPUT_STRING_ATTRIBUTE(driver, credits, "credits", FLAG_DRIVER_CREDITS)
 
 			fprintf(dat->out, "/>\n");
 		}
@@ -808,6 +837,15 @@ int save_mame_listxml(struct dat *dat)
 			}
 
 			fprintf(dat->out, "\t\t</device>\n");
+		}
+
+		/* --- Archive information --- */
+
+		for (j=0, curr_archive=curr_game->archives; j<curr_game->num_archives; j++, curr_archive++)
+		{
+			fprintf(dat->out, "\t\t<archive");
+			OUTPUT_STRING_ATTRIBUTE(archive, name, "name", FLAG_ARCHIVE_NAME)
+			fprintf(dat->out, "/>\n");
 		}
 
 		fprintf(dat->out, "\t</%s>\n", game_type);

@@ -855,6 +855,9 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_EXTENSION_NAME && dat->num_games>0)
 			dat->num_extensions++;
 
+		else if (type==TOKEN_ARCHIVE_NAME && dat->num_games>0)
+			dat->num_archives++;
+
 		BUFFER2_ADVANCE_LINE
 	}
 
@@ -1071,6 +1074,18 @@ int allocate_dat_memory(struct dat *dat)
 			STRUCT_CALLOC(dat->extensions, dat->num_extensions, sizeof(struct extension))
 	}
 
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d archives identified\n", dat->num_archives);
+		}
+
+		if (dat->num_archives>0)
+			STRUCT_CALLOC(dat->archives, dat->num_archives, sizeof(struct archive))
+	}
+
 	return(errflg);
 }
 
@@ -1091,6 +1106,7 @@ int store_tokenized_dat(struct dat *dat)
 	struct driver *curr_driver=dat->drivers;
 	struct device *curr_device=dat->devices;
 	struct extension *curr_extension=dat->extensions;
+	struct archive *curr_archive=dat->archives;
 
 	struct comment *comments=0;
 	char type;
@@ -1216,6 +1232,9 @@ int store_tokenized_dat(struct dat *dat)
 
 			else if (type==TOKEN_GAME_REBUILDTO || type==TOKEN_RESOURCE_REBUILDTO || type==TOKEN_MACHINE_REBUILDTO)
 				curr_game->rebuildto=BUFFER2_PTR;
+
+			else if (type==TOKEN_GAME_BOARD || type==TOKEN_RESOURCE_BOARD || type==TOKEN_MACHINE_BOARD)
+				curr_game->board=BUFFER2_PTR;
 
 			/* --- ROM elements --- */
 
@@ -1389,6 +1408,31 @@ int store_tokenized_dat(struct dat *dat)
 				/* --- Whatever happens, increase the sample count for the current game --- */
 
 				curr_game->num_samples++;
+			}
+
+
+			/* --- Archive elements --- */
+
+			if (curr_archive!=0 && curr_archive->name!=0)
+			{
+				if (type==TOKEN_ARCHIVE_NAME)
+					curr_archive++;
+			}
+
+			if (type==TOKEN_ARCHIVE_NAME)
+			{
+				/* --- The current archive must remember its name --- */
+
+				curr_archive->name=BUFFER2_PTR;
+
+				/* --- If this is the first archive for the current game then set up the archives pointer --- */
+
+				if (curr_game->archives==0)
+					curr_game->archives=curr_archive;
+
+				/* --- Whatever happens, increase the archive count for the current game --- */
+
+				curr_game->num_archives++;
 			}
 
 			if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
@@ -1587,6 +1631,14 @@ int store_tokenized_dat(struct dat *dat)
 						curr_input->input_flags|=FLAG_INPUT_COINS;
 					}
 
+
+					else if (type==TOKEN_INPUT_DIPSWITCHES)
+					{
+						curr_input->dipswitches=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_input->input_flags|=FLAG_INPUT_DIPSWITCHES;
+					}
 				}
 
 				if (type==TOKEN_INPUT_PLAYERS)
@@ -1694,6 +1746,17 @@ int store_tokenized_dat(struct dat *dat)
 						// Value may be zero so its presence needs remembering!
 						curr_driver->driver_flags|=FLAG_DRIVER_PALETTESIZE;
 					}
+
+					else if (type==TOKEN_DRIVER_COLORDEEP)
+					{
+						curr_driver->colordeep=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_driver->driver_flags|=FLAG_DRIVER_COLORDEEP;
+					}
+
+					else if (type==TOKEN_DRIVER_CREDITS)
+						curr_driver->credits=BUFFER2_PTR;
 				}
 
 				if (type==TOKEN_DRIVER_STATUS)
@@ -2919,6 +2982,7 @@ int summarise_dat(struct dat *dat)
 	struct driver *curr_driver=0;
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
+	struct archive *curr_archive=0;
 	uint32_t i, j;
 
 	int errflg=0;
@@ -2996,6 +3060,9 @@ int summarise_dat(struct dat *dat)
 
 		if (curr_game->rebuildto)
 			curr_game->game_flags|=FLAG_GAME_REBUILDTO;
+
+		if (curr_game->board)
+			curr_game->game_flags|=FLAG_GAME_BOARD;
 
 		for (j=0, curr_comment=curr_game->comments; j<curr_game->num_comments; j++, curr_comment++)
 		{
@@ -3169,6 +3236,9 @@ int summarise_dat(struct dat *dat)
 			if (curr_input->coins)
 				curr_input->input_flags|=FLAG_INPUT_COINS;
 
+			if (curr_input->dipswitches)
+				curr_input->input_flags|=FLAG_INPUT_DIPSWITCHES;
+
 			curr_game->input_flags|=curr_input->input_flags;
 		}
 
@@ -3217,6 +3287,12 @@ int summarise_dat(struct dat *dat)
 			if (curr_driver->palettesize)
 				curr_driver->driver_flags|=FLAG_DRIVER_PALETTESIZE;
 
+			if (curr_driver->colordeep)
+				curr_driver->driver_flags|=FLAG_DRIVER_COLORDEEP;
+
+			if (curr_driver->credits)
+				curr_driver->driver_flags|=FLAG_DRIVER_CREDITS;
+
 			curr_game->driver_flags|=curr_driver->driver_flags;
 		}
 
@@ -3236,6 +3312,14 @@ int summarise_dat(struct dat *dat)
 			curr_game->extension_flags|=curr_extension->extension_flags;
 		}
 
+		for (j=0, curr_archive=curr_game->archives; j<curr_game->num_archives; j++, curr_archive++)
+		{
+			if (curr_archive->name)
+				curr_archive->archive_flags|=FLAG_ARCHIVE_NAME;
+
+			curr_game->archive_flags|=curr_archive->archive_flags;
+		}
+
 		dat->game_flags|=curr_game->game_flags;
 		dat->comment_flags|=curr_game->comment_flags;
 		dat->biosset_flags|=curr_game->biosset_flags;
@@ -3251,6 +3335,7 @@ int summarise_dat(struct dat *dat)
 		dat->driver_flags|=curr_game->driver_flags;
 		dat->device_flags|=curr_game->device_flags;
 		dat->extension_flags|=curr_game->extension_flags;
+		dat->archive_flags|=curr_game->archive_flags;
 
 		/* --- Keep count of parents, clones and others --- */
 
@@ -3296,6 +3381,8 @@ int summarise_dat(struct dat *dat)
 		printf("Device flags=%02x\n", dat->device_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Extension flags=%02x\n", dat->extension_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Archive flags=%02x\n", dat->archive_flags);
 	}
 
 	return(errflg);
@@ -3615,7 +3702,8 @@ int report_warnings(struct dat *dat)
 		for (j=0, curr_driver=curr_game->drivers; j<curr_game->num_drivers; j++, curr_driver++)
 		{
 			curr_driver->driver_warnings|=(curr_driver->driver_flags ^ dat->driver_flags) &
-				(FLAG_DRIVER_EMULATION | FLAG_DRIVER_COLOR | FLAG_DRIVER_SOUND | FLAG_DRIVER_GRAPHIC | FLAG_DRIVER_PALETTESIZE);
+				(FLAG_DRIVER_EMULATION | FLAG_DRIVER_COLOR | FLAG_DRIVER_SOUND | FLAG_DRIVER_GRAPHIC | FLAG_DRIVER_PALETTESIZE |
+				 FLAG_DRIVER_COLORDEEP | FLAG_DRIVER_CREDITS);
 
 			curr_game->driver_warnings|=curr_driver->driver_warnings;
 		}
@@ -3635,6 +3723,7 @@ int report_warnings(struct dat *dat)
 		dat->driver_warnings|=curr_game->driver_warnings;
 		dat->device_warnings|=curr_game->device_warnings;
 		dat->extension_warnings|=curr_game->extension_warnings;
+		dat->archive_warnings|=curr_game->archive_warnings;
 	}
 
 	/* --- Report warnings --- */
@@ -3675,14 +3764,16 @@ int report_warnings(struct dat *dat)
 		printf("Device warnings=%02x\n", dat->device_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Extension warnings=%02x\n", dat->extension_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Archive warnings=%02x\n", dat->archive_warnings);
 
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Reporting warnings...\n");
 	}
 
 	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
-		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings ||
-		dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings)
+		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings ||
+		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Warning Summary\n");
@@ -3834,14 +3925,18 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing Graphic\n");
 			if (dat->driver_warnings & FLAG_DRIVER_PALETTESIZE)
 				fprintf(dat->log_file, "    Missing Palettesize\n");
+			if (dat->driver_warnings & FLAG_DRIVER_COLORDEEP)
+				fprintf(dat->log_file, "    Missing Colordeep\n");
+			if (dat->driver_warnings & FLAG_DRIVER_CREDITS)
+				fprintf(dat->log_file, "    Missing Credits\n");
 
 			fprintf(dat->log_file, "\n");
 		}
 	}
 
 	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
-		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings ||
-		dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings) &&
+		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings ||
+		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings) &&
 		dat->options->options & OPTION_VERBOSE_LOGGING)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
@@ -3879,7 +3974,7 @@ int report_warnings(struct dat *dat)
 			if (curr_game->game_warnings || curr_game->comment_warnings || curr_game->biosset_warnings || curr_game->rom_warnings || curr_game->disk_warnings || curr_game->sample_warnings ||
 				curr_game->chip_warnings || curr_game->video_warnings || curr_game->sound_warnings || curr_game->input_warnings ||
 				curr_game->dipswitch_warnings || curr_game->dipvalue_warnings || curr_game->driver_warnings  ||
-				curr_game->device_warnings || curr_game->extension_warnings)
+				curr_game->device_warnings || curr_game->extension_warnings || curr_game->archive_warnings)
 			{
 				fprintf(dat->log_file, "%s - %s\n", curr_game->name, curr_game->description);
 
@@ -3996,6 +4091,10 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    Driver - Missing Graphic\n");
 						if (curr_driver->driver_warnings & FLAG_DRIVER_PALETTESIZE)
 							fprintf(dat->log_file, "    Driver - Missing Palettesize\n");
+						if (curr_driver->driver_warnings & FLAG_DRIVER_COLORDEEP)
+							fprintf(dat->log_file, "    Driver - Missing Colordeep\n");
+						if (curr_driver->driver_warnings & FLAG_DRIVER_CREDITS)
+							fprintf(dat->log_file, "    Driver - Missing Credits\n");
 					}
 				}
 	
@@ -4076,6 +4175,8 @@ int report_fixes(struct dat *dat)
 		printf("Device fixes=%02x\n", dat->device_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Extension fixes=%02x\n", dat->extension_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Archive fixes=%02x\n", dat->archive_fixes);
 
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Reporting fixes...\n");
@@ -5369,7 +5470,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
@@ -5464,6 +5565,9 @@ int save_dat(struct dat *dat)
 
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Extension losses=%02x.\n", ~dat->extension_saved & dat->extension_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("Archive losses=%02x.\n", ~dat->archive_saved & dat->archive_flags);
 		}
 		else
 		{
@@ -5486,7 +5590,8 @@ int save_dat(struct dat *dat)
 			~dat->dipvalue_saved & dat->dipvalue_flags ||
 			~dat->driver_saved & dat->driver_flags ||
 			~dat->device_saved & dat->device_flags ||
-			~dat->extension_saved & dat->extension_flags))
+			~dat->extension_saved & dat->extension_flags ||
+			~dat->archive_saved & dat->archive_flags))
 		{
 			fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 			fprintf(dat->log_file, "Features that were lost by saving in %s format\n", dat->save->description);
@@ -5525,6 +5630,8 @@ int save_dat(struct dat *dat)
 						fprintf(dat->log_file, "    History\n");
 					if (lost & FLAG_GAME_REBUILDTO)
 						fprintf(dat->log_file, "    Rebuild To\n");
+					if (lost & FLAG_GAME_BOARD)
+						fprintf(dat->log_file, "    Board\n");
 
 					fprintf(dat->log_file, "\n");
 				}
@@ -5709,6 +5816,8 @@ int save_dat(struct dat *dat)
 						fprintf(dat->log_file, "    Buttons\n");
 					if (lost & FLAG_INPUT_COINS)
 						fprintf(dat->log_file, "    Coins\n");
+					if (lost & FLAG_INPUT_DIPSWITCHES)
+						fprintf(dat->log_file, "    Dipswitches\n");
 
 					fprintf(dat->log_file, "\n");
 				}
@@ -5762,7 +5871,11 @@ int save_dat(struct dat *dat)
 					if (lost & FLAG_DRIVER_PROTECTION)
 						fprintf(dat->log_file, "    Protection\n");
 					if (lost & FLAG_DRIVER_PALETTESIZE)
-						fprintf(dat->log_file, "    Palette size\n");
+						fprintf(dat->log_file, "    Palettesize\n");
+					if (lost & FLAG_DRIVER_COLORDEEP)
+						fprintf(dat->log_file, "    Colordeep\n");
+					if (lost & FLAG_DRIVER_CREDITS)
+						fprintf(dat->log_file, "    Credits\n");
 
 					fprintf(dat->log_file, "\n");
 				}
@@ -5782,6 +5895,14 @@ int save_dat(struct dat *dat)
 			{
 				if (lost & FLAG_EXTENSION_NAME)
 					fprintf(dat->log_file, "Extensions have been lost entirely!\n\n");
+			}
+
+			/* --- Extensions --- */
+
+			if ((lost=~dat->archive_saved & dat->archive_flags))
+			{
+				if (lost & FLAG_ARCHIVE_NAME)
+					fprintf(dat->log_file, "Archives have been lost entirely!\n\n");
 			}
 
 			if (!datlib_debug)
@@ -5895,6 +6016,13 @@ struct dat *free_dat(struct dat *dat)
 			printf("Closing log file...\n");
 		}
 		FCLOSE(dat->log_file)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of archives...\n");
+		}
+		FREE(dat->archives)
 
 		if (datlib_debug)
 		{

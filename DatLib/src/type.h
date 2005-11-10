@@ -229,6 +229,7 @@ struct input
 	char *control;
 	uint8_t buttons;
 	uint8_t coins;
+	uint8_t dipswitches;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -292,14 +293,16 @@ struct driver
 	char *cocktail;
 	char *protection;
 	uint32_t palettesize;
+	uint8_t colordeep;
+	char *credits;
 
 	/* --- Fields that are calculated by DatLib */
 
 	struct game *game;
 
-	uint8_t driver_flags;
-	uint8_t driver_warnings;
-	uint8_t driver_fixes;
+	uint16_t driver_flags;
+	uint16_t driver_warnings;
+	uint16_t driver_fixes;
 };
 
 
@@ -340,6 +343,24 @@ struct device
 };
 
 
+/* --- Archive Structures --- */
+
+struct archive
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t archive_flags;
+	uint8_t archive_warnings;
+	uint8_t archive_fixes;
+};
+
+
 /* --- Game Structures --- */
 
 struct game
@@ -355,8 +376,8 @@ struct game
 	char *year;
 	char *manufacturer;
 	char *history;
-
 	char *rebuildto;
+	char *board;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -395,6 +416,8 @@ struct game
 	struct device *devices;
 	struct extension *extensions;
 
+	struct archive *archives;
+
 	uint32_t num_comments;
 	uint32_t num_biossets;
 	uint32_t num_roms;
@@ -409,13 +432,14 @@ struct game
 	uint32_t num_drivers;
 	uint32_t num_devices;
 	uint32_t num_extensions;
+	uint32_t num_archives;
 
 	uint32_t size;
 	uint32_t crc;
 
 	uint32_t num_clones;
 
-	uint16_t game_flags;
+	uint32_t game_flags;
 
 	uint8_t comment_flags;
 	uint8_t biosset_flags;
@@ -428,11 +452,12 @@ struct game
 	uint8_t input_flags;
 	uint8_t dipswitch_flags;
 	uint8_t dipvalue_flags;
-	uint8_t driver_flags;
+	uint16_t driver_flags;
 	uint8_t device_flags;
 	uint8_t extension_flags;
+	uint8_t archive_flags;
 
-	uint16_t game_warnings;
+	uint32_t game_warnings;
 
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
@@ -445,11 +470,12 @@ struct game
 	uint8_t input_warnings;
 	uint8_t dipswitch_warnings;
 	uint8_t dipvalue_warnings;
-	uint8_t driver_warnings;
+	uint16_t driver_warnings;
 	uint8_t device_warnings;
 	uint8_t extension_warnings;
+	uint8_t archive_warnings;
 
-	uint16_t game_fixes;
+	uint32_t game_fixes;
 
 	uint8_t comment_fixes;
 	uint8_t biosset_fixes;
@@ -462,9 +488,10 @@ struct game
 	uint8_t input_fixes;
 	uint8_t dipswitch_fixes;
 	uint8_t dipvalue_fixes;
-	uint8_t driver_fixes;
+	uint16_t driver_fixes;
 	uint8_t device_fixes;
 	uint8_t extension_fixes;
+	uint8_t archive_fixes;
 
 	/* --- Fields that are specific to external tools */
 
@@ -701,6 +728,8 @@ struct dat
 	struct device *devices;
 	struct extension *extensions;
 
+	struct archive *archives;
+
 	struct game_zip *game_zips;
 	struct game_zip_idx *game_zip_name_idx;
 	struct game_zip_rom *game_zip_roms;
@@ -722,6 +751,7 @@ struct dat
 	uint32_t num_drivers;
 	uint32_t num_devices;
 	uint32_t num_extensions;
+	uint32_t num_archives;
 
 	uint32_t num_game_zips;
 	uint32_t num_game_zip_roms;
@@ -732,7 +762,7 @@ struct dat
 
 	uint16_t dat_flags;
 
-	uint16_t game_flags;
+	uint32_t game_flags;
 	uint8_t comment_flags;
 	uint8_t biosset_flags;
 	uint16_t rom_flags;
@@ -744,14 +774,15 @@ struct dat
 	uint8_t input_flags;
 	uint8_t dipswitch_flags;
 	uint8_t dipvalue_flags;
-	uint8_t driver_flags;
+	uint16_t driver_flags;
 	uint8_t device_flags;
 	uint8_t extension_flags;
+	uint8_t archive_flags;
 
 	uint8_t game_selection_warnings;
 	uint8_t sourcefile_selection_warnings;
 
-	uint16_t game_warnings;
+	uint32_t game_warnings;
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
 	uint16_t rom_warnings;
@@ -763,11 +794,12 @@ struct dat
 	uint8_t input_warnings;
 	uint8_t dipswitch_warnings;
 	uint8_t dipvalue_warnings;
-	uint8_t driver_warnings;
+	uint16_t driver_warnings;
 	uint8_t device_warnings;
 	uint8_t extension_warnings;
+	uint8_t archive_warnings;
 
-	uint16_t game_fixes;
+	uint32_t game_fixes;
 	uint8_t comment_fixes;
 	uint8_t biosset_fixes;
 	uint16_t rom_fixes;
@@ -779,11 +811,12 @@ struct dat
 	uint8_t input_fixes;
 	uint8_t dipswitch_fixes;
 	uint8_t dipvalue_fixes;
-	uint8_t driver_fixes;
+	uint16_t driver_fixes;
 	uint8_t device_fixes;
 	uint8_t extension_fixes;
+	uint8_t archive_fixes;
 
-	uint16_t game_saved;
+	uint32_t game_saved;
 	uint8_t comment_saved;
 	uint8_t biosset_saved;
 	uint16_t rom_saved;
@@ -795,9 +828,10 @@ struct dat
 	uint8_t input_saved;
 	uint8_t dipswitch_saved;
 	uint8_t dipvalue_saved;
-	uint8_t driver_saved;
+	uint16_t driver_saved;
 	uint8_t device_saved;
 	uint8_t extension_saved;
+	uint8_t archive_saved;
 };
 
 
@@ -874,23 +908,24 @@ struct ini_entry
 
 /* --- Game Flags --- */
 
-#define	FLAG_GAME_NAME			0x0001
-#define	FLAG_RESOURCE_NAME		0x0002
-#define	FLAG_MACHINE_NAME		0x0004
-#define FLAG_GAME_SOURCEFILE		0x0008
-#define FLAG_GAME_CLONEOF		0x0010
-#define FLAG_GAME_ROMOF			0x0020
-#define FLAG_GAME_SAMPLEOF		0x0040
-#define FLAG_GAME_DESCRIPTION		0x0080
-#define FLAG_GAME_YEAR			0x0100
-#define FLAG_GAME_MANUFACTURER		0x0200
-#define FLAG_GAME_HISTORY		0x0400
-#define FLAG_GAME_REBUILDTO		0x0800
+#define	FLAG_GAME_NAME			0x00000001
+#define	FLAG_RESOURCE_NAME		0x00000002
+#define	FLAG_MACHINE_NAME		0x00000004
+#define FLAG_GAME_SOURCEFILE		0x00000008
+#define FLAG_GAME_CLONEOF		0x00000010
+#define FLAG_GAME_ROMOF			0x00000020
+#define FLAG_GAME_SAMPLEOF		0x00000040
+#define FLAG_GAME_DESCRIPTION		0x00000080
+#define FLAG_GAME_YEAR			0x00000100
+#define FLAG_GAME_MANUFACTURER		0x00000200
+#define FLAG_GAME_HISTORY		0x00000400
+#define FLAG_GAME_REBUILDTO		0x00000800
+#define FLAG_GAME_BOARD			0x00001000
 
-#define FLAG_GAME_CLONEOFCLONE		0x1000
-#define FLAG_GAME_DUPLICATE_NAME	0x2000
-#define FLAG_GAME_DUPLICATE_DESCRIPTION	0x4000
-#define FLAG_GAME_DUPLICATE_CRC		0x8000
+#define FLAG_GAME_CLONEOFCLONE		0x00010000
+#define FLAG_GAME_DUPLICATE_NAME	0x00020000
+#define FLAG_GAME_DUPLICATE_DESCRIPTION	0x00040000
+#define FLAG_GAME_DUPLICATE_CRC		0x00080000
 
 
 /* --- Comment Flags --- */
@@ -981,6 +1016,7 @@ struct ini_entry
 #define FLAG_INPUT_CONTROL		0x08
 #define FLAG_INPUT_BUTTONS		0x10
 #define FLAG_INPUT_COINS		0x20
+#define FLAG_INPUT_DIPSWITCHES		0x40
 
 
 /* --- Dipswitch Flags --- */
@@ -996,14 +1032,16 @@ struct ini_entry
 
 /* --- Driver Flags --- */
 
-#define FLAG_DRIVER_STATUS		0x01
-#define FLAG_DRIVER_EMULATION		0x02
-#define FLAG_DRIVER_COLOR		0x04
-#define FLAG_DRIVER_SOUND		0x08
-#define FLAG_DRIVER_GRAPHIC		0x10
-#define FLAG_DRIVER_COCKTAIL		0x20
-#define FLAG_DRIVER_PROTECTION		0x40
-#define FLAG_DRIVER_PALETTESIZE		0x80
+#define FLAG_DRIVER_STATUS		0x0001
+#define FLAG_DRIVER_EMULATION		0x0002
+#define FLAG_DRIVER_COLOR		0x0004
+#define FLAG_DRIVER_SOUND		0x0008
+#define FLAG_DRIVER_GRAPHIC		0x0010
+#define FLAG_DRIVER_COCKTAIL		0x0020
+#define FLAG_DRIVER_PROTECTION		0x0040
+#define FLAG_DRIVER_PALETTESIZE		0x0080
+#define FLAG_DRIVER_COLORDEEP		0x0100
+#define FLAG_DRIVER_CREDITS		0x0200
 
 
 /* --- Device Flags --- */
@@ -1014,6 +1052,11 @@ struct ini_entry
 /* --- Extension Flags --- */
 
 #define FLAG_EXTENSION_NAME		0x01
+
+
+/* --- Archive Flags --- */
+
+#define FLAG_ARCHIVE_NAME		0x01
 
 
 #endif /* _DATLIB_TYPE_H_ */

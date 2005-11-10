@@ -115,6 +115,7 @@ int load_tab_delimited(struct dat *dat)
 				BUFFER1_GET_FIELD(TOKEN_RESOURCE_MANUFACTURER)
 				BUFFER1_GET_FIELD(TOKEN_RESOURCE_HISTORY)
 				BUFFER1_GET_FIELD(TOKEN_RESOURCE_REBUILDTO)
+				BUFFER1_GET_FIELD(TOKEN_RESOURCE_BOARD)
 			}
 			else
 			{
@@ -132,6 +133,7 @@ int load_tab_delimited(struct dat *dat)
 				BUFFER1_GET_FIELD(TOKEN_GAME_MANUFACTURER)
 				BUFFER1_GET_FIELD(TOKEN_GAME_HISTORY)
 				BUFFER1_GET_FIELD(TOKEN_GAME_REBUILDTO)
+				BUFFER1_GET_FIELD(TOKEN_GAME_BOARD)
 			}
 		}
 
@@ -301,6 +303,7 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_COINS)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_SERVICE)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_TILT)
+			BUFFER1_GET_FIELD(TOKEN_INPUT_DIPSWITCHES)
 		}
 
 		/* --- Dipswitch information --- */
@@ -353,6 +356,8 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_COCKTAIL)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_PROTECTION)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_PALETTESIZE)
+			BUFFER1_GET_FIELD(TOKEN_DRIVER_COLORDEEP)
+			BUFFER1_GET_FIELD(TOKEN_DRIVER_CREDITS)
 		}
 
 		/* --- Device information --- */
@@ -382,6 +387,21 @@ int load_tab_delimited(struct dat *dat)
 			/* --- Process the other fields --- */
 
 			BUFFER1_GET_FIELD(TOKEN_EXTENSION_NAME)
+		}
+
+		/* --- Archive information --- */
+
+		if (BUFFER1_RECORD_TYPE("game_archive\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_ARCHIVE_NAME)
 		}
 
 		BUFFER1_ADVANCE_LINE
@@ -496,6 +516,7 @@ int save_tab_delimited(struct dat *dat)
 	struct driver *curr_driver=dat->drivers;
 	struct device *curr_device=dat->devices;
 	struct extension *curr_extension=dat->extensions;
+	struct archive *curr_archive=dat->archives;
 
 	char dat_name[MAX_STRING_LENGTH];
 
@@ -537,6 +558,7 @@ int save_tab_delimited(struct dat *dat)
 		OUTPUT_STRING_FIELD(game, manufacturer, FLAG_GAME_MANUFACTURER)
 		OUTPUT_STRING_FIELD(game, history, FLAG_GAME_HISTORY)
 		OUTPUT_STRING_FIELD(game, rebuildto, FLAG_GAME_REBUILDTO)
+		OUTPUT_STRING_FIELD(game, board, FLAG_GAME_BOARD)
 
 		fprintf(dat->out, "\n");
 
@@ -668,6 +690,7 @@ int save_tab_delimited(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG_FIELD(input, coins, FLAG_INPUT_COINS)
 			OUTPUT_STRING_FIELD(input, service, FLAG_INPUT_SERVICE)
 			OUTPUT_STRING_FIELD(input, tilt, FLAG_INPUT_TILT)
+			OUTPUT_UNSIGNED_LONG_FIELD(input, dipswitches, FLAG_INPUT_DIPSWITCHES)
 
 			fprintf(dat->out, "\n");
 		}
@@ -707,6 +730,8 @@ int save_tab_delimited(struct dat *dat)
 			OUTPUT_STRING_FIELD(driver, cocktail, FLAG_DRIVER_COCKTAIL)
 			OUTPUT_STRING_FIELD(driver, protection, FLAG_DRIVER_PROTECTION)
 			OUTPUT_UNSIGNED_LONG_FIELD(driver, palettesize, FLAG_DRIVER_PALETTESIZE)
+			OUTPUT_UNSIGNED_LONG_FIELD(driver, colordeep, FLAG_DRIVER_COLORDEEP)
+			OUTPUT_STRING_FIELD(driver, credits, FLAG_DRIVER_CREDITS)
 
 			fprintf(dat->out, "\n");
 		}
@@ -729,6 +754,15 @@ int save_tab_delimited(struct dat *dat)
 
 				fprintf(dat->out, "\n");
 			}
+		}
+
+		/* --- Archive information --- */
+
+		for (j=0, curr_archive=curr_game->archives; j<curr_game->num_archives; j++, curr_archive++)
+		{
+			fprintf(dat->out, "game_archive\t%s\t%s\t", dat_name, curr_game->name);
+			OUTPUT_STRING_FIELD(archive, name, FLAG_ARCHIVE_NAME)
+			fprintf(dat->out, "\n");
 		}
 	}
 
