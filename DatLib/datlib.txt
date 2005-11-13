@@ -179,10 +179,11 @@ History
 xx/xx/xxxx  *** v2.11 ***
 
             - Added support for 'board', 'colordeep', 'credits' and 'archive'
-              Supported by ListInfo, ListXML and Delimited formats (load+save).
+              (fully supported by ListInfo, ListXML and Delimited formats).
+            - M1 XML loader now retains the 'board' information (see above).
             - M1 XML will not use hex for ROM sizes after all... changed back!
-            - M1 XML loader now retains the 'board' information (see above)
-            - Improved the way that the Nebula driver handles Neo-Geo ROMs
+            - Improved the way that the Nebula driver handles Neo-Geo ROMs.
+            - Fixed Nebula Jukebox driver for Neo-Geo ROMs (broken from v2.7).
 
 31/10/2005  *** v2.10 ***
 
