@@ -98,10 +98,10 @@ int file_details(char *fn, struct stat *buf, int images)
 
 	if (images)
 	{
-		if (!strcmp(&fn[strlen(fn)-4], ".png"))
+		if (!strcasecmp(&fn[strlen(fn)-4], ".png"))
 			file_format=PNG_FORMAT;
 
-		if (!strcmp(&fn[strlen(fn)-4], ".jpg"))
+		if (!strcasecmp(&fn[strlen(fn)-4], ".jpg"))
 			file_format=JPG_FORMAT;
 	}
 

@@ -174,7 +174,7 @@ int process_file(char *fn, char *newfourcc1, char *newfourcc2)
 
 	/* --- If the file is an AVI, process it! --- */
 
-	if (strrchr(st, '.') && !strcmp(strrchr(st, '.'), ".avi"))
+	if (strrchr(st, '.') && !strcasecmp(strrchr(st, '.'), ".avi"))
 	{
 		printf("Processing %s... ", fn);
 
