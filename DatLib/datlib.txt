@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.11 - xx/xx/xxxx
+                          DatLib v2.11 - 13/11/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -176,14 +176,14 @@ do anything with them but I am interested to hear them!
 History
 -------
 
-xx/xx/xxxx  *** v2.11 ***
+13/11/2005  *** v2.11 ***
 
             - Added support for 'board', 'colordeep', 'credits' and 'archive'
               (fully supported by ListInfo, ListXML and Delimited formats).
             - M1 XML loader now retains the 'board' information (see above).
             - M1 XML will not use hex for ROM sizes after all... changed back!
             - Improved the way that the Nebula driver handles Neo-Geo ROMs.
-            - Fixed Nebula Jukebox driver for Neo-Geo ROMs (broken from v2.7).
+            - Fixed Nebula Jukebox driver for Neo-Geo ROMs (broken in v2.7).
 
 31/10/2005  *** v2.10 ***
 
