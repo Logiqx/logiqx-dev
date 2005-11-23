@@ -211,13 +211,9 @@ int process_zip(FILE *out, char *fn)
 {
 	ZIP *zip;
 	struct zipent *zipent;
-	char st[MAX_FILENAME_LENGTH+1];
 	int errflg=0;
 
-	strcpy(st, fn);
-	LOWER(st)
-
-	if (strrchr(st, '.') && !strcmp(strrchr(st, '.'), ".zip"))
+	if (strrchr(fn, '.') && !strcasecmp(strrchr(fn, '.'), ".zip"))
 	{
 		if ((zip = openzip(fn)))
 		{
