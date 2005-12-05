@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.24 - 15/12/2005
+                         DatUtil v2.24 - 05/12/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ Feel free to send me any suggestions that you have also.
 History
 -------
 
-15/12/2005  *** v2.24 ***
+05/12/2005  *** v2.24 ***
 
             - Uses DatLib v2.12.
             - Fixed a rare crash (if the longest line in the dat was the last).

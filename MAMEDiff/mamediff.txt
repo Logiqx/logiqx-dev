@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.22 - 15/12/2005
+                          MAMEDiff v2.22 - 05/12/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 11. History
 -----------
 
-15/12/2005  *** v2.22 ***
+05/12/2005  *** v2.22 ***
 
             - Uses DatLib v2.12.
             - Fixed a rare crash (if the longest line in the dat was the last).
