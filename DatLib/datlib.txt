@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.11 - 13/11/2005
+                          DatLib v2.12 - 15/12/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -175,6 +175,11 @@ do anything with them but I am interested to hear them!
 
 History
 -------
+
+15/12/2005  *** v2.12 ***
+
+            - Fixed a rare crash (if the longest line in the dat was the last).
+            - Fixed a problem loading RomCenter data files containing [].
 
 13/11/2005  *** v2.11 ***
 

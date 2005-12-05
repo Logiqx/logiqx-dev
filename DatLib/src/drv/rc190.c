@@ -69,11 +69,14 @@ int load_romcenter_190(struct dat *dat)
 	char *parent_name, *parent_title, *game_name, *game_title, *rom_name, *rom_crc, *rom_neogeo, *rom_merge, *rom_size;
 	char *prev_game=0;
 	char *value;
+	char *st;
 
 	int errflg=0;
 
 	BUFFER1_REWIND
 	BUFFER2_REWIND
+
+	BYTE_MALLOC(st, dat->token_size+1);
 
 	while (!errflg && BUFFER1_REMAINING)
 	{
@@ -139,7 +142,9 @@ int load_romcenter_190(struct dat *dat)
 		}
 		else if (in_romcenter_games && *BUFFER1_PTR=='¬')
 		{
-			parent_name=BUFFER1_PTR+1;
+			strcpy(st, BUFFER1_PTR);
+
+			parent_name=st+1;
 			parent_title=game_name=game_title=rom_name=rom_crc=rom_neogeo=rom_merge=rom_size=0;
 
 			if (parent_name && (parent_title=strchr(parent_name, '¬')))
@@ -220,6 +225,8 @@ int load_romcenter_190(struct dat *dat)
 
 		BUFFER1_ADVANCE_LINE
 	}
+
+	FREE(st)
 
 	return(0);
 }

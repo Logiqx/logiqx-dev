@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.11"
-#define DATLIB_DATE "13 November 2005"
+#define DATLIB_VERSION "v2.12"
+#define DATLIB_DATE "15 December 2005"
 
 
 /* --- Standard includes --- */
@@ -5186,6 +5186,9 @@ struct dat *init_dat(struct options *options)
 				line_length++;
 			}
 		}
+
+		if (line_length>dat->token_size)
+			dat->token_size=line_length;
 
 		/* --- Add final termination character --- */
 
