@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPIdent v2.5 - 31/10/2005
+                         ZIPIdent v2.6 - 05/12/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -181,6 +181,12 @@ matched against different games).
 
 History
 -------
+
+05/12/2005  *** v2.6 ***
+
+            - Uses DatLib v2.12.
+            - Fixed a rare crash (if the longest line in the dat was the last).
+            - Fixed a problem loading RomCenter data files containing [].
 
 31/10/2005  *** v2.5 ***
 
