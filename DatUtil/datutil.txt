@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.24 - 05/12/2005
+                         DatUtil v2.25 - 06/12/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -384,6 +384,11 @@ Feel free to send me any suggestions that you have also.
 
 History
 -------
+
+06/12/2005  *** v2.25 ***
+
+            - Uses DatLib v2.13.
+            - DatLib v2.12 broke the RomCenter drivers (now fixed).
 
 05/12/2005  *** v2.24 ***
 
