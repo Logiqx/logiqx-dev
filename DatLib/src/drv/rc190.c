@@ -69,14 +69,11 @@ int load_romcenter_190(struct dat *dat)
 	char *parent_name, *parent_title, *game_name, *game_title, *rom_name, *rom_crc, *rom_neogeo, *rom_merge, *rom_size;
 	char *prev_game=0;
 	char *value;
-	char *st;
 
 	int errflg=0;
 
 	BUFFER1_REWIND
 	BUFFER2_REWIND
-
-	BYTE_MALLOC(st, dat->token_size+1);
 
 	while (!errflg && BUFFER1_REMAINING)
 	{
@@ -142,34 +139,56 @@ int load_romcenter_190(struct dat *dat)
 		}
 		else if (in_romcenter_games && *BUFFER1_PTR=='¬')
 		{
-			strcpy(st, BUFFER1_PTR);
-
-			parent_name=st+1;
+			parent_name=BUFFER1_PTR+1;
 			parent_title=game_name=game_title=rom_name=rom_crc=rom_neogeo=rom_merge=rom_size=0;
 
 			if (parent_name && (parent_title=strchr(parent_name, '¬')))
+			{
 				*parent_title++='\0';
+				BUFFER1_PTR=parent_title;
+			}
 
 			if (parent_title && (game_name=strchr(parent_title, '¬')))
+			{
 				*game_name++='\0';
+				BUFFER1_PTR=game_name;
+			}
 
 			if (game_name && (game_title=strchr(game_name, '¬')))
+			{
 				*game_title++='\0';
+				BUFFER1_PTR=game_title;
+			}
 
 			if (game_title && (rom_name=strchr(game_title, '¬')))
+			{
 				*rom_name++='\0';
+				BUFFER1_PTR=rom_name;
+			}
 
 			if (rom_name && (rom_crc=strchr(rom_name, '¬')))
+			{
 				*rom_crc++='\0';
+				BUFFER1_PTR=rom_crc;
+			}
 
 			if (rom_crc && (rom_neogeo=strchr(rom_crc, '¬')))
+			{
 				*rom_neogeo++='\0';
+				BUFFER1_PTR=rom_neogeo;
+			}
 
 			if (rom_neogeo && (rom_merge=strchr(rom_neogeo, '¬')))
+			{
 				*rom_merge++='\0';
+				BUFFER1_PTR=rom_merge;
+			}
 
 			if (rom_merge && (rom_size=strchr(rom_merge, '¬')))
+			{
 				*rom_size++='\0';
+				BUFFER1_PTR=rom_size;
+			}
 
 			if (rom_size && strchr(rom_size, '¬'))
 			{
@@ -225,8 +244,6 @@ int load_romcenter_190(struct dat *dat)
 
 		BUFFER1_ADVANCE_LINE
 	}
-
-	FREE(st)
 
 	return(0);
 }
