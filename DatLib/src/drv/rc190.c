@@ -66,7 +66,7 @@ int identify_romcenter_190(struct dat *dat)
 int load_romcenter_190(struct dat *dat)
 {
 	int in_romcenter_credits=0, in_romcenter_emulator=0, in_romcenter_games=0;
-	char *parent_name, *parent_title, *game_name, *game_title, *rom_name, *rom_crc, *rom_neogeo, *rom_merge, *rom_size;
+	char *parent_name, *parent_title, *game_name, *game_title, *rom_name, *rom_crc, *rom_neogeo, *rom_merge, *rom_size, *rest_of_line;
 	char *prev_game=0;
 	char *value;
 
@@ -140,7 +140,7 @@ int load_romcenter_190(struct dat *dat)
 		else if (in_romcenter_games && *BUFFER1_PTR=='¬')
 		{
 			parent_name=BUFFER1_PTR+1;
-			parent_title=game_name=game_title=rom_name=rom_crc=rom_neogeo=rom_merge=rom_size=0;
+			parent_title=game_name=game_title=rom_name=rom_crc=rom_neogeo=rom_merge=rom_size=rest_of_line=0;
 
 			if (parent_name && (parent_title=strchr(parent_name, '¬')))
 			{
@@ -190,9 +190,10 @@ int load_romcenter_190(struct dat *dat)
 				BUFFER1_PTR=rom_size;
 			}
 
-			if (rom_size && strchr(rom_size, '¬'))
+			if (rom_size && (rest_of_line=strchr(rom_size, '¬')))
 			{
-				*strchr(rom_size, '¬')='\0';
+				*rest_of_line++='\0';
+				BUFFER1_PTR=rest_of_line;
 
 				if (!prev_game || strcmp(game_name, prev_game))
 				{
