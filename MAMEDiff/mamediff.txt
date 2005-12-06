@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.22 - 05/12/2005
+                          MAMEDiff v2.23 - 06/12/2005
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -293,6 +293,11 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+06/12/2005  *** v2.23 ***
+
+            - Uses DatLib v2.13.
+            - DatLib v2.12 broke the RomCenter drivers (now fixed).
 
 05/12/2005  *** v2.22 ***
 
