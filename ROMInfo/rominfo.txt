@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ROMInfo v2.5 - 05/12/2005
+                          ROMInfo v2.6 - 06/12/2005
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -73,6 +73,11 @@ D-Zine who prompted me to write this and came up with the ZIP file idea.
 
 History
 -------
+
+06/12/2005  *** v2.6 ***
+
+            - Uses DatLib v2.13.
+            - DatLib v2.12 broke the RomCenter drivers (now fixed).
 
 05/12/2005  *** v2.5 ***
 
