@@ -440,9 +440,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 	if (!errflg && diff_type==1)
 	{
 		if (num_game_zip_removals || num_game_zip_additions ||
-			num_game_zip_rom_removals || num_game_zip_rom_additions || num_game_zip_rom_elsewheres ||
-			num_game_zip_disk_removals || num_game_zip_disk_additions || num_game_zip_disk_elsewheres ||
-			num_game_zip_sample_removals || num_game_zip_sample_additions || num_game_zip_sample_elsewheres)
+			num_game_zip_rom_removals || num_game_zip_rom_additions ||
+			num_game_zip_disk_removals || num_game_zip_disk_additions ||
+			num_game_zip_sample_removals || num_game_zip_sample_additions)
 		{
 			strcpy(st, dat2->name);
 			if (strstr(st, ".dat")) *strstr(st, ".dat")=0;
@@ -541,7 +541,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			{
 				curr_game_zip2=curr_game_zip_name_idx2->game_zip;
 
-				if (curr_game_zip2->flags & (GAME_ZIP_ROM_REMOVED | GAME_ZIP_ROM_ADDED | GAME_ZIP_ROM_ELSEWHERE | GAME_ZIP_DISK_REMOVED | GAME_ZIP_DISK_ADDED | GAME_ZIP_DISK_ELSEWHERE | GAME_ZIP_SAMPLE_REMOVED | GAME_ZIP_SAMPLE_ADDED | GAME_ZIP_SAMPLE_ELSEWHERE))
+				if (curr_game_zip2->flags & (GAME_ZIP_ROM_REMOVED | GAME_ZIP_ROM_ADDED | GAME_ZIP_DISK_REMOVED | GAME_ZIP_DISK_ADDED | GAME_ZIP_SAMPLE_REMOVED | GAME_ZIP_SAMPLE_ADDED))
 				{
 					if (object_type==OPTION_OBJECT_TYPE_DISK)
 						fprintf(changes_log, "%8s - %s\n", curr_game_zip2->game->name, curr_game_zip2->game->description);
@@ -605,8 +605,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 	if (!errflg && diff_type>1)
 	{
 		if (num_game_zip_additions ||
-			num_game_zip_rom_additions || num_game_zip_disk_additions || num_game_zip_sample_additions ||
-			(diff_type==2 && (num_game_zip_rom_elsewheres || num_game_zip_disk_elsewheres || num_game_zip_sample_elsewheres)))
+			num_game_zip_rom_additions || num_game_zip_disk_additions || num_game_zip_sample_additions)
 		{
 			strcpy(st, dat2->name);
 			if (strstr(st, ".dat")) *strstr(st, ".dat")=0;
@@ -646,9 +645,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 			for (i=0, curr_game_zip2=dat2->game_zips; i<dat2->num_game_zips; i++, curr_game_zip2++)
 			{
-				if ((curr_game_zip2->flags & (GAME_ZIP_ADDED|GAME_ZIP_ROM_ADDED|GAME_ZIP_DISK_ADDED|GAME_ZIP_SAMPLE_ADDED)) ||
-					(diff_type==2 && curr_game_zip2->flags &
-					(GAME_ZIP_ROM_ELSEWHERE|GAME_ZIP_DISK_ELSEWHERE|GAME_ZIP_SAMPLE_ELSEWHERE)))
+				if ((curr_game_zip2->flags & (GAME_ZIP_ADDED|GAME_ZIP_ROM_ADDED|GAME_ZIP_DISK_ADDED|GAME_ZIP_SAMPLE_ADDED)))
 				{
 					curr_game=curr_game_zip2->game;
 
@@ -673,8 +670,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 						if ((curr_game_zip2->flags & GAME_ZIP_ADDED &&
 							!(diff_type==3 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE)) ||
-							curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED ||
-							(diff_type==2 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE))
+							curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED)
 						{
 							if (!strcmp(curr_rom->status, "nodump"))
 								fprintf(changes_log, "  ROM: %12s (%7lu bytes, no dump available)", curr_rom->name, (unsigned long) curr_rom->size);
@@ -698,8 +694,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 						if ((curr_game_zip2->flags & GAME_ZIP_ADDED &&
 							!(diff_type==3 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE)) ||
-							curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED ||
-							(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
+							curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED)
 						{
 							if (!strcmp(curr_disk->status, "nodump"))
 								fprintf(changes_log, "  Disk: %12s (no dump available)", curr_disk->name);
@@ -728,8 +723,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 						if ((curr_game_zip2->flags & GAME_ZIP_ADDED &&
 							!(diff_type==3 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE)) ||
-							curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ADDED ||
-							(diff_type==2 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE))
+							curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ADDED)
 						{
 							fprintf(changes_log, "  Sample: %12s", curr_sample->name);
 
@@ -753,8 +747,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 		for (i=0, curr_game_zip2=dat2->game_zips; i<dat2->num_game_zips; i++, curr_game_zip2++)
 		{
 			if ((curr_game_zip2->flags & (GAME_ZIP_ADDED|GAME_ZIP_ROM_ADDED|GAME_ZIP_DISK_ADDED|GAME_ZIP_SAMPLE_ADDED)) ||
-				(diff_type==1 && curr_game_zip2->flags & (GAME_ZIP_ROM_REMOVED|GAME_ZIP_DISK_REMOVED|GAME_ZIP_SAMPLE_REMOVED)) ||
-				((diff_type==1 || diff_type==2) && curr_game_zip2->flags & (GAME_ZIP_ROM_ELSEWHERE|GAME_ZIP_DISK_ELSEWHERE|GAME_ZIP_SAMPLE_ELSEWHERE)))
+				(diff_type==1 && curr_game_zip2->flags & (GAME_ZIP_ROM_REMOVED|GAME_ZIP_DISK_REMOVED|GAME_ZIP_SAMPLE_REMOVED)))
 			{
 				curr_game=curr_game_zip2->game;
 
@@ -795,8 +788,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 					if (diff_type==1 ||
 						(curr_game_zip2->flags & GAME_ZIP_ADDED &&
 						!(diff_type==3 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE)) ||
-						curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED ||
-						(diff_type==2 && curr_game_zip_rom2->flags & GAME_ZIP_ROM_ELSEWHERE))
+						curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED)
 					{
 						curr_rom->merge=0;
 						curr_rom->rom_flags&=~FLAG_ROM_MERGE;
@@ -816,8 +808,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 					if (diff_type==1 ||
 						(curr_game_zip2->flags & GAME_ZIP_ADDED &&
 						!(diff_type==3 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE)) ||
-						curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED ||
-						(diff_type==2 && curr_game_zip_disk2->flags & GAME_ZIP_DISK_ELSEWHERE))
+						curr_game_zip_disk2->flags & GAME_ZIP_DISK_ADDED)
 					{
 						curr_disk->merge=0;
 						curr_disk->disk_flags&=~FLAG_DISK_MERGE;
@@ -837,8 +828,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 					if (diff_type==1 ||
 						(curr_game_zip2->flags & GAME_ZIP_ADDED &&
 						!(diff_type==3 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE)) ||
-						curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ADDED ||
-						(diff_type==2 && curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ELSEWHERE))
+						curr_game_zip_sample2->flags & GAME_ZIP_SAMPLE_ADDED)
 					{
 						curr_sample->merge=0;
 						// No such flag! curr_sample->sample_flags&=~FLAG_SAMPLE_MERGE;
@@ -857,8 +847,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 	if (!errflg)
 	{
 		if (num_game_zip_additions || num_game_zip_rom_additions || num_game_zip_disk_additions || num_game_zip_disk_additions ||
-			(diff_type==1 && (num_game_zip_rom_removals || num_game_zip_disk_removals || num_game_zip_sample_removals)) ||
-			((diff_type==1 || diff_type==2) && (num_game_zip_rom_elsewheres || num_game_zip_disk_elsewheres || num_game_zip_sample_elsewheres)))
+			(diff_type==1 && (num_game_zip_rom_removals || num_game_zip_disk_removals || num_game_zip_sample_removals)))
 		{
 			printf("Report has been written to mamediff.log and dat saved as mamediff.dat\n");
 		}
