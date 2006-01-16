@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.13"
-#define DATLIB_DATE "6 December 2005"
+#define DATLIB_VERSION "v2.15"
+#define DATLIB_DATE "13 January 2006"
 
 
 /* --- Standard includes --- */
@@ -461,7 +461,7 @@ int game_name_idx_sort_function(const void *idx1, const void *idx2)
 
 int game_description_idx_sort_function(const void *idx1, const void *idx2)
 {
-	int result=strcmp(((struct game_idx *)idx1)->game->description, ((struct game_idx *)idx2)->game->description);
+	int result=strcasecmp(((struct game_idx *)idx1)->game->description, ((struct game_idx *)idx2)->game->description);
 
 	if (result==0)
 	{
@@ -5005,11 +5005,128 @@ int build_zip_structures(struct dat *dat)
 	return(errflg);
 }
 
+int init_buffer1(struct dat *dat, int buf_size, char *size_prefix)
+{
+	uint32_t line_length=0;
+	int errflg=0;
+
+	/* --- Allocate memory for file buffer 1 --- */
+
+	if (!errflg)
+	{
+		dat->buffer1_size=buf_size;
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("File size of '%s' is %d bytes.\n", dat->name, dat->buffer1_size);
+
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Allocating memory for file buffer 1 (%d bytes)...\n", dat->buffer1_size+1);
+		}
+
+		BYTE_MALLOC(dat->buffer1_start, dat->buffer1_size+1)
+
+		dat->buffer1_end=dat->buffer1_start+dat->buffer1_size;
+
+		BUFFER1_REWIND
+	}
+
+	/* --- Read file into buffer 1 and tidy it up (i.e. remove CR/LF) --- */
+
+	if (!errflg)
+	{
+		float kb=(float)dat->buffer1_size/1024, mb=kb/1024;
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Loading dat into file buffer 1 (%s%d bytes)...\n", size_prefix, dat->buffer1_size);
+		}
+		else
+		{
+			if (!(dat->options->options & OPTION_LOAD_QUIETLY))
+			{
+				if (kb <= 1023)
+					printf("  Loading the file into memory (%s%.0f.%.0fKB)...\n", size_prefix, floor(kb), ceil(100*(kb-floor(kb))));
+				else
+					printf("  Loading the file into memory (%s%.0f.%.0fMB)...\n", size_prefix, floor(mb), ceil(100*(mb-floor(mb))));
+			}
+		}
+
+		BYTE_READ(dat->buffer1_start, dat->buffer1_size, dat->name)
+	}
+
+	if (!errflg)
+	{
+		/* --- Remove CR/LF characters (use 0 terminator) --- */
+		/* --- Find the longest line too --- */
+
+		BUFFER1_REWIND
+
+		while (BUFFER1_REMAINING)
+		{
+			if (*BUFFER1_PTR==10 || *BUFFER1_PTR==13)
+			{
+				if (line_length>dat->token_size)
+					dat->token_size=line_length;
+
+				while (BUFFER1_REMAINING && (*BUFFER1_PTR==10 || *BUFFER1_PTR==13))
+				{
+					*BUFFER1_PTR='\0';
+					BUFFER1_PTR++;
+				}
+
+				if (line_length>0)
+				{
+					dat->num_lines++;
+					line_length=0;
+				}
+			}
+			else
+			{
+				BUFFER1_PTR++;
+				line_length++;
+			}
+		}
+
+		if (line_length>dat->token_size)
+			dat->token_size=line_length;
+
+		/* --- Add final termination character --- */
+
+		*BUFFER1_PTR='\0';
+	}
+
+	/* --- Allocate memory for token buffer --- */
+
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Identified %d non-empty lines.\n", dat->num_lines);
+
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Identified maximum line length as %d characters.\n", dat->token_size);
+
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Allocating memory for token buffer (%d bytes)...\n", dat->token_size+1);
+		}
+
+		BYTE_MALLOC(dat->token, dat->token_size+1)
+	}
+
+	return(errflg);
+}
+
+#define IDENTIFICATION_BYTES 4096
+
 struct dat *init_dat(struct options *options)
 {
 	struct dat *dat=0;
 	struct stat buf;
-	uint32_t i, line_length=0, num_lines=0;
+	uint32_t i;
 	int datlib_driver_matches=0, errflg=0;
 
 	if (options->options & OPTION_SHOW_DEBUG_INFO)
@@ -5106,112 +5223,14 @@ struct dat *init_dat(struct options *options)
 		}
 	}
 
-	/* --- Allocate memory for file buffer 1 --- */
+	/* --- Load part of the file into buffer 1 --- */
 
 	if (!errflg)
 	{
-		dat->buffer1_size=buf.st_size;
-
-		if (datlib_debug)
-		{
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("File size of '%s' is %d bytes.\n", dat->name, dat->buffer1_size);
-
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("Allocating memory for file buffer 1 (%d bytes)...\n", dat->buffer1_size+1);
-		}
-
-		BYTE_MALLOC(dat->buffer1_start, dat->buffer1_size+1)
-
-		dat->buffer1_end=dat->buffer1_start+dat->buffer1_size;
-
-		BUFFER1_REWIND
-	}
-
-	/* --- Read file into buffer 1 and tidy it up (i.e. remove CR/LF) --- */
-
-	if (!errflg)
-	{
-		float kb=(float)dat->buffer1_size/1024, mb=kb/1024;
-
-		if (datlib_debug)
-		{
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("Loading dat into file buffer 1 (%d bytes)...\n", dat->buffer1_size);
-		}
+		if (buf.st_size<=IDENTIFICATION_BYTES)
+			errflg=init_buffer1(dat, buf.st_size, "");
 		else
-		{
-			if (!(options->options & OPTION_LOAD_QUIETLY))
-			{
-				if (kb <= 1023)
-					printf("  Loading the file into memory (%.0f.%.0fKB)...\n", floor(kb), ceil(100*(kb-floor(kb))));
-				else
-					printf("  Loading the file into memory (%.0f.%.0fMB)...\n", floor(mb), ceil(100*(mb-floor(mb))));
-			}
-		}
-
-
-		BYTE_READ(dat->buffer1_start, dat->buffer1_size, dat->name)
-	}
-
-	if (!errflg)
-	{
-		/* --- Remove CR/LF characters (use 0 terminator) --- */
-		/* --- Find the longest line too --- */
-
-		BUFFER1_REWIND
-
-		while (BUFFER1_REMAINING)
-		{
-			if (*BUFFER1_PTR==10 || *BUFFER1_PTR==13)
-			{
-				if (line_length>dat->token_size)
-					dat->token_size=line_length;
-
-				while (BUFFER1_REMAINING && (*BUFFER1_PTR==10 || *BUFFER1_PTR==13))
-				{
-					*BUFFER1_PTR='\0';
-					BUFFER1_PTR++;
-				}
-
-				if (line_length>0)
-				{
-					num_lines++;
-					line_length=0;
-				}
-			}
-			else
-			{
-				BUFFER1_PTR++;
-				line_length++;
-			}
-		}
-
-		if (line_length>dat->token_size)
-			dat->token_size=line_length;
-
-		/* --- Add final termination character --- */
-
-		*BUFFER1_PTR='\0';
-	}
-
-	/* --- Allocate memory for token buffer --- */
-
-	if (!errflg)
-	{
-		if (datlib_debug)
-		{
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("Identified %d non-empty lines.\n", num_lines);
-
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("Identified maximum line length as %d characters.\n", dat->token_size);
-
-			printf("%-16s: ", "Datlib.init_dat");
-			printf("Allocating memory for token buffer (%d bytes)...\n", dat->token_size+1);
-		}
-
-		BYTE_MALLOC(dat->token, dat->token_size+1)
+			errflg=init_buffer1(dat, IDENTIFICATION_BYTES, "first ");
 	}
 
 	/* --- For all supported datlib_drivers, check which one is suitable --- */
@@ -5264,7 +5283,7 @@ struct dat *init_dat(struct options *options)
 
 	/* --- Default save format --- */
 
-	if (!errflg)
+	if (!errflg && !dat->save)
 	{
 		/* --- Choose the first save datlib_driver that is different to the load datlib_driver --- */
 
@@ -5325,6 +5344,27 @@ struct dat *init_dat(struct options *options)
 		}
 	}
 
+	/* --- Load the whole file into buffer 1 --- */
+
+	if (!errflg && buf.st_size>IDENTIFICATION_BYTES)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of token buffer...\n");
+		}
+		FREE(dat->token)
+
+		if (datlib_debug)
+		{
+				printf("%-16s: ", "Datlib.init_dat");
+			printf("Freeing memory of file buffer 1...\n");
+		}
+		FREE(dat->buffer1_start)
+
+		errflg=init_buffer1(dat, buf.st_size, "");
+	}
+
 	/* --- Allocate memory for file buffer 2 --- */
 
 	/*
@@ -5343,7 +5383,7 @@ struct dat *init_dat(struct options *options)
 
 	if (!errflg)
 	{
-		dat->buffer2_size=buf.st_size+num_lines*dat->load->safety;
+		dat->buffer2_size=buf.st_size+dat->num_lines*dat->load->safety;
 
 		if (datlib_debug)
 		{

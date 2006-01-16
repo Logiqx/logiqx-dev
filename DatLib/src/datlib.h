@@ -12,6 +12,7 @@
 /* --- Function prototypes for use by external tools --- */
 
 void display_datlib_version(void);
+int init_buffer1(struct dat *dat, int buf_size, char *size_prefix);
 struct dat *init_dat(struct options *options);
 int save_dat(struct dat *dat);
 struct dat *free_dat(struct dat *dat);

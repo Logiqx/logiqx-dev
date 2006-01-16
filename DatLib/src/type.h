@@ -673,6 +673,8 @@ struct dat
 	uint32_t buffer2_size;
 	char *buffer2_ptr;
 
+	uint32_t num_lines;
+
 	char *token;
 	uint32_t token_size;
 
