@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.23 - 06/12/2005
+                          MAMEDiff v2.24 - 09/01/2006
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -127,6 +127,14 @@ A removal or addition is shown by a line beginning '<' or '>'.
 5. Alternative reports and dat creation
 ---------------------------------------
 
+Before describing the four dat creation options, it is worth pointing out that
+the higher the number, the smaller the resultant dat. So, -d1 will generate
+the largest dat (and thus ROM set) whilst -d4 will generate the smallest one.
+
+Each mode has a different aim regarding compatibility and they are described
+in the following sections of this document.
+
+
 5.1 Using the -d1 option to show 'ZIPs updates'
 -----------------------------------------------
 
@@ -171,11 +179,31 @@ specific 'supplementary' ROM set for the emulator of your choice.
 
 Note: -d3 is very similar in nature to the old 'tiny' supplements of MAMEDiff.
 
-When using the -d1, -d2 and -d3 options, there are two additional options:
+When using the -d1, -d2 and -d3 options, there are several additional options.
+These are detailed after the section describing use of the -d4 option.
 
 
-5.3 Options for use with -d1, -d2 and -d3
+5.3 Using the -d4 option for ROM archival
 -----------------------------------------
+
+The -d4 option uses the same logic as -d2 and -d3 but ignores the issue of
+compatibility completely! It simply checks if a ROM (or disk/sample) exists
+in the first data file (ignoring what the name of the game it is in) and if
+it does then it will not appear in the output data file.
+
+This has greater benefits for split (-s) and non-merged (-n) sets but also
+reduces the size of a merged (-m) supplement.
+
+Note 1: The only intention of this mode is for archival purposes. It cannot be
+used to create 100% compatible supplements like -d1, -d2 and -d3.
+
+Note 2: There is a chance that ROMs will be duplicated in the output datfile.
+There is no de-duplication across games in the second data file so to minimise
+the chance of duplicates occuring, the -m option might be your best option.
+
+
+5.4 Options for use with -d1, -d2, -d3 and -d4
+----------------------------------------------
 
 -r will include ROM renames in the output data file. Use this option if the
    target dat is for an emulator that does not have CRC support.
@@ -196,7 +224,7 @@ types of merging are supported (i.e. ROMs can be in either parent or clone) and
 'split merging' is assumed as a default if you do not specify -m, -s or -n.
 
 
-5.4 ROM auditing using the -d1 option
+5.5 ROM auditing using the -d1 option
 -------------------------------------
 
 You can scan audit ROMs to a certain degree with the -d1 option (by comparing
@@ -293,6 +321,12 @@ tiny dat generation). Thanks also to Guru-Choc for doing early beta testing.
 
 11. History
 -----------
+
+09/01/2006  *** v2.24 ***
+
+            - Added -d4 (even smaller supplements - for ROM archival only).
+            - Updated the usage information on the command line.
+            - Tidied up the code in generate.c (used by -d1, -d2, -d3, -d4).
 
 06/12/2005  *** v2.23 ***
 
