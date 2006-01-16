@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.25"
-#define DATUTIL_DATE "6 December 2005"
+#define DATUTIL_VERSION "v2.27"
+#define DATUTIL_DATE "13 January 2006"
 
 
 /* --- The standard includes --- */
@@ -195,6 +195,17 @@ int main(int argc, char **argv)
 		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");
 		printf("Information     [-v] [-d]\n\n");
+
+		printf("Output formats and aliases:\n\n");
+
+		printf("MAME ListInfo   listinfo info li clrmamepro clrmame cmpro cmp cm\n");
+  		printf("MAME ListXML    listxml xml lx\n");
+  		printf("RomCenter 2     romcenter2 rc2 romcenter rc\n");
+  		printf("Tab Delimited   delimited tab text\n");
+  		printf("MAME GameList   gamelist gl\n");
+  		printf("TitleList       titlelist titles\n");
+  		printf("RC2 Sublist     sublist sub rcsublist rcsub\n\n");
+
 	}
 
 	if (!errflg)
