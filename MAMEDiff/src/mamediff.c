@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.23"
-#define MAMEDIFF_DATE "6 December 2005"
+#define MAMEDIFF_VERSION "v2.24"
+#define MAMEDIFF_DATE "9 January 2006"
 
 
 /* --- The standard includes --- */
@@ -105,10 +105,12 @@ int main(int argc, char **argv)
 			zeros++;
 			break;
 		case 'o':
-			if (!strcmp(optarg, "sample"))
-				object_type=OPTION_OBJECT_TYPE_SAMPLE;
+			if (!strcmp(optarg, "rom"))
+				object_type=OPTION_OBJECT_TYPE_ROM;
 			else if (!strcmp(optarg, "disk"))
 				object_type=OPTION_OBJECT_TYPE_DISK;
+			else if (!strcmp(optarg, "sample"))
+				object_type=OPTION_OBJECT_TYPE_SAMPLE;
 			else
 				errflg++;
 			break;
@@ -201,13 +203,18 @@ int main(int argc, char **argv)
 		printf("instead.\n\n");
 	}
 
+	if (diff_type<0 || diff_type>4)
+	{
+		errflg++;
+	}
+
 	if (errflg)
 	{
-		printf("Usage: mamediff [-v] | [[-m|-s|-n] [-d[1|2|3] -o[disk|sample] [-r] [-z] [-b]]]\n       <old data file> <new data file 2>\n\n");
+		printf("Usage: mamediff [-m|-s|-n]\n       [[-v] | [-d[1|2|3|4] [[-o[rom|disk|sample]] [-r] [-z] [-b]]]]\n       <old data file> <new data file>\n\n");
 		printf("Running MAMEDiff without specifying a type of ROM set will produce a summary of\nchanges made to the ROM sets of individual games. If you specify a type of ROM\nset, MAMEDiff will tell you which ZIP files need rebuilding (if you have them).\n\n");
-		printf("The three ROM set types are 'm'erged, 's'plit or 'n'on-merged.\n\n");
+		printf("The three ROM set types are 'm'erged, 's'plit (default) or 'n'on-merged.\n\n");
 		printf("Use verbose mode (the -v option) for a detailed report of ROM changes.\n\n");
-		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -b option is for use if you like to have non-separated BIOS ROMs.\n");
+		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -b option is for use if you like to have non-separated BIOS ROMs.\nThe -o option dictates the type of object to be processed (default=rom).\n");
 		exit (1);
 	}
 
