@@ -27,6 +27,7 @@ DECLARE_DRIVER(m1_xml, "M1 XML", 0)
 DECLARE_DRIVER(gngeo_romrc, "GNGEO romrc", 0)
 DECLARE_DRIVER(title_list, "Title List", 0)
 DECLARE_DRIVER(romcenter_sublist, "RomCenter Sublist", 0)
+DECLARE_DRIVER(mame_gamelist, "MAME GameList", 0)
 DECLARE_DRIVER(allzip, "All Zip", 5)
 DECLARE_DRIVER(ziplist, "ZIP List", 5)
 
@@ -52,6 +53,7 @@ const struct datlib_driver *datlib_drivers[] =
 	DRIVER(gngeo_romrc)
 	DRIVER(title_list)
 	DRIVER(romcenter_sublist)
+	DRIVER(mame_gamelist)
 	DRIVER(allzip)
 	DRIVER(ziplist)
 	0
