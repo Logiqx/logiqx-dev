@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.15"
-#define DATLIB_DATE "13 January 2006"
+#define DATLIB_VERSION "v2.16"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -2889,6 +2889,7 @@ int remove_duplicates(struct dat *dat)
 					dup_rom->rom_fixes|=FLAG_ROM_DUPLICATE;
 
 					curr_game->num_roms--;
+					dat->num_roms--;
 
 					found_dup++;
 				}
@@ -2919,6 +2920,7 @@ int remove_duplicates(struct dat *dat)
 					curr_game->disk_fixes|=FLAG_DISK_DUPLICATE;
 
 					curr_game->num_disks--;
+					dat->num_disks--;
 
 					found_dup++;
 				}
@@ -2949,6 +2951,7 @@ int remove_duplicates(struct dat *dat)
 					curr_game->sample_fixes|=FLAG_SAMPLE_DUPLICATE;
 
 					curr_game->num_samples--;
+					dat->num_samples--;
 
 					found_dup++;
 				}
@@ -3393,6 +3396,51 @@ int fix_merging_phase_2(struct dat *dat)
 	int i, j;
 
 	int errflg=0;
+
+	struct game *curr_game=0;
+
+	struct rom *curr_rom=0;
+	struct rom_idx *curr_rom_name_idx=0;
+
+	struct disk *curr_disk=0;
+	struct disk_idx *curr_disk_name_idx=0;
+
+	/* --- Need a rom and disk name index to run 'fix merging phase 2' --- */
+
+	if (datlib_debug)
+	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Creating temporary name indices...\n");
+	}
+
+	curr_rom_name_idx=dat->rom_name_idx;
+	curr_disk_name_idx=dat->disk_name_idx;
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		if (curr_game->num_roms)
+		{
+			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
+			{
+				curr_rom->game=curr_game;
+
+				curr_rom_name_idx++->rom=curr_rom;
+			}
+		}
+
+		if (curr_game->num_disks)
+		{
+			for (j=0, curr_disk=curr_game->disks; j<curr_game->num_disks; j++, curr_disk++)
+			{
+				curr_disk->game=curr_game;
+
+				curr_disk_name_idx++->disk=curr_disk;
+			}
+		}
+	}
+
+	qsort(dat->rom_name_idx, dat->num_roms, sizeof(struct rom_idx), rom_name_idx_sort_function);
+	qsort(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx), disk_name_idx_sort_function);
 
 	/* --- Identify CRC conflicts and do final bit of 'fix merging' --- */
 
@@ -5468,14 +5516,14 @@ struct dat *init_dat(struct options *options)
 	if (!errflg && !(options->options & OPTION_REMOVE_DUPLICATES_OFF))
 		errflg=remove_duplicates(dat);
 
+	if (!errflg && !(options->options & OPTION_FIX_MERGING_OFF))
+		errflg=fix_merging_phase_2(dat);
+
 	if (!errflg)
 		errflg=summarise_dat(dat);
 
 	if (!errflg)
 		errflg=rebuild_dat_indices(dat);
-
-	if (!errflg && !(options->options & OPTION_FIX_MERGING_OFF))
-		errflg=fix_merging_phase_2(dat);
 
 	if (!errflg && dat->log_file)
 		errflg=report_warnings(dat);

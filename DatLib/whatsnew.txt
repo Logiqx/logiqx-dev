@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.16 ***
+
+            - Fixed bug that messed up internal indices (affected crc matching)
+
 13/01/2006  *** v2.15 ***
 
             - Last release would not load data files less than 4KB in size!
