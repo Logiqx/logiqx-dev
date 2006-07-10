@@ -80,58 +80,37 @@ int output_sample_details(FILE *out, char *name)
 	return(errflg);
 }
 
-int output_chd_details(FILE *out, char *name, char *fn)
+int output_disk_details(FILE *out, char *name, char *mem, uint32_t mem_size)
 {
-	FILE *in=0;
-
-	char tag[8];
-	uint32_t length=0;
 	uint32_t version=0;
 	uint8_t byte;
 
-	int i=0, errflg=0;
+	int i=0, offset, errflg=0;
 
-	fprintf(out, "%s \"%s\"\n", datlib_tokens[TOKEN_DISK_NAME].description, name);
-
-	FOPEN(in, fn, "rb")
+	if (mem_size<60)
+		errflg++;
 
 	if (!errflg)
 	{
-		fread(tag, 1, 8, in);
+		fprintf(out, "%s \"%s\"\n", datlib_tokens[TOKEN_DISK_NAME].description, name);
 
-		if (strncmp(tag, "MComprHD", 8))
+		offset=12;
+		for (i=0; i<4; i++)
 		{
-			fprintf(stderr, "Error: CHD file did not have expected header\n");
+			version=version*256+mem[offset++];
+		}
+		if (version>=3 && mem_size<100)
 			errflg++;
-		}
-	}
-
-	if (!errflg)
-	{
-		for (i=0; i<4; i++)
-		{
-			fread(&byte, 1, 1, in);
-			length=length*256+byte;
-		}
-	}
-
-	if (!errflg)
-	{
-		for (i=0; i<4; i++)
-		{
-			fread(&byte, 1, 1, in);
-			version=version*256+byte;
-		}
 	}
 
 	if (!errflg)
 	{
 		fprintf(out, "%s ", datlib_tokens[TOKEN_DISK_MD5].description);
 
-		fseek(in, 44, 0);
+		offset=44;
 		for (i=0; i<16; i++)
 		{
-			fread(&byte, 1, 1, in);
+			byte=mem[offset++];
 			fprintf(out, "%02x", byte);
 		}
 		fprintf(out, "\n");
@@ -141,21 +120,19 @@ int output_chd_details(FILE *out, char *name, char *fn)
 	{
 		fprintf(out, "%s ", datlib_tokens[TOKEN_DISK_SHA1].description);
 
-		fseek(in, 80, 0);
+		offset=80;
 		for (i=0; i<20; i++)
 		{
-			fread(&byte, 1, 1, in);
+			byte=mem[offset++];
 			fprintf(out, "%02x", byte);
 		}
 		fprintf(out, "\n");
 	}
 
-	FCLOSE(in)
-
 	return(errflg);
 }
 
-int output_rom_details(FILE *out, char *name, uint32_t crc, uint32_t size, char *mem)
+int output_rom_details(FILE *out, char *name, uint32_t size, uint32_t crc, char *mem, uint32_t mem_size, FILE *in)
 {
 	md5_context md5ctx;
 	unsigned char md5sum[16];
@@ -165,46 +142,49 @@ int output_rom_details(FILE *out, char *name, uint32_t crc, uint32_t size, char 
 	uint32_t i;
 	int errflg=0;
 
-	/* --- Name and size --- */
-
-	if (strchr(name, ' '))
-		fprintf(out, "%s \"%s\"\n", datlib_tokens[TOKEN_ROM_NAME].description, name);
-	else
-		fprintf(out, "%s %s\n", datlib_tokens[TOKEN_ROM_NAME].description, name);
-
-	fprintf(out, "%s %d\n", datlib_tokens[TOKEN_ROM_SIZE].description, size);
-
-	/* --- CRC32 --- */
+	/* --- Initialise --- */
 
 	if (mem)
 	{
-		crc = crc32(0, NULL, 0);
-		crc = crc32(crc, mem, size);
+		crc=crc32(0, NULL, 0);
+		md5_starts(&md5ctx);
+		sha1_starts(&sha1ctx);
 	}
 
-	fprintf(out, "%s %08lx\n", datlib_tokens[TOKEN_ROM_CRC].description, (unsigned long) crc);
+	/* --- Update --- */
 
-	/* --- MD5 --- */
+	while (mem_size)
+	{
+		crc=crc32(crc, mem, mem_size);
+		md5_update(&md5ctx, mem, mem_size);
+		sha1_update(&sha1ctx, mem, mem_size);
+
+		if (in)
+			mem_size=fread(mem, 1, BUFFER_SIZE, in);
+		else
+			mem_size=0;
+	}
+
+	/* --- Finalise --- */
 
 	if (mem)
 	{
-		md5_starts(&md5ctx);
-		md5_update(&md5ctx, mem, size);
 		md5_finish(&md5ctx, md5sum);
+		sha1_finish(&sha1ctx, sha1sum);
+	}
 
+	/* --- Output --- */
+
+	fprintf(out, "%s \"%s\"\n", datlib_tokens[TOKEN_ROM_NAME].description, name);
+	fprintf(out, "%s %d\n", datlib_tokens[TOKEN_ROM_SIZE].description, size);
+	fprintf(out, "%s %08lx\n", datlib_tokens[TOKEN_ROM_CRC].description, (unsigned long) crc);
+
+	if (mem)
+	{
 		fprintf(out, "%s ", datlib_tokens[TOKEN_ROM_MD5].description);
 		for (i=0; i<16; i++)
 			fprintf(out, "%02x", md5sum[i]);
 		fprintf(out, "\n");
-	}
-
-	/* --- SHA1 --- */
-
-	if (mem)
-	{
-		sha1_starts(&sha1ctx);
-		sha1_update(&sha1ctx, mem, size);
-		sha1_finish(&sha1ctx, sha1sum);
 
 		fprintf(out, "%s ", datlib_tokens[TOKEN_ROM_SHA1].description);
 		for (i=0; i<20; i++)
@@ -217,9 +197,19 @@ int output_rom_details(FILE *out, char *name, uint32_t crc, uint32_t size, char 
 	return(errflg);
 }
 
+int determine_file_type(char *mem, uint32_t size)
+{
+	if (size>=8 && !strncmp(mem, "MComprHD", 8))
+		return(OPTION_OBJECT_TYPE_DISK);
+	else if (size>=12 && !strncmp(mem, "RIFF", 4) && !strncmp(mem+8, "WAVE", 4))
+		return(OPTION_OBJECT_TYPE_SAMPLE);
+	else
+		return(OPTION_OBJECT_TYPE_ROM);
+}
+
 int dir_scan(struct dat *dat)
 {
-	FILE *out=0;
+	FILE *in=0, *out=0;
 
 	DIR *dirp=0, *sdirp=0;                                    
 	struct dirent *direntp, *sdirentp;                       
@@ -232,8 +222,9 @@ int dir_scan(struct dat *dat)
 	char st[MAX_FILENAME_LENGTH+1];
 
 	char *mem;
+	uint32_t mem_size;
 
-	int errflg=0;
+	int file_type=0, errflg=0;
 
 	if (!datlib_debug && !(dat->options->options & OPTION_LOAD_QUIETLY))
 		printf("  Scanning directory and writing details to datlib.tmp...\n");
@@ -254,16 +245,11 @@ int dir_scan(struct dat *dat)
 		{
 			if (!(buf.st_mode & S_IFDIR))
 			{
-				strcpy(st, fn);
-				LOWER(st)
-
-				if (strrchr(st, '.') && !strcmp(strrchr(st, '.'), ".zip"))
+				if (strrchr(fn, '.') && !strcmp(strrchr(fn, '.'), ".zip"))
 				{
 					strcpy(st, direntp->d_name);
-
 					LOWER(strrchr(st, '.'))
-					if (strstr(st, ".zip"))
-						*strstr(st, ".zip")='\0';
+					*strstr(st, ".zip")='\0';
 
 					if (strchr(st, ' '))
 						fprintf(out, "\n%s \"%s\"\n", datlib_tokens[TOKEN_GAME_NAME].description, st);
@@ -274,28 +260,42 @@ int dir_scan(struct dat *dat)
 					{
 						while (!errflg && (zipent = readzip(zip)) != 0)
 						{
-							if (dat->options->options & OPTION_OBJECT_TYPE_SAMPLE)
+							if (zipent->uncompressed_size)
 							{
-								errflg=output_sample_details(out, zipent->name);
-							}
-							else if (dat->options->options & OPTION_EXTENDED_CHECKSUMS)
-							{
-								if (zipent->uncompressed_size && zipent->uncompressed_size<=MAX_ROM_SIZE)
+								if (dat->options->options & OPTION_EXTENDED_CHECKSUMS ||
+									dat->options->options & OPTION_OBJECT_TYPE_SAMPLE ||
+									dat->options->options & OPTION_OBJECT_TYPE_DISK)
 								{
-									BYTE_MALLOC(mem, zipent->uncompressed_size)
+									mem_size=zipent->uncompressed_size;
+									BYTE_MALLOC(mem, mem_size)
 
 									if (!errflg)
 										errflg=readuncompresszip(zip, zipent, mem);
 
 									if (!errflg)
-										errflg=output_rom_details(out, zipent->name, 0, zipent->uncompressed_size, mem);
+									{
+										file_type=determine_file_type(mem, zipent->uncompressed_size);
+
+										switch (file_type)
+										{
+											case OPTION_OBJECT_TYPE_ROM:
+												errflg=output_rom_details(out, zipent->name, zipent->uncompressed_size, zipent->crc32, mem, mem_size, 0);
+												break;
+											case OPTION_OBJECT_TYPE_DISK:
+												errflg=output_disk_details(out, zipent->name, mem, zipent->uncompressed_size);
+												break;
+											case OPTION_OBJECT_TYPE_SAMPLE:
+												errflg=output_sample_details(out, zipent->name);
+												break;
+										}
+									}
 
 									FREE(mem)
 								}
-							}
-							else
-							{
-								errflg=output_rom_details(out, zipent->name, zipent->crc32, zipent->uncompressed_size, 0);
+								else
+								{
+									errflg=output_rom_details(out, zipent->name, zipent->uncompressed_size, zipent->crc32, 0, 0, 0);
+								}
 							}
 						}
 						closezip(zip);
@@ -315,28 +315,35 @@ int dir_scan(struct dat *dat)
 						sprintf(st, "%s/%s", fn, sdirentp->d_name);
 						if (stat(st, &buf) == 0)
 						{
-							if (!(buf.st_mode & S_IFDIR))
+							if (!(buf.st_mode & S_IFDIR) && buf.st_size)
 							{
-								if (dat->options->options & OPTION_OBJECT_TYPE_SAMPLE)
-								{
-									errflg=output_sample_details(out, sdirentp->d_name);
-								}
-								else if (strrchr(st, '.') && !strcmp(strrchr(st, '.'), ".chd"))
-								{
-									errflg=output_chd_details(out, sdirentp->d_name, st);
-								}
-								else if (buf.st_size && buf.st_size<=MAX_ROM_SIZE)
-								{
-									BYTE_MALLOC(mem, (int)buf.st_size)
+								BYTE_MALLOC(mem, BUFFER_SIZE)
 
-									if (!errflg)
-										BYTE_READ(mem, (int)buf.st_size, st)
+								if (!errflg)
+									FOPEN(in, st, "rb")
 
-									if (!errflg)
-										errflg=output_rom_details(out, sdirentp->d_name, 0, buf.st_size, mem);
+								if (!errflg)
+									mem_size=fread(mem, 1, BUFFER_SIZE, in);
 
-									FREE(mem)
+								if (!errflg)
+								{
+									file_type=determine_file_type(mem, mem_size);
+
+									switch (file_type)
+									{
+										case OPTION_OBJECT_TYPE_ROM:
+											errflg=output_rom_details(out, sdirentp->d_name, buf.st_size, 0, mem, mem_size, in);
+											break;
+										case OPTION_OBJECT_TYPE_DISK:
+											errflg=output_disk_details(out, sdirentp->d_name, mem, mem_size);
+											break;
+										case OPTION_OBJECT_TYPE_SAMPLE:
+											errflg=output_sample_details(out, sdirentp->d_name);
+											break;
+									}
 								}
+
+								FREE(mem)
 							}
 						}
 						else
