@@ -1,6 +1,13 @@
 History
 -------
 
+11/07/2006  *** v2.28 ***
+
+            - Uses DatLib v2.16.
+            - Fixed bug that messed up internal indices (affected crc matching)
+            - More intelligent directory scanner (regarding samples and CHDs)
+            - Removed 64MB file limit from directory scanner (reads 1MB blocks)
+
 13/01/2006  *** v2.27 ***
 
             - Uses DatLib v2.15.
