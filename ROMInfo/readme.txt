@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          ROMInfo v2.6 - 06/12/2005
+                          ROMInfo v2.7 - 11/07/2006
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -70,64 +70,3 @@ Thanks
 
 D-Zine who prompted me to write this and came up with the ZIP file idea.
 
-
-History
--------
-
-06/12/2005  *** v2.6 ***
-
-            - Uses DatLib v2.13.
-            - DatLib v2.12 broke the RomCenter drivers (now fixed).
-
-05/12/2005  *** v2.5 ***
-
-            - Uses DatLib v2.12.
-            - Fixed a rare crash (if the longest line in the dat was the last).
-            - Fixed a problem loading RomCenter data files containing [].
-
-31/10/2005  *** v2.4 ***
-
-            - Uses DatLib v2.10.
-            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
-
-28/02/2005  *** v2.3 ***
-
-            - Uses DatLib v2.2.
-            - Added support for tab delimited files.
-
-22/07/2004  *** v2.2 ***
-
-            - Uses DatLib v1.8.
-            - Removed the need for xml2info by adding my own MAME XML parser.
-            - A nice side effect is that names like "Alien³: The Gun" work now!
-            - The parser also supports MESS XML.
-
-11/07/2004  *** v2.1 ***
-
-            - Updated the source to use the new functions of DatLib v1.4.
-            - There is no functional change within ROMInfo though.
-
-02/07/2004  *** v2.0 ***
-
-            Modified to use DatLib - there are no game or ROM limits anymore!
-            Also supports all DatLib formats (ListInfo, XML, RomCenter, etc).
-            Note: For XML support to work, you need xml2info.exe in your path.
-
-22/01/2001  *** v1.03 ***
-
-            Added standard file support
-            Added support for multiple CRCs/files/zips
-            Added automatic logging (sends output to rominfo.log)
-            Other minor improvements to the output format and the source code
-
-06/01/2001  *** v1.02 ***
-
-            Added drag and drop support
-
-31/12/2000  *** v1.01 ***
-
-            Added ZIP file support (instead of single CRC)
-
-30/12/2000  *** v1.0 ***
-
-            First public release.
