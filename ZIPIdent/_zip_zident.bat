@@ -1,6 +1,6 @@
 @ECHO OFF
 
 rm -f zident.zip
-zip -r zident.zip src makefile zipident.exe zipident.txt -x src/CVS/*
+zip -r zident.zip src makefile zipident.exe readme.txt whatsnew.txt -x src/CVS/*
 
 PAUSE

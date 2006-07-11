@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ZIPIDENT_VERSION "v2.7"
-#define ZIPIDENT_DATE "6 December 2005"
+#define ZIPIDENT_VERSION "v2.8"
+#define ZIPIDENT_DATE "11 July 2006"
 
 
 /* --- The standard includes --- */
