@@ -1,7 +1,7 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.16 ***
+11/07/2006  *** v2.16 ***
 
             - Fixed bug that messed up internal indices (affected crc matching)
             - More intelligent directory scanner (regarding samples and CHDs)

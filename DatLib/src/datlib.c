@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v2.16"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "11 July 2006"
 
 
 /* --- Standard includes --- */
@@ -343,6 +343,7 @@ int dir_scan(struct dat *dat)
 									}
 								}
 
+								FCLOSE(in)
 								FREE(mem)
 							}
 						}
