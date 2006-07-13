@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.16"
-#define DATLIB_DATE "11 July 2006"
+#define DATLIB_VERSION "v2.17"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -2079,7 +2079,10 @@ int remove_clones(struct dat *dat)
 	{
 		if (orig_game->match==0)
 		{
-			dat->num_games-=1;
+			dat->num_games--;
+			dat->num_roms-=orig_game->num_roms;
+			dat->num_disks-=orig_game->num_disks;
+			dat->num_samples-=orig_game->num_samples;
 		}
 		else
 		{
@@ -2217,7 +2220,10 @@ int game_sourcefile_selections(struct dat *dat)
 	{
 		if (orig_game->match==0)
 		{
-			dat->num_games-=1;
+			dat->num_games--;
+			dat->num_roms-=orig_game->num_roms;
+			dat->num_disks-=orig_game->num_disks;
+			dat->num_samples-=orig_game->num_samples;
 		}
 		else
 		{
@@ -2996,6 +3002,10 @@ int summarise_dat(struct dat *dat)
 	struct archive *curr_archive=0;
 	uint32_t i, j;
 
+	uint32_t num_roms=dat->num_roms;
+	uint32_t num_disks=dat->num_disks;
+	uint32_t num_samples=dat->num_samples;
+
 	int errflg=0;
 
 	/* --- Summarise games --- */
@@ -3356,6 +3366,26 @@ int summarise_dat(struct dat *dat)
 			dat->num_parents++;
 		else if (!(curr_game->game_flags & FLAG_RESOURCE_NAME))
 			dat->num_others++;
+	}
+
+	/* --- Check for previous errors --- */
+
+	if (num_roms!=dat->num_roms)
+	{
+		fprintf(stderr, "Error: num_roms was incorrect prior to summarise_dat()!\n");
+		errflg++;
+	}
+
+	if (num_disks!=dat->num_disks)
+	{
+		fprintf(stderr, "Error: num_disks was incorrect prior to summarise_dat()!\n");
+		errflg++;
+	}
+
+	if (num_samples!=dat->num_samples)
+	{
+		fprintf(stderr, "Error: num_samples was incorrect prior to summarise_dat()!\n");
+		errflg++;
 	}
 
 	/* --- Debug summary --- */
@@ -4950,8 +4980,8 @@ int build_zip_structures(struct dat *dat)
 		if (i>0 && !strcmp((curr_game_zip_rom-1)->game_zip->game->name, orig_game_zip_rom->game_zip->game->name) &&
 			 !strcmp((curr_game_zip_rom-1)->rom->name, orig_game_zip_rom->rom->name))
 		{
-			orig_game_zip_rom->game_zip->num_game_zip_roms-=1;
-			dat->num_game_zip_roms-=1;
+			orig_game_zip_rom->game_zip->num_game_zip_roms--;
+			dat->num_game_zip_roms--;
 		}
 		else
 		{
@@ -4984,8 +5014,8 @@ int build_zip_structures(struct dat *dat)
 		if (i>0 && !strcmp((curr_game_zip_disk-1)->game_zip->game->name, orig_game_zip_disk->game_zip->game->name) &&
 			 !strcmp((curr_game_zip_disk-1)->disk->name, orig_game_zip_disk->disk->name))
 		{
-			orig_game_zip_disk->game_zip->num_game_zip_disks-=1;
-			dat->num_game_zip_disks-=1;
+			orig_game_zip_disk->game_zip->num_game_zip_disks--;
+			dat->num_game_zip_disks--;
 		}
 		else
 		{
@@ -5018,8 +5048,8 @@ int build_zip_structures(struct dat *dat)
 		if (i>0 && !strcmp((curr_game_zip_sample-1)->game_zip->game->name, orig_game_zip_sample->game_zip->game->name) &&
 			 !strcmp((curr_game_zip_sample-1)->sample->name, orig_game_zip_sample->sample->name))
 		{
-			orig_game_zip_sample->game_zip->num_game_zip_samples-=1;
-			dat->num_game_zip_samples-=1;
+			orig_game_zip_sample->game_zip->num_game_zip_samples--;
+			dat->num_game_zip_samples--;
 		}
 		else
 		{
