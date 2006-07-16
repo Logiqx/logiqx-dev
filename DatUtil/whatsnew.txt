@@ -1,6 +1,11 @@
 History
 -------
 
+16/07/2006  *** v2.29 ***
+
+            - Uses DatLib v2.16.
+            - Fixed bug that caused the DatUtil -g and -r options to crash
+
 11/07/2006  *** v2.28 ***
 
             - Uses DatLib v2.16.
