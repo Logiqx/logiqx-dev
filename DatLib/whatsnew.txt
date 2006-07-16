@@ -1,6 +1,10 @@
 History
 -------
 
+16/07/2006  *** v2.17 ***
+
+            - Fixed bug that caused the DatUtil -g and -r options to crash
+
 11/07/2006  *** v2.16 ***
 
             - Fixed bug that messed up internal indices (affected crc matching)
