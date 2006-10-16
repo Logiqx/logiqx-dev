@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.17"
-#define DATLIB_DATE "16 July 2006"
+#define DATLIB_VERSION "v2.18"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -842,11 +842,17 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_VIDEO_SCREEN && dat->num_games>0)
 			dat->num_videos++;
 
+		else if (type==TOKEN_DISPLAY_TYPE && dat->num_games>0)
+			dat->num_displays++;
+
 		else if (type==TOKEN_SOUND_CHANNELS && dat->num_games>0)
 			dat->num_sounds++;
 
 		else if (type==TOKEN_INPUT_PLAYERS && dat->num_games>0)
 			dat->num_inputs++;
+
+		else if (type==TOKEN_CONTROL_TYPE && dat->num_games>0)
+			dat->num_controls++;
 
 		else if (type==TOKEN_DIPSWITCH_NAME && dat->num_games>0)
 			dat->num_dipswitches++;
@@ -1003,6 +1009,18 @@ int allocate_dat_memory(struct dat *dat)
 		if (datlib_debug)
 		{
 			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d displays identified\n", dat->num_displays);
+		}
+
+		if (dat->num_displays>0)
+			STRUCT_CALLOC(dat->displays, dat->num_displays, sizeof(struct display))
+	}
+
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
 			printf("%d sounds identified\n", dat->num_sounds);
 		}
 
@@ -1020,6 +1038,18 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_inputs>0)
 			STRUCT_CALLOC(dat->inputs, dat->num_inputs, sizeof(struct input))
+	}
+
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d controls identified\n", dat->num_controls);
+		}
+
+		if (dat->num_controls>0)
+			STRUCT_CALLOC(dat->controls, dat->num_controls, sizeof(struct control))
 	}
 
 	if (!errflg)
@@ -1107,8 +1137,10 @@ int store_tokenized_dat(struct dat *dat)
 	struct sample *curr_sample=dat->samples;
 	struct chip *curr_chip=dat->chips;
 	struct video *curr_video=dat->videos;
+	struct display *curr_display=dat->displays;
 	struct sound *curr_sound=dat->sounds;
 	struct input *curr_input=dat->inputs;
+	struct control *curr_control=dat->controls;
 	struct dipswitch *curr_dipswitch=dat->dipswitches;
 	struct dipvalue *curr_dipvalue=dat->dipvalues;
 	struct driver *curr_driver=dat->drivers;
@@ -1140,6 +1172,17 @@ int store_tokenized_dat(struct dat *dat)
 
 	while (BUFFER2_REMAINING && (type=*BUFFER2_PTR++)!=TOKEN_UNDEFINED)
 	{
+		/* --- Emulator header --- */
+
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		{
+			if (type==TOKEN_EMULATOR_NAME)
+				dat->emulator.name=BUFFER2_PTR;
+
+			else if (type==TOKEN_EMULATOR_BUILD)
+				dat->emulator.build=BUFFER2_PTR;
+		}
+
 		/* --- ClrMamePro header --- */
 
 		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
@@ -1580,6 +1623,65 @@ int store_tokenized_dat(struct dat *dat)
 					curr_game->num_videos++;
 				}
 
+				/* --- Display elements --- */
+
+				if (curr_display!=0 && curr_display->type!=0)
+				{
+					if (type==TOKEN_DISPLAY_TYPE)
+						curr_display++;
+
+					else if (type==TOKEN_DISPLAY_ROTATE)
+					{
+						curr_display->rotate=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_display->display_flags|=FLAG_DISPLAY_ROTATE;
+					}
+
+					else if (type==TOKEN_DISPLAY_FLIPX)
+						curr_display->flipx=BUFFER2_PTR;
+
+					else if (type==TOKEN_DISPLAY_WIDTH)
+					{
+						curr_display->width=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_display->display_flags|=FLAG_DISPLAY_WIDTH;
+					}
+
+					else if (type==TOKEN_DISPLAY_HEIGHT)
+					{
+						curr_display->height=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_display->display_flags|=FLAG_DISPLAY_HEIGHT;
+					}
+
+					else if (type==TOKEN_DISPLAY_REFRESH)
+					{
+						curr_display->refresh=atof(BUFFER2_PTR);
+
+						// Value may be zero so its presence needs remembering!
+						curr_display->display_flags|=FLAG_DISPLAY_REFRESH;
+					}
+				}
+
+				if (type==TOKEN_DISPLAY_TYPE)
+				{
+					/* --- The current display must remember its type --- */
+
+					curr_display->type=BUFFER2_PTR;
+
+					/* --- If this is the first display for the current game then set up the displays pointer --- */
+
+					if (curr_game->displays==0)
+						curr_game->displays=curr_display;
+
+					/* --- Whatever happens, increase the display count for the current game --- */
+
+					curr_game->num_displays++;
+				}
+
 				/* --- Sound elements --- */
 
 				if (curr_sound!=0 && curr_sound->sound_flags & FLAG_SOUND_CHANNELS)
@@ -1639,7 +1741,6 @@ int store_tokenized_dat(struct dat *dat)
 						curr_input->input_flags|=FLAG_INPUT_COINS;
 					}
 
-
 					else if (type==TOKEN_INPUT_DIPSWITCHES)
 					{
 						curr_input->dipswitches=strtoul(BUFFER2_PTR, NULL, 10);
@@ -1666,6 +1767,68 @@ int store_tokenized_dat(struct dat *dat)
 					/* --- Whatever happens, increase the input count for the current game --- */
 
 					curr_game->num_inputs++;
+				}
+
+				/* --- Control elements --- */
+
+				if (curr_control!=0 && curr_control->type!=0)
+				{
+					if (type==TOKEN_CONTROL_TYPE)
+						curr_control++;
+
+					else if (type==TOKEN_CONTROL_MINIMUM)
+					{
+						curr_control->minimum=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_control->control_flags|=FLAG_CONTROL_MINIMUM;
+					}
+
+					else if (type==TOKEN_CONTROL_MAXIMUM)
+					{
+						curr_control->maximum=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_control->control_flags|=FLAG_CONTROL_MAXIMUM;
+					}
+
+					else if (type==TOKEN_CONTROL_SENSITIVITY)
+					{
+						curr_control->sensitivity=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_control->control_flags|=FLAG_CONTROL_SENSITIVITY;
+					}
+
+					else if (type==TOKEN_CONTROL_KEYDELTA)
+					{
+						curr_control->keydelta=strtoul(BUFFER2_PTR, NULL, 10);
+
+						// Value may be zero so its presence needs remembering!
+						curr_control->control_flags|=FLAG_CONTROL_KEYDELTA;
+					}
+
+					else if (type==TOKEN_CONTROL_REVERSE)
+						curr_control->reverse=BUFFER2_PTR;
+				}
+
+				if (type==TOKEN_CONTROL_TYPE)
+				{
+					/* --- The current control must remember its type --- */
+
+					curr_control->type=BUFFER2_PTR;
+
+					/* --- If this is the first control for the current input/game then set up the controls pointer --- */
+
+					if (curr_input->controls==0)
+						curr_input->controls=curr_control;
+					if (curr_game->controls==0)
+						curr_game->controls=curr_control;
+
+					/* --- Whatever happens, increase the control count for the current input/game --- */
+
+					curr_input->num_controls++;
+					curr_game->num_controls++;
 				}
 
 				/* --- Dipswitch elements --- */
@@ -1746,6 +1909,9 @@ int store_tokenized_dat(struct dat *dat)
 
 					else if (type==TOKEN_DRIVER_PROTECTION)
 						curr_driver->protection=BUFFER2_PTR;
+
+					else if (type==TOKEN_DRIVER_SAVESTATE)
+						curr_driver->savestate=BUFFER2_PTR;
 
 					else if (type==TOKEN_DRIVER_PALETTESIZE)
 					{
@@ -2992,8 +3158,10 @@ int summarise_dat(struct dat *dat)
 	struct sample *curr_sample=0;
 	struct chip *curr_chip=0;
 	struct video *curr_video=0;
+	struct display *curr_display=0;
 	struct sound *curr_sound=0;
 	struct input *curr_input=0;
+	struct control *curr_control=0;
 	struct dipswitch *curr_dipswitch=0;
 	struct dipvalue *curr_dipvalue=0;
 	struct driver *curr_driver=0;
@@ -3229,6 +3397,29 @@ int summarise_dat(struct dat *dat)
 			curr_game->video_flags|=curr_video->video_flags;
 		}
 
+		for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+		{
+			if (curr_display->type)
+				curr_display->display_flags|=FLAG_DISPLAY_TYPE;
+
+			if (curr_display->rotate)
+				curr_display->display_flags|=FLAG_DISPLAY_ROTATE;
+
+			if (curr_display->flipx)
+				curr_display->display_flags|=FLAG_DISPLAY_FLIPX;
+
+			if (curr_display->width)
+				curr_display->display_flags|=FLAG_DISPLAY_WIDTH;
+
+			if (curr_display->height)
+				curr_display->display_flags|=FLAG_DISPLAY_HEIGHT;
+
+			if (curr_display->refresh)
+				curr_display->display_flags|=FLAG_DISPLAY_REFRESH;
+
+			curr_game->display_flags|=curr_display->display_flags;
+		}
+
 		for (j=0, curr_sound=curr_game->sounds; j<curr_game->num_sounds; j++, curr_sound++)
 		{
 			if (curr_sound->channels)
@@ -3261,6 +3452,29 @@ int summarise_dat(struct dat *dat)
 				curr_input->input_flags|=FLAG_INPUT_DIPSWITCHES;
 
 			curr_game->input_flags|=curr_input->input_flags;
+		}
+
+		for (j=0, curr_control=curr_game->controls; j<curr_game->num_controls; j++, curr_control++)
+		{
+			if (curr_control->type)
+				curr_control->control_flags|=FLAG_CONTROL_TYPE;
+
+			if (curr_control->minimum)
+				curr_control->control_flags|=FLAG_CONTROL_MINIMUM;
+
+			if (curr_control->maximum)
+				curr_control->control_flags|=FLAG_CONTROL_MAXIMUM;
+
+			if (curr_control->sensitivity)
+				curr_control->control_flags|=FLAG_CONTROL_SENSITIVITY;
+
+			if (curr_control->keydelta)
+				curr_control->control_flags|=FLAG_CONTROL_KEYDELTA;
+
+			if (curr_control->reverse)
+				curr_control->control_flags|=FLAG_CONTROL_REVERSE;
+
+			curr_game->control_flags|=curr_control->control_flags;
 		}
 
 		for (j=0, curr_dipswitch=curr_game->dipswitches; j<curr_game->num_dipswitches; j++, curr_dipswitch++)
@@ -3304,6 +3518,9 @@ int summarise_dat(struct dat *dat)
 
 			if (curr_driver->protection)
 				curr_driver->driver_flags|=FLAG_DRIVER_PROTECTION;
+
+			if (curr_driver->savestate)
+				curr_driver->driver_flags|=FLAG_DRIVER_SAVESTATE;
 
 			if (curr_driver->palettesize)
 				curr_driver->driver_flags|=FLAG_DRIVER_PALETTESIZE;
@@ -3349,8 +3566,10 @@ int summarise_dat(struct dat *dat)
 		dat->sample_flags|=curr_game->sample_flags;
 		dat->chip_flags|=curr_game->chip_flags;
 		dat->video_flags|=curr_game->video_flags;
+		dat->display_flags|=curr_game->display_flags;
 		dat->sound_flags|=curr_game->sound_flags;
 		dat->input_flags|=curr_game->input_flags;
+		dat->control_flags|=curr_game->control_flags;
 		dat->dipswitch_flags|=curr_game->dipswitch_flags;
 		dat->dipvalue_flags|=curr_game->dipvalue_flags;
 		dat->driver_flags|=curr_game->driver_flags;
@@ -3409,9 +3628,13 @@ int summarise_dat(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Video flags=%02x\n", dat->video_flags);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Display flags=%02x\n", dat->display_flags);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Sound flags=%02x\n", dat->sound_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Input flags=%02x\n", dat->input_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Control flags=%02x\n", dat->control_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Dipswitch flags=%02x\n", dat->dipswitch_flags);
 		printf("%-16s: ", "Datlib.init_dat");
@@ -3677,6 +3900,7 @@ int report_warnings(struct dat *dat)
 	struct disk *curr_disk=0;
 	struct chip *curr_chip=0;
 	struct video *curr_video=0;
+	struct display *curr_display=0;
 	struct driver *curr_driver=0;
 	uint32_t i, j;
 
@@ -3785,6 +4009,14 @@ int report_warnings(struct dat *dat)
 			curr_game->video_warnings|=curr_video->video_warnings;
 		}
 
+		for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+		{
+			curr_display->display_warnings|=(curr_display->display_flags ^ dat->display_flags) &
+				(FLAG_DISPLAY_ROTATE | FLAG_DISPLAY_REFRESH);
+
+			curr_game->display_warnings|=curr_display->display_warnings;
+		}
+
 		for (j=0, curr_driver=curr_game->drivers; j<curr_game->num_drivers; j++, curr_driver++)
 		{
 			curr_driver->driver_warnings|=(curr_driver->driver_flags ^ dat->driver_flags) &
@@ -3802,8 +4034,10 @@ int report_warnings(struct dat *dat)
 		dat->sample_warnings|=curr_game->sample_warnings;
 		dat->chip_warnings|=curr_game->chip_warnings;
 		dat->video_warnings|=curr_game->video_warnings;
+		dat->display_warnings|=curr_game->display_warnings;
 		dat->sound_warnings|=curr_game->sound_warnings;
 		dat->input_warnings|=curr_game->input_warnings;
+		dat->control_warnings|=curr_game->control_warnings;
 		dat->dipswitch_warnings|=curr_game->dipswitch_warnings;
 		dat->dipvalue_warnings|=curr_game->dipvalue_warnings;
 		dat->driver_warnings|=curr_game->driver_warnings;
@@ -3837,9 +4071,13 @@ int report_warnings(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Video warnings=%02x\n", dat->video_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Display warnings=%02x\n", dat->display_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Sound warnings=%02x\n", dat->sound_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Input warnings=%02x\n", dat->input_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Control warnings=%02x\n", dat->control_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Dipswitch warnings=%02x\n", dat->dipswitch_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
@@ -3858,7 +4096,7 @@ int report_warnings(struct dat *dat)
 	}
 
 	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
-		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings ||
+		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
@@ -3995,6 +4233,22 @@ int report_warnings(struct dat *dat)
 			fprintf(dat->log_file, "\n");
 		}
 
+		/* --- Displays --- */
+
+		if (dat->display_warnings)
+		{
+			fprintf(dat->log_file, "Display warnings:\n\n");
+
+			if (dat->display_warnings & FLAG_DISPLAY_ROTATE)
+				fprintf(dat->log_file, "    Missing Rotate\n");
+			if (dat->display_warnings & FLAG_DISPLAY_FLIPX)
+				fprintf(dat->log_file, "    Missing Flip X\n");
+			if (dat->display_warnings & FLAG_DISPLAY_REFRESH)
+				fprintf(dat->log_file, "    Missing Refresh\n");
+
+			fprintf(dat->log_file, "\n");
+		}
+
 		/* --- Drivers --- */
 
 		if (dat->driver_warnings)
@@ -4021,7 +4275,7 @@ int report_warnings(struct dat *dat)
 	}
 
 	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
-		dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings ||
+		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings) &&
 		dat->options->options & OPTION_VERBOSE_LOGGING)
 	{
@@ -4058,7 +4312,7 @@ int report_warnings(struct dat *dat)
 		for (i=0, curr_game=dat->games; dat->log_file && i<dat->num_games; i++, curr_game++)
 		{
 			if (curr_game->game_warnings || curr_game->comment_warnings || curr_game->biosset_warnings || curr_game->rom_warnings || curr_game->disk_warnings || curr_game->sample_warnings ||
-				curr_game->chip_warnings || curr_game->video_warnings || curr_game->sound_warnings || curr_game->input_warnings ||
+				curr_game->chip_warnings || curr_game->video_warnings || curr_game->display_warnings || curr_game->sound_warnings || curr_game->input_warnings || curr_game->control_warnings ||
 				curr_game->dipswitch_warnings || curr_game->dipvalue_warnings || curr_game->driver_warnings  ||
 				curr_game->device_warnings || curr_game->extension_warnings || curr_game->archive_warnings)
 			{
@@ -4163,6 +4417,19 @@ int report_warnings(struct dat *dat)
 					}
 				}
 	
+				if (curr_game->display_warnings)
+				{
+					for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+					{
+						if (curr_display->display_warnings & FLAG_DISPLAY_ROTATE)
+							fprintf(dat->log_file, "    Display - Missing Rotate\n");
+						if (curr_display->display_warnings & FLAG_DISPLAY_FLIPX)
+							fprintf(dat->log_file, "    Display - Missing Flip X\n");
+						if (curr_display->display_warnings & FLAG_DISPLAY_REFRESH)
+							fprintf(dat->log_file, "    Display - Missing Refresh\n");
+					}
+				}
+	
 				if (curr_game->driver_warnings)
 				{
 					for (j=0, curr_driver=curr_game->drivers; j<curr_game->num_drivers; j++, curr_driver++)
@@ -4248,9 +4515,13 @@ int report_fixes(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Video fixes=%02x\n", dat->video_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Display fixes=%02x\n", dat->display_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Sound fixes=%02x\n", dat->sound_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Input fixes=%02x\n", dat->input_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Control fixes=%02x\n", dat->control_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Dipswitch fixes=%02x\n", dat->dipswitch_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
@@ -5206,7 +5477,7 @@ int init_buffer1(struct dat *dat, int buf_size, char *size_prefix)
 	return(errflg);
 }
 
-#define IDENTIFICATION_BYTES 4096
+#define IDENTIFICATION_BYTES 8192
 
 struct dat *init_dat(struct options *options)
 {
@@ -5599,7 +5870,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->sound_warnings || dat->input_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
@@ -5675,10 +5946,16 @@ int save_dat(struct dat *dat)
 			printf("Video losses=%02x.\n", ~dat->video_saved & dat->video_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
+			printf("Display losses=%02x.\n", ~dat->display_saved & dat->display_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
 			printf("Sound losses=%02x.\n", ~dat->sound_saved & dat->sound_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Input losses=%02x.\n", ~dat->input_saved & dat->input_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("Control losses=%02x.\n", ~dat->control_saved & dat->control_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Dipswitch losses=%02x.\n", ~dat->dipswitch_saved & dat->dipswitch_flags);
@@ -5713,8 +5990,10 @@ int save_dat(struct dat *dat)
 			~dat->sample_saved & dat->sample_flags ||
 			~dat->chip_saved & dat->chip_flags ||
 			~dat->video_saved & dat->video_flags ||
+			~dat->display_saved & dat->display_flags ||
 			~dat->sound_saved & dat->sound_flags ||
 			~dat->input_saved & dat->input_flags ||
+			~dat->control_saved & dat->control_flags ||
 			~dat->dipswitch_saved & dat->dipswitch_flags ||
 			~dat->dipvalue_saved & dat->dipvalue_flags ||
 			~dat->driver_saved & dat->driver_flags ||
@@ -5917,6 +6196,31 @@ int save_dat(struct dat *dat)
 				}
 			}
 
+			/* --- Display --- */
+
+			if ((lost=~dat->display_saved & dat->display_flags))
+			{
+				if (lost & FLAG_DISPLAY_TYPE)
+					fprintf(dat->log_file, "Displays have been lost entirely!\n\n");
+				else
+				{
+					fprintf(dat->log_file, "Display information that has been lost:\n\n");
+
+					if (lost & FLAG_DISPLAY_ROTATE)
+						fprintf(dat->log_file, "    Rotate\n");
+					if (lost & FLAG_DISPLAY_FLIPX)
+						fprintf(dat->log_file, "    Flip X\n");
+					if (lost & FLAG_DISPLAY_WIDTH)
+						fprintf(dat->log_file, "    Width\n");
+					if (lost & FLAG_DISPLAY_HEIGHT)
+						fprintf(dat->log_file, "    Height\n");
+					if (lost & FLAG_DISPLAY_REFRESH)
+						fprintf(dat->log_file, "    Refresh\n");
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
+
 			/* --- Sounds --- */
 
 			if ((lost=~dat->sound_saved & dat->sound_flags))
@@ -5947,6 +6251,31 @@ int save_dat(struct dat *dat)
 						fprintf(dat->log_file, "    Coins\n");
 					if (lost & FLAG_INPUT_DIPSWITCHES)
 						fprintf(dat->log_file, "    Dipswitches\n");
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
+
+			/* --- Controls --- */
+
+			if ((lost=~dat->control_saved & dat->control_flags))
+			{
+				if (lost & FLAG_CONTROL_TYPE)
+					fprintf(dat->log_file, "Controls have been lost entirely!\n\n");
+				else
+				{
+					fprintf(dat->log_file, "Control information that has been lost:\n\n");
+
+					if (lost & FLAG_CONTROL_MINIMUM)
+						fprintf(dat->log_file, "    Minimum\n");
+					if (lost & FLAG_CONTROL_MAXIMUM)
+						fprintf(dat->log_file, "    Maximum\n");
+					if (lost & FLAG_CONTROL_SENSITIVITY)
+						fprintf(dat->log_file, "    Sensitivity\n");
+					if (lost & FLAG_CONTROL_KEYDELTA)
+						fprintf(dat->log_file, "    Keydelta\n");
+					if (lost & FLAG_CONTROL_REVERSE)
+						fprintf(dat->log_file, "    Reverse\n");
 
 					fprintf(dat->log_file, "\n");
 				}
@@ -5999,6 +6328,8 @@ int save_dat(struct dat *dat)
 						fprintf(dat->log_file, "    Cocktail\n");
 					if (lost & FLAG_DRIVER_PROTECTION)
 						fprintf(dat->log_file, "    Protection\n");
+					if (lost & FLAG_DRIVER_SAVESTATE)
+						fprintf(dat->log_file, "    Savestate\n");
 					if (lost & FLAG_DRIVER_PALETTESIZE)
 						fprintf(dat->log_file, "    Palettesize\n");
 					if (lost & FLAG_DRIVER_COLORDEEP)
@@ -6191,6 +6522,13 @@ struct dat *free_dat(struct dat *dat)
 		if (datlib_debug)
 		{
 			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of controls...\n");
+		}
+		FREE(dat->controls)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
 			printf("Freeing memory of inputs...\n");
 		}
 		FREE(dat->inputs)
@@ -6201,6 +6539,13 @@ struct dat *free_dat(struct dat *dat)
 			printf("Freeing memory of sounds...\n");
 		}
 		FREE(dat->sounds)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of displays...\n");
+		}
+		FREE(dat->displays)
 
 		if (datlib_debug)
 		{

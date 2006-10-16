@@ -199,6 +199,29 @@ struct video
 };
 
 
+/* --- Display Structures --- */
+
+struct display
+{
+	/* --- Fields that appear in data files */
+
+	char *type;
+	uint16_t rotate;
+	char *flipx;
+	uint16_t width;
+	uint16_t height;
+	float refresh;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t display_flags;
+	uint8_t display_warnings;
+	uint8_t display_fixes;
+};
+
+
 /* --- Sound Structures --- */
 
 struct sound
@@ -214,6 +237,29 @@ struct sound
 	uint8_t sound_flags;
 	uint8_t sound_warnings;
 	uint8_t sound_fixes;
+};
+
+
+/* --- Control Structures --- */
+
+struct control
+{
+	/* --- Fields that appear in data files */
+
+	char *type;
+	uint8_t minimum;
+	uint16_t maximum;
+	uint8_t sensitivity;
+	uint8_t keydelta;
+	char *reverse;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct input *input;
+
+	uint8_t control_flags;
+	uint8_t control_warnings;
+	uint8_t control_fixes;
 };
 
 
@@ -234,6 +280,10 @@ struct input
 	/* --- Fields that are calculated by DatLib */
 
 	struct game *game;
+
+	struct control *controls;
+
+	uint32_t num_controls;
 
 	uint8_t input_flags;
 	uint8_t input_warnings;
@@ -292,6 +342,7 @@ struct driver
 	char *graphic;
 	char *cocktail;
 	char *protection;
+	char *savestate;
 	uint32_t palettesize;
 	uint8_t colordeep;
 	char *credits;
@@ -306,7 +357,7 @@ struct driver
 };
 
 
-/* --- Dipswitch Structures --- */
+/* --- MESS Structures --- */
 
 struct extension
 {
@@ -404,9 +455,12 @@ struct game
 
 	struct video *videos;
 
+	struct display *displays;
+
 	struct sound *sounds;
 
 	struct input *inputs;
+	struct control *controls;
 
 	struct dipswitch *dipswitches;
 	struct dipvalue *dipvalues;
@@ -425,8 +479,10 @@ struct game
 	uint32_t num_samples;
 	uint32_t num_chips;
 	uint32_t num_videos;
+	uint32_t num_displays;
 	uint32_t num_sounds;
 	uint32_t num_inputs;
+	uint32_t num_controls;
 	uint32_t num_dipswitches;
 	uint32_t num_dipvalues;
 	uint32_t num_drivers;
@@ -448,8 +504,10 @@ struct game
 	uint8_t sample_flags;
 	uint8_t chip_flags;
 	uint8_t video_flags;
+	uint8_t display_flags;
 	uint8_t sound_flags;
 	uint8_t input_flags;
+	uint8_t control_flags;
 	uint8_t dipswitch_flags;
 	uint8_t dipvalue_flags;
 	uint16_t driver_flags;
@@ -466,8 +524,10 @@ struct game
 	uint8_t sample_warnings;
 	uint8_t chip_warnings;
 	uint8_t video_warnings;
+	uint8_t display_warnings;
 	uint8_t sound_warnings;
 	uint8_t input_warnings;
+	uint8_t control_warnings;
 	uint8_t dipswitch_warnings;
 	uint8_t dipvalue_warnings;
 	uint16_t driver_warnings;
@@ -484,8 +544,10 @@ struct game
 	uint8_t sample_fixes;
 	uint8_t chip_fixes;
 	uint8_t video_fixes;
+	uint8_t display_fixes;
 	uint8_t sound_fixes;
 	uint8_t input_fixes;
+	uint8_t control_fixes;
 	uint8_t dipswitch_fixes;
 	uint8_t dipvalue_fixes;
 	uint16_t driver_fixes;
@@ -573,6 +635,12 @@ struct game_zip_idx
 
 
 /* --- Header Structures --- */
+
+struct emulator
+{
+	char *name;
+	char *build;
+};
 
 struct clrmamepro
 {
@@ -680,6 +748,8 @@ struct dat
 
 	/* --- Fields that appear in data files */
 
+	struct emulator emulator;
+
 	struct clrmamepro clrmamepro;
 
 	struct romcenter_credits romcenter_credits;
@@ -718,9 +788,12 @@ struct dat
 
 	struct video *videos;
 
+	struct display *displays;
+
 	struct sound *sounds;
 
 	struct input *inputs;
+	struct control *controls;
 
 	struct dipswitch *dipswitches;
 	struct dipvalue *dipvalues;
@@ -746,8 +819,10 @@ struct dat
 	uint32_t num_samples, num_resource_samples, num_machine_samples;
 	uint32_t num_chips;
 	uint32_t num_videos;
+	uint32_t num_displays;
 	uint32_t num_sounds;
 	uint32_t num_inputs;
+	uint32_t num_controls;
 	uint32_t num_dipswitches;
 	uint32_t num_dipvalues;
 	uint32_t num_drivers;
@@ -772,8 +847,10 @@ struct dat
 	uint8_t sample_flags;
 	uint8_t chip_flags;
 	uint8_t video_flags;
+	uint8_t display_flags;
 	uint8_t sound_flags;
 	uint8_t input_flags;
+	uint8_t control_flags;
 	uint8_t dipswitch_flags;
 	uint8_t dipvalue_flags;
 	uint16_t driver_flags;
@@ -792,8 +869,10 @@ struct dat
 	uint8_t sample_warnings;
 	uint8_t chip_warnings;
 	uint8_t video_warnings;
+	uint8_t display_warnings;
 	uint8_t sound_warnings;
 	uint8_t input_warnings;
+	uint8_t control_warnings;
 	uint8_t dipswitch_warnings;
 	uint8_t dipvalue_warnings;
 	uint16_t driver_warnings;
@@ -809,8 +888,10 @@ struct dat
 	uint8_t sample_fixes;
 	uint8_t chip_fixes;
 	uint8_t video_fixes;
+	uint8_t display_fixes;
 	uint8_t sound_fixes;
 	uint8_t input_fixes;
+	uint8_t control_fixes;
 	uint8_t dipswitch_fixes;
 	uint8_t dipvalue_fixes;
 	uint16_t driver_fixes;
@@ -826,8 +907,10 @@ struct dat
 	uint8_t sample_saved;
 	uint8_t chip_saved;
 	uint8_t video_saved;
+	uint8_t display_saved;
 	uint8_t sound_saved;
 	uint8_t input_saved;
+	uint8_t control_saved;
 	uint8_t dipswitch_saved;
 	uint8_t dipvalue_saved;
 	uint16_t driver_saved;
@@ -886,6 +969,7 @@ struct ini_entry
 
 /* --- Parser Flags --- */
 
+#define	FLAG_EMULATOR_HEADER		0x4000
 #define	FLAG_CLRMAMEPRO_HEADER		0x8000
 
 
@@ -1005,6 +1089,16 @@ struct ini_entry
 #define FLAG_VIDEO_REFRESH		0x40
 
 
+/* --- Display Flags --- */
+
+#define FLAG_DISPLAY_TYPE		0x01
+#define FLAG_DISPLAY_ROTATE		0x02
+#define FLAG_DISPLAY_FLIPX		0x04
+#define FLAG_DISPLAY_WIDTH		0x08
+#define FLAG_DISPLAY_HEIGHT		0x10
+#define FLAG_DISPLAY_REFRESH		0x20
+
+
 /* --- Sound Flags --- */
 
 #define FLAG_SOUND_CHANNELS		0x01
@@ -1019,6 +1113,16 @@ struct ini_entry
 #define FLAG_INPUT_BUTTONS		0x10
 #define FLAG_INPUT_COINS		0x20
 #define FLAG_INPUT_DIPSWITCHES		0x40
+
+
+/* --- Control Flags --- */
+
+#define FLAG_CONTROL_TYPE		0x01
+#define FLAG_CONTROL_MINIMUM		0x02
+#define FLAG_CONTROL_MAXIMUM		0x04
+#define FLAG_CONTROL_SENSITIVITY	0x08
+#define FLAG_CONTROL_KEYDELTA		0x10
+#define FLAG_CONTROL_REVERSE		0x20
 
 
 /* --- Dipswitch Flags --- */
@@ -1041,9 +1145,10 @@ struct ini_entry
 #define FLAG_DRIVER_GRAPHIC		0x0010
 #define FLAG_DRIVER_COCKTAIL		0x0020
 #define FLAG_DRIVER_PROTECTION		0x0040
-#define FLAG_DRIVER_PALETTESIZE		0x0080
-#define FLAG_DRIVER_COLORDEEP		0x0100
-#define FLAG_DRIVER_CREDITS		0x0200
+#define FLAG_DRIVER_SAVESTATE		0x0080
+#define FLAG_DRIVER_PALETTESIZE		0x0180
+#define FLAG_DRIVER_COLORDEEP		0x0200
+#define FLAG_DRIVER_CREDITS		0x0400
 
 
 /* --- Device Flags --- */

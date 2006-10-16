@@ -114,6 +114,9 @@ int load_mame_listinfo(struct dat *dat)
 		else if (!strcmp(TOKEN, "clrmamepro"))
 			game_type=FLAG_CLRMAMEPRO_HEADER;
 
+		else if (!strcmp(TOKEN, "emulator"))
+			game_type=FLAG_EMULATOR_HEADER;
+
 		/* --- Comments --- */
 
 		if (!strcmp(TOKEN, "//"))
@@ -123,9 +126,17 @@ int load_mame_listinfo(struct dat *dat)
 			TOKEN[0]='\0';
 		}
 
+		/* --- Emulator header --- */
+
+		if (game_type==FLAG_EMULATOR_HEADER)
+		{
+			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_EMULATOR_NAME)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_EMULATOR_BUILD)
+		}
+
 		/* --- ClrMamePro header --- */
 
-		if (game_type==FLAG_CLRMAMEPRO_HEADER)
+		else if (game_type==FLAG_CLRMAMEPRO_HEADER)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_CLRMAMEPRO_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_CLRMAMEPRO_DESCRIPTION)
@@ -330,6 +341,23 @@ int load_mame_listinfo(struct dat *dat)
 				}
 			}
 
+			/* --- Displays --- */
+
+			else if (!strcmp(TOKEN, "display"))
+			{
+				while (strchr(BUFFER1_PTR, ')') && BUFFER1_REMAINING && strcmp(TOKEN, ")"))
+				{
+					BUFFER1_GET_TOKEN
+
+					BUFFER2_PUT_INFO_ATTRIBUTE("type", TOKEN_DISPLAY_TYPE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("rotate", TOKEN_DISPLAY_ROTATE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("flipx", TOKEN_DISPLAY_FLIPX)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("width", TOKEN_DISPLAY_WIDTH)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("height", TOKEN_DISPLAY_HEIGHT)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("refresh", TOKEN_DISPLAY_REFRESH)
+				}
+			}
+
 			/* --- Sounds --- */
 
 			else if (!strcmp(TOKEN, "sound"))
@@ -357,6 +385,23 @@ int load_mame_listinfo(struct dat *dat)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
+				}
+			}
+
+			/* --- Controls --- */
+
+			else if (!strcmp(TOKEN, "control"))
+			{
+				while (strchr(BUFFER1_PTR, ')') && BUFFER1_REMAINING && strcmp(TOKEN, ")"))
+				{
+					BUFFER1_GET_TOKEN
+
+					BUFFER2_PUT_INFO_ATTRIBUTE("type", TOKEN_CONTROL_TYPE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("minimum", TOKEN_CONTROL_MINIMUM)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("maximum", TOKEN_CONTROL_MAXIMUM)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("sensitivity", TOKEN_CONTROL_SENSITIVITY)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("keydelta", TOKEN_CONTROL_KEYDELTA)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("reverse", TOKEN_CONTROL_REVERSE)
 				}
 			}
 
@@ -396,6 +441,7 @@ int load_mame_listinfo(struct dat *dat)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("graphic", TOKEN_DRIVER_GRAPHIC)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("savestate", TOKEN_DRIVER_SAVESTATE)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
@@ -595,8 +641,10 @@ int save_mame_listinfo(struct dat *dat)
 	struct sample *curr_sample=0;
 	struct chip *curr_chip=0;
 	struct video *curr_video=0;
+	struct display *curr_display=0;
 	struct sound *curr_sound=0;
 	struct input *curr_input=0;
+	struct control *curr_control=0;
 	struct dipswitch *curr_dipswitch=0;
 	struct dipvalue *curr_dipvalue=0;
 	struct driver *curr_driver=0;
@@ -688,6 +736,19 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\tforcezipping %s\n", dat->clrmamepro.forcezipping);
 		}
+
+		fprintf(dat->out, ")\n\n");
+	}
+
+	/* --- Output Emulator Header (no clever macros like everything else!) --- */
+
+	if (dat->emulator.name!=0)
+	{
+		fprintf(dat->out, "emulator (\n");
+
+		fprintf(dat->out, "\tname \"%s\"\n", dat->emulator.name);
+
+		fprintf(dat->out, "\tversion \"%s\"\n", dat->emulator.build);
 
 		fprintf(dat->out, ")\n\n");
 	}
@@ -843,6 +904,22 @@ int save_mame_listinfo(struct dat *dat)
 			fprintf(dat->out, ")\n");
 		}
 
+		/* --- Display information --- */
+
+		for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+		{
+			fprintf(dat->out, "\tdisplay ( ");
+
+			OUTPUT_UNQUOTED_STRING(display, type, "type", FLAG_DISPLAY_TYPE)
+			OUTPUT_UNSIGNED_LONG(display, rotate, "rotate", FLAG_DISPLAY_ROTATE)
+			OUTPUT_UNQUOTED_STRING(display, flipx, "flipx", FLAG_DISPLAY_FLIPX)
+			OUTPUT_UNSIGNED_LONG(display, width, "width", FLAG_DISPLAY_WIDTH)
+			OUTPUT_UNSIGNED_LONG(display, height, "height", FLAG_DISPLAY_HEIGHT)
+			OUTPUT_0_6_FLOAT(display, refresh, "refresh", FLAG_DISPLAY_REFRESH)
+
+			fprintf(dat->out, ")\n");
+		}
+
 		/* --- Sound information --- */
 
 		for (j=0, curr_sound=curr_game->sounds; j<curr_game->num_sounds; j++, curr_sound++)
@@ -869,6 +946,20 @@ int save_mame_listinfo(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG(input, dipswitches, "dipswitches", FLAG_INPUT_DIPSWITCHES)
 
 			fprintf(dat->out, ")\n");
+
+			for (k=0, curr_control=curr_input->controls; k<curr_input->num_controls; k++, curr_control++)
+			{
+				fprintf(dat->out, "\tcontrol ( ");
+	
+				OUTPUT_UNQUOTED_STRING(control, type, "type", FLAG_CONTROL_TYPE)
+				OUTPUT_UNSIGNED_LONG(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
+				OUTPUT_UNSIGNED_LONG(control, maximum, "maximum", FLAG_CONTROL_MAXIMUM)
+				OUTPUT_UNSIGNED_LONG(control, sensitivity, "sensitivity", FLAG_CONTROL_SENSITIVITY)
+				OUTPUT_UNSIGNED_LONG(control, keydelta, "keydelta", FLAG_CONTROL_KEYDELTA)
+				OUTPUT_UNQUOTED_STRING(control, reverse, "reverse", FLAG_CONTROL_REVERSE)
+	
+				fprintf(dat->out, ")\n");
+			}
 		}
 
 		/* --- Dipswitch information --- */
@@ -901,6 +992,7 @@ int save_mame_listinfo(struct dat *dat)
 			OUTPUT_UNQUOTED_STRING(driver, graphic, "graphic", FLAG_DRIVER_GRAPHIC)
 			OUTPUT_UNQUOTED_STRING(driver, cocktail, "cocktail", FLAG_DRIVER_COCKTAIL)
 			OUTPUT_UNQUOTED_STRING(driver, protection, "protection", FLAG_DRIVER_PROTECTION)
+			OUTPUT_UNQUOTED_STRING(driver, savestate, "savestate", FLAG_DRIVER_SAVESTATE)
 			OUTPUT_UNSIGNED_LONG(driver, palettesize, "palettesize", FLAG_DRIVER_PALETTESIZE)
 			OUTPUT_UNSIGNED_LONG(driver, colordeep, "colordeep", FLAG_DRIVER_COLORDEEP)
 			OUTPUT_QUOTED_STRING(driver, credits, "credits", FLAG_DRIVER_CREDITS)

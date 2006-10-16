@@ -85,6 +85,21 @@ int load_tab_delimited(struct dat *dat)
 
 	while (!errflg && BUFFER1_REMAINING)
 	{
+		/* --- Emulator information --- */
+
+		if (BUFFER1_RECORD_TYPE("emulator\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_EMULATOR_NAME)
+			BUFFER1_GET_FIELD(TOKEN_EMULATOR_BUILD)
+		}
+
 		/* --- Game/machine information --- */
 
 		if (BUFFER1_RECORD_TYPE("game\t"))
@@ -270,6 +285,26 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_VIDEO_REFRESH)
 		}
 
+		/* --- Display information --- */
+
+		if (BUFFER1_RECORD_TYPE("game_display\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_TYPE)
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_ROTATE)
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_FLIPX)
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_WIDTH)
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_HEIGHT)
+			BUFFER1_GET_FIELD(TOKEN_DISPLAY_REFRESH)
+		}
+
 		/* --- Sound information --- */
 
 		if (BUFFER1_RECORD_TYPE("game_sound\t"))
@@ -304,6 +339,27 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_SERVICE)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_TILT)
 			BUFFER1_GET_FIELD(TOKEN_INPUT_DIPSWITCHES)
+		}
+
+		/* --- Control information --- */
+
+		if (BUFFER1_RECORD_TYPE("game_control\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_TYPE)
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_MINIMUM)
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_MAXIMUM)
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_SENSITIVITY)
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_KEYDELTA)
+			BUFFER1_GET_FIELD(TOKEN_CONTROL_REVERSE)
 		}
 
 		/* --- Dipswitch information --- */
@@ -358,6 +414,7 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_PALETTESIZE)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_COLORDEEP)
 			BUFFER1_GET_FIELD(TOKEN_DRIVER_CREDITS)
+			BUFFER1_GET_FIELD(TOKEN_DRIVER_SAVESTATE)
 		}
 
 		/* --- Device information --- */
@@ -509,8 +566,10 @@ int save_tab_delimited(struct dat *dat)
 	struct sample *curr_sample=dat->samples;
 	struct chip *curr_chip=dat->chips;
 	struct video *curr_video=dat->videos;
+	struct display *curr_display=dat->displays;
 	struct sound *curr_sound=dat->sounds;
 	struct input *curr_input=dat->inputs;
+	struct control *curr_control=dat->controls;
 	struct dipswitch *curr_dipswitch=dat->dipswitches;
 	struct dipvalue *curr_dipvalue=dat->dipvalues;
 	struct driver *curr_driver=dat->drivers;
@@ -535,6 +594,20 @@ int save_tab_delimited(struct dat *dat)
 		*strrchr(dat_name, '.')='\0';
 
 	/* --- For all games --- */
+
+	if (dat->emulator.name)
+	{
+		fprintf(dat->out, "emulator\t%s\t", dat_name);
+
+		fprintf(dat->out, "%s\t", dat->emulator.name);
+
+		if (dat->emulator.build)
+			fprintf(dat->out, "%s\t", dat->emulator.build);
+		else
+			fprintf(dat->out, "\\N\t");
+
+		fprintf(dat->out, "\n");
+	}
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
@@ -667,6 +740,22 @@ int save_tab_delimited(struct dat *dat)
 			fprintf(dat->out, "\n");
 		}
 
+		/* --- Display information --- */
+
+		for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+		{
+			fprintf(dat->out, "game_display\t%s\t%s\t", dat_name, curr_game->name);
+
+			OUTPUT_STRING_FIELD(display, type, FLAG_DISPLAY_TYPE)
+			OUTPUT_UNSIGNED_LONG_FIELD(display, rotate, FLAG_DISPLAY_ROTATE)
+			OUTPUT_STRING_FIELD(display, flipx, FLAG_DISPLAY_FLIPX)
+			OUTPUT_UNSIGNED_LONG_FIELD(display, width, FLAG_DISPLAY_WIDTH)
+			OUTPUT_UNSIGNED_LONG_FIELD(display, height, FLAG_DISPLAY_HEIGHT)
+			OUTPUT_0_6_FLOAT_FIELD(display, refresh, FLAG_DISPLAY_REFRESH)
+
+			fprintf(dat->out, "\n");
+		}
+
 		/* --- Sound information --- */
 
 		for (j=0, curr_sound=curr_game->sounds; j<curr_game->num_sounds; j++, curr_sound++)
@@ -693,6 +782,22 @@ int save_tab_delimited(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG_FIELD(input, dipswitches, FLAG_INPUT_DIPSWITCHES)
 
 			fprintf(dat->out, "\n");
+
+			for (k=0, curr_control=curr_input->controls; k<curr_input->num_controls; k++, curr_control++)
+			{
+				fprintf(dat->out, "game_control\t%s\t%s\t", dat_name, curr_game->name);
+
+				OUTPUT_UNSIGNED_LONG_FIELD(input, players, FLAG_INPUT_PLAYERS)
+
+				OUTPUT_STRING_FIELD(control, type, FLAG_CONTROL_TYPE)
+				OUTPUT_UNSIGNED_LONG_FIELD(control, minimum, FLAG_CONTROL_MINIMUM)
+				OUTPUT_UNSIGNED_LONG_FIELD(control, maximum, FLAG_CONTROL_MAXIMUM)
+				OUTPUT_UNSIGNED_LONG_FIELD(control, sensitivity, FLAG_CONTROL_SENSITIVITY)
+				OUTPUT_UNSIGNED_LONG_FIELD(control, keydelta, FLAG_CONTROL_KEYDELTA)
+				OUTPUT_STRING_FIELD(control, reverse, FLAG_CONTROL_REVERSE)
+
+				fprintf(dat->out, "\n");
+			}
 		}
 
 		/* --- Dipswitch information --- */
@@ -732,6 +837,7 @@ int save_tab_delimited(struct dat *dat)
 			OUTPUT_UNSIGNED_LONG_FIELD(driver, palettesize, FLAG_DRIVER_PALETTESIZE)
 			OUTPUT_UNSIGNED_LONG_FIELD(driver, colordeep, FLAG_DRIVER_COLORDEEP)
 			OUTPUT_STRING_FIELD(driver, credits, FLAG_DRIVER_CREDITS)
+			OUTPUT_STRING_FIELD(driver, savestate, FLAG_DRIVER_SAVESTATE)
 
 			fprintf(dat->out, "\n");
 		}

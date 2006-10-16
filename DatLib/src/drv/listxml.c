@@ -34,14 +34,14 @@ int identify_mame_listxml(struct dat *dat)
 
 	BUFFER1_REWIND
 
-	for (i=0; i<100 && BUFFER1_REMAINING; i++)
+	for (i=0; i<200 && BUFFER1_REMAINING; i++)
 	{
 		BUFFER1_GET_TOKEN
 
 		if (!strcmp(TOKEN, "<?xml"))
 			xml++;
 
-		if (xml && (!strcmp(TOKEN, "<mame>") || !strcmp(TOKEN, "<mame")))
+		if (xml && (!strcmp(TOKEN, "<mame>") || !strcmp(TOKEN, "<mame") || !strcmp(TOKEN, "<Raine32>") || !strcmp(TOKEN, "<Raine32")))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
@@ -57,7 +57,7 @@ int identify_mess_listxml(struct dat *dat)
 
 	BUFFER1_REWIND
 
-	for (i=0; i<100 && BUFFER1_REMAINING; i++)
+	for (i=0; i<200 && BUFFER1_REMAINING; i++)
 	{
 		BUFFER1_GET_TOKEN
 
@@ -181,7 +181,25 @@ int load_mame_listxml(struct dat *dat)
 
 	while (!errflg && BUFFER1_REMAINING)
 	{
-		if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
+		if (strstr(BUFFER1_PTR, "<mame "))
+		{
+			strcpy(TOKEN, "mame");
+			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+		}
+		if (strstr(BUFFER1_PTR, "<Raine32 "))
+		{
+			strcpy(TOKEN, "Raine32");
+			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+		}
+		else if (strstr(BUFFER1_PTR, "<mess "))
+		{
+			strcpy(TOKEN, "mess");
+			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+		}
+		else if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
 		{
 			if (strstr(BUFFER1_PTR, "runnable=\"no\""))
 				game_type=FLAG_RESOURCE_NAME;
@@ -304,6 +322,15 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("aspecty", TOKEN_VIDEO_ASPECTY) 
 			GET_XML_ATTRIBUTE("refresh", TOKEN_VIDEO_REFRESH) 
 		}
+		else if (strstr(BUFFER1_PTR, "<display "))
+		{
+			GET_XML_ATTRIBUTE("type", TOKEN_DISPLAY_TYPE) 
+			GET_XML_ATTRIBUTE("rotate", TOKEN_DISPLAY_ROTATE) 
+			GET_XML_ATTRIBUTE("flipx", TOKEN_DISPLAY_FLIPX) 
+			GET_XML_ATTRIBUTE("width", TOKEN_DISPLAY_WIDTH) 
+			GET_XML_ATTRIBUTE("height", TOKEN_DISPLAY_HEIGHT) 
+			GET_XML_ATTRIBUTE("refresh", TOKEN_DISPLAY_REFRESH) 
+		}
 		else if (strstr(BUFFER1_PTR, "<sound "))
 		{
 			GET_XML_ATTRIBUTE("channels", TOKEN_SOUND_CHANNELS)
@@ -317,6 +344,15 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
 			GET_XML_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
 			GET_XML_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
+		}
+		else if (strstr(BUFFER1_PTR, "<control "))
+		{
+			GET_XML_ATTRIBUTE("type", TOKEN_CONTROL_TYPE)
+			GET_XML_ATTRIBUTE("minimum", TOKEN_CONTROL_MINIMUM)
+			GET_XML_ATTRIBUTE("maximum", TOKEN_CONTROL_MAXIMUM)
+			GET_XML_ATTRIBUTE("sensitivity", TOKEN_CONTROL_SENSITIVITY)
+			GET_XML_ATTRIBUTE("keydelta", TOKEN_CONTROL_KEYDELTA)
+			GET_XML_ATTRIBUTE("reverse", TOKEN_CONTROL_REVERSE)
 		}
 		else if (strstr(BUFFER1_PTR, "<dipswitch "))
 		{
@@ -336,6 +372,7 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("graphic", TOKEN_DRIVER_GRAPHIC)
 			GET_XML_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
 			GET_XML_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
+			GET_XML_ATTRIBUTE("savestate", TOKEN_DRIVER_SAVESTATE)
 			GET_XML_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
 			GET_XML_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
 			GET_XML_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
@@ -475,8 +512,10 @@ int save_mame_listxml(struct dat *dat)
 	struct sample *curr_sample=0;
 	struct chip *curr_chip=0;
 	struct video *curr_video=0;
+	struct display *curr_display=0;
 	struct sound *curr_sound=0;
 	struct input *curr_input=0;
+	struct control *curr_control=0;
 	struct dipswitch *curr_dipswitch=0;
 	struct dipvalue *curr_dipvalue=0;
 	struct driver *curr_driver=0;
@@ -496,7 +535,7 @@ int save_mame_listxml(struct dat *dat)
 	}
 	else
 	{
-		doc_type="mame";
+		doc_type=dat->emulator.name ? dat->emulator.name : "mame";
 		game_type="game";
 	}
 
@@ -504,11 +543,16 @@ int save_mame_listxml(struct dat *dat)
 
 	fprintf(dat->out, "<!DOCTYPE %s [\n", doc_type);
 	fprintf(dat->out, "<!ELEMENT %s (%s+)>\n", doc_type, game_type);
+	if (dat->emulator.build)
+		fprintf(dat->out, "\t<!ATTLIST %s build CDATA #IMPLIED>\n", doc_type);
 
 	fprintf(dat->out, "\t<!ELEMENT %s (", game_type);
 	if (dat->comment_flags & FLAG_COMMENT_TEXT)
 		fprintf(dat->out, "comment*, ");
-	fprintf(dat->out, "description, year?, manufacturer, history?, biosset*, rom*, disk*, sample*, chip*, video?, sound?, input?, dipswitch*, driver?");
+	fprintf(dat->out, "description, year?, manufacturer, ");
+	if (dat->game_flags & FLAG_GAME_HISTORY)
+		fprintf(dat->out, "history?, ");
+	fprintf(dat->out, "biosset*, rom*, disk*, sample*, chip*, video?, display*, sound?, input?, dipswitch*, driver?");
 	if (dat->num_machines>0)
 		fprintf(dat->out, ", device*");
 	fprintf(dat->out, ")>\n");
@@ -528,7 +572,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t<!ELEMENT description (#PCDATA)>\n");
 	fprintf(dat->out, "\t\t<!ELEMENT year (#PCDATA)>\n");
 	fprintf(dat->out, "\t\t<!ELEMENT manufacturer (#PCDATA)>\n");
-	fprintf(dat->out, "\t\t<!ELEMENT history (#PCDATA)>\n");
+	if (dat->game_flags & FLAG_GAME_HISTORY)
+		fprintf(dat->out, "\t\t<!ELEMENT history (#PCDATA)>\n");
 
 	fprintf(dat->out, "\t\t<!ELEMENT biosset EMPTY>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST biosset name CDATA #REQUIRED>\n");
@@ -547,7 +592,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST rom offset CDATA #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST rom status (baddump|nodump|good) \"good\">\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST rom dispose (yes|no) \"no\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom soundonly (yes|no) \"no\">\n");
+	if (dat->rom_flags & FLAG_ROM_SOUNDONLY)
+		fprintf(dat->out, "\t\t\t<!ATTLIST rom soundonly (yes|no) \"no\">\n");
 
 	fprintf(dat->out, "\t\t<!ELEMENT disk EMPTY>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST disk name CDATA #REQUIRED>\n");
@@ -564,7 +610,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t<!ELEMENT chip EMPTY>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST chip name CDATA #REQUIRED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST chip type (cpu|audio) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST chip soundonly (yes|no) \"no\">\n");
+	if (dat->chip_flags & FLAG_CHIP_SOUNDONLY)
+		fprintf(dat->out, "\t\t\t<!ATTLIST chip soundonly (yes|no) \"no\">\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST chip clock CDATA #IMPLIED>\n");
 
 	fprintf(dat->out, "\t\t<!ELEMENT video EMPTY>\n");
@@ -577,10 +624,19 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST video aspecty CDATA #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST video refresh CDATA #REQUIRED>\n");
 
+	fprintf(dat->out, "\t\t<!ELEMENT display EMPTY>\n");
+
+	fprintf(dat->out, "\t\t\t<!ATTLIST display type (raster|vector) #REQUIRED>\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST display rotate (0|90|180|270) #REQUIRED>\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST display flipx (yes|no) \"no\">\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST display width CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST display height CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST display refresh CDATA #REQUIRED>\n");
+
 	fprintf(dat->out, "\t\t<!ELEMENT sound EMPTY>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST sound channels CDATA #REQUIRED>\n");
 
-	fprintf(dat->out, "\t\t<!ELEMENT input EMPTY>\n");
+	fprintf(dat->out, "\t\t<!ELEMENT input (control*)>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST input service (yes|no) \"no\">\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST input tilt (yes|no) \"no\">\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST input players CDATA #REQUIRED>\n");
@@ -589,6 +645,13 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST input coins CDATA #IMPLIED>\n");
 	if (dat->input_flags & FLAG_INPUT_DIPSWITCHES)
 		fprintf(dat->out, "\t\t\t<!ATTLIST input dipswitches CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t<!ELEMENT control EMPTY>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control type CDATA #REQUIRED>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control minimum CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control maximum CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control sensitivity CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control keydelta CDATA #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t\t<!ATTLIST control reverse (yes|no) \"no\">\n");
 
 	fprintf(dat->out, "\t\t<!ELEMENT dipswitch (dipvalue*)>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST dipswitch name CDATA #REQUIRED>\n");
@@ -604,6 +667,7 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver graphic (good|imperfect|preliminary) #REQUIRED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver cocktail (good|imperfect|preliminary) #IMPLIED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver protection (good|imperfect|preliminary) #IMPLIED>\n");
+	fprintf(dat->out, "\t\t\t<!ATTLIST driver savestate (supported|unsupported) #REQUIRED>\n");
 	fprintf(dat->out, "\t\t\t<!ATTLIST driver palettesize CDATA #REQUIRED>\n");
 	if (dat->driver_flags & FLAG_DRIVER_COLORDEEP)
 		fprintf(dat->out, "\t\t\t<!ATTLIST driver colordeep CDATA #REQUIRED>\n");
@@ -628,7 +692,10 @@ int save_mame_listxml(struct dat *dat)
 
 	/* --- For every game, machine and resource --- */
 
-	fprintf(dat->out, "<%s>\n", doc_type);
+	if (dat->emulator.build)
+		fprintf(dat->out, "<%s build=\"%s\">\n", doc_type, dat->emulator.build);
+	else
+		fprintf(dat->out, "<%s>\n", doc_type);
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
@@ -750,6 +817,22 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "/>\n");
 		}
 
+		/* --- Display information --- */
+
+		for (j=0, curr_display=curr_game->displays; j<curr_game->num_displays; j++, curr_display++)
+		{
+			fprintf(dat->out, "\t\t<display");
+
+			OUTPUT_STRING_ATTRIBUTE(display, type, "type", FLAG_DISPLAY_TYPE)
+			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(display, rotate, "rotate", FLAG_DISPLAY_ROTATE)
+			OUTPUT_STRING_ATTRIBUTE(display, flipx, "flipx", FLAG_DISPLAY_FLIPX)
+			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(display, width, "width", FLAG_DISPLAY_WIDTH)
+			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(display, height, "height", FLAG_DISPLAY_HEIGHT)
+			OUTPUT_0_6_FLOAT_ATTRIBUTE(display, refresh, "refresh", FLAG_DISPLAY_REFRESH)
+
+			fprintf(dat->out, "/>\n");
+		}
+
 		/* --- Sound information --- */
 
 		for (j=0, curr_sound=curr_game->sounds; j<curr_game->num_sounds; j++, curr_sound++)
@@ -775,7 +858,23 @@ int save_mame_listxml(struct dat *dat)
 			OUTPUT_STRING_ATTRIBUTE(input, tilt, "tilt", FLAG_INPUT_TILT)
 			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(input, dipswitches, "dipswitches", FLAG_INPUT_DIPSWITCHES)
 
-			fprintf(dat->out, "/>\n");
+			fprintf(dat->out, ">\n");
+
+			for (k=0, curr_control=curr_input->controls; k<curr_input->num_controls; k++, curr_control++)
+			{
+				fprintf(dat->out, "\t\t\t<control");
+
+				OUTPUT_STRING_ATTRIBUTE(control, type, "type", FLAG_CONTROL_TYPE)
+				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
+				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, maximum, "maximum", FLAG_CONTROL_MAXIMUM)
+				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, sensitivity, "sensitivity", FLAG_CONTROL_SENSITIVITY)
+				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, keydelta, "keydelta", FLAG_CONTROL_KEYDELTA)
+				OUTPUT_STRING_ATTRIBUTE(control, reverse, "reverse", FLAG_CONTROL_REVERSE)
+
+				fprintf(dat->out, "/>\n");
+			}
+
+			fprintf(dat->out, "\t\t</input>\n");
 		}
 
 		/* --- Dipswitch information --- */
@@ -812,6 +911,7 @@ int save_mame_listxml(struct dat *dat)
 			OUTPUT_STRING_ATTRIBUTE(driver, graphic, "graphic", FLAG_DRIVER_GRAPHIC)
 			OUTPUT_STRING_ATTRIBUTE(driver, cocktail, "cocktail", FLAG_DRIVER_COCKTAIL)
 			OUTPUT_STRING_ATTRIBUTE(driver, protection, "protection", FLAG_DRIVER_PROTECTION)
+			OUTPUT_STRING_ATTRIBUTE(driver, savestate, "savestate", FLAG_DRIVER_SAVESTATE)
 			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(driver, palettesize, "palettesize", FLAG_DRIVER_PALETTESIZE)
 			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(driver, colordeep, "colordeep", FLAG_DRIVER_COLORDEEP)
 			OUTPUT_STRING_ATTRIBUTE(driver, credits, "credits", FLAG_DRIVER_CREDITS)

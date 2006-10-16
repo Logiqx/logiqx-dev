@@ -98,8 +98,10 @@ int save_title_list(struct dat *dat)
 	dat->sample_saved=0xff;
 	dat->chip_saved=0xff;
 	dat->video_saved=0xff;
+	dat->display_saved=0xff;
 	dat->sound_saved=0xff;
 	dat->input_saved=0xff;
+	dat->control_saved=0xff;
 	dat->dipswitch_saved=0xff;
 	dat->dipvalue_saved=0xff;
 	dat->driver_saved=0xff;
