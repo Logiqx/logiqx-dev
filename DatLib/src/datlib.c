@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v2.18"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "17 October 2006"
 
 
 /* --- Standard includes --- */
@@ -824,7 +824,7 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_COMMENT_TEXT)
 			dat->num_comments++;
 
-		else if (type==TOKEN_BIOSSET_NAME && dat->num_games>0)
+		else if (type==TOKEN_BIOSSET_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_biossets++;
 
 		else if (type==TOKEN_ROM_NAME && dat->num_games>0)
@@ -836,37 +836,37 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_SAMPLE_NAME && dat->num_games>0)
 			dat->num_samples++;
 
-		else if (type==TOKEN_CHIP_TYPE && dat->num_games>0)
+		else if (type==TOKEN_CHIP_TYPE && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_chips++;
 
-		else if (type==TOKEN_VIDEO_SCREEN && dat->num_games>0)
+		else if (type==TOKEN_VIDEO_SCREEN && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_videos++;
 
-		else if (type==TOKEN_DISPLAY_TYPE && dat->num_games>0)
+		else if (type==TOKEN_DISPLAY_TYPE && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_displays++;
 
-		else if (type==TOKEN_SOUND_CHANNELS && dat->num_games>0)
+		else if (type==TOKEN_SOUND_CHANNELS && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_sounds++;
 
-		else if (type==TOKEN_INPUT_PLAYERS && dat->num_games>0)
+		else if (type==TOKEN_INPUT_PLAYERS && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_inputs++;
 
-		else if (type==TOKEN_CONTROL_TYPE && dat->num_games>0)
+		else if (type==TOKEN_CONTROL_TYPE && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_controls++;
 
-		else if (type==TOKEN_DIPSWITCH_NAME && dat->num_games>0)
+		else if (type==TOKEN_DIPSWITCH_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_dipswitches++;
 
-		else if (type==TOKEN_DIPVALUE_NAME && dat->num_games>0)
+		else if (type==TOKEN_DIPVALUE_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_dipvalues++;
 
-		else if (type==TOKEN_DRIVER_STATUS && dat->num_games>0)
+		else if (type==TOKEN_DRIVER_STATUS && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_drivers++;
 
-		else if (type==TOKEN_DEVICE_NAME && dat->num_games>0)
+		else if (type==TOKEN_DEVICE_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_devices++;
 
-		else if (type==TOKEN_EXTENSION_NAME && dat->num_games>0)
+		else if (type==TOKEN_EXTENSION_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_extensions++;
 
 		else if (type==TOKEN_ARCHIVE_NAME && dat->num_games>0)
