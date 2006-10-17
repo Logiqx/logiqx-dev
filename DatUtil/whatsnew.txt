@@ -1,9 +1,20 @@
 History
 -------
 
+17/10/2006  *** v2.30 ***
+
+            - Uses DatLib v2.18.
+            - More intelligent DTD creation when saving in ListXML format
+            - Added support for game/display (MAME v0.107)
+            - Added support for game/input/control (MAME v0.107)
+            - Added support for emulator/build (MAME+MESS v0.101u4 upwards)
+            - Added support for driver/savestate (MAME v0.101u1 upwards)
+            - Note: The above changes affect the tab delimited format!
+            - Added 'delimited.sql' as an example of loading dats into MySQL
+
 16/07/2006  *** v2.29 ***
 
-            - Uses DatLib v2.16.
+            - Uses DatLib v2.17.
             - Fixed bug that caused the DatUtil -g and -r options to crash
 
 11/07/2006  *** v2.28 ***
