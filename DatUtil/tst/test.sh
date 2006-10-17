@@ -220,6 +220,9 @@ case "$1" in
 	raine)
 		DATA_FILE="RAINE Listinfo.dat"
 		;;
+	mame)
+		DATA_FILE="mame.xml"
+		;;
 	*)
 		echo "Error: Unrecognised test file '$1'"
 		;;
