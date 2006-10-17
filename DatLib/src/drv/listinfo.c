@@ -604,6 +604,14 @@ if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 	OUTPUT_COMPLETED(OBJECT, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
 }
 
+#define OUTPUT_SIGNED_LONG(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, "%s %ld", ATTRIBUTE_TEXT, (long)curr_##OBJECT->ATTRIBUTE); \
+\
+	OUTPUT_COMPLETED(OBJECT, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+}
+
 #define OUTPUT_PADDED_HEX(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 { \
@@ -952,7 +960,7 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tcontrol ( ");
 	
 				OUTPUT_UNQUOTED_STRING(control, type, "type", FLAG_CONTROL_TYPE)
-				OUTPUT_UNSIGNED_LONG(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
+				OUTPUT_SIGNED_LONG(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
 				OUTPUT_UNSIGNED_LONG(control, maximum, "maximum", FLAG_CONTROL_MAXIMUM)
 				OUTPUT_UNSIGNED_LONG(control, sensitivity, "sensitivity", FLAG_CONTROL_SENSITIVITY)
 				OUTPUT_UNSIGNED_LONG(control, keydelta, "keydelta", FLAG_CONTROL_KEYDELTA)

@@ -523,6 +523,17 @@ else \
 	fprintf(dat->out, "\\N\t"); \
 }
 
+#define OUTPUT_SIGNED_LONG_FIELD(OBJECT, FIELD, FIELD_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
+{ \
+	fprintf(dat->out, "%ld\t", (long)curr_##OBJECT->FIELD); \
+	dat->OBJECT##_saved|=FIELD_FLAG; \
+} \
+else \
+{ \
+	fprintf(dat->out, "\\N\t"); \
+}
+
 #define OUTPUT_0_6_FLOAT_FIELD(OBJECT, FIELD, FIELD_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 { \
@@ -790,8 +801,8 @@ int save_tab_delimited(struct dat *dat)
 				OUTPUT_UNSIGNED_LONG_FIELD(input, players, FLAG_INPUT_PLAYERS)
 
 				OUTPUT_STRING_FIELD(control, type, FLAG_CONTROL_TYPE)
-				OUTPUT_UNSIGNED_LONG_FIELD(control, minimum, FLAG_CONTROL_MINIMUM)
-				OUTPUT_UNSIGNED_LONG_FIELD(control, maximum, FLAG_CONTROL_MAXIMUM)
+				OUTPUT_SIGNED_LONG_FIELD(control, minimum, FLAG_CONTROL_MINIMUM)
+				OUTPUT_SIGNED_LONG_FIELD(control, maximum, FLAG_CONTROL_MAXIMUM)
 				OUTPUT_UNSIGNED_LONG_FIELD(control, sensitivity, FLAG_CONTROL_SENSITIVITY)
 				OUTPUT_UNSIGNED_LONG_FIELD(control, keydelta, FLAG_CONTROL_KEYDELTA)
 				OUTPUT_STRING_FIELD(control, reverse, FLAG_CONTROL_REVERSE)

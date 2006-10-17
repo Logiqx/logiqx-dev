@@ -247,8 +247,8 @@ struct control
 	/* --- Fields that appear in data files */
 
 	char *type;
-	uint8_t minimum;
-	uint16_t maximum;
+	int32_t minimum;
+	int32_t maximum;
 	uint8_t sensitivity;
 	uint8_t keydelta;
 	char *reverse;
