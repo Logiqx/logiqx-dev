@@ -13,3 +13,5 @@ copy "VBEmu v1.00a.dat"+"%CAESAR%\data\games\multi2\VBEmu Screen Saver v1.01a - 
 rombchk MAME*dat
 
 del *.dat
+
+PAUSE
