@@ -469,6 +469,13 @@ if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 	dat->OBJECT##_saved|=ATTRIBUTE_FLAG; \
 }
 
+#define OUTPUT_SIGNED_LONG_ATTRIBUTE(OBJECT, ATTRIBUTE, ATTRIBUTE_NAME, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, " %s=\"%ld\"", ATTRIBUTE_NAME, (long)curr_##OBJECT->ATTRIBUTE); \
+	dat->OBJECT##_saved|=ATTRIBUTE_FLAG; \
+}
+
 #define OUTPUT_0_6_FLOAT_ATTRIBUTE(OBJECT, ATTRIBUTE, ATTRIBUTE_NAME, ATTRIBUTE_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 { \
@@ -528,9 +535,9 @@ int save_mame_listxml(struct dat *dat)
 
 	/* --- Write the DTD --- */
 
-	if (dat->num_machines>0)
+	if (dat->num_machines)
 	{
-		doc_type="mess";
+		doc_type=dat->emulator.name ? dat->emulator.name : "mess";
 		game_type="machine";
 	}
 	else
@@ -547,21 +554,53 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, "\t<!ATTLIST %s build CDATA #IMPLIED>\n", doc_type);
 
 	fprintf(dat->out, "\t<!ELEMENT %s (", game_type);
-	if (dat->comment_flags & FLAG_COMMENT_TEXT)
+	if (dat->num_comments)
 		fprintf(dat->out, "comment*, ");
-	fprintf(dat->out, "description, year?, manufacturer, ");
+	fprintf(dat->out, "description");
+	if (dat->game_flags & FLAG_GAME_YEAR)
+		fprintf(dat->out, ", year?");
+	if (dat->game_flags & FLAG_GAME_MANUFACTURER)
+		fprintf(dat->out, ", manufacturer");
 	if (dat->game_flags & FLAG_GAME_HISTORY)
-		fprintf(dat->out, "history?, ");
-	fprintf(dat->out, "biosset*, rom*, disk*, sample*, chip*, video?, display*, sound?, input?, dipswitch*, driver?");
-	if (dat->num_machines>0)
+		fprintf(dat->out, ", history?");
+	if (dat->num_biossets)
+		fprintf(dat->out, ", biosset*");
+	if (dat->num_roms)
+		fprintf(dat->out, ", rom*");
+	if (dat->num_disks)
+		fprintf(dat->out, ", disk*");
+	if (dat->num_samples)
+		fprintf(dat->out, ", sample*");
+	if (dat->num_chips)
+		fprintf(dat->out, ", chip*");
+	if (dat->num_videos)
+		fprintf(dat->out, ", video?");
+	if (dat->num_displays)
+		fprintf(dat->out, ", display*");
+	if (dat->num_sounds)
+		fprintf(dat->out, ", sound?");
+	if (dat->num_inputs)
+		fprintf(dat->out, ", input?");
+	if (dat->num_dipswitches)
+		fprintf(dat->out, ", dipswitch*");
+	if (dat->num_drivers)
+		fprintf(dat->out, ", driver?");
+	if (dat->num_devices)
 		fprintf(dat->out, ", device*");
+	if (dat->num_archives)
+		fprintf(dat->out, ", archive*");
 	fprintf(dat->out, ")>\n");
 	fprintf(dat->out, "\t\t<!ATTLIST %s name CDATA #REQUIRED>\n", game_type);
-	fprintf(dat->out, "\t\t<!ATTLIST %s sourcefile CDATA #IMPLIED>\n", game_type);
-	fprintf(dat->out, "\t\t<!ATTLIST %s runnable (yes|no) \"yes\">\n", game_type);
-	fprintf(dat->out, "\t\t<!ATTLIST %s cloneof CDATA #IMPLIED>\n", game_type);
-	fprintf(dat->out, "\t\t<!ATTLIST %s romof CDATA #IMPLIED>\n", game_type);
-	fprintf(dat->out, "\t\t<!ATTLIST %s sampleof CDATA #IMPLIED>\n", game_type);
+	if (dat->game_flags & FLAG_GAME_SOURCEFILE)
+		fprintf(dat->out, "\t\t<!ATTLIST %s sourcefile CDATA #IMPLIED>\n", game_type);
+	if (dat->num_resources)
+		fprintf(dat->out, "\t\t<!ATTLIST %s runnable (yes|no) \"yes\">\n", game_type);
+	if (dat->game_flags & FLAG_GAME_CLONEOF)
+		fprintf(dat->out, "\t\t<!ATTLIST %s cloneof CDATA #IMPLIED>\n", game_type);
+	if (dat->game_flags & FLAG_GAME_ROMOF)
+		fprintf(dat->out, "\t\t<!ATTLIST %s romof CDATA #IMPLIED>\n", game_type);
+	if (dat->game_flags & FLAG_GAME_SAMPLEOF)
+		fprintf(dat->out, "\t\t<!ATTLIST %s sampleof CDATA #IMPLIED>\n", game_type);
 	if (dat->game_flags & FLAG_GAME_REBUILDTO)
 		fprintf(dat->out, "\t\t<!ATTLIST %s rebuildto (#PCDATA)>\n", game_type);
 	if (dat->game_flags & FLAG_GAME_BOARD)
@@ -570,119 +609,224 @@ int save_mame_listxml(struct dat *dat)
 	if (dat->comment_flags & FLAG_COMMENT_TEXT)
 		fprintf(dat->out, "\t\t<!ELEMENT comment (#PCDATA)>\n");
 	fprintf(dat->out, "\t\t<!ELEMENT description (#PCDATA)>\n");
-	fprintf(dat->out, "\t\t<!ELEMENT year (#PCDATA)>\n");
-	fprintf(dat->out, "\t\t<!ELEMENT manufacturer (#PCDATA)>\n");
+	if (dat->game_flags & FLAG_GAME_YEAR)
+		fprintf(dat->out, "\t\t<!ELEMENT year (#PCDATA)>\n");
+	if (dat->game_flags & FLAG_GAME_MANUFACTURER)
+		fprintf(dat->out, "\t\t<!ELEMENT manufacturer (#PCDATA)>\n");
 	if (dat->game_flags & FLAG_GAME_HISTORY)
 		fprintf(dat->out, "\t\t<!ELEMENT history (#PCDATA)>\n");
 
-	fprintf(dat->out, "\t\t<!ELEMENT biosset EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST biosset name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST biosset description CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST biosset default (yes|no) \"no\">\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT rom EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom bios CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom size CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom crc CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom md5 CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom sha1 CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom merge CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom region CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom offset CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom status (baddump|nodump|good) \"good\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST rom dispose (yes|no) \"no\">\n");
-	if (dat->rom_flags & FLAG_ROM_SOUNDONLY)
-		fprintf(dat->out, "\t\t\t<!ATTLIST rom soundonly (yes|no) \"no\">\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT disk EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk md5 CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk sha1 CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk merge CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk region CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk index CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST disk status (baddump|nodump|good) \"good\">\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT sample EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST sample name CDATA #REQUIRED>\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT chip EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST chip name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST chip type (cpu|audio) #REQUIRED>\n");
-	if (dat->chip_flags & FLAG_CHIP_SOUNDONLY)
-		fprintf(dat->out, "\t\t\t<!ATTLIST chip soundonly (yes|no) \"no\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST chip clock CDATA #IMPLIED>\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT video EMPTY>\n");
-
-	fprintf(dat->out, "\t\t\t<!ATTLIST video screen (raster|vector) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video orientation (vertical|horizontal) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video width CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video height CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video aspectx CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video aspecty CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST video refresh CDATA #REQUIRED>\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT display EMPTY>\n");
-
-	fprintf(dat->out, "\t\t\t<!ATTLIST display type (raster|vector) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST display rotate (0|90|180|270) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST display flipx (yes|no) \"no\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST display width CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST display height CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST display refresh CDATA #REQUIRED>\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT sound EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST sound channels CDATA #REQUIRED>\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT input (control*)>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input service (yes|no) \"no\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input tilt (yes|no) \"no\">\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input players CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input control CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input buttons CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST input coins CDATA #IMPLIED>\n");
-	if (dat->input_flags & FLAG_INPUT_DIPSWITCHES)
-		fprintf(dat->out, "\t\t\t<!ATTLIST input dipswitches CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ELEMENT control EMPTY>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control type CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control minimum CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control maximum CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control sensitivity CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control keydelta CDATA #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST control reverse (yes|no) \"no\">\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT dipswitch (dipvalue*)>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST dipswitch name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ELEMENT dipvalue EMPTY>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST dipvalue name CDATA #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t\t<!ATTLIST dipvalue default (yes|no) \"no\">\n");
-
-	fprintf(dat->out, "\t\t<!ELEMENT driver EMPTY>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver status (good|imperfect|preliminary) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver emulation (good|imperfect|preliminary) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver color (good|imperfect|preliminary) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver sound (good|imperfect|preliminary) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver graphic (good|imperfect|preliminary) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver cocktail (good|imperfect|preliminary) #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver protection (good|imperfect|preliminary) #IMPLIED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver savestate (supported|unsupported) #REQUIRED>\n");
-	fprintf(dat->out, "\t\t\t<!ATTLIST driver palettesize CDATA #REQUIRED>\n");
-	if (dat->driver_flags & FLAG_DRIVER_COLORDEEP)
-		fprintf(dat->out, "\t\t\t<!ATTLIST driver colordeep CDATA #REQUIRED>\n");
-	if (dat->driver_flags & FLAG_DRIVER_CREDITS)
-		fprintf(dat->out, "\t\t\t<!ATTLIST driver credits CDATA #IMPLIED>\n");
-
-	if (dat->num_machines>0)
+	if (dat->num_biossets)
 	{
-		fprintf(dat->out, "\t\t<!ELEMENT device (extension*)>\n");
+		fprintf(dat->out, "\t\t<!ELEMENT biosset EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST biosset name CDATA #REQUIRED>\n");
+		if (dat->biosset_flags & FLAG_BIOSSET_DESCRIPTION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST biosset description CDATA #REQUIRED>\n");
+		if (dat->biosset_flags & FLAG_BIOSSET_DEFAULT)
+			fprintf(dat->out, "\t\t\t<!ATTLIST biosset default (yes|no) \"no\">\n");
+	}
+
+	if (dat->num_roms)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT rom EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST rom name CDATA #REQUIRED>\n");
+		if (dat->rom_flags & FLAG_ROM_BIOS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom bios CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_SIZE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom size CDATA #REQUIRED>\n");
+		if (dat->rom_flags & FLAG_ROM_CRC)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom crc CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_MD5)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom md5 CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_SHA1)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom sha1 CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_MERGE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom merge CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_REGION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom region CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_OFFSET)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom offset CDATA #IMPLIED>\n");
+		if (dat->rom_flags & FLAG_ROM_STATUS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom status (baddump|nodump|good) \"good\">\n");
+		if (dat->rom_flags & FLAG_ROM_DISPOSE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom dispose (yes|no) \"no\">\n");
+		if (dat->rom_flags & FLAG_ROM_SOUNDONLY)
+			fprintf(dat->out, "\t\t\t<!ATTLIST rom soundonly (yes|no) \"no\">\n");
+	}
+
+	if (dat->num_disks)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT disk EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST disk name CDATA #REQUIRED>\n");
+		if (dat->disk_flags & FLAG_DISK_MD5)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk md5 CDATA #IMPLIED>\n");
+		if (dat->disk_flags & FLAG_DISK_SHA1)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk sha1 CDATA #IMPLIED>\n");
+		if (dat->disk_flags & FLAG_DISK_MERGE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk merge CDATA #IMPLIED>\n");
+		if (dat->disk_flags & FLAG_DISK_REGION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk region CDATA #IMPLIED>\n");
+		if (dat->disk_flags & FLAG_DISK_INDEX)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk index CDATA #IMPLIED>\n");
+		if (dat->disk_flags & FLAG_DISK_STATUS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST disk status (baddump|nodump|good) \"good\">\n");
+	}
+
+	if (dat->num_samples)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT sample EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST sample name CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_chips)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT chip EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST chip name CDATA #REQUIRED>\n");
+		if (dat->chip_flags & FLAG_CHIP_TYPE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST chip type (cpu|audio) #REQUIRED>\n");
+		if (dat->chip_flags & FLAG_CHIP_SOUNDONLY)
+			fprintf(dat->out, "\t\t\t<!ATTLIST chip soundonly (yes|no) \"no\">\n");
+		if (dat->chip_flags & FLAG_CHIP_CLOCK)
+			fprintf(dat->out, "\t\t\t<!ATTLIST chip clock CDATA #IMPLIED>\n");
+	}
+
+	if (dat->num_videos)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT video EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST video screen (raster|vector) #REQUIRED>\n");
+		if (dat->video_flags & FLAG_VIDEO_ORIENTATION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video orientation (vertical|horizontal) #REQUIRED>\n");
+		if (dat->video_flags & FLAG_VIDEO_WIDTH)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video width CDATA #IMPLIED>\n");
+		if (dat->video_flags & FLAG_VIDEO_HEIGHT)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video height CDATA #IMPLIED>\n");
+		if (dat->video_flags & FLAG_VIDEO_ASPECTX)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video aspectx CDATA #IMPLIED>\n");
+		if (dat->video_flags & FLAG_VIDEO_ASPECTY)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video aspecty CDATA #IMPLIED>\n");
+		if (dat->video_flags & FLAG_VIDEO_REFRESH)
+			fprintf(dat->out, "\t\t\t<!ATTLIST video refresh CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_displays)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT display EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST display type (raster|vector) #REQUIRED>\n");
+		if (dat->display_flags & FLAG_DISPLAY_ROTATE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST display rotate (0|90|180|270) #REQUIRED>\n");
+		if (dat->display_flags & FLAG_DISPLAY_FLIPX)
+			fprintf(dat->out, "\t\t\t<!ATTLIST display flipx (yes|no) \"no\">\n");
+		if (dat->display_flags & FLAG_DISPLAY_WIDTH)
+			fprintf(dat->out, "\t\t\t<!ATTLIST display width CDATA #IMPLIED>\n");
+		if (dat->display_flags & FLAG_DISPLAY_HEIGHT)
+			fprintf(dat->out, "\t\t\t<!ATTLIST display height CDATA #IMPLIED>\n");
+		if (dat->display_flags & FLAG_DISPLAY_REFRESH)
+			fprintf(dat->out, "\t\t\t<!ATTLIST display refresh CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_sounds)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT sound EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST sound channels CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_inputs)
+	{
+		if (dat->num_controls)
+			fprintf(dat->out, "\t\t<!ELEMENT input (control*)>\n");
+		else
+			fprintf(dat->out, "\t\t<!ELEMENT input EMPTY>\n");
+		if (dat->input_flags & FLAG_INPUT_SERVICE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input service (yes|no) \"no\">\n");
+		if (dat->input_flags & FLAG_INPUT_TILT)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input tilt (yes|no) \"no\">\n");
+		if (dat->input_flags & FLAG_INPUT_PLAYERS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input players CDATA #REQUIRED>\n");
+		if (dat->input_flags & FLAG_INPUT_CONTROL)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input control CDATA #IMPLIED>\n");
+		if (dat->input_flags & FLAG_INPUT_BUTTONS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input buttons CDATA #IMPLIED>\n");
+		if (dat->input_flags & FLAG_INPUT_COINS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input coins CDATA #IMPLIED>\n");
+		if (dat->input_flags & FLAG_INPUT_DIPSWITCHES)
+			fprintf(dat->out, "\t\t\t<!ATTLIST input dipswitches CDATA #IMPLIED>\n");
+	}
+
+	if (dat->num_controls)
+	{
+		fprintf(dat->out, "\t\t\t<!ELEMENT control EMPTY>\n");
+		fprintf(dat->out, "\t\t\t\t<!ATTLIST control type CDATA #REQUIRED>\n");
+		if (dat->control_flags & FLAG_CONTROL_MINIMUM)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST control minimum CDATA #IMPLIED>\n");
+		if (dat->control_flags & FLAG_CONTROL_MAXIMUM)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST control maximum CDATA #IMPLIED>\n");
+		if (dat->control_flags & FLAG_CONTROL_SENSITIVITY)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST control sensitivity CDATA #IMPLIED>\n");
+		if (dat->control_flags & FLAG_CONTROL_KEYDELTA)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST control keydelta CDATA #IMPLIED>\n");
+		if (dat->control_flags & FLAG_CONTROL_REVERSE)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST control reverse (yes|no) \"no\">\n");
+	}
+
+	if (dat->num_dipswitches)
+	{
+		if (dat->num_dipvalues)
+			fprintf(dat->out, "\t\t<!ELEMENT dipswitch (dipvalue*)>\n");
+		else
+			fprintf(dat->out, "\t\t<!ELEMENT dipswitch EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST dipswitch name CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_dipvalues)
+	{
+		fprintf(dat->out, "\t\t\t<!ELEMENT dipvalue EMPTY>\n");
+		fprintf(dat->out, "\t\t\t\t<!ATTLIST dipvalue name CDATA #REQUIRED>\n");
+		if (dat->dipvalue_flags & FLAG_DIPVALUE_DEFAULT)
+			fprintf(dat->out, "\t\t\t\t<!ATTLIST dipvalue default (yes|no) \"no\">\n");
+	}
+
+	if (dat->num_drivers)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT driver EMPTY>\n");
+		fprintf(dat->out, "\t\t\t<!ATTLIST driver status (good|imperfect|preliminary) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_EMULATION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver emulation (good|imperfect|preliminary) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_COLOR)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver color (good|imperfect|preliminary) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_SOUND)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver sound (good|imperfect|preliminary) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_GRAPHIC)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver graphic (good|imperfect|preliminary) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_COCKTAIL)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver cocktail (good|imperfect|preliminary) #IMPLIED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_PROTECTION)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver protection (good|imperfect|preliminary) #IMPLIED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_SAVESTATE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver savestate (supported|unsupported) #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_PALETTESIZE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver palettesize CDATA #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_COLORDEEP)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver colordeep CDATA #REQUIRED>\n");
+		if (dat->driver_flags & FLAG_DRIVER_CREDITS)
+			fprintf(dat->out, "\t\t\t<!ATTLIST driver credits CDATA #IMPLIED>\n");
+	}
+
+	if (dat->num_devices)
+	{
+		if (dat->num_extensions)
+			fprintf(dat->out, "\t\t<!ELEMENT device (extension*)>\n");
+		else
+			fprintf(dat->out, "\t\t<!ELEMENT device EMPTY>\n");
 		fprintf(dat->out, "\t\t\t<!ATTLIST device name CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_extensions)
+	{
 		fprintf(dat->out, "\t\t\t<!ELEMENT extension EMPTY>\n");
 		fprintf(dat->out, "\t\t\t\t<!ATTLIST extension name CDATA #REQUIRED>\n");
 	}
 
-	if (dat->num_archives>0)
+	if (dat->num_archives)
 	{
 		fprintf(dat->out, "\t\t<!ELEMENT archive EMPTY>\n");
 		fprintf(dat->out, "\t\t\t<!ATTLIST archive name CDATA #REQUIRED>\n");
@@ -865,8 +1009,8 @@ int save_mame_listxml(struct dat *dat)
 				fprintf(dat->out, "\t\t\t<control");
 
 				OUTPUT_STRING_ATTRIBUTE(control, type, "type", FLAG_CONTROL_TYPE)
-				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
-				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, maximum, "maximum", FLAG_CONTROL_MAXIMUM)
+				OUTPUT_SIGNED_LONG_ATTRIBUTE(control, minimum, "minimum", FLAG_CONTROL_MINIMUM)
+				OUTPUT_SIGNED_LONG_ATTRIBUTE(control, maximum, "maximum", FLAG_CONTROL_MAXIMUM)
 				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, sensitivity, "sensitivity", FLAG_CONTROL_SENSITIVITY)
 				OUTPUT_UNSIGNED_LONG_ATTRIBUTE(control, keydelta, "keydelta", FLAG_CONTROL_KEYDELTA)
 				OUTPUT_STRING_ATTRIBUTE(control, reverse, "reverse", FLAG_CONTROL_REVERSE)
