@@ -5,8 +5,8 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
-#define MAMEDIFF_VERSION "v2.25"
-#define MAMEDIFF_DATE "11 July 2006"
+#define MAMEDIFF_VERSION "v2.26"
+#define MAMEDIFF_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -241,6 +241,12 @@ int main(int argc, char **argv)
 		{
 			options1->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
 			options2->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+		}
+
+		if (diff_type && !renames)
+		{
+			options1->options|=OPTION_REDUCE_ZIP_STRUCTURES;
+			options2->options|=OPTION_REDUCE_ZIP_STRUCTURES;
 		}
 
 		options1->fn=argv[optind];

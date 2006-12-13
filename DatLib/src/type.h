@@ -966,6 +966,8 @@ struct ini_entry
 #define	OPTION_OBJECT_TYPE_SAMPLE	0x04000000	// MAMEDiff -o option
 #define	OPTION_INCLUDE_NODUMPS_IN_ZIPS	0x08000000	// MAMEDiff -z option
 
+#define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// Used by MAMEDiff
+
 
 /* --- Parser Flags --- */
 
