@@ -5082,6 +5082,26 @@ int game_zip_sample_sort_function(const void *zip_sample1, const void *zip_sampl
 	return(diff);
 }
 
+int game_zip_rom_sort_function_2(const void *zip_rom1, const void *zip_rom2)
+{
+	int diff=strcmp(((struct game_zip_rom *)zip_rom1)->game_zip->game->name, ((struct game_zip_rom *)zip_rom2)->game_zip->game->name);
+
+	if (diff==0)
+		diff=strcmp(((struct game_zip_rom *)zip_rom1)->rom->name, ((struct game_zip_rom *)zip_rom2)->rom->name);
+
+	return(diff);
+}
+
+int game_zip_disk_sort_function_2(const void *zip_disk1, const void *zip_disk2)
+{
+	int diff=strcmp(((struct game_zip_disk *)zip_disk1)->game_zip->game->name, ((struct game_zip_disk *)zip_disk2)->game_zip->game->name);
+
+	if (diff==0)
+		diff=strcmp(((struct game_zip_disk *)zip_disk1)->disk->name, ((struct game_zip_disk *)zip_disk2)->disk->name);
+
+	return(diff);
+}
+
 int build_zip_structures(struct dat *dat)
 {
 	struct game *curr_game;
@@ -5316,7 +5336,7 @@ int build_zip_structures(struct dat *dat)
 		}
 	}
 
-	/* --- Sort the game_zip ROMs, disks and samples --- */
+	/* --- Sort the game_zip ROMs, disks and samples for de-duplication --- */
 
 	qsort(dat->game_zip_roms, dat->num_game_zip_roms, sizeof(struct game_zip_rom), game_zip_rom_sort_function);
 	qsort(dat->game_zip_disks, dat->num_game_zip_disks, sizeof(struct game_zip_disk), game_zip_disk_sort_function);
@@ -5427,6 +5447,11 @@ int build_zip_structures(struct dat *dat)
 			curr_game_zip_name_idx->game_zip->game_zip_samples=curr_game_zip_sample;
 		}
 	}
+
+	/* --- Sort the game_zip ROMs, disks and samples for processing --- */
+
+	qsort(dat->game_zip_roms, dat->num_game_zip_roms, sizeof(struct game_zip_rom), game_zip_rom_sort_function_2);
+	qsort(dat->game_zip_disks, dat->num_game_zip_disks, sizeof(struct game_zip_disk), game_zip_disk_sort_function_2);
 
 	/* --- Display it for testing purposes! --- */
 
