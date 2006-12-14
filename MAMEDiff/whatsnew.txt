@@ -1,6 +1,11 @@
 History
 -------
 
+??/??/????  *** v2.26 ***
+
+            - Uses DatLib v2.19.
+            - Improved -dX modes (understands merging despite differing names) 
+
 11/07/2006  *** v2.25 ***
 
             - Uses DatLib v2.16.

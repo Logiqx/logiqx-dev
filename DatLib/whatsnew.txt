@@ -1,6 +1,11 @@
 History
 -------
 
+??/??/????  *** v2.19 ***
+
+            - Internal change that only affects MAMEDiff (see note below)
+            - Improved -dX modes (understands merging despite differing names) 
+
 17/10/2006  *** v2.18 ***
 
             - More intelligent DTD creation when saving in ListXML format
