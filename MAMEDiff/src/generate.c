@@ -38,6 +38,8 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 	char st[MAX_STRING_LENGTH];
 
+	char *extra;
+
 	struct game_zip *curr_game_zip1, *curr_game_zip2;
 	struct game_zip_idx *curr_game_zip_name_idx1, *curr_game_zip_name_idx2;
 
@@ -691,7 +693,11 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 					curr_game->game_flags&=~FLAG_GAME_ROMOF;
 
 					FORMAT_GAME_NAME(st, curr_game);
-					fprintf(changes_log, "%s\n\n", st);
+					if (object_type==OPTION_OBJECT_TYPE_DISK && curr_game->sourcefile!=0 && !strcmp(curr_game->sourcefile, "cps2.c"))
+						extra = "CPS-2: ";
+					else
+						extra = "";
+					fprintf(changes_log, "%s%s\n\n", extra, st);
 
 					/* --- ROMs --- */
 
@@ -793,12 +799,17 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				else
 					fprintf(changes_dat, "\tname %s\n", curr_game->name);
 
+				if (object_type==OPTION_OBJECT_TYPE_DISK && curr_game->sourcefile!=0 && !strcmp(curr_game->sourcefile, "cps2.c"))
+					extra="CPS-2: ";
+				else
+					extra="";
+
 				if (curr_game->description!=0)
 				{
 					if (dat2->options->options & OPTION_DAT_FULL_MERGING)
-						fprintf(changes_dat, "\tdescription \"%s [n.b. includes clones]\"\n", curr_game->description);
+						fprintf(changes_dat, "\tdescription \"%s%s [n.b. includes clones]\"\n", extra, curr_game->description);
 					else
-						fprintf(changes_dat, "\tdescription \"%s\"\n", curr_game->description);
+						fprintf(changes_dat, "\tdescription \"%s%s\"\n", extra, curr_game->description);
 				}
 
 				if (curr_game->year!=0)
@@ -811,6 +822,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 				if (curr_game->manufacturer!=0)
 					fprintf(changes_dat, "\tmanufacturer \"%s\"\n", curr_game->manufacturer);
+
+				if (curr_game->sourcefile!=0)
+					fprintf(changes_dat, "\tsourcefile %s\n", curr_game->sourcefile);
 
 				for (j=0, curr_game_zip_rom2=curr_game_zip2->game_zip_roms;
 					object_type==OPTION_OBJECT_TYPE_ROM && j<curr_game_zip2->num_game_zip_roms;
