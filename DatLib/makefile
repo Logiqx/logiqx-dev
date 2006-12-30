@@ -5,7 +5,7 @@
 MD=mkdir
 
 CC=@gcc
-CFLAGS+=-Wall -O2 -I $(LOGIQX)/dev
+CFLAGS+=-Wall -O3 -I $(LOGIQX)/dev
 
 LD=@gcc
 LIBS+=-lz -lm
