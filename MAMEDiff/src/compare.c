@@ -316,7 +316,7 @@ int compare_games(struct game_change *game_change, struct game *game1, struct ga
 			if (i>=game1->num_samples) diff=1;
 			if (j>=game2->num_samples) diff=-1;
 			if (i<game1->num_samples && j<game2->num_samples)
-				diff=strcmp(samples_idx1[j].sample->name, samples_idx2[i].sample->name);
+				diff=strcmp(samples_idx1[i].sample->name, samples_idx2[j].sample->name);
 
 			if (diff==0)
 			{
