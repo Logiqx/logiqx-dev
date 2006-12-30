@@ -1,12 +1,14 @@
 History
 -------
 
-??/??/????  *** v2.26 ***
+30/12/2006  *** v2.26 ***
 
             - Uses DatLib v2.19.
             - Improved -dX modes (understands merging despite differing names) 
             - Added CPS-2 to descriptions when producing disk supplements
             - Added sourcefile information to output datafile
+            - Fixed sample functionality in the standard comparison modes.
+              i.e. Running MAMEDiff without options or in verbose mode (-v).
 
 11/07/2006  *** v2.25 ***
 

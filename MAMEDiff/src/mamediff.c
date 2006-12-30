@@ -6,7 +6,7 @@
  * -------------------------------------------------------------------------- */
 
 #define MAMEDIFF_VERSION "v2.26"
-#define MAMEDIFF_DATE "Private Beta"
+#define MAMEDIFF_DATE "30 December 2006"
 
 
 /* --- The standard includes --- */
