@@ -3148,6 +3148,50 @@ int remove_duplicates(struct dat *dat)
 	return(errflg);
 }
 
+int prune_objects(struct dat *dat)
+{
+	struct game *curr_game=0;
+	uint32_t i;
+
+	int errflg=0;
+
+	/* --- Summarise games --- */
+
+	if (datlib_debug)
+	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Pruning Objects...\n");
+	}
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		if (dat->options->prune_roms && curr_game->num_roms)
+		{
+			curr_game->num_roms=0;
+			curr_game->game_fixes|=FLAG_GAME_PRUNED_ROMS;
+		}
+		if (dat->options->prune_disks && curr_game->num_disks)
+		{
+			curr_game->num_disks=0;
+			curr_game->game_fixes|=FLAG_GAME_PRUNED_DISKS;
+		}
+		if (dat->options->prune_samples && curr_game->num_samples)
+		{
+			curr_game->num_samples=0;
+			curr_game->game_fixes|=FLAG_GAME_PRUNED_SAMPLES;
+		}
+	}
+
+	if (dat->options->prune_roms)
+		dat->num_roms=0;
+	if (dat->options->prune_disks)
+		dat->num_disks=0;
+	if (dat->options->prune_samples)
+		dat->num_samples=0;
+
+	return(errflg);
+}
+
 int summarise_dat(struct dat *dat)
 {
 	struct game *curr_game=0;
@@ -4565,6 +4609,12 @@ int report_fixes(struct dat *dat)
 				fprintf(dat->log_file, "    ROM Of\n");
 			if (dat->game_fixes & FLAG_GAME_SAMPLEOF)
 				fprintf(dat->log_file, "    Sample Of\n");
+			if (dat->game_fixes & FLAG_GAME_PRUNED_ROMS)
+				fprintf(dat->log_file, "    Pruned ROMs!\n");
+			if (dat->game_fixes & FLAG_GAME_PRUNED_DISKS)
+				fprintf(dat->log_file, "    Pruned Disks!\n");
+			if (dat->game_fixes & FLAG_GAME_PRUNED_SAMPLES)
+				fprintf(dat->log_file, "    Pruned Samples!\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4702,6 +4752,21 @@ int report_fixes(struct dat *dat)
 							fprintf(dat->log_file, "    Sample Of set/changed.\n");
 						else
 							fprintf(dat->log_file, "    Sample Of removed (invalid reference).\n");
+					}
+
+					if (curr_game->game_fixes & FLAG_GAME_PRUNED_ROMS)
+					{
+						fprintf(dat->log_file, "    Pruned ROMs!\n");
+					}
+
+					if (curr_game->game_fixes & FLAG_GAME_PRUNED_DISKS)
+					{
+						fprintf(dat->log_file, "    Pruned Disks!\n");
+					}
+
+					if (curr_game->game_fixes & FLAG_GAME_PRUNED_SAMPLES)
+					{
+						fprintf(dat->log_file, "    Pruned Samples!\n");
 					}
 				}
 	
@@ -5909,6 +5974,9 @@ struct dat *init_dat(struct options *options)
 
 	if (!errflg && (options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		errflg=game_sourcefile_selections(dat);
+
+	if (!errflg && (options->prune_roms || options->prune_disks || options->prune_samples))
+		errflg=prune_objects(dat);
 
 	if (!errflg && dat->num_games==0)
 	{

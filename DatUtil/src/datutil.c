@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDxmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDp:xmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -156,6 +156,14 @@ int main(int argc, char **argv)
 		case 'D':
 			options->options|=OPTION_REMOVE_DUPLICATES_OFF;
 			break;
+		case 'p':
+			if (strstr(optarg, "rom"))
+				options->prune_roms++;
+			if (strstr(optarg, "disk"))
+				options->prune_disks++;
+			if (strstr(optarg, "sample"))
+				options->prune_samples++;
+			break;
 		/* --- MD5/SHA1 --- */
 		case 'x':
 			options->options|=OPTION_EXTENDED_CHECKSUMS;
@@ -192,7 +200,7 @@ int main(int argc, char **argv)
 		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
 		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
 		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
-		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D]\n");
+		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D] [-p[rom|disk|sample]]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");
 		printf("Information     [-v] [-d]\n\n");
 

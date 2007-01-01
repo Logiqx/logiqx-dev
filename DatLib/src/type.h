@@ -707,6 +707,10 @@ struct options
 	struct st_idx *sourcefile_selections;
 	uint32_t num_sourcefile_selections;
 
+	uint8_t prune_roms;
+	uint8_t prune_disks;
+	uint8_t prune_samples;
+
 	char *save_name;
 	char *save_mode;
 	char *save_format;
@@ -1014,6 +1018,10 @@ struct ini_entry
 #define FLAG_GAME_DUPLICATE_NAME	0x00020000
 #define FLAG_GAME_DUPLICATE_DESCRIPTION	0x00040000
 #define FLAG_GAME_DUPLICATE_CRC		0x00080000
+
+#define FLAG_GAME_PRUNED_ROMS  		0x00100000
+#define FLAG_GAME_PRUNED_DISKS 		0x00200000
+#define FLAG_GAME_PRUNED_SAMPLES	0x00400000
 
 
 /* --- Comment Flags --- */
