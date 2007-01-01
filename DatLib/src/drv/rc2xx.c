@@ -116,7 +116,7 @@ int load_romcenter_250(struct dat *dat)
 		{
 			BUFFER1_GET_TOKEN
 
-			in_romcenter_credits=in_romcenter_dat=in_romcenter_emulator=in_romcenter_games=0;
+			in_romcenter_credits=in_romcenter_dat=in_romcenter_emulator=in_romcenter_games=in_romcenter_resources=0;
 
 			LOWER(TOKEN)
 
