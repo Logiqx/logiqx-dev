@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.20 ***
+
+            - Added 'prune' feature for removing roms, disk and/or samples
+
 30/12/2006  *** v2.19 ***
 
             - Internal change that only affects MAMEDiff (see note below)

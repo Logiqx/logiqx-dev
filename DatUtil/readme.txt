@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.30 - 17/10/2006
+                         DatUtil v2.31 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -202,6 +202,10 @@ parent/merge details (which would be removed if 'fix merging' was left on).
 
 Note: When using -X, DatUtil will not be able to identify CRC/SHA1 conflicts.
 
+If you wish to remove objects such as ROMs, disks or samples you can use the
+-p option. This has a variety of uses, including the removal of CPS-2 disks
+which at this time are somewhat large (~4GB)!
+
 The final option is '-s' for sorting the games before saving. This actually
 sorts games by their parent name first (n.b. name, not description) and then
 by the game name (n.b. name, not description).
@@ -279,7 +283,7 @@ Saving:
   -f  output format (listinfo, listxml, romcenter2, delimited, sublist, etc)
   -q  always use quotes around strings (only applies to listinfo output)
   -k  keep as much information as possible from the source file
-  -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata.
+  -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata
   -o  output to file
   -a  append to file
   -t  test mode - no data file is actually saved (just loaded and cleansed)
@@ -296,9 +300,9 @@ Header text:
 
 Game selection:
 
-  -g  individual game selection. use the @ symbol to specify a file of names.
+  -g  individual game selection. use the @ symbol to specify a file of names
   -c  include clones (for use with the -g option)
-  -G  select games from a specified sourcefile. the @ method is also supported.
+  -G  select games from a specified sourcefile. the @ method is also supported
   -!  changes the -g and -G options (including the -c option) to exclude games
   -r  remove clones
 
@@ -306,9 +310,10 @@ Cleansing:
 
   -l  lower case game names and ROM names
   -s  sort games by parent (sorted by parent name then game name)
-  -i  include missing information from a 'reference' data file.
+  -i  include missing information from a 'reference' data file
   -X  fix merging off (do not use unless you understand the consequences!)
-  -D  remove duplicate ROMs/disks/samples (as above in terms of usage).
+  -D  remove duplicate ROMs/disks/samples (as above in terms of usage)
+  -p  prune (remove) ROMs, disks and/or samples (e.g. '-p disk,sample')
 
 MD5/SHA1:
 
