@@ -5,12 +5,12 @@
 MD=mkdir
 
 CC=@gcc
-CFLAGS+=-g3 -Wall -O3 -I $(LOGIQX)/dev
+CFLAGS+=-Wall -O3 -I $(LOGIQX)/dev
 
 LD=@gcc
 LIBS+=-lz -lm
 
-UPX=@ls -l
+UPX=@upx -9
 
 DLSRC=$(LOGIQX)/dev/datlib/src
 
