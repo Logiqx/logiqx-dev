@@ -1,10 +1,11 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.31 ***
+01/01/2007  *** v2.31 ***
 
             - Uses DatLib v2.20.
             - Added 'prune' option (-p) for removing roms, disk and/or samples
+            - Added 'incorporate' option (-I) to assist in combining datafiles
 
 17/10/2006  *** v2.30 ***
 

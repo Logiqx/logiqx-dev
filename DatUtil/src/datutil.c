@@ -8,7 +8,7 @@
 /* --- Version information --- */
 
 #define DATUTIL_VERSION "v2.31"
-#define DATUTIL_DATE "Private Beta"
+#define DATUTIL_DATE "1 January 2007"
 
 
 /* --- The standard includes --- */
@@ -53,10 +53,10 @@ int main(int argc, char **argv)
 	char c;
 
 	struct stat buf;
-	struct dat *dat=0, *info=0;
+	struct dat *dat=0, *blend=0;
 	struct options *options=0;
 
-	int test=0, errflg=0;
+	int test=0, incorporate=0, errflg=0;
 
 	/* --- Display version information --- */
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsi:XDp:xmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -147,9 +147,6 @@ int main(int argc, char **argv)
 		case 's':
 			options->options|=OPTION_SORT_GAMES_BY_PARENT;
 			break;
-		case 'i':
-			options->fn=optarg;
-			break;
 		case 'X':
 			options->options|=OPTION_FIX_MERGING_OFF;
 			break;
@@ -163,6 +160,14 @@ int main(int argc, char **argv)
 				options->prune_disks++;
 			if (strstr(optarg, "sample"))
 				options->prune_samples++;
+			break;
+		/* --- MD5/SHA1 --- */
+		case 'i':
+			options->fn=optarg;
+			break;
+		case 'I':
+			options->fn=optarg;
+			incorporate++;
 			break;
 		/* --- MD5/SHA1 --- */
 		case 'x':
@@ -200,7 +205,8 @@ int main(int argc, char **argv)
 		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
 		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
 		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
-		printf("Cleansing       [-l] [-s] [-i <info file>] [-X] [-D] [-p[rom|disk|sample]]\n");
+		printf("Cleansing       [-l] [-s] [-X] [-D] [-p[rom|disk|sample]]\n");
+		printf("Blending        [-i <info file>] [-I <incorporate file>]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");
 		printf("Information     [-v] [-d]\n\n");
 
@@ -222,16 +228,19 @@ int main(int argc, char **argv)
 
 		options->options|=OPTION_SHOW_SUMMARY;
 
-		/* --- If using an 'info' dat, load it into memory --- */
+		/* --- If using an 'blend' dat, load it into memory --- */
 
 		if (options->fn)
 		{
-			if ((info=init_dat(options))==0)
+			if ((blend=init_dat(options))==0)
 				errflg++;
 			else
 			{
 				printf("\n");
-				options->info=info;
+				if (incorporate)
+					options->incorporate=blend;
+				else
+					options->info=blend;
 			}
 		}
 
@@ -272,8 +281,8 @@ int main(int argc, char **argv)
 
 		dat=free_dat(dat);
 
-		if (info)
-			info=free_dat(info);
+		if (blend)
+			blend=free_dat(blend);
 
 		/* --- Delete the log file if it is empty --- */
 

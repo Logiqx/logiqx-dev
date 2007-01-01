@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.31 - xx/xx/xxxx
+                         DatUtil v2.31 - 01/01/2007
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -247,6 +247,18 @@ if it just used a game name as a method of matching! The -i option is only
 intended fot the two purposes described above.
 
 
+Incorporating another data file
+-------------------------------
+
+The -I option will incorporate the roms/disks/samples from another data file.
+
+datutil -I supplement.dat base.dat
+
+If the same game exists in both data files then the ROMs from both data files
+are combined. Standard cleansing functions will then remove the duplicate ROMs
+within that game.
+
+
 MD5 and SHA1
 ------------
 
@@ -311,6 +323,7 @@ Cleansing:
   -l  lower case game names and ROM names
   -s  sort games by parent (sorted by parent name then game name)
   -i  include missing information from a 'reference' data file
+  -I  Incorporate games from a 'supplement' data file
   -X  fix merging off (do not use unless you understand the consequences!)
   -D  remove duplicate ROMs/disks/samples (as above in terms of usage)
   -p  prune (remove) ROMs, disks and/or samples (e.g. '-p disk,sample')
@@ -355,6 +368,22 @@ Adding support for new dat formats
 To add support for new formats, take a look at the documentation for DatLib.
 It is really easy to add support for a new format but if you can't code, drop
 me an e-mail and I might do it for you (if I think it is a useful addition).
+
+
+Tips and tricks
+---------------
+
+It is possible to remove CHDs for individual systems using a combination of
+DatUtil options. For example, to remove all CPS-2 CHDs do the following:
+
+datutil -f listinfo -G cps2.c -p disk -o cps2.dat mame.dat
+datutil -f listinfo -! -G cps2.c -o nocps2.dat mame.dat
+datutil -f listinfo -I cps2.dat -o new.dat nocps2.dat
+
+You can check the resultant data file with the following commands:
+
+mamediff -v mame.dat new.dat
+notepad mamediff.log
 
 
 Thanks
