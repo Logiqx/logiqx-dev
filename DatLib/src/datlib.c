@@ -2174,7 +2174,7 @@ int store_tokenized_dat(struct dat *dat)
 
 	for (i=0; i<dat->num_games; i++)
 	{
-		for (j=0; j<dat->games[i].num_roms; i++)
+		for (j=0; j<dat->games[i].num_roms; j++)
 		{
 			if (dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
 			{
