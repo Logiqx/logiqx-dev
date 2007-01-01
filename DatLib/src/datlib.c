@@ -9,7 +9,7 @@
 /* --- Version information --- */
 
 #define DATLIB_VERSION "v2.20"
-#define DATLIB_DATE "Private Beta"
+#define DATLIB_DATE "1 January 2007"
 
 
 /* --- Standard includes --- */
@@ -789,6 +789,21 @@ int allocate_dat_memory(struct dat *dat)
 
 	int errflg=0;
 
+	/* --- Allocate memory for the incorporate dat structures --- */
+
+	if (!errflg && dat->options->incorporate==0)
+	{	
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("Allocating memory for dummy 'incorporate' dat\n");
+		}
+
+		STRUCT_CALLOC(dat->options->incorporate, 1, sizeof(struct dat))
+	}
+
+	/* --- State that objects are being counted --- */
+
 	if (datlib_debug)
 	{
 		printf("%-16s: ", "Datlib.init_dat");
@@ -887,14 +902,14 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_games>0)
 		{
-			STRUCT_CALLOC(dat->games, dat->num_games, sizeof(struct game))
-			STRUCT_CALLOC(dat->game_name_idx, dat->num_games, sizeof(struct game_idx))
-			STRUCT_CALLOC(dat->game_description_idx, dat->num_games, sizeof(struct game_idx))
-			STRUCT_CALLOC(dat->game_crc_idx, dat->num_games, sizeof(struct game_idx))
-			STRUCT_CALLOC(dat->game_score_idx, dat->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->games, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game))
+			STRUCT_CALLOC(dat->game_name_idx, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_description_idx, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_crc_idx, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_idx))
+			STRUCT_CALLOC(dat->game_score_idx, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_idx))
 
-			STRUCT_CALLOC(dat->game_zips, dat->num_games, sizeof(struct game_zip))
-			STRUCT_CALLOC(dat->game_zip_name_idx, dat->num_games, sizeof(struct game_zip_idx))
+			STRUCT_CALLOC(dat->game_zips, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_zip))
+			STRUCT_CALLOC(dat->game_zip_name_idx, dat->num_games+dat->options->incorporate->num_games, sizeof(struct game_zip_idx))
 		}
 	}
 
@@ -932,13 +947,13 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_roms>0)
 		{
-			STRUCT_CALLOC(dat->roms, dat->num_roms, sizeof(struct rom))
-			STRUCT_CALLOC(dat->game_rom_name_idx, dat->num_roms, sizeof(struct rom_idx))
-			STRUCT_CALLOC(dat->game_rom_crc_idx, dat->num_roms, sizeof(struct rom_idx))
-			STRUCT_CALLOC(dat->rom_name_idx, dat->num_roms, sizeof(struct rom_idx))
-			STRUCT_CALLOC(dat->rom_crc_idx, dat->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->roms, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct rom))
+			STRUCT_CALLOC(dat->game_rom_name_idx, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->game_rom_crc_idx, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->rom_name_idx, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct rom_idx))
+			STRUCT_CALLOC(dat->rom_crc_idx, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct rom_idx))
 
-			STRUCT_CALLOC(dat->game_zip_roms, dat->num_roms, sizeof(struct game_zip_rom))
+			STRUCT_CALLOC(dat->game_zip_roms, dat->num_roms+dat->options->incorporate->num_roms, sizeof(struct game_zip_rom))
 		}
 	}
 
@@ -952,13 +967,13 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_disks>0)
 		{
-			STRUCT_CALLOC(dat->disks, dat->num_disks, sizeof(struct disk))
-			STRUCT_CALLOC(dat->game_disk_name_idx, dat->num_disks, sizeof(struct disk_idx))
-			STRUCT_CALLOC(dat->game_disk_crc_idx, dat->num_disks, sizeof(struct disk_idx))
-			STRUCT_CALLOC(dat->disk_name_idx, dat->num_disks, sizeof(struct disk_idx))
-			STRUCT_CALLOC(dat->disk_crc_idx, dat->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->disks, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct disk))
+			STRUCT_CALLOC(dat->game_disk_name_idx, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->game_disk_crc_idx, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->disk_name_idx, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct disk_idx))
+			STRUCT_CALLOC(dat->disk_crc_idx, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct disk_idx))
 
-			STRUCT_CALLOC(dat->game_zip_disks, dat->num_disks, sizeof(struct game_zip_disk))
+			STRUCT_CALLOC(dat->game_zip_disks, dat->num_disks+dat->options->incorporate->num_disks, sizeof(struct game_zip_disk))
 		}
 	}
 
@@ -972,11 +987,11 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_samples>0)
 		{
-			STRUCT_CALLOC(dat->samples, dat->num_samples, sizeof(struct sample))
-			STRUCT_CALLOC(dat->game_sample_name_idx, dat->num_samples, sizeof(struct sample_idx))
-			STRUCT_CALLOC(dat->sample_name_idx, dat->num_samples, sizeof(struct sample_idx))
+			STRUCT_CALLOC(dat->samples, dat->num_samples+dat->options->incorporate->num_samples, sizeof(struct sample))
+			STRUCT_CALLOC(dat->game_sample_name_idx, dat->num_samples+dat->options->incorporate->num_samples, sizeof(struct sample_idx))
+			STRUCT_CALLOC(dat->sample_name_idx, dat->num_samples+dat->options->incorporate->num_samples, sizeof(struct sample_idx))
 
-			STRUCT_CALLOC(dat->game_zip_samples, dat->num_samples, sizeof(struct game_zip_sample))
+			STRUCT_CALLOC(dat->game_zip_samples, dat->num_samples+dat->options->incorporate->num_samples, sizeof(struct game_zip_sample))
 		}
 	}
 
@@ -1148,10 +1163,12 @@ int store_tokenized_dat(struct dat *dat)
 	struct extension *curr_extension=dat->extensions;
 	struct archive *curr_archive=dat->archives;
 
+	struct game_idx *game_match;
+
 	struct comment *comments=0;
 	char type;
 
-	int i, num_comments=0, errflg=0;
+	int i, j, num_comments=0, errflg=0;
 
 	if (datlib_debug)
 	{
@@ -2026,6 +2043,91 @@ int store_tokenized_dat(struct dat *dat)
 				comments=0;
 				num_comments=0;
 			}
+
+			/* --- Identify if the game is in the 'incorporate' data file --- */
+
+			if ((game_match=bsearch((void *)curr_game->name, dat->options->incorporate->game_name_idx, dat->options->incorporate->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
+			{
+				/* --- Copy the ROMs --- */
+
+				for (i=0; i<game_match->game->num_roms; i++)
+				{
+					/* --- May need to skip past the last ROM --- */
+
+					if (curr_rom->name!=0)
+						curr_rom++;
+
+					/* --- If this is the first rom for the current game then set up the roms pointer --- */
+
+					if (curr_game->roms==0)
+						curr_game->roms=curr_rom;
+
+					/* --- Copy the 'incorporate' rom --- */
+
+					memcpy(curr_rom, &game_match->game->roms[i], sizeof(struct rom));
+					curr_rom->game=curr_game;
+					curr_rom->rom_fixes|=FLAG_ROM_INCORPORATED;
+
+					/* --- Whatever happens, increase the rom count for the current game --- */
+
+					curr_game->num_roms++;
+					dat->num_roms++;
+				}
+
+				/* --- Copy the Disks --- */
+
+				for (i=0; i<game_match->game->num_disks; i++)
+				{
+					/* --- May need to skip past the last disk --- */
+
+					if (curr_disk->name!=0)
+						curr_disk++;
+
+					/* --- If this is the first disk for the current game then set up the disks pointer --- */
+
+					if (curr_game->disks==0)
+						curr_game->disks=curr_disk;
+
+					/* --- Copy the 'incorporate' disk --- */
+
+					memcpy(curr_disk, &game_match->game->disks[i], sizeof(struct disk));
+					curr_disk->game=curr_game;
+					curr_disk->disk_fixes|=FLAG_DISK_INCORPORATED;
+
+					/* --- Whatever happens, increase the disk count for the current game --- */
+
+					curr_game->num_disks++;
+					dat->num_disks++;
+				}
+
+				/* --- Copy the Samples --- */
+
+				for (i=0; i<game_match->game->num_samples; i++)
+				{
+					/* --- May need to skip past the last sample --- */
+
+					if (curr_sample->name!=0)
+						curr_sample++;
+
+					/* --- If this is the first sample for the current game then set up the samples pointer --- */
+
+					if (curr_game->samples==0)
+						curr_game->samples=curr_sample;
+
+					/* --- Copy the 'incorporate' sample --- */
+
+					memcpy(curr_sample, &game_match->game->samples[i], sizeof(struct sample));
+					curr_sample->game=curr_game;
+					curr_sample->sample_fixes|=FLAG_SAMPLE_INCORPORATED;
+
+					/* --- Whatever happens, increase the sample count for the current game --- */
+
+					curr_game->num_samples++;
+					dat->num_samples++;
+				}
+
+				game_match->game->match++;
+			}
 		}
 
 		/* --- Comments --- */
@@ -2042,23 +2144,55 @@ int store_tokenized_dat(struct dat *dat)
 		BUFFER2_ADVANCE_LINE
 	}
 
-	/* --- Mark 'no dumps' --- */
+	/* --- Copy games from the 'incorporate' dat that are as yet unused --- */
 
-	for (i=0; i<dat->num_roms; i++)
+	for (i=0; i<dat->options->incorporate->num_games; i++)
 	{
-		if (dat->roms[i].crc==0 && strcmp(dat->roms[i].status, "nodump"))
+		if (dat->options->incorporate->games[i].match==0)
 		{
-			dat->roms[i].status="nodump";
-			dat->roms[i].rom_fixes|=FLAG_ROM_STATUS;
+			/* --- May need to skip past the last ROM --- */
+
+			if (curr_game->name!=0)
+				curr_game++;
+
+			/* --- Copy the 'incorporate' game --- */
+
+			memcpy(curr_game, &dat->options->incorporate->games[i], sizeof(struct game));
+			curr_game->game_cloneof=0;
+			curr_game->game_romof=0;
+			curr_game->game_sampleof=0;
+			curr_game->game_fixes|=FLAG_GAME_INCORPORATED;
+
+			/* --- Whatever happens, increase the game count --- */
+
+			dat->num_roms+=curr_game->num_roms;
+			dat->num_games++;
 		}
 	}
 
-	for (i=0; i<dat->num_disks; i++)
+	/* --- Mark 'no dumps' --- */
+
+	for (i=0; i<dat->num_games; i++)
 	{
-		if (dat->disks[i].crc==0 && strcmp(dat->disks[i].status, "nodump"))
+		for (j=0; j<dat->games[i].num_roms; i++)
 		{
-			dat->disks[i].status="nodump";
-			dat->disks[i].disk_fixes|=FLAG_DISK_STATUS;
+			if (dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
+			{
+				dat->games[i].roms[j].status="nodump";
+				dat->games[i].roms[j].rom_fixes|=FLAG_ROM_STATUS;
+			}
+		}
+	}
+
+	for (i=0; i<dat->num_games; i++)
+	{
+		for (j=0; j<dat->games[i].num_disks; j++)
+		{
+			if (dat->games[i].disks[j].crc==0 && strcmp(dat->games[i].disks[j].status, "nodump"))
+			{
+				dat->games[i].disks[j].status="nodump";
+				dat->games[i].disks[j].disk_fixes|=FLAG_DISK_STATUS;
+			}
 		}
 	}
 
@@ -3097,7 +3231,7 @@ int remove_duplicates(struct dat *dat)
 				if (!strcmp(curr_disk->name, dup_disk->name))
 				{
 					memcpy(curr_disk, curr_disk+1, (curr_game->num_disks-j-1)*sizeof(struct disk));
-					curr_game->disk_fixes|=FLAG_DISK_DUPLICATE;
+					dup_disk->disk_fixes|=FLAG_DISK_DUPLICATE;
 
 					curr_game->num_disks--;
 					dat->num_disks--;
@@ -3128,7 +3262,7 @@ int remove_duplicates(struct dat *dat)
 				if (!strcmp(curr_sample->name, dup_sample->name))
 				{
 					memcpy(curr_sample, curr_sample+1, (curr_game->num_samples-j-1)*sizeof(struct sample));
-					curr_game->sample_fixes|=FLAG_SAMPLE_DUPLICATE;
+					dup_sample->sample_fixes|=FLAG_SAMPLE_DUPLICATE;
 
 					curr_game->num_samples--;
 					dat->num_samples--;
@@ -4615,6 +4749,8 @@ int report_fixes(struct dat *dat)
 				fprintf(dat->log_file, "    Pruned Disks!\n");
 			if (dat->game_fixes & FLAG_GAME_PRUNED_SAMPLES)
 				fprintf(dat->log_file, "    Pruned Samples!\n");
+			if (dat->game_fixes & FLAG_GAME_INCORPORATED)
+				fprintf(dat->log_file, "    Incorporated!\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4643,6 +4779,8 @@ int report_fixes(struct dat *dat)
 				fprintf(dat->log_file, "    Status\n");
 			if (dat->rom_fixes & FLAG_ROM_DUPLICATE)
 				fprintf(dat->log_file, "    Duplicate\n");
+			if (dat->rom_fixes & FLAG_ROM_INCORPORATED)
+				fprintf(dat->log_file, "    Incorporated!\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4667,6 +4805,8 @@ int report_fixes(struct dat *dat)
 				fprintf(dat->log_file, "    Status\n");
 			if (dat->disk_fixes & FLAG_DISK_DUPLICATE)
 				fprintf(dat->log_file, "    Duplicate\n");
+			if (dat->disk_fixes & FLAG_DISK_INCORPORATED)
+				fprintf(dat->log_file, "    Incorporated!\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4681,6 +4821,8 @@ int report_fixes(struct dat *dat)
 				fprintf(dat->log_file, "    Name\n");
 			if (dat->sample_fixes & FLAG_SAMPLE_DUPLICATE)
 				fprintf(dat->log_file, "    Duplicate\n");
+			if (dat->sample_fixes & FLAG_SAMPLE_INCORPORATED)
+				fprintf(dat->log_file, "    Incorporated!\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4768,6 +4910,11 @@ int report_fixes(struct dat *dat)
 					{
 						fprintf(dat->log_file, "    Pruned Samples!\n");
 					}
+
+					if (curr_game->game_fixes & FLAG_GAME_INCORPORATED)
+					{
+						fprintf(dat->log_file, "    Incorporated!\n");
+					}
 				}
 	
 				if (curr_game->rom_fixes)
@@ -4827,6 +4974,11 @@ int report_fixes(struct dat *dat)
 						{
 							fprintf(dat->log_file, "    ROM %s - duplicate removed.\n", curr_rom->name);
 						}
+
+						if (curr_rom->rom_fixes & FLAG_ROM_INCORPORATED)
+						{
+							fprintf(dat->log_file, "    ROM %s - incorporated!\n", curr_rom->name);
+						}
 					}
 				}
 
@@ -4877,6 +5029,11 @@ int report_fixes(struct dat *dat)
 						{
 							fprintf(dat->log_file, "    Disk %s - duplicate removed.\n", curr_disk->name);
 						}
+
+						if (curr_disk->disk_fixes & FLAG_DISK_INCORPORATED)
+						{
+							fprintf(dat->log_file, "    Disk %s - incorporated!\n", curr_disk->name);
+						}
 					}
 				}
 
@@ -4892,6 +5049,11 @@ int report_fixes(struct dat *dat)
 						if (curr_sample->sample_fixes & FLAG_SAMPLE_DUPLICATE)
 						{
 							fprintf(dat->log_file, "    Sample %s - duplicate removed.\n", curr_sample->name);
+						}
+
+						if (curr_sample->sample_fixes & FLAG_SAMPLE_INCORPORATED)
+						{
+							fprintf(dat->log_file, "    Sample %s - incorporated!\n", curr_sample->name);
 						}
 					}
 				}

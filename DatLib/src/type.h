@@ -75,9 +75,9 @@ struct rom
 
 	struct game *game;
 
-	uint16_t rom_flags;
-	uint16_t rom_warnings;
-	uint16_t rom_fixes;
+	uint32_t rom_flags;
+	uint32_t rom_warnings;
+	uint32_t rom_fixes;
 
 	/* --- Fields that are specific to external tools */
 
@@ -499,7 +499,7 @@ struct game
 
 	uint8_t comment_flags;
 	uint8_t biosset_flags;
-	uint16_t rom_flags;
+	uint32_t rom_flags;
 	uint16_t disk_flags;
 	uint8_t sample_flags;
 	uint8_t chip_flags;
@@ -519,7 +519,7 @@ struct game
 
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
-	uint16_t rom_warnings;
+	uint32_t rom_warnings;
 	uint16_t disk_warnings;
 	uint8_t sample_warnings;
 	uint8_t chip_warnings;
@@ -539,7 +539,7 @@ struct game
 
 	uint8_t comment_fixes;
 	uint8_t biosset_fixes;
-	uint16_t rom_fixes;
+	uint32_t rom_fixes;
 	uint16_t disk_fixes;
 	uint8_t sample_fixes;
 	uint8_t chip_fixes;
@@ -693,6 +693,7 @@ struct options
 	char *fn;
 	char *log_fn;
 	struct dat *info;
+	struct dat *incorporate;
 
 	struct clrmamepro clrmamepro;
 	uint32_t options;
@@ -846,7 +847,7 @@ struct dat
 	uint32_t game_flags;
 	uint8_t comment_flags;
 	uint8_t biosset_flags;
-	uint16_t rom_flags;
+	uint32_t rom_flags;
 	uint16_t disk_flags;
 	uint8_t sample_flags;
 	uint8_t chip_flags;
@@ -868,7 +869,7 @@ struct dat
 	uint32_t game_warnings;
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
-	uint16_t rom_warnings;
+	uint32_t rom_warnings;
 	uint16_t disk_warnings;
 	uint8_t sample_warnings;
 	uint8_t chip_warnings;
@@ -887,7 +888,7 @@ struct dat
 	uint32_t game_fixes;
 	uint8_t comment_fixes;
 	uint8_t biosset_fixes;
-	uint16_t rom_fixes;
+	uint32_t rom_fixes;
 	uint16_t disk_fixes;
 	uint8_t sample_fixes;
 	uint8_t chip_fixes;
@@ -906,7 +907,7 @@ struct dat
 	uint32_t game_saved;
 	uint8_t comment_saved;
 	uint8_t biosset_saved;
-	uint16_t rom_saved;
+	uint32_t rom_saved;
 	uint16_t disk_saved;
 	uint8_t sample_saved;
 	uint8_t chip_saved;
@@ -1022,6 +1023,7 @@ struct ini_entry
 #define FLAG_GAME_PRUNED_ROMS  		0x00100000
 #define FLAG_GAME_PRUNED_DISKS 		0x00200000
 #define FLAG_GAME_PRUNED_SAMPLES	0x00400000
+#define FLAG_GAME_INCORPORATED		0x00800000
 
 
 /* --- Comment Flags --- */
@@ -1038,23 +1040,24 @@ struct ini_entry
 
 /* --- ROM Flags --- */
 
-#define FLAG_ROM_NAME			0x0001
-#define FLAG_ROM_BIOS			0x0002
-#define FLAG_ROM_SIZE			0x0004
-#define FLAG_ROM_CRC			0x0008
-#define FLAG_ROM_MD5			0x0010
-#define FLAG_ROM_SHA1			0x0020
-#define FLAG_ROM_MERGE			0x0040
-#define FLAG_ROM_REGION			0x0080
-#define FLAG_ROM_OFFSET			0x0100
-#define FLAG_ROM_STATUS			0x0200
-#define FLAG_ROM_DISPOSE		0x0400
-#define FLAG_ROM_SOUNDONLY		0x0800
+#define FLAG_ROM_NAME			0x00000001
+#define FLAG_ROM_BIOS			0x00000002
+#define FLAG_ROM_SIZE			0x00000004
+#define FLAG_ROM_CRC			0x00000008
+#define FLAG_ROM_MD5			0x00000010
+#define FLAG_ROM_SHA1			0x00000020
+#define FLAG_ROM_MERGE			0x00000040
+#define FLAG_ROM_REGION			0x00000080
+#define FLAG_ROM_OFFSET			0x00000100
+#define FLAG_ROM_STATUS			0x00000200
+#define FLAG_ROM_DISPOSE		0x00000400
+#define FLAG_ROM_SOUNDONLY		0x00000800
 
-#define FLAG_ROM_DUPLICATE		0x1000
-#define FLAG_ROM_SIZE_CONFLICT		0x2000
-#define FLAG_ROM_CRC_CONFLICT		0x4000
-#define FLAG_ROM_SHA1_MD5_CONFLICT	0x8000
+#define FLAG_ROM_DUPLICATE		0x00001000
+#define FLAG_ROM_SIZE_CONFLICT		0x00002000
+#define FLAG_ROM_CRC_CONFLICT		0x00004000
+#define FLAG_ROM_SHA1_MD5_CONFLICT	0x00008000
+#define FLAG_ROM_INCORPORATED		0x00010000
 
 
 /* --- Disk Flags --- */
@@ -1067,10 +1070,11 @@ struct ini_entry
 #define FLAG_DISK_INDEX			0x0020
 #define FLAG_DISK_STATUS		0x0040
 
-#define FLAG_DISK_DUPLICATE		0x1000
-#define FLAG_DISK_SIZE_CONFLICT		0x2000
-#define FLAG_DISK_CRC_CONFLICT		0x4000
-#define FLAG_DISK_SHA1_MD5_CONFLICT	0x8000
+#define FLAG_DISK_DUPLICATE		0x0800
+#define FLAG_DISK_SIZE_CONFLICT		0x1000
+#define FLAG_DISK_CRC_CONFLICT		0x2000
+#define FLAG_DISK_SHA1_MD5_CONFLICT	0x4000
+#define FLAG_DISK_INCORPORATED		0x8000
 
 
 /* --- Sample Flags --- */
@@ -1078,6 +1082,7 @@ struct ini_entry
 #define FLAG_SAMPLE_NAME		0x01
 
 #define FLAG_SAMPLE_DUPLICATE		0x02
+#define FLAG_SAMPLE_INCORPORATED	0x04
 
 
 /* --- Chip Flags --- */
