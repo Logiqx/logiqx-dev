@@ -376,9 +376,8 @@ Tips and tricks
 It is possible to remove CHDs for individual systems using a combination of
 DatUtil options. For example, to remove all CPS-2 CHDs do the following:
 
-datutil -f listinfo -G cps2.c -p disk -o cps2.dat mame.dat
-datutil -f listinfo -! -G cps2.c -o nocps2.dat mame.dat
-datutil -f listinfo -I cps2.dat -o new.dat nocps2.dat
+datutil -f listinfo -! -G cps2.c -o new.dat mame.dat 
+datutil -f listinfo -G cps2.c -p disk -a new.dat mame.dat 
 
 You can check the resultant data file with the following commands:
 
