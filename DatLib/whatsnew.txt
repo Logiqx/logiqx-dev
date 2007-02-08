@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/2007  *** v2.21 ***
+
+            - Empty attributes are now ignored (e.g. sha1="")
+
 01/01/2007  *** v2.20 ***
 
             - Added 'prune' feature for removing roms, disk and/or samples

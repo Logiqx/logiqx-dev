@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.20"
-#define DATLIB_DATE "1 January 2007"
+#define DATLIB_VERSION "v2.21"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -1266,879 +1266,885 @@ int store_tokenized_dat(struct dat *dat)
 			else if (type==TOKEN_ROMCENTER_EMULATOR_VERSION)
 				dat->romcenter_emulator.version=BUFFER2_PTR;
 		}
+	
+		/* --- Bear in mind that the actual parameter may be missing) --- */
 
-		/* --- Game, resource and machine elements --- */
-
-		if (curr_game!=0 && curr_game->name!=0)
+		if (*BUFFER2_PTR)
 		{
-			if (type==TOKEN_GAME_NAME || type==TOKEN_RESOURCE_NAME || type==TOKEN_MACHINE_NAME)
-				curr_game++;
-
-			else if (type==TOKEN_GAME_SOURCEFILE || type==TOKEN_RESOURCE_SOURCEFILE || type==TOKEN_MACHINE_SOURCEFILE)
-				curr_game->sourcefile=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_CLONEOF || type==TOKEN_MACHINE_CLONEOF)
-				curr_game->cloneof=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_ROMOF || type==TOKEN_MACHINE_ROMOF)
-				curr_game->romof=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_SAMPLEOF || type==TOKEN_MACHINE_SAMPLEOF)
-				curr_game->sampleof=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_DESCRIPTION || type==TOKEN_RESOURCE_DESCRIPTION || type==TOKEN_MACHINE_DESCRIPTION)
-				curr_game->description=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_YEAR || type==TOKEN_RESOURCE_YEAR || type==TOKEN_MACHINE_YEAR)
-				curr_game->year=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_MANUFACTURER || type==TOKEN_RESOURCE_MANUFACTURER || type==TOKEN_MACHINE_MANUFACTURER)
-				curr_game->manufacturer=BUFFER2_PTR;
-
-			else if (dat->options->options & OPTION_KEEP_FULL_DETAILS && (type==TOKEN_GAME_HISTORY || type==TOKEN_RESOURCE_HISTORY || type==TOKEN_MACHINE_HISTORY))
-				curr_game->history=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_REBUILDTO || type==TOKEN_RESOURCE_REBUILDTO || type==TOKEN_MACHINE_REBUILDTO)
-				curr_game->rebuildto=BUFFER2_PTR;
-
-			else if (type==TOKEN_GAME_BOARD || type==TOKEN_RESOURCE_BOARD || type==TOKEN_MACHINE_BOARD)
-				curr_game->board=BUFFER2_PTR;
-
-			/* --- ROM elements --- */
-
-			if (curr_rom!=0 && curr_rom->name!=0)
+			/* --- Game, resource and machine elements --- */
+	
+			if (curr_game!=0 && curr_game->name!=0)
 			{
-				if (type==TOKEN_ROM_NAME)
-					curr_rom++;
-
-				else if (type==TOKEN_ROM_SIZE)
+				if (type==TOKEN_GAME_NAME || type==TOKEN_RESOURCE_NAME || type==TOKEN_MACHINE_NAME)
+					curr_game++;
+	
+				else if (type==TOKEN_GAME_SOURCEFILE || type==TOKEN_RESOURCE_SOURCEFILE || type==TOKEN_MACHINE_SOURCEFILE)
+					curr_game->sourcefile=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_CLONEOF || type==TOKEN_MACHINE_CLONEOF)
+					curr_game->cloneof=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_ROMOF || type==TOKEN_MACHINE_ROMOF)
+					curr_game->romof=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_SAMPLEOF || type==TOKEN_MACHINE_SAMPLEOF)
+					curr_game->sampleof=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_DESCRIPTION || type==TOKEN_RESOURCE_DESCRIPTION || type==TOKEN_MACHINE_DESCRIPTION)
+					curr_game->description=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_YEAR || type==TOKEN_RESOURCE_YEAR || type==TOKEN_MACHINE_YEAR)
+					curr_game->year=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_MANUFACTURER || type==TOKEN_RESOURCE_MANUFACTURER || type==TOKEN_MACHINE_MANUFACTURER)
+					curr_game->manufacturer=BUFFER2_PTR;
+	
+				else if (dat->options->options & OPTION_KEEP_FULL_DETAILS && (type==TOKEN_GAME_HISTORY || type==TOKEN_RESOURCE_HISTORY || type==TOKEN_MACHINE_HISTORY))
+					curr_game->history=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_REBUILDTO || type==TOKEN_RESOURCE_REBUILDTO || type==TOKEN_MACHINE_REBUILDTO)
+					curr_game->rebuildto=BUFFER2_PTR;
+	
+				else if (type==TOKEN_GAME_BOARD || type==TOKEN_RESOURCE_BOARD || type==TOKEN_MACHINE_BOARD)
+					curr_game->board=BUFFER2_PTR;
+	
+				/* --- ROM elements --- */
+	
+				if (curr_rom!=0 && curr_rom->name!=0)
 				{
-					curr_rom->size=strtoul(BUFFER2_PTR, NULL, 10);
-
-					// Value may be zero so its presence needs remembering!
-					curr_rom->rom_flags|=FLAG_ROM_SIZE;
-				}
-
-				else if (type==TOKEN_ROM_SIZE_HEX)
-				{
-					curr_rom->size=strtoul(BUFFER2_PTR, NULL, 16);
-
-					// Value may be zero so its presence needs remembering!
-					curr_rom->rom_flags|=FLAG_ROM_SIZE;
-				}
-
-				else if (type==TOKEN_ROM_CRC)
-					curr_rom->crc=strtoul(BUFFER2_PTR, NULL, 16);
-
-				else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
-					curr_rom->md5=BUFFER2_PTR;
-
-				else if (type==TOKEN_ROM_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
-					curr_rom->sha1=BUFFER2_PTR;
-
-				else if (type==TOKEN_ROM_MERGE)
-					curr_rom->merge=BUFFER2_PTR;
-
-				else if (type==TOKEN_ROM_STATUS)
-					curr_rom->status=BUFFER2_PTR;
-
-				else if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
-				{
-					if (type==TOKEN_ROM_BIOS)
-						curr_rom->bios=BUFFER2_PTR;
-
-					else if (type==TOKEN_ROM_REGION)
-						curr_rom->region=BUFFER2_PTR;
-
-					else if (type==TOKEN_ROM_OFFSET)
-					{
-						curr_rom->offset=strtoul(BUFFER2_PTR, NULL, 16);
-
-						// Value may be zero so its presence needs remembering!
-						curr_rom->rom_flags|=FLAG_ROM_OFFSET;
-					}
-
-					else if (type==TOKEN_ROM_DISPOSE)
-						curr_rom->dispose=BUFFER2_PTR;
-
-					else if (type==TOKEN_ROM_SOUNDONLY)
-						curr_rom->soundonly=BUFFER2_PTR;
-				}
-			}
-
-			if (type==TOKEN_ROM_NAME)
-			{
-				/* --- The current ROM must remember its name --- */
-
-				curr_rom->name=BUFFER2_PTR;
-
-				/* --- Ensure that status is initialised so that it can be checked easily --- */
-
-				curr_rom->status="";
-
-				/* --- If this is the first rom for the current game then set up the roms pointer --- */
-
-				if (curr_game->roms==0)
-					curr_game->roms=curr_rom;
-
-				/* --- Whatever happens, increase the rom count for the current game --- */
-
-				curr_game->num_roms++;
-			}
-
-			/* --- Disk elements --- */
-
-			if (curr_disk!=0 && curr_disk->name!=0)
-			{
-				if (type==TOKEN_DISK_NAME)
-					curr_disk++;
-
-				else if (type==TOKEN_DISK_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
-				{
-					curr_disk->md5=BUFFER2_PTR;
-
-					/* --- Create a dummy CRC for MAMEDiff --- */
-
-					curr_disk->crc=crc32(0, NULL, 0);
-					curr_disk->crc=crc32(curr_disk->crc, curr_disk->md5, strlen(curr_disk->md5));
-				}
-
-				else if (type==TOKEN_DISK_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
-				{
-					curr_disk->sha1=BUFFER2_PTR;
-
-					/* --- Create a dummy CRC for MAMEDiff --- */
-
-					curr_disk->crc=crc32(0, NULL, 0);
-					curr_disk->crc=crc32(curr_disk->crc, curr_disk->sha1, strlen(curr_disk->sha1));
-				}
-
-				else if (type==TOKEN_DISK_MERGE)
-					curr_disk->merge=BUFFER2_PTR;
-
-				else if (type==TOKEN_DISK_STATUS)
-					curr_disk->status=BUFFER2_PTR;
-
-				else if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
-				{
-					if (type==TOKEN_DISK_REGION)
-						curr_disk->region=BUFFER2_PTR;
-
-					else if (type==TOKEN_DISK_INDEX)
-					{
-						curr_disk->index=strtoul(BUFFER2_PTR, NULL, 16);
-
-						// Value may be zero so its presence needs remembering!
-						curr_disk->disk_flags|=FLAG_DISK_INDEX;
-					}
-				}
-			}
-
-			if (type==TOKEN_DISK_NAME)
-			{
-				/* --- The current disk must remember its name --- */
-
-				curr_disk->name=BUFFER2_PTR;
-
-				/* --- Ensure that status is initialised so that it can be checked easily --- */
-
-				curr_disk->status="";
-
-				/* --- If this is the first disk for the current game then set up the disks pointer --- */
-
-				if (curr_game->disks==0)
-					curr_game->disks=curr_disk;
-
-				/* --- Whatever happens, increase the disk count for the current game --- */
-
-				curr_game->num_disks++;
-			}
-
-			/* --- Sample elements --- */
-
-			if (curr_sample!=0 && curr_sample->name!=0)
-			{
-				if (type==TOKEN_SAMPLE_NAME)
-					curr_sample++;
-			}
-
-			if (type==TOKEN_SAMPLE_NAME)
-			{
-				/* --- The current sample must remember its name --- */
-
-				curr_sample->name=BUFFER2_PTR;
-
-				/* --- If this is the first sample for the current game then set up the samples pointer --- */
-
-				if (curr_game->samples==0)
-					curr_game->samples=curr_sample;
-
-				/* --- Whatever happens, increase the sample count for the current game --- */
-
-				curr_game->num_samples++;
-			}
-
-
-			/* --- Archive elements --- */
-
-			if (curr_archive!=0 && curr_archive->name!=0)
-			{
-				if (type==TOKEN_ARCHIVE_NAME)
-					curr_archive++;
-			}
-
-			if (type==TOKEN_ARCHIVE_NAME)
-			{
-				/* --- The current archive must remember its name --- */
-
-				curr_archive->name=BUFFER2_PTR;
-
-				/* --- If this is the first archive for the current game then set up the archives pointer --- */
-
-				if (curr_game->archives==0)
-					curr_game->archives=curr_archive;
-
-				/* --- Whatever happens, increase the archive count for the current game --- */
-
-				curr_game->num_archives++;
-			}
-
-			if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
-			{
-				/* --- Biosset elements --- */
-
-				if (curr_biosset!=0 && curr_biosset->name!=0)
-				{
-					if (type==TOKEN_BIOSSET_NAME)
-						curr_biosset++;
-
-					else if (type==TOKEN_BIOSSET_DESCRIPTION)
-						curr_biosset->description=BUFFER2_PTR;
-
-					else if (type==TOKEN_BIOSSET_DEFAULT)
-						curr_biosset->_default=BUFFER2_PTR;
-				}
-
-				if (type==TOKEN_BIOSSET_NAME)
-				{
-					/* --- The current biosset must remember its name --- */
-
-					curr_biosset->name=BUFFER2_PTR;
-
-					/* --- If this is the first biosset for the current game then set up the biossets pointer --- */
-
-					if (curr_game->biossets==0)
-						curr_game->biossets=curr_biosset;
-
-					/* --- Whatever happens, increase the biosset count for the current game --- */
-
-					curr_game->num_biossets++;
-				}
-
-				/* --- Chip elements --- */
-
-				if (curr_chip!=0 && curr_chip->type!=0)
-				{
-					if (type==TOKEN_CHIP_TYPE)
-						curr_chip++;
-
-					else if (type==TOKEN_CHIP_NAME)
-						curr_chip->name=BUFFER2_PTR;
-
-					else if (type==TOKEN_CHIP_SOUNDONLY)
-						curr_chip->soundonly=BUFFER2_PTR;
-
-					else if (type==TOKEN_CHIP_CLOCK)
-					{
-						curr_chip->clock=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_chip->chip_flags|=FLAG_CHIP_CLOCK;
-					}
-				}
-
-				if (type==TOKEN_CHIP_TYPE)
-				{
-					/* --- The current chip must remember its type --- */
-
-					curr_chip->type=BUFFER2_PTR;
-
-					/* --- If this is the first chip for the current game then set up the chips pointer --- */
-
-					if (curr_game->chips==0)
-						curr_game->chips=curr_chip;
-
-					/* --- Whatever happens, increase the chip count for the current game --- */
-
-					curr_game->num_chips++;
-				}
-
-				/* --- Video elements --- */
-
-				if (curr_video!=0 && curr_video->screen!=0)
-				{
-					if (type==TOKEN_VIDEO_SCREEN)
-						curr_video++;
-
-					else if (type==TOKEN_VIDEO_ORIENTATION)
-						curr_video->orientation=BUFFER2_PTR;
-
-					else if (type==TOKEN_VIDEO_WIDTH)
-					{
-						curr_video->width=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_video->video_flags|=FLAG_VIDEO_WIDTH;
-					}
-
-					else if (type==TOKEN_VIDEO_HEIGHT)
-					{
-						curr_video->height=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_video->video_flags|=FLAG_VIDEO_HEIGHT;
-					}
-
-					else if (type==TOKEN_VIDEO_ASPECTX)
-					{
-						curr_video->aspectx=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_video->video_flags|=FLAG_VIDEO_ASPECTX;
-					}
-
-					else if (type==TOKEN_VIDEO_ASPECTY)
-					{
-						curr_video->aspecty=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_video->video_flags|=FLAG_VIDEO_ASPECTY;
-					}
-
-					else if (type==TOKEN_VIDEO_REFRESH)
-					{
-						curr_video->refresh=atof(BUFFER2_PTR);
-
-						// Value may be zero so its presence needs remembering!
-						curr_video->video_flags|=FLAG_VIDEO_REFRESH;
-					}
-				}
-
-				if (type==TOKEN_VIDEO_SCREEN)
-				{
-					/* --- The current video must remember its screen --- */
-
-					curr_video->screen=BUFFER2_PTR;
-
-					/* --- If this is the first video for the current game then set up the videos pointer --- */
-
-					if (curr_game->videos==0)
-						curr_game->videos=curr_video;
-
-					/* --- Whatever happens, increase the video count for the current game --- */
-
-					curr_game->num_videos++;
-				}
-
-				/* --- Display elements --- */
-
-				if (curr_display!=0 && curr_display->type!=0)
-				{
-					if (type==TOKEN_DISPLAY_TYPE)
-						curr_display++;
-
-					else if (type==TOKEN_DISPLAY_ROTATE)
-					{
-						curr_display->rotate=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_display->display_flags|=FLAG_DISPLAY_ROTATE;
-					}
-
-					else if (type==TOKEN_DISPLAY_FLIPX)
-						curr_display->flipx=BUFFER2_PTR;
-
-					else if (type==TOKEN_DISPLAY_WIDTH)
-					{
-						curr_display->width=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_display->display_flags|=FLAG_DISPLAY_WIDTH;
-					}
-
-					else if (type==TOKEN_DISPLAY_HEIGHT)
-					{
-						curr_display->height=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_display->display_flags|=FLAG_DISPLAY_HEIGHT;
-					}
-
-					else if (type==TOKEN_DISPLAY_REFRESH)
-					{
-						curr_display->refresh=atof(BUFFER2_PTR);
-
-						// Value may be zero so its presence needs remembering!
-						curr_display->display_flags|=FLAG_DISPLAY_REFRESH;
-					}
-				}
-
-				if (type==TOKEN_DISPLAY_TYPE)
-				{
-					/* --- The current display must remember its type --- */
-
-					curr_display->type=BUFFER2_PTR;
-
-					/* --- If this is the first display for the current game then set up the displays pointer --- */
-
-					if (curr_game->displays==0)
-						curr_game->displays=curr_display;
-
-					/* --- Whatever happens, increase the display count for the current game --- */
-
-					curr_game->num_displays++;
-				}
-
-				/* --- Sound elements --- */
-
-				if (curr_sound!=0 && curr_sound->sound_flags & FLAG_SOUND_CHANNELS)
-				{
-					if (type==TOKEN_SOUND_CHANNELS)
-						curr_sound++;
-				}
-
-				if (type==TOKEN_SOUND_CHANNELS)
-				{
-					/* --- The current sound must remember its channels --- */
-
-					curr_sound->channels=strtoul(BUFFER2_PTR, NULL, 10);
-
-					// Value may be zero so its presence needs remembering!
-					curr_sound->sound_flags|=FLAG_SOUND_CHANNELS;
-
-					/* --- If this is the first sound for the current game then set up the sounds pointer --- */
-
-					if (curr_game->sounds==0)
-						curr_game->sounds=curr_sound;
-
-					/* --- Whatever happens, increase the sound count for the current game --- */
-
-					curr_game->num_sounds++;
-				}
-
-				/* --- Input elements --- */
-
-				if (curr_input!=0 && curr_input->input_flags & FLAG_INPUT_PLAYERS)
-				{
-					if (type==TOKEN_INPUT_PLAYERS)
-						curr_input++;
-
-					else if (type==TOKEN_INPUT_SERVICE)
-						curr_input->service=BUFFER2_PTR;
-
-					else if (type==TOKEN_INPUT_TILT)
-						curr_input->tilt=BUFFER2_PTR;
-
-					else if (type==TOKEN_INPUT_CONTROL)
-						curr_input->control=BUFFER2_PTR;
-
-					else if (type==TOKEN_INPUT_BUTTONS)
-					{
-						curr_input->buttons=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_input->input_flags|=FLAG_INPUT_BUTTONS;
-					}
-
-					else if (type==TOKEN_INPUT_COINS)
-					{
-						curr_input->coins=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_input->input_flags|=FLAG_INPUT_COINS;
-					}
-
-					else if (type==TOKEN_INPUT_DIPSWITCHES)
-					{
-						curr_input->dipswitches=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_input->input_flags|=FLAG_INPUT_DIPSWITCHES;
-					}
-				}
-
-				if (type==TOKEN_INPUT_PLAYERS)
-				{
-					/* --- The current input must remember its players --- */
-
-					curr_input->players=strtoul(BUFFER2_PTR, NULL, 10);
-
-					// Value may be zero so its presence needs remembering!
-					curr_input->input_flags|=FLAG_INPUT_PLAYERS;
-
-					/* --- If this is the first input for the current game then set up the inputs pointer --- */
-
-					if (curr_game->inputs==0)
-						curr_game->inputs=curr_input;
-
-					/* --- Whatever happens, increase the input count for the current game --- */
-
-					curr_game->num_inputs++;
-				}
-
-				/* --- Control elements --- */
-
-				if (curr_control!=0 && curr_control->type!=0)
-				{
-					if (type==TOKEN_CONTROL_TYPE)
-						curr_control++;
-
-					else if (type==TOKEN_CONTROL_MINIMUM)
-					{
-						curr_control->minimum=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_control->control_flags|=FLAG_CONTROL_MINIMUM;
-					}
-
-					else if (type==TOKEN_CONTROL_MAXIMUM)
-					{
-						curr_control->maximum=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_control->control_flags|=FLAG_CONTROL_MAXIMUM;
-					}
-
-					else if (type==TOKEN_CONTROL_SENSITIVITY)
-					{
-						curr_control->sensitivity=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_control->control_flags|=FLAG_CONTROL_SENSITIVITY;
-					}
-
-					else if (type==TOKEN_CONTROL_KEYDELTA)
-					{
-						curr_control->keydelta=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_control->control_flags|=FLAG_CONTROL_KEYDELTA;
-					}
-
-					else if (type==TOKEN_CONTROL_REVERSE)
-						curr_control->reverse=BUFFER2_PTR;
-				}
-
-				if (type==TOKEN_CONTROL_TYPE)
-				{
-					/* --- The current control must remember its type --- */
-
-					curr_control->type=BUFFER2_PTR;
-
-					/* --- If this is the first control for the current input/game then set up the controls pointer --- */
-
-					if (curr_input->controls==0)
-						curr_input->controls=curr_control;
-					if (curr_game->controls==0)
-						curr_game->controls=curr_control;
-
-					/* --- Whatever happens, increase the control count for the current input/game --- */
-
-					curr_input->num_controls++;
-					curr_game->num_controls++;
-				}
-
-				/* --- Dipswitch elements --- */
-
-				if (curr_dipswitch!=0 && curr_dipswitch->name!=0)
-				{
-					if (type==TOKEN_DIPSWITCH_NAME)
-						curr_dipswitch++;
-				}
-
-				if (type==TOKEN_DIPSWITCH_NAME)
-				{
-					/* --- The current dipswitch must remember its name --- */
-
-					curr_dipswitch->name=BUFFER2_PTR;
-
-					/* --- If this is the first dipswitch for the current game then set up the dipswitches pointer --- */
-
-					if (curr_game->dipswitches==0)
-						curr_game->dipswitches=curr_dipswitch;
-
-					/* --- Whatever happens, increase the dipswitch count for the current game --- */
-
-					curr_game->num_dipswitches++;
-				}
-
-				/* --- Dipvalue elements --- */
-
-				if (curr_dipvalue!=0 && curr_dipvalue->name!=0)
-				{
-					if (type==TOKEN_DIPVALUE_NAME)
-						curr_dipvalue++;
-
-					else if (type==TOKEN_DIPVALUE_DEFAULT)
-						curr_dipvalue->_default=BUFFER2_PTR;
-				}
-
-				if (type==TOKEN_DIPVALUE_NAME)
-				{
-					/* --- The current dipvalue must remember its name --- */
-
-					curr_dipvalue->name=BUFFER2_PTR;
-
-					/* --- If this is the first dipvalue for the current dipswitch/game then set up the dipvalues pointer --- */
-
-					if (curr_dipswitch->dipvalues==0)
-						curr_dipswitch->dipvalues=curr_dipvalue;
-					if (curr_game->dipvalues==0)
-						curr_game->dipvalues=curr_dipvalue;
-
-					/* --- Whatever happens, increase the dipvalue count for the current dipswitch/game --- */
-
-					curr_dipswitch->num_dipvalues++;
-					curr_game->num_dipvalues++;
-				}
-
-				/* --- Driver elements --- */
-
-				if (curr_driver!=0 && curr_driver->status!=0)
-				{
-					if (type==TOKEN_DRIVER_STATUS)
-						curr_driver++;
-
-					else if (type==TOKEN_DRIVER_EMULATION)
-						curr_driver->emulation=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_COLOR)
-						curr_driver->color=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_SOUND)
-						curr_driver->sound=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_GRAPHIC)
-						curr_driver->graphic=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_COCKTAIL)
-						curr_driver->cocktail=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_PROTECTION)
-						curr_driver->protection=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_SAVESTATE)
-						curr_driver->savestate=BUFFER2_PTR;
-
-					else if (type==TOKEN_DRIVER_PALETTESIZE)
-					{
-						curr_driver->palettesize=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_driver->driver_flags|=FLAG_DRIVER_PALETTESIZE;
-					}
-
-					else if (type==TOKEN_DRIVER_COLORDEEP)
-					{
-						curr_driver->colordeep=strtoul(BUFFER2_PTR, NULL, 10);
-
-						// Value may be zero so its presence needs remembering!
-						curr_driver->driver_flags|=FLAG_DRIVER_COLORDEEP;
-					}
-
-					else if (type==TOKEN_DRIVER_CREDITS)
-						curr_driver->credits=BUFFER2_PTR;
-				}
-
-				if (type==TOKEN_DRIVER_STATUS)
-				{
-					/* --- The current driver must remember its status --- */
-
-					curr_driver->status=BUFFER2_PTR;
-
-					/* --- If this is the first driver for the current game then set up the drivers pointer --- */
-
-					if (curr_game->drivers==0)
-						curr_game->drivers=curr_driver;
-
-					/* --- Whatever happens, increase the driver count for the current game --- */
-
-					curr_game->num_drivers++;
-				}
-
-				/* --- Device elements --- */
-
-				if (curr_device!=0 && curr_device->name!=0)
-				{
-					if (type==TOKEN_DEVICE_NAME)
-						curr_device++;
-				}
-
-				if (type==TOKEN_DEVICE_NAME)
-				{
-					/* --- The current device must remember its name --- */
-
-					curr_device->name=BUFFER2_PTR;
-
-					/* --- If this is the first device for the current game then set up the devices pointer --- */
-
-					if (curr_game->devices==0)
-						curr_game->devices=curr_device;
-
-					/* --- Whatever happens, increase the device count for the current game --- */
-
-					curr_game->num_devices++;
-				}
-
-				/* --- Extensions elements --- */
-
-				if (curr_extension!=0 && curr_extension->name!=0)
-				{
-					if (type==TOKEN_EXTENSION_NAME)
-						curr_extension++;
-				}
-
-				if (type==TOKEN_EXTENSION_NAME)
-				{
-					/* --- The current extension must remember its name --- */
-
-					curr_extension->name=BUFFER2_PTR;
-
-					/* --- If this is the first extension for the current device/game then set up the extensions pointer --- */
-
-					if (curr_device->extensions==0)
-						curr_device->extensions=curr_extension;
-					if (curr_game->extensions==0)
-						curr_game->extensions=curr_extension;
-
-					/* --- Whatever happens, increase the extension count for the current device/game --- */
-
-					curr_device->num_extensions++;
-					curr_game->num_extensions++;
-				}
-			}
-		}
-
-		/* --- Game, resource and machine names --- */
-
-		if (type==TOKEN_GAME_NAME || type==TOKEN_RESOURCE_NAME || type==TOKEN_MACHINE_NAME)
-		{
-			/* --- The current game/resource/machine must remember its name and flags --- */
-
-			curr_game->name=BUFFER2_PTR;
-
-			if (type==TOKEN_GAME_NAME)
-				curr_game->game_flags|=FLAG_GAME_NAME;
-			else if (type==TOKEN_RESOURCE_NAME)
-				curr_game->game_flags|=FLAG_RESOURCE_NAME;
-			else if (type==TOKEN_MACHINE_NAME)
-				curr_game->game_flags|=FLAG_MACHINE_NAME;
-
-			/* --- Link in any comments that preceded the game --- */
-
-			if (comments)
-			{
-				curr_game->comments=comments;
-				curr_game->num_comments=num_comments;
-				comments=0;
-				num_comments=0;
-			}
-
-			/* --- Identify if the game is in the 'incorporate' data file --- */
-
-			if ((game_match=bsearch((void *)curr_game->name, dat->options->incorporate->game_name_idx, dat->options->incorporate->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
-			{
-				/* --- Copy the ROMs --- */
-
-				for (i=0; i<game_match->game->num_roms; i++)
-				{
-					/* --- May need to skip past the last ROM --- */
-
-					if (curr_rom->name!=0)
+					if (type==TOKEN_ROM_NAME)
 						curr_rom++;
-
+	
+					else if (type==TOKEN_ROM_SIZE)
+					{
+						curr_rom->size=strtoul(BUFFER2_PTR, NULL, 10);
+	
+						// Value may be zero so its presence needs remembering!
+						curr_rom->rom_flags|=FLAG_ROM_SIZE;
+					}
+	
+					else if (type==TOKEN_ROM_SIZE_HEX)
+					{
+						curr_rom->size=strtoul(BUFFER2_PTR, NULL, 16);
+	
+						// Value may be zero so its presence needs remembering!
+						curr_rom->rom_flags|=FLAG_ROM_SIZE;
+					}
+	
+					else if (type==TOKEN_ROM_CRC)
+						curr_rom->crc=strtoul(BUFFER2_PTR, NULL, 16);
+	
+					else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
+						curr_rom->md5=BUFFER2_PTR;
+	
+					else if (type==TOKEN_ROM_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
+						curr_rom->sha1=BUFFER2_PTR;
+	
+					else if (type==TOKEN_ROM_MERGE)
+						curr_rom->merge=BUFFER2_PTR;
+	
+					else if (type==TOKEN_ROM_STATUS)
+						curr_rom->status=BUFFER2_PTR;
+	
+					else if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
+					{
+						if (type==TOKEN_ROM_BIOS)
+							curr_rom->bios=BUFFER2_PTR;
+	
+						else if (type==TOKEN_ROM_REGION)
+							curr_rom->region=BUFFER2_PTR;
+	
+						else if (type==TOKEN_ROM_OFFSET)
+						{
+							curr_rom->offset=strtoul(BUFFER2_PTR, NULL, 16);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_rom->rom_flags|=FLAG_ROM_OFFSET;
+						}
+	
+						else if (type==TOKEN_ROM_DISPOSE)
+							curr_rom->dispose=BUFFER2_PTR;
+	
+						else if (type==TOKEN_ROM_SOUNDONLY)
+							curr_rom->soundonly=BUFFER2_PTR;
+					}
+				}
+	
+				if (type==TOKEN_ROM_NAME)
+				{
+					/* --- The current ROM must remember its name --- */
+	
+					curr_rom->name=BUFFER2_PTR;
+	
+					/* --- Ensure that status is initialised so that it can be checked easily --- */
+	
+					curr_rom->status="";
+	
 					/* --- If this is the first rom for the current game then set up the roms pointer --- */
-
+	
 					if (curr_game->roms==0)
 						curr_game->roms=curr_rom;
-
-					/* --- Copy the 'incorporate' rom --- */
-
-					memcpy(curr_rom, &game_match->game->roms[i], sizeof(struct rom));
-					curr_rom->game=curr_game;
-					curr_rom->rom_fixes|=FLAG_ROM_INCORPORATED;
-
+	
 					/* --- Whatever happens, increase the rom count for the current game --- */
-
+	
 					curr_game->num_roms++;
-					dat->num_roms++;
 				}
-
-				/* --- Copy the Disks --- */
-
-				for (i=0; i<game_match->game->num_disks; i++)
+	
+				/* --- Disk elements --- */
+	
+				if (curr_disk!=0 && curr_disk->name!=0)
 				{
-					/* --- May need to skip past the last disk --- */
-
-					if (curr_disk->name!=0)
+					if (type==TOKEN_DISK_NAME)
 						curr_disk++;
-
+	
+					else if (type==TOKEN_DISK_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
+					{
+						curr_disk->md5=BUFFER2_PTR;
+	
+						/* --- Create a dummy CRC for MAMEDiff --- */
+	
+						curr_disk->crc=crc32(0, NULL, 0);
+						curr_disk->crc=crc32(curr_disk->crc, curr_disk->md5, strlen(curr_disk->md5));
+					}
+	
+					else if (type==TOKEN_DISK_SHA1 && dat->options->options & OPTION_SHA1_CHECKSUMS)
+					{
+						curr_disk->sha1=BUFFER2_PTR;
+	
+						/* --- Create a dummy CRC for MAMEDiff --- */
+	
+						curr_disk->crc=crc32(0, NULL, 0);
+						curr_disk->crc=crc32(curr_disk->crc, curr_disk->sha1, strlen(curr_disk->sha1));
+					}
+	
+					else if (type==TOKEN_DISK_MERGE)
+						curr_disk->merge=BUFFER2_PTR;
+	
+					else if (type==TOKEN_DISK_STATUS)
+						curr_disk->status=BUFFER2_PTR;
+	
+					else if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
+					{
+						if (type==TOKEN_DISK_REGION)
+							curr_disk->region=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DISK_INDEX)
+						{
+							curr_disk->index=strtoul(BUFFER2_PTR, NULL, 16);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_disk->disk_flags|=FLAG_DISK_INDEX;
+						}
+					}
+				}
+	
+				if (type==TOKEN_DISK_NAME)
+				{
+					/* --- The current disk must remember its name --- */
+	
+					curr_disk->name=BUFFER2_PTR;
+	
+					/* --- Ensure that status is initialised so that it can be checked easily --- */
+	
+					curr_disk->status="";
+	
 					/* --- If this is the first disk for the current game then set up the disks pointer --- */
-
+	
 					if (curr_game->disks==0)
 						curr_game->disks=curr_disk;
-
-					/* --- Copy the 'incorporate' disk --- */
-
-					memcpy(curr_disk, &game_match->game->disks[i], sizeof(struct disk));
-					curr_disk->game=curr_game;
-					curr_disk->disk_fixes|=FLAG_DISK_INCORPORATED;
-
+	
 					/* --- Whatever happens, increase the disk count for the current game --- */
-
+	
 					curr_game->num_disks++;
-					dat->num_disks++;
 				}
-
-				/* --- Copy the Samples --- */
-
-				for (i=0; i<game_match->game->num_samples; i++)
+	
+				/* --- Sample elements --- */
+	
+				if (curr_sample!=0 && curr_sample->name!=0)
 				{
-					/* --- May need to skip past the last sample --- */
-
-					if (curr_sample->name!=0)
+					if (type==TOKEN_SAMPLE_NAME)
 						curr_sample++;
-
+				}
+	
+				if (type==TOKEN_SAMPLE_NAME)
+				{
+					/* --- The current sample must remember its name --- */
+	
+					curr_sample->name=BUFFER2_PTR;
+	
 					/* --- If this is the first sample for the current game then set up the samples pointer --- */
-
+	
 					if (curr_game->samples==0)
 						curr_game->samples=curr_sample;
-
-					/* --- Copy the 'incorporate' sample --- */
-
-					memcpy(curr_sample, &game_match->game->samples[i], sizeof(struct sample));
-					curr_sample->game=curr_game;
-					curr_sample->sample_fixes|=FLAG_SAMPLE_INCORPORATED;
-
+	
 					/* --- Whatever happens, increase the sample count for the current game --- */
-
+	
 					curr_game->num_samples++;
-					dat->num_samples++;
 				}
-
-				game_match->game->match++;
+	
+	
+				/* --- Archive elements --- */
+	
+				if (curr_archive!=0 && curr_archive->name!=0)
+				{
+					if (type==TOKEN_ARCHIVE_NAME)
+						curr_archive++;
+				}
+	
+				if (type==TOKEN_ARCHIVE_NAME)
+				{
+					/* --- The current archive must remember its name --- */
+	
+					curr_archive->name=BUFFER2_PTR;
+	
+					/* --- If this is the first archive for the current game then set up the archives pointer --- */
+	
+					if (curr_game->archives==0)
+						curr_game->archives=curr_archive;
+	
+					/* --- Whatever happens, increase the archive count for the current game --- */
+	
+					curr_game->num_archives++;
+				}
+	
+				if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
+				{
+					/* --- Biosset elements --- */
+	
+					if (curr_biosset!=0 && curr_biosset->name!=0)
+					{
+						if (type==TOKEN_BIOSSET_NAME)
+							curr_biosset++;
+	
+						else if (type==TOKEN_BIOSSET_DESCRIPTION)
+							curr_biosset->description=BUFFER2_PTR;
+	
+						else if (type==TOKEN_BIOSSET_DEFAULT)
+							curr_biosset->_default=BUFFER2_PTR;
+					}
+	
+					if (type==TOKEN_BIOSSET_NAME)
+					{
+						/* --- The current biosset must remember its name --- */
+	
+						curr_biosset->name=BUFFER2_PTR;
+	
+						/* --- If this is the first biosset for the current game then set up the biossets pointer --- */
+	
+						if (curr_game->biossets==0)
+							curr_game->biossets=curr_biosset;
+	
+						/* --- Whatever happens, increase the biosset count for the current game --- */
+	
+						curr_game->num_biossets++;
+					}
+	
+					/* --- Chip elements --- */
+	
+					if (curr_chip!=0 && curr_chip->type!=0)
+					{
+						if (type==TOKEN_CHIP_TYPE)
+							curr_chip++;
+	
+						else if (type==TOKEN_CHIP_NAME)
+							curr_chip->name=BUFFER2_PTR;
+	
+						else if (type==TOKEN_CHIP_SOUNDONLY)
+							curr_chip->soundonly=BUFFER2_PTR;
+	
+						else if (type==TOKEN_CHIP_CLOCK)
+						{
+							curr_chip->clock=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_chip->chip_flags|=FLAG_CHIP_CLOCK;
+						}
+					}
+	
+					if (type==TOKEN_CHIP_TYPE)
+					{
+						/* --- The current chip must remember its type --- */
+	
+						curr_chip->type=BUFFER2_PTR;
+	
+						/* --- If this is the first chip for the current game then set up the chips pointer --- */
+	
+						if (curr_game->chips==0)
+							curr_game->chips=curr_chip;
+	
+						/* --- Whatever happens, increase the chip count for the current game --- */
+	
+						curr_game->num_chips++;
+					}
+	
+					/* --- Video elements --- */
+	
+					if (curr_video!=0 && curr_video->screen!=0)
+					{
+						if (type==TOKEN_VIDEO_SCREEN)
+							curr_video++;
+	
+						else if (type==TOKEN_VIDEO_ORIENTATION)
+							curr_video->orientation=BUFFER2_PTR;
+	
+						else if (type==TOKEN_VIDEO_WIDTH)
+						{
+							curr_video->width=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_video->video_flags|=FLAG_VIDEO_WIDTH;
+						}
+	
+						else if (type==TOKEN_VIDEO_HEIGHT)
+						{
+							curr_video->height=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_video->video_flags|=FLAG_VIDEO_HEIGHT;
+						}
+	
+						else if (type==TOKEN_VIDEO_ASPECTX)
+						{
+							curr_video->aspectx=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_video->video_flags|=FLAG_VIDEO_ASPECTX;
+						}
+	
+						else if (type==TOKEN_VIDEO_ASPECTY)
+						{
+							curr_video->aspecty=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_video->video_flags|=FLAG_VIDEO_ASPECTY;
+						}
+	
+						else if (type==TOKEN_VIDEO_REFRESH)
+						{
+							curr_video->refresh=atof(BUFFER2_PTR);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_video->video_flags|=FLAG_VIDEO_REFRESH;
+						}
+					}
+	
+					if (type==TOKEN_VIDEO_SCREEN)
+					{
+						/* --- The current video must remember its screen --- */
+	
+						curr_video->screen=BUFFER2_PTR;
+	
+						/* --- If this is the first video for the current game then set up the videos pointer --- */
+	
+						if (curr_game->videos==0)
+							curr_game->videos=curr_video;
+	
+						/* --- Whatever happens, increase the video count for the current game --- */
+	
+						curr_game->num_videos++;
+					}
+	
+					/* --- Display elements --- */
+	
+					if (curr_display!=0 && curr_display->type!=0)
+					{
+						if (type==TOKEN_DISPLAY_TYPE)
+							curr_display++;
+	
+						else if (type==TOKEN_DISPLAY_ROTATE)
+						{
+							curr_display->rotate=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_display->display_flags|=FLAG_DISPLAY_ROTATE;
+						}
+	
+						else if (type==TOKEN_DISPLAY_FLIPX)
+							curr_display->flipx=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DISPLAY_WIDTH)
+						{
+							curr_display->width=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_display->display_flags|=FLAG_DISPLAY_WIDTH;
+						}
+	
+						else if (type==TOKEN_DISPLAY_HEIGHT)
+						{
+							curr_display->height=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_display->display_flags|=FLAG_DISPLAY_HEIGHT;
+						}
+	
+						else if (type==TOKEN_DISPLAY_REFRESH)
+						{
+							curr_display->refresh=atof(BUFFER2_PTR);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_display->display_flags|=FLAG_DISPLAY_REFRESH;
+						}
+					}
+	
+					if (type==TOKEN_DISPLAY_TYPE)
+					{
+						/* --- The current display must remember its type --- */
+	
+						curr_display->type=BUFFER2_PTR;
+	
+						/* --- If this is the first display for the current game then set up the displays pointer --- */
+	
+						if (curr_game->displays==0)
+							curr_game->displays=curr_display;
+	
+						/* --- Whatever happens, increase the display count for the current game --- */
+	
+						curr_game->num_displays++;
+					}
+	
+					/* --- Sound elements --- */
+	
+					if (curr_sound!=0 && curr_sound->sound_flags & FLAG_SOUND_CHANNELS)
+					{
+						if (type==TOKEN_SOUND_CHANNELS)
+							curr_sound++;
+					}
+	
+					if (type==TOKEN_SOUND_CHANNELS)
+					{
+						/* --- The current sound must remember its channels --- */
+	
+						curr_sound->channels=strtoul(BUFFER2_PTR, NULL, 10);
+	
+						// Value may be zero so its presence needs remembering!
+						curr_sound->sound_flags|=FLAG_SOUND_CHANNELS;
+	
+						/* --- If this is the first sound for the current game then set up the sounds pointer --- */
+	
+						if (curr_game->sounds==0)
+							curr_game->sounds=curr_sound;
+	
+						/* --- Whatever happens, increase the sound count for the current game --- */
+	
+						curr_game->num_sounds++;
+					}
+	
+					/* --- Input elements --- */
+	
+					if (curr_input!=0 && curr_input->input_flags & FLAG_INPUT_PLAYERS)
+					{
+						if (type==TOKEN_INPUT_PLAYERS)
+							curr_input++;
+	
+						else if (type==TOKEN_INPUT_SERVICE)
+							curr_input->service=BUFFER2_PTR;
+	
+						else if (type==TOKEN_INPUT_TILT)
+							curr_input->tilt=BUFFER2_PTR;
+	
+						else if (type==TOKEN_INPUT_CONTROL)
+							curr_input->control=BUFFER2_PTR;
+	
+						else if (type==TOKEN_INPUT_BUTTONS)
+						{
+							curr_input->buttons=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_input->input_flags|=FLAG_INPUT_BUTTONS;
+						}
+	
+						else if (type==TOKEN_INPUT_COINS)
+						{
+							curr_input->coins=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_input->input_flags|=FLAG_INPUT_COINS;
+						}
+	
+						else if (type==TOKEN_INPUT_DIPSWITCHES)
+						{
+							curr_input->dipswitches=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_input->input_flags|=FLAG_INPUT_DIPSWITCHES;
+						}
+					}
+	
+					if (type==TOKEN_INPUT_PLAYERS)
+					{
+						/* --- The current input must remember its players --- */
+	
+						curr_input->players=strtoul(BUFFER2_PTR, NULL, 10);
+	
+						// Value may be zero so its presence needs remembering!
+						curr_input->input_flags|=FLAG_INPUT_PLAYERS;
+	
+						/* --- If this is the first input for the current game then set up the inputs pointer --- */
+	
+						if (curr_game->inputs==0)
+							curr_game->inputs=curr_input;
+	
+						/* --- Whatever happens, increase the input count for the current game --- */
+	
+						curr_game->num_inputs++;
+					}
+	
+					/* --- Control elements --- */
+	
+					if (curr_control!=0 && curr_control->type!=0)
+					{
+						if (type==TOKEN_CONTROL_TYPE)
+							curr_control++;
+	
+						else if (type==TOKEN_CONTROL_MINIMUM)
+						{
+							curr_control->minimum=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_control->control_flags|=FLAG_CONTROL_MINIMUM;
+						}
+	
+						else if (type==TOKEN_CONTROL_MAXIMUM)
+						{
+							curr_control->maximum=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_control->control_flags|=FLAG_CONTROL_MAXIMUM;
+						}
+	
+						else if (type==TOKEN_CONTROL_SENSITIVITY)
+						{
+							curr_control->sensitivity=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_control->control_flags|=FLAG_CONTROL_SENSITIVITY;
+						}
+	
+						else if (type==TOKEN_CONTROL_KEYDELTA)
+						{
+							curr_control->keydelta=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_control->control_flags|=FLAG_CONTROL_KEYDELTA;
+						}
+	
+						else if (type==TOKEN_CONTROL_REVERSE)
+							curr_control->reverse=BUFFER2_PTR;
+					}
+	
+					if (type==TOKEN_CONTROL_TYPE)
+					{
+						/* --- The current control must remember its type --- */
+	
+						curr_control->type=BUFFER2_PTR;
+	
+						/* --- If this is the first control for the current input/game then set up the controls pointer --- */
+	
+						if (curr_input->controls==0)
+							curr_input->controls=curr_control;
+						if (curr_game->controls==0)
+							curr_game->controls=curr_control;
+	
+						/* --- Whatever happens, increase the control count for the current input/game --- */
+	
+						curr_input->num_controls++;
+						curr_game->num_controls++;
+					}
+	
+					/* --- Dipswitch elements --- */
+	
+					if (curr_dipswitch!=0 && curr_dipswitch->name!=0)
+					{
+						if (type==TOKEN_DIPSWITCH_NAME)
+							curr_dipswitch++;
+					}
+	
+					if (type==TOKEN_DIPSWITCH_NAME)
+					{
+						/* --- The current dipswitch must remember its name --- */
+	
+						curr_dipswitch->name=BUFFER2_PTR;
+	
+						/* --- If this is the first dipswitch for the current game then set up the dipswitches pointer --- */
+	
+						if (curr_game->dipswitches==0)
+							curr_game->dipswitches=curr_dipswitch;
+	
+						/* --- Whatever happens, increase the dipswitch count for the current game --- */
+	
+						curr_game->num_dipswitches++;
+					}
+	
+					/* --- Dipvalue elements --- */
+	
+					if (curr_dipvalue!=0 && curr_dipvalue->name!=0)
+					{
+						if (type==TOKEN_DIPVALUE_NAME)
+							curr_dipvalue++;
+	
+						else if (type==TOKEN_DIPVALUE_DEFAULT)
+							curr_dipvalue->_default=BUFFER2_PTR;
+					}
+	
+					if (type==TOKEN_DIPVALUE_NAME)
+					{
+						/* --- The current dipvalue must remember its name --- */
+	
+						curr_dipvalue->name=BUFFER2_PTR;
+	
+						/* --- If this is the first dipvalue for the current dipswitch/game then set up the dipvalues pointer --- */
+	
+						if (curr_dipswitch->dipvalues==0)
+							curr_dipswitch->dipvalues=curr_dipvalue;
+						if (curr_game->dipvalues==0)
+							curr_game->dipvalues=curr_dipvalue;
+	
+						/* --- Whatever happens, increase the dipvalue count for the current dipswitch/game --- */
+	
+						curr_dipswitch->num_dipvalues++;
+						curr_game->num_dipvalues++;
+					}
+	
+					/* --- Driver elements --- */
+	
+					if (curr_driver!=0 && curr_driver->status!=0)
+					{
+						if (type==TOKEN_DRIVER_STATUS)
+							curr_driver++;
+	
+						else if (type==TOKEN_DRIVER_EMULATION)
+							curr_driver->emulation=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_COLOR)
+							curr_driver->color=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_SOUND)
+							curr_driver->sound=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_GRAPHIC)
+							curr_driver->graphic=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_COCKTAIL)
+							curr_driver->cocktail=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_PROTECTION)
+							curr_driver->protection=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_SAVESTATE)
+							curr_driver->savestate=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DRIVER_PALETTESIZE)
+						{
+							curr_driver->palettesize=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_driver->driver_flags|=FLAG_DRIVER_PALETTESIZE;
+						}
+	
+						else if (type==TOKEN_DRIVER_COLORDEEP)
+						{
+							curr_driver->colordeep=strtoul(BUFFER2_PTR, NULL, 10);
+	
+							// Value may be zero so its presence needs remembering!
+							curr_driver->driver_flags|=FLAG_DRIVER_COLORDEEP;
+						}
+	
+						else if (type==TOKEN_DRIVER_CREDITS)
+							curr_driver->credits=BUFFER2_PTR;
+					}
+	
+					if (type==TOKEN_DRIVER_STATUS)
+					{
+						/* --- The current driver must remember its status --- */
+	
+						curr_driver->status=BUFFER2_PTR;
+	
+						/* --- If this is the first driver for the current game then set up the drivers pointer --- */
+	
+						if (curr_game->drivers==0)
+							curr_game->drivers=curr_driver;
+	
+						/* --- Whatever happens, increase the driver count for the current game --- */
+	
+						curr_game->num_drivers++;
+					}
+	
+					/* --- Device elements --- */
+	
+					if (curr_device!=0 && curr_device->name!=0)
+					{
+						if (type==TOKEN_DEVICE_NAME)
+							curr_device++;
+					}
+	
+					if (type==TOKEN_DEVICE_NAME)
+					{
+						/* --- The current device must remember its name --- */
+	
+						curr_device->name=BUFFER2_PTR;
+	
+						/* --- If this is the first device for the current game then set up the devices pointer --- */
+	
+						if (curr_game->devices==0)
+							curr_game->devices=curr_device;
+	
+						/* --- Whatever happens, increase the device count for the current game --- */
+	
+						curr_game->num_devices++;
+					}
+	
+					/* --- Extensions elements --- */
+	
+					if (curr_extension!=0 && curr_extension->name!=0)
+					{
+						if (type==TOKEN_EXTENSION_NAME)
+							curr_extension++;
+					}
+	
+					if (type==TOKEN_EXTENSION_NAME)
+					{
+						/* --- The current extension must remember its name --- */
+	
+						curr_extension->name=BUFFER2_PTR;
+	
+						/* --- If this is the first extension for the current device/game then set up the extensions pointer --- */
+	
+						if (curr_device->extensions==0)
+							curr_device->extensions=curr_extension;
+						if (curr_game->extensions==0)
+							curr_game->extensions=curr_extension;
+	
+						/* --- Whatever happens, increase the extension count for the current device/game --- */
+	
+						curr_device->num_extensions++;
+						curr_game->num_extensions++;
+					}
+				}
 			}
-		}
+	
+			/* --- Game, resource and machine names --- */
+	
+			if (type==TOKEN_GAME_NAME || type==TOKEN_RESOURCE_NAME || type==TOKEN_MACHINE_NAME)
+			{
+				/* --- The current game/resource/machine must remember its name and flags --- */
+	
+				curr_game->name=BUFFER2_PTR;
+	
+				if (type==TOKEN_GAME_NAME)
+					curr_game->game_flags|=FLAG_GAME_NAME;
+				else if (type==TOKEN_RESOURCE_NAME)
+					curr_game->game_flags|=FLAG_RESOURCE_NAME;
+				else if (type==TOKEN_MACHINE_NAME)
+					curr_game->game_flags|=FLAG_MACHINE_NAME;
+	
+				/* --- Link in any comments that preceded the game --- */
+	
+				if (comments)
+				{
+					curr_game->comments=comments;
+					curr_game->num_comments=num_comments;
+					comments=0;
+					num_comments=0;
+				}
+	
+				/* --- Identify if the game is in the 'incorporate' data file --- */
+	
+				if ((game_match=bsearch((void *)curr_game->name, dat->options->incorporate->game_name_idx, dat->options->incorporate->num_games, sizeof(struct game_idx), find_game_by_name))!=0)
+				{
+					/* --- Copy the ROMs --- */
+	
+					for (i=0; i<game_match->game->num_roms; i++)
+					{
+						/* --- May need to skip past the last ROM --- */
+	
+						if (curr_rom->name!=0)
+							curr_rom++;
+	
+						/* --- If this is the first rom for the current game then set up the roms pointer --- */
+	
+						if (curr_game->roms==0)
+							curr_game->roms=curr_rom;
+	
+						/* --- Copy the 'incorporate' rom --- */
+	
+						memcpy(curr_rom, &game_match->game->roms[i], sizeof(struct rom));
+						curr_rom->game=curr_game;
+						curr_rom->rom_fixes|=FLAG_ROM_INCORPORATED;
+	
+						/* --- Whatever happens, increase the rom count for the current game --- */
+	
+						curr_game->num_roms++;
+						dat->num_roms++;
+					}
+	
+					/* --- Copy the Disks --- */
+	
+					for (i=0; i<game_match->game->num_disks; i++)
+					{
+						/* --- May need to skip past the last disk --- */
+	
+						if (curr_disk->name!=0)
+							curr_disk++;
+	
+						/* --- If this is the first disk for the current game then set up the disks pointer --- */
+	
+						if (curr_game->disks==0)
+							curr_game->disks=curr_disk;
+	
+						/* --- Copy the 'incorporate' disk --- */
+	
+						memcpy(curr_disk, &game_match->game->disks[i], sizeof(struct disk));
+						curr_disk->game=curr_game;
+						curr_disk->disk_fixes|=FLAG_DISK_INCORPORATED;
+	
+						/* --- Whatever happens, increase the disk count for the current game --- */
+	
+						curr_game->num_disks++;
+						dat->num_disks++;
+					}
+	
+					/* --- Copy the Samples --- */
+	
+					for (i=0; i<game_match->game->num_samples; i++)
+					{
+						/* --- May need to skip past the last sample --- */
+	
+						if (curr_sample->name!=0)
+							curr_sample++;
+	
+						/* --- If this is the first sample for the current game then set up the samples pointer --- */
+	
+						if (curr_game->samples==0)
+							curr_game->samples=curr_sample;
+	
+						/* --- Copy the 'incorporate' sample --- */
+	
+						memcpy(curr_sample, &game_match->game->samples[i], sizeof(struct sample));
+						curr_sample->game=curr_game;
+						curr_sample->sample_fixes|=FLAG_SAMPLE_INCORPORATED;
+	
+						/* --- Whatever happens, increase the sample count for the current game --- */
+	
+						curr_game->num_samples++;
+						dat->num_samples++;
+					}
+	
+					game_match->game->match++;
+				}
+			}
+	
+			/* --- Comments --- */
+	
+			if (type==TOKEN_COMMENT_TEXT)
+			{
+				if (comments==0)
+					comments=curr_comment;
+	
+				curr_comment++->text=BUFFER2_PTR;
+				num_comments++;
+			}
 
-		/* --- Comments --- */
-
-		if (type==TOKEN_COMMENT_TEXT)
-		{
-			if (comments==0)
-				comments=curr_comment;
-
-			curr_comment++->text=BUFFER2_PTR;
-			num_comments++;
 		}
 
 		BUFFER2_ADVANCE_LINE
