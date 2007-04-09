@@ -1,3 +1,7 @@
+xx/xx/2006  *** v2.9 ***
+
+	    Updated ROM names for R-Type (Japan prototype) to match MAME v0.112
+
 17/10/2006  *** v2.8 ***
 
             Removed RAINE ROMs since they are now MAME compatible (v0.43.4+)

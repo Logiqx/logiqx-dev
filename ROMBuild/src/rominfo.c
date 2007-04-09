@@ -11320,12 +11320,12 @@ struct Rom rage_roms[] =
 	{
 		FULL_COPY,
 		{"rtypejp", "db_d2.bin",   32768, 0x791df4f8,     0, 32768},
-		{"rtypepj", "cpu-11.bin",  65536, 0xbb182f1a,     0, 32768},
+		{"rtypejp", "rt_r-11.1l",  65536, 0xbb182f1a,     0, 32768},
 	},
 	{
 		FULL_COPY,
 		{"rtypejp", "db_c2.bin",   32768, 0xed793841,     0, 32768},
-		{"rtypepj", "cpu-21.bin",  65536, 0x5b41f5f3,     0, 32768},
+		{"rtypejp", "rt_r-21.3j",  65536, 0x5b41f5f3,     0, 32768},
 	},
 	{
 		FULL_COPY,
@@ -11454,12 +11454,12 @@ struct Rom m72_roms[] =
 	{
 		FULL_COPY,
 		{"rtypejp", "db_d2.bin",   32768, 0x791df4f8,     0, 32768},
-		{"rtypepj", "cpu-11.bin",  65536, 0xbb182f1a,     0, 32768},
+		{"rtypejp", "rt_r-11.1l",  65536, 0xbb182f1a,     0, 32768},
 	},
 	{
 		FULL_COPY,
 		{"rtypejp", "db_c2.bin",   32768, 0xed793841,     0, 32768},
-		{"rtypepj", "cpu-21.bin",  65536, 0x5b41f5f3,     0, 32768},
+		{"rtypejp", "rt_r-21.3j",  65536, 0x5b41f5f3,     0, 32768},
 	},
 	{
 		FULL_COPY,
