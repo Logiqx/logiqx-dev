@@ -217,23 +217,9 @@ Including missing information
 The -i option will retrieve information from another dat and include it in the
 dat that you are working on. Basically, -i is meant for use with exactly
 matching dats rather than any arbitrary dat that might have a different game
-with the same name. The -i option is intended for two purposes:
+with the same name.
 
-Purpose 1:
-
-After using datutil -g on multiple games, you will find that the parent/clone
-relationships have gone (since each game is saved as a standalone game after
-'fix merging'). If you want to add them back, you can use datutil -i:
-
-datutil -a new.dat -f listinfo -g ssf2 mame.dat
-datutil -a new.dat -f listinfo -g ssf2a mame.dat
-datutil -i mame.dat -f listinfo new.dat
-
-Under these circumstances, cloneof, romof and sampleof can be corrected.
-
-N.B. It is possible to use the -X option and avoid the need for this method!
-
-Purpose 2:
+Example purpose:
 
 Correct ROM details (size, MS5/SHA1, flags, etc), using ZIPs as reference:
 
@@ -244,7 +230,7 @@ Under these circumstances, size, crc, md5, sha1 and flags can be corrected.
 Note: The -i option is not intended for retrieving descriptions, years or
 manufacturers from another dat. Such an operation would be very unreliable
 if it just used a game name as a method of matching! The -i option is only
-intended fot the two purposes described above.
+intended fot the purpose described above.
 
 
 Incorporating another data file

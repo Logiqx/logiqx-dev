@@ -5,6 +5,7 @@ xx/xx/2007  *** v2.32 ***
 
             - Uses DatLib v2.21.
             - Empty attributes are now ignored (e.g. sha1="")
+            - Removed cloneof, romof and sampleof fixes from datutil -i
 
 01/01/2007  *** v2.31 ***
 

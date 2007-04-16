@@ -2571,24 +2571,6 @@ int add_missing_info(struct dat *dat)
 
 		if (game_match)
 		{
-			if (game_match->game->cloneof && curr_game->cloneof==0)
-			{
-				curr_game->game_fixes|=FLAG_GAME_CLONEOF;
-				curr_game->cloneof=game_match->game->cloneof;
-			}
-
-			if (game_match->game->romof && curr_game->romof==0)
-			{
-				curr_game->game_fixes|=FLAG_GAME_ROMOF;
-				curr_game->romof=game_match->game->romof;
-			}
-
-			if (game_match->game->sampleof && curr_game->sampleof==0)
-			{
-				curr_game->game_fixes|=FLAG_GAME_SAMPLEOF;
-				curr_game->sampleof=game_match->game->sampleof;
-			}
-
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				rom_match=bsearch((void *)curr_rom->name, game_match->game->rom_name_idx, game_match->game->num_roms, sizeof(struct rom_idx), find_rom_by_name);
