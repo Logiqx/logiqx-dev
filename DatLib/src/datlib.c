@@ -5968,14 +5968,20 @@ struct dat *init_dat(struct options *options)
 	if (!errflg && !dat->save)
 	{
 		/* --- Choose the first save datlib_driver that is different to the load datlib_driver --- */
+		/* --- Note: Some options will cause DatLib to default to the first format (CMPro) --- */
 
 		for (i=0; datlib_drivers[i]; i++)
 		{
 			if (!(dat->save) &&
 				(strcmp(datlib_drivers[i]->description, dat->load->description) ||
-				options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_REMOVE_CLONES))
+				options->info || options->incorporate ||
+				options->prune_roms || options->prune_disks || options->prune_samples ||
+				options->game_selection || options->sourcefile_selection ||
+				options->options & OPTION_REMOVE_CLONES)
 			)
+			{
 				dat->save=(struct datlib_driver *)datlib_drivers[i];
+			}
 		}
 	}
 

@@ -5,6 +5,8 @@ xx/xx/2007  *** v2.21 ***
 
             - Empty attributes are now ignored (e.g. sha1="")
             - Removed cloneof, romof and sampleof fixes from datutil -i
+            - DatUtil -i, -I and -p now default the output format to CMPro
+              (in addition to -g, -G and -r which already behave like that)
 
 01/01/2007  *** v2.20 ***
 
