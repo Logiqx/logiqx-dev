@@ -98,7 +98,7 @@ xx/xx/2006  *** v2.9 ***
             Changed source to compile without modification on FreeBSD.
             Changed internal Neo-Geo ROM names to match MAME v0.59.
             Added support for Pisces graphics ROMs (changed in MAME v0.59):
-              Xcade v0.85, MacMoon v0.86, Arcade Emulator v0.7, GalEmu v40.9,
+              Xcade v0.85, Arcade Emulator v0.7, GalEmu v40.9,
               PASMulator v0.22, Replay v0.04, Rockulator++ v0.98a, SAGE v1.16,
               Sparcade v2.33b, VAntAGE v1.11
 
