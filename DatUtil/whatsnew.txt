@@ -8,6 +8,7 @@ xx/xx/2007  *** v2.32 ***
             - Removed cloneof, romof and sampleof fixes from datutil -i
             - DatUtil -i, -I and -p now default the output format to CMPro
               (in addition to -g, -G and -r which already behave like that)
+            - Added support for the isbios="yes" of MAME v0.117u2 onwards.
 
 01/01/2007  *** v2.31 ***
 

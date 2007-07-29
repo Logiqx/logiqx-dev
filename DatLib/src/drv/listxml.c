@@ -201,7 +201,7 @@ int load_mame_listxml(struct dat *dat)
 		}
 		else if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
 		{
-			if (strstr(BUFFER1_PTR, "runnable=\"no\""))
+			if (strstr(BUFFER1_PTR, "runnable=\"no\"") || strstr(BUFFER1_PTR, "isbios=\"yes\""))
 				game_type=FLAG_RESOURCE_NAME;
 			else if (strstr(BUFFER1_PTR, "<game "))
 				game_type=FLAG_GAME_NAME;
@@ -594,7 +594,7 @@ int save_mame_listxml(struct dat *dat)
 	if (dat->game_flags & FLAG_GAME_SOURCEFILE)
 		fprintf(dat->out, "\t\t<!ATTLIST %s sourcefile CDATA #IMPLIED>\n", game_type);
 	if (dat->num_resources)
-		fprintf(dat->out, "\t\t<!ATTLIST %s runnable (yes|no) \"yes\">\n", game_type);
+		fprintf(dat->out, "\t\t<!ATTLIST %s isbios (yes|no) \"no\">\n", game_type);
 	if (dat->game_flags & FLAG_GAME_CLONEOF)
 		fprintf(dat->out, "\t\t<!ATTLIST %s cloneof CDATA #IMPLIED>\n", game_type);
 	if (dat->game_flags & FLAG_GAME_ROMOF)
@@ -848,7 +848,7 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, "\t<%s", game_type);
 
 		if (curr_game->game_flags & FLAG_RESOURCE_NAME)
-			fprintf(dat->out, " runnable=\"no\"");
+			fprintf(dat->out, " isbios=\"yes\"");
 		OUTPUT_STRING_ATTRIBUTE(game, name, "name", (FLAG_GAME_NAME|FLAG_RESOURCE_NAME|FLAG_MACHINE_NAME))
 		OUTPUT_STRING_ATTRIBUTE(game, sourcefile, "sourcefile", FLAG_GAME_SOURCEFILE)
 		OUTPUT_STRING_ATTRIBUTE(game, cloneof, "cloneof", FLAG_GAME_CLONEOF)
