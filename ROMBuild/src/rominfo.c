@@ -782,23 +782,23 @@ struct Rom salamander_roms[] =
 {
 	{
 		FULL_COPY,
-		{"salamand", "17b_l.bin",  65536, 0xb83e8724,     0, 65536},
-		{"salamand", "17b.bin",   131072, 0xe5caf6e6,     0, 65536},
+		{"salamand", "17b_l.bin",    65536, 0xb83e8724,     0, 65536},
+		{"salamand", "587-c03.17b", 131072, 0xe5caf6e6,     0, 65536},
 	},
 	{
 		FULL_COPY,
-		{"salamand", "17b_u.bin",  65536, 0xb4d2fec9,     0, 65536},
-		{"salamand", "17b.bin",   131072, 0xe5caf6e6, 65536, 65536},
+		{"salamand", "17b_u.bin",    65536, 0xb4d2fec9,     0, 65536},
+		{"salamand", "587-c03.17b", 131072, 0xe5caf6e6, 65536, 65536},
 	},
 	{
 		FULL_COPY,
-		{"salamand", "17c_l.bin",  65536, 0xa6ef6dc4,     0, 65536},
-		{"salamand", "17c.bin",   131072, 0xc2f567ea,     0, 65536},
+		{"salamand", "17c_l.bin",    65536, 0xa6ef6dc4,     0, 65536},
+		{"salamand", "587-c06.17c", 131072, 0xc2f567ea,     0, 65536},
 	},
 	{
 		FULL_COPY,
-		{"salamand", "17c_u.bin",  65536, 0x6ea59643,     0, 65536},
-		{"salamand", "17c.bin",   131072, 0xc2f567ea, 65536, 65536},
+		{"salamand", "17c_u.bin",    65536, 0x6ea59643,     0, 65536},
+		{"salamand", "587-c06.17c", 131072, 0xc2f567ea, 65536, 65536},
 	},
 	{0}
 };
@@ -9102,32 +9102,32 @@ struct Rom system16_roms[] =
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 0, 65536},
-		{"altbeas4", "epr11722.a14", 65536, 0xadaa8db5, 0, 65536},
+		{"altbeas4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 0, 65536},
-		{"altbeas4", "epr11723.a15", 65536, 0x131a3f9a, 0, 65536},
+		{"altbeas4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 0, 65536},
-		{"altbeas4", "epr11724.a16", 65536, 0x6f2ed50a, 0, 65536},
+		{"altbeas4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 65536, 65536},
-		{"altbeas4", "epr11736.b14", 65536, 0xe9ad5e89, 0, 65536},
+		{"altbeas4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 65536, 65536},
-		{"altbeas4", "epr11737.b15", 65536, 0x2e420023, 0, 65536},
+		{"altbeas4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 65536, 65536},
-		{"altbeas4", "epr11738.b16", 65536, 0xde3d6d02, 0, 65536},
+		{"altbeas4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
 	},
 	{0}
 };
@@ -9152,32 +9152,32 @@ struct Rom calice_roms[] =
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 0, 65536},
-		{"altbeas4", "epr11722.a14", 65536, 0xadaa8db5, 0, 65536},
+		{"altbeas4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 0, 65536},
-		{"altbeas4", "epr11723.a15", 65536, 0x131a3f9a, 0, 65536},
+		{"altbeas4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 0, 65536},
-		{"altbeas4", "epr11724.a16", 65536, 0x6f2ed50a, 0, 65536},
+		{"altbeas4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 65536, 65536},
-		{"altbeas4", "epr11736.b14", 65536, 0xe9ad5e89, 0, 65536},
+		{"altbeas4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 65536, 65536},
-		{"altbeas4", "epr11737.b15", 65536, 0x2e420023, 0, 65536},
+		{"altbeas4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 65536, 65536},
-		{"altbeas4", "epr11738.b16", 65536, 0xde3d6d02, 0, 65536},
+		{"altbeas4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -11031,6 +11031,46 @@ struct Rom junofirst_roms[] =
 		{"junoboot", "jfg1.cpu", 8192, 0x00000000, 3605, 4587},
 		{"junofrst", "jfc1_a4.bin",  8192, 0x03ccbf1d, 3605, 4587},
 	},*/
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-01.bin", 65536, 0xb28d1a60,     0, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-01.bin", 65536, 0xb28d1a60, 32768, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-11.bin", 65536, 0xbb182f1a,     0, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-11.bin", 65536, 0xbb182f1a, 32768, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-21.bin", 65536, 0x5b41f5f3,     0, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-21.bin", 65536, 0x5b41f5f3, 32768, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-31.bin", 65536, 0x2bec510a,     0, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtype",   "cpu-31.bin", 65536, 0x2bec510a, 32768, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
 	{0}
 };
 
@@ -11317,6 +11357,7 @@ struct Rom rage_roms[] =
 		{"nspirit", "nin-b3.rom", 131072, 0x092d6291, 65536, 65536},
 		{"nspirit", "nin-b3.rom",  65536, 0x98856cb4,     0, 65536},
 	},
+	/* Noticed missing in MAME 0.118 but could have disappeared long ago! No longer required anway.
 	{
 		FULL_COPY,
 		{"rtypejp", "db_d2.bin",   32768, 0x791df4f8,     0, 32768},
@@ -11327,6 +11368,7 @@ struct Rom rage_roms[] =
 		{"rtypejp", "db_c2.bin",   32768, 0xed793841,     0, 32768},
 		{"rtypejp", "rt_r-21.3j",  65536, 0x5b41f5f3,     0, 32768},
 	},
+	*/
 	{
 		FULL_COPY,
 		{"rtype2",  "rt2_c0.bin", 262144, 0xf5bad5f2,      0, 131072},
@@ -11390,6 +11432,66 @@ struct Rom rage_roms[] =
 		{"rtype2", "rt2_h0.bin", 131072, 0x47639a78, 0, 131072},
 		{"rtype2", "ic54.8d",    131072, 0xd8ece6f4, 0, 131072},
 		patch_rt2_h0
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-01.bin", 65536, 0xb28d1a60,     0, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-01.bin", 65536, 0xb28d1a60, 32768, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-11.bin", 65536, 0xbb182f1a,     0, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-11.bin", 65536, 0xbb182f1a, 32768, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-21.bin", 65536, 0x5b41f5f3,     0, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-21.bin", 65536, 0x5b41f5f3, 32768, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-31.bin", 65536, 0x2bec510a,     0, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-31.bin", 65536, 0x2bec510a, 32768, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_d3.bin",  65536, 0xb28d1a60,     0, 32768},
+		{"rtypejp", "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_d3.bin",  65536, 0xb28d1a60, 32768, 32768},
+		{"rtypejp", "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_a3.bin",  65536, 0x2bec510a,     0, 32768},
+		{"rtypejp", "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_a3.bin",  65536, 0x2bec510a, 32768, 32768},
+		{"rtypejp", "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
 	},
 	{0}
 };
@@ -11451,6 +11553,7 @@ struct Rom m72_roms[] =
 		{"nspirit", "nin-b3.rom", 131072, 0x092d6291, 65536, 65536},
 		{"nspirit", "nin-b3.rom",  65536, 0x98856cb4,     0, 65536},
 	},
+	/* Noticed missing in MAME 0.118 but could have disappeared long ago! No longer required anway.
 	{
 		FULL_COPY,
 		{"rtypejp", "db_d2.bin",   32768, 0x791df4f8,     0, 32768},
@@ -11461,6 +11564,7 @@ struct Rom m72_roms[] =
 		{"rtypejp", "db_c2.bin",   32768, 0xed793841,     0, 32768},
 		{"rtypejp", "rt_r-21.3j",  65536, 0x5b41f5f3,     0, 32768},
 	},
+	*/
 	{
 		FULL_COPY,
 		{"rtype2",  "rt2_c0.bin", 262144, 0xf5bad5f2,      0, 131072},
@@ -11524,6 +11628,66 @@ struct Rom m72_roms[] =
 		{"rtype2", "rt2_h0.bin", 131072, 0x47639a78, 0, 131072},
 		{"rtype2", "ic54.8d",    131072, 0xd8ece6f4, 0, 131072},
 		patch_rt2_h0
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-01.bin", 65536, 0xb28d1a60,     0, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-01.bin", 65536, 0xb28d1a60, 32768, 32768},
+		{"rtypeu",  "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-11.bin", 65536, 0xbb182f1a,     0, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-11.bin", 65536, 0xbb182f1a, 32768, 32768},
+		{"rtypeu",  "rt_r-11.1l", 32768, 0x791df4f8,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-21.bin", 65536, 0x5b41f5f3,     0, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-21.bin", 65536, 0x5b41f5f3, 32768, 32768},
+		{"rtypeu",  "rt_r-21.3j", 32768, 0xed793841,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-31.bin", 65536, 0x2bec510a,     0, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypeus", "cpu-31.bin", 65536, 0x2bec510a, 32768, 32768},
+		{"rtypeu",  "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_d3.bin",  65536, 0xb28d1a60,     0, 32768},
+		{"rtypejp", "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_d3.bin",  65536, 0xb28d1a60, 32768, 32768},
+		{"rtypejp", "rt_r-01.1j", 32768, 0x5e441e7f,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_a3.bin",  65536, 0x2bec510a,     0, 32768},
+		{"rtypejp", "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
+	},
+	{
+		FULL_COPY,
+		{"rtypejp", "db_a3.bin",  65536, 0x2bec510a, 32768, 32768},
+		{"rtypejp", "rt_r-31.3l", 32768, 0x8558355d,     0, 32768},
 	},
 	{0}
 };

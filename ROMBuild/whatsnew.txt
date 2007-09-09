@@ -1,6 +1,10 @@
-xx/xx/2006  *** v2.9 ***
+09/09/2007  *** v2.9 ***
 
-	    Updated ROM names for R-Type (Japan prototype) to match MAME v0.112
+            Updated ROM names for R-Type (Japan prototype) to match MAME v0.112
+            Updates after MAME v0.118:
+            - Removed some old fixes for rtypejp (no longer required).
+            - Added rtypeus and rtypejp fixes for JunoFirst, M72 and RAGE.
+            - Now incorporates MAME ROM renames for salamand and altbeas4.
 
 17/10/2006  *** v2.8 ***
 
