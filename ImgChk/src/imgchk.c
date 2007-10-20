@@ -4,8 +4,8 @@
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.6"
-#define IMGCHK_DATE "31 October 2005"
+#define IMGCHK_VERSION "v2.7"
+#define IMGCHK_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 
 	if (!errflg && find_ini_value(ini, "Dat", "Dat"))
 	{
-		options->options=OPTION_SHOW_SUMMARY;
+		options->options=OPTION_SHOW_SUMMARY|OPTION_KEEP_FULL_DETAILS;
 		options->fn=find_ini_value(ini, "Dat", "Dat");
 
 		if ((dat=init_dat(options))==0)
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 
 int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 {
-	int report_unknown=0, report_missing=0, allow_clones=1, allow_resources=1, allow_alternates=0;
+	int report_unknown=0, report_missing=0, allow_clones=1, allow_resources=1, allow_alternates=0, allow_nonworking=1;
 	char *img_ext=0;
 
 	struct stat buf;
@@ -134,16 +134,19 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 	if (find_ini_value(ini, section, "AllowAlternates"))
 		allow_alternates=atoi(find_ini_value(ini, section, "AllowAlternates"));
 
+	if (find_ini_value(ini, section, "AllowNonWorking"))
+		allow_nonworking=atoi(find_ini_value(ini, section, "AllowNonWorking"));
+
 	if ((find_ini_value(ini, section, "ZipFile") && (stat(find_ini_value(ini, section, "ZipFile"), &buf) == 0)) ||
 		(find_ini_value(ini, section, "Directory") && (stat(find_ini_value(ini, section, "Directory"), &buf) == 0)))
 	{
 		printf("\nTesting %s...\n", section);
 
 		if (find_ini_value(ini, section, "ZipFile"))
-			check_zip(dat, find_ini_value(ini, section, "ZipFile"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
+			check_zip(dat, find_ini_value(ini, section, "ZipFile"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates, allow_nonworking);
 
 		if (find_ini_value(ini, section, "Directory"))
-			check_dir(dat, find_ini_value(ini, section, "Directory"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
+			check_dir(dat, find_ini_value(ini, section, "Directory"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates, allow_nonworking);
 
 		for (i=0; report_missing && i<dat->num_games; i++)
 		{
@@ -152,7 +155,17 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 				if ((allow_clones==1 && dat->game_name_idx[i].game->cloneof) ||
 					(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
 					(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
-				printf("   Missing: %s%s\n", dat->game_name_idx[i].game->name, img_ext);
+				{
+					if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->status && strcmp(dat->game_name_idx[i].game->drivers->status, "good"))
+					{
+						// No action (simplest way to implement the test)
+					}
+					else
+					{
+						printf("   Missing: %s%s\n", dat->game_name_idx[i].game->name, img_ext);
+					}
+				}
+
 			}
 		}
 
@@ -166,7 +179,7 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
  * Read file names from ZIP file
  * -------------------------------------------------------------------------- */
 
-int check_zip(struct dat *dat, char *zip_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+int check_zip(struct dat *dat, char *zip_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates, int allow_nonworking)
 {
 	ZIP *zip;
 	struct zipent *zipent;
@@ -177,7 +190,7 @@ int check_zip(struct dat *dat, char *zip_fn, char *img_ext, int report_unknown, 
 	{
 		while ((zipent=readzip(zip)))
 		{
-			check_img(dat, zipent->name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
+			check_img(dat, zipent->name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates, allow_nonworking);
 		}
 	}
 	else
@@ -195,7 +208,7 @@ int check_zip(struct dat *dat, char *zip_fn, char *img_ext, int report_unknown, 
  * Read file names from directory
  * -------------------------------------------------------------------------- */
 
-int check_dir(struct dat *dat, char *dir_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+int check_dir(struct dat *dat, char *dir_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates, int allow_nonworking)
 {
 	DIR *dirp=0;                                    
 	struct dirent *direntp;                       
@@ -208,7 +221,7 @@ int check_dir(struct dat *dat, char *dir_fn, char *img_ext, int report_unknown, 
 		{
 			if (strcmp(direntp->d_name, ".") && strcmp(direntp->d_name, ".."))
 			{
-				check_img(dat, direntp->d_name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates);
+				check_img(dat, direntp->d_name, img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates, allow_nonworking);
 			}
 		}
 	}
@@ -228,7 +241,7 @@ int check_dir(struct dat *dat, char *dir_fn, char *img_ext, int report_unknown, 
  * Check an image
  * -------------------------------------------------------------------------- */
 
-int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates)
+int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, int report_missing, int allow_clones, int allow_resources, int allow_alternates, int allow_nonworking)
 {
 	struct game_idx *game_idx=0;
 	char st[MAX_STRING_LENGTH+1];
@@ -276,6 +289,9 @@ int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, 
 
 		if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
 			printf("   Resource: %s\n", img_fn);
+
+		if (allow_nonworking==0 && game_idx->game->drivers && game_idx->game->drivers->status && strcmp(game_idx->game->drivers->status, "good"))
+			printf("   Non-working: %s\n", img_fn);
 	}
 
 	return(errflg);
