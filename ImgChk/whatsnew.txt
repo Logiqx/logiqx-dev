@@ -1,9 +1,9 @@
 History
 -------
 
-xx/xx/2007  *** v2.7 ***
+21/10/2007  *** v2.7 ***
 
-            - Added 'AllowNonWorking' property (default is 1).
+            - Added 'AllowNonWorking' property for J.Hardy IV (default is 1).
             - Uses DatLib v2.21.
             - Added support for the isbios="yes" of MAME v0.117u2 onwards.
 

@@ -5,7 +5,7 @@
  * -------------------------------------------------------------------------- */
 
 #define IMGCHK_VERSION "v2.7"
-#define IMGCHK_DATE "Private Beta"
+#define IMGCHK_DATE "21 October 2007"
 
 
 /* --- The standard includes --- */
