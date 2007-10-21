@@ -156,7 +156,7 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 					(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
 					(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
 				{
-					if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->status && strcmp(dat->game_name_idx[i].game->drivers->status, "good"))
+					if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->emulation && strcmp(dat->game_name_idx[i].game->drivers->emulation, "good"))
 					{
 						// No action (simplest way to implement the test)
 					}
@@ -290,7 +290,7 @@ int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, 
 		if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
 			printf("   Resource: %s\n", img_fn);
 
-		if (allow_nonworking==0 && game_idx->game->drivers && game_idx->game->drivers->status && strcmp(game_idx->game->drivers->status, "good"))
+		if (allow_nonworking==0 && game_idx->game->drivers && game_idx->game->drivers->emulation && strcmp(game_idx->game->drivers->emulation, "good"))
 			printf("   Non-working: %s\n", img_fn);
 	}
 
