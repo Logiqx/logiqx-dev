@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.8 ***
+
+            - Enhanced 'AllowNonWorking' behavior when AllowClones=0
+
 21/10/2007  *** v2.7 ***
 
             - Added 'AllowNonWorking' property for J.Hardy IV (default is 1).

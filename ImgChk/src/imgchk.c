@@ -4,8 +4,8 @@
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.7"
-#define IMGCHK_DATE "21 October 2007"
+#define IMGCHK_VERSION "v2.8"
+#define IMGCHK_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -142,6 +142,33 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 	{
 		printf("\nTesting %s...\n", section);
 
+		for (i=0; i<dat->num_games; i++)
+		{
+			dat->game_name_idx[i].game->flags = 0;
+		}
+
+		for (i=0; i<dat->num_games; i++)
+		{
+			if ((allow_clones==1 && dat->game_name_idx[i].game->cloneof) ||
+				(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
+				(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
+			{
+				if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->emulation && strcmp(dat->game_name_idx[i].game->drivers->emulation, "good"))
+				{
+					// No action (simplest way to implement the test)
+				}
+				else
+				{
+					dat->game_name_idx[i].game->flags |= FLAG_GAME_REQUIRED;
+
+					if (dat->game_name_idx[i].game->game_cloneof != 0)
+					{
+						dat->game_name_idx[i].game->game_cloneof->flags |= FLAG_GAME_REQUIRED;
+					}
+				}
+			}
+		}
+
 		if (find_ini_value(ini, section, "ZipFile"))
 			check_zip(dat, find_ini_value(ini, section, "ZipFile"), img_ext, report_unknown, report_missing, allow_clones, allow_resources, allow_alternates, allow_nonworking);
 
@@ -150,22 +177,9 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 
 		for (i=0; report_missing && i<dat->num_games; i++)
 		{
-			if (!(dat->game_name_idx[i].game->match))
+			if (!(dat->game_name_idx[i].game->match) && (dat->game_name_idx[i].game->flags & FLAG_GAME_REQUIRED))
 			{
-				if ((allow_clones==1 && dat->game_name_idx[i].game->cloneof) ||
-					(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
-					(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
-				{
-					if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->emulation && strcmp(dat->game_name_idx[i].game->drivers->emulation, "good"))
-					{
-						// No action (simplest way to implement the test)
-					}
-					else
-					{
-						printf("   Missing: %s%s\n", dat->game_name_idx[i].game->name, img_ext);
-					}
-				}
-
+				printf("   Missing: %s%s\n", dat->game_name_idx[i].game->name, img_ext);
 			}
 		}
 
@@ -284,14 +298,17 @@ int check_img(struct dat *dat, char *img_fn, char *img_ext, int report_unknown, 
 	}
 	else
 	{
-		if (allow_clones==0 && game_idx->game->cloneof)
-			printf("   Clone: %s\n", img_fn);
+		if (!(game_idx->game->flags & FLAG_GAME_REQUIRED))
+		{
+			if (allow_clones==0 && game_idx->game->cloneof)
+				printf("   Clone: %s\n", img_fn);
 
-		if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
-			printf("   Resource: %s\n", img_fn);
+			if (allow_resources==0 && game_idx->game->game_flags & FLAG_RESOURCE_NAME)
+				printf("   Resource: %s\n", img_fn);
 
-		if (allow_nonworking==0 && game_idx->game->drivers && game_idx->game->drivers->emulation && strcmp(game_idx->game->drivers->emulation, "good"))
-			printf("   Non-working: %s\n", img_fn);
+			if (allow_nonworking==0 && game_idx->game->drivers && game_idx->game->drivers->emulation && strcmp(game_idx->game->drivers->emulation, "good"))
+				printf("   Non-working: %s\n", img_fn);
+		}
 	}
 
 	return(errflg);
