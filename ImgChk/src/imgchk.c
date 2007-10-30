@@ -149,22 +149,26 @@ int process_section(struct ini_entry *ini, struct dat *dat, char *section)
 
 		for (i=0; i<dat->num_games; i++)
 		{
-			if ((allow_clones==1 && dat->game_name_idx[i].game->cloneof) ||
-				(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
-				(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
+			if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->emulation && strcmp(dat->game_name_idx[i].game->drivers->emulation, "good"))
 			{
-				if (allow_nonworking==0 && dat->game_name_idx[i].game->drivers && dat->game_name_idx[i].game->drivers->emulation && strcmp(dat->game_name_idx[i].game->drivers->emulation, "good"))
-				{
-					// No action (simplest way to implement the test)
-				}
-				else
+				// Game not required - simplest logic to implement the non-working functionality
+			}
+			else
+			{
+				// Determine whether the game is required based on whether it is clone, resource or parent
+
+				if ((allow_clones==1 && dat->game_name_idx[i].game->cloneof) ||
+					(allow_resources==1 && dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) ||
+					(!(dat->game_name_idx[i].game->game_flags & FLAG_RESOURCE_NAME) && !(dat->game_name_idx[i].game->cloneof)))
 				{
 					dat->game_name_idx[i].game->flags |= FLAG_GAME_REQUIRED;
+				}
 
-					if (dat->game_name_idx[i].game->game_cloneof != 0)
-					{
-						dat->game_name_idx[i].game->game_cloneof->flags |= FLAG_GAME_REQUIRED;
-					}
+				// Flag parent as required
+
+				if (dat->game_name_idx[i].game->game_cloneof != 0)
+				{
+					dat->game_name_idx[i].game->game_cloneof->flags |= FLAG_GAME_REQUIRED;
 				}
 			}
 		}
