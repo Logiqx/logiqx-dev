@@ -1,7 +1,7 @@
 History
 -------
 
-xx/xx/2007  *** v2.21 ***
+29/07/2007  *** v2.21 ***
 
             - Empty attributes are now ignored (e.g. sha1="")
             - Removed cloneof, romof and sampleof fixes from datutil -i
