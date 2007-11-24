@@ -186,18 +186,21 @@ int load_mame_listxml(struct dat *dat)
 			strcpy(TOKEN, "mame");
 			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
 			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
 		}
 		if (strstr(BUFFER1_PTR, "<Raine32 "))
 		{
 			strcpy(TOKEN, "Raine32");
 			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
 			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
 		}
 		else if (strstr(BUFFER1_PTR, "<mess "))
 		{
 			strcpy(TOKEN, "mess");
 			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
 			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
 		}
 		else if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
 		{
@@ -379,7 +382,14 @@ int load_mame_listxml(struct dat *dat)
 		}
 		else if (strstr(BUFFER1_PTR, "<device "))
 		{
-			GET_XML_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
+			if (strstr(BUFFER1_PTR, "type="))
+			{
+				GET_XML_ATTRIBUTE("type", TOKEN_DEVICE_TYPE)
+			}
+			else
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
+			}
 		}
 		else if (strstr(BUFFER1_PTR, "<extension "))
 		{
@@ -552,6 +562,8 @@ int save_mame_listxml(struct dat *dat)
 	fprintf(dat->out, "<!ELEMENT %s (%s+)>\n", doc_type, game_type);
 	if (dat->emulator.build)
 		fprintf(dat->out, "\t<!ATTLIST %s build CDATA #IMPLIED>\n", doc_type);
+	if (dat->emulator.debug)
+		fprintf(dat->out, "\t<!ATTLIST %s debug (yes|no) \"no\">\n", doc_type);
 
 	fprintf(dat->out, "\t<!ELEMENT %s (", game_type);
 	if (dat->num_comments)
@@ -836,10 +848,15 @@ int save_mame_listxml(struct dat *dat)
 
 	/* --- For every game, machine and resource --- */
 
+	fprintf(dat->out, "<%s", doc_type);
+
 	if (dat->emulator.build)
-		fprintf(dat->out, "<%s build=\"%s\">\n", doc_type, dat->emulator.build);
-	else
-		fprintf(dat->out, "<%s>\n", doc_type);
+		fprintf(dat->out, " build=\"%s\"", dat->emulator.build);
+
+	if (dat->emulator.debug)
+		fprintf(dat->out, " debug=\"%s\"", dat->emulator.debug);
+
+	fprintf(dat->out, ">\n");
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{
@@ -1068,7 +1085,14 @@ int save_mame_listxml(struct dat *dat)
 		for (j=0, curr_device=curr_game->devices; j<curr_game->num_devices; j++, curr_device++)
 		{
 			fprintf(dat->out, "\t\t<device");
-			OUTPUT_STRING_ATTRIBUTE(device, name, "name", FLAG_DEVICE_NAME)
+			if (curr_device->type)
+			{
+				OUTPUT_STRING_ATTRIBUTE(device, type, "type", FLAG_DEVICE_TYPE)
+			}
+			else
+			{
+				OUTPUT_STRING_ATTRIBUTE(device, name, "name", FLAG_DEVICE_NAME)
+			}
 			fprintf(dat->out, ">\n");
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)

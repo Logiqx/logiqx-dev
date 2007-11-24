@@ -98,6 +98,7 @@ int load_tab_delimited(struct dat *dat)
 
 			BUFFER1_GET_FIELD(TOKEN_EMULATOR_NAME)
 			BUFFER1_GET_FIELD(TOKEN_EMULATOR_BUILD)
+			BUFFER1_GET_FIELD(TOKEN_EMULATOR_DEBUG)
 		}
 
 		/* --- Game/machine information --- */
@@ -430,6 +431,7 @@ int load_tab_delimited(struct dat *dat)
 			/* --- Process the other fields --- */
 
 			BUFFER1_GET_FIELD(TOKEN_DEVICE_NAME)
+			BUFFER1_GET_FIELD(TOKEN_DEVICE_TYPE)
 		}
 
 		if (BUFFER1_RECORD_TYPE("game_extension\t"))
@@ -614,6 +616,11 @@ int save_tab_delimited(struct dat *dat)
 
 		if (dat->emulator.build)
 			fprintf(dat->out, "%s\t", dat->emulator.build);
+		else
+			fprintf(dat->out, "\\N\t");
+
+		if (dat->emulator.debug)
+			fprintf(dat->out, "%s\t", dat->emulator.debug);
 		else
 			fprintf(dat->out, "\\N\t");
 
@@ -859,6 +866,7 @@ int save_tab_delimited(struct dat *dat)
 		{
 			fprintf(dat->out, "game_device\t%s\t%s\t", dat_name, curr_game->name);
 			OUTPUT_STRING_FIELD(device, name, FLAG_DEVICE_NAME)
+			OUTPUT_STRING_FIELD(device, type, FLAG_DEVICE_TYPE)
 			fprintf(dat->out, "\n");
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)
@@ -866,6 +874,7 @@ int save_tab_delimited(struct dat *dat)
 				fprintf(dat->out, "game_extension\t%s\t%s\t", dat_name, curr_game->name);
 
 				OUTPUT_STRING_FIELD(device, name, FLAG_DEVICE_NAME)
+				OUTPUT_STRING_FIELD(device, type, FLAG_DEVICE_TYPE)
 
 				OUTPUT_STRING_FIELD(extension, name, FLAG_EXTENSION_NAME)
 

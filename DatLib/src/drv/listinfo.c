@@ -132,6 +132,7 @@ int load_mame_listinfo(struct dat *dat)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_EMULATOR_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_EMULATOR_BUILD)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG)
 		}
 
 		/* --- ClrMamePro header --- */
@@ -457,6 +458,7 @@ int load_mame_listinfo(struct dat *dat)
 					BUFFER1_GET_TOKEN
 
 					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("type", TOKEN_DEVICE_TYPE)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("extension", TOKEN_EXTENSION_NAME)
 				}
 			}
@@ -758,6 +760,9 @@ int save_mame_listinfo(struct dat *dat)
 
 		fprintf(dat->out, "\tversion \"%s\"\n", dat->emulator.build);
 
+		if (dat->emulator.debug!=0)
+			fprintf(dat->out, "\tdebug \"%s\"\n", dat->emulator.debug);
+
 		fprintf(dat->out, ")\n\n");
 	}
 
@@ -1014,7 +1019,14 @@ int save_mame_listinfo(struct dat *dat)
 		{
 			fprintf(dat->out, "\tdevice ( ");
 
-			OUTPUT_UNQUOTED_STRING(device, name, "name", FLAG_DEVICE_NAME)
+			if (curr_device->type)
+			{
+				OUTPUT_UNQUOTED_STRING(device, type, "type", FLAG_DEVICE_TYPE)
+			}
+			else
+			{
+				OUTPUT_UNQUOTED_STRING(device, name, "name", FLAG_DEVICE_NAME)
+			}
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)
 			{

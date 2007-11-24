@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.21"
-#define DATLIB_DATE "29 July 2007"
+#define DATLIB_VERSION "v2.22"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -881,6 +881,9 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_DEVICE_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_devices++;
 
+		else if (type==TOKEN_DEVICE_TYPE && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
+			dat->num_devices++;
+
 		else if (type==TOKEN_EXTENSION_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_extensions++;
 
@@ -1198,6 +1201,9 @@ int store_tokenized_dat(struct dat *dat)
 
 			else if (type==TOKEN_EMULATOR_BUILD)
 				dat->emulator.build=BUFFER2_PTR;
+
+			else if (type==TOKEN_EMULATOR_DEBUG)
+				dat->emulator.debug=BUFFER2_PTR;
 		}
 
 		/* --- ClrMamePro header --- */
@@ -1972,9 +1978,9 @@ int store_tokenized_dat(struct dat *dat)
 	
 					/* --- Device elements --- */
 	
-					if (curr_device!=0 && curr_device->name!=0)
+					if (curr_device!=0 && (curr_device->name!=0 || curr_device->type!=0))
 					{
-						if (type==TOKEN_DEVICE_NAME)
+						if (type==TOKEN_DEVICE_NAME || type==TOKEN_DEVICE_TYPE)
 							curr_device++;
 					}
 	
@@ -1983,6 +1989,22 @@ int store_tokenized_dat(struct dat *dat)
 						/* --- The current device must remember its name --- */
 	
 						curr_device->name=BUFFER2_PTR;
+	
+						/* --- If this is the first device for the current game then set up the devices pointer --- */
+	
+						if (curr_game->devices==0)
+							curr_game->devices=curr_device;
+	
+						/* --- Whatever happens, increase the device count for the current game --- */
+	
+						curr_game->num_devices++;
+					}
+	
+					if (type==TOKEN_DEVICE_TYPE)
+					{
+						/* --- The current device must remember its name --- */
+	
+						curr_device->type=BUFFER2_PTR;
 	
 						/* --- If this is the first device for the current game then set up the devices pointer --- */
 	
@@ -3704,6 +3726,9 @@ int summarise_dat(struct dat *dat)
 		{
 			if (curr_device->name)
 				curr_device->device_flags|=FLAG_DEVICE_NAME;
+
+			if (curr_device->type)
+				curr_device->device_flags|=FLAG_DEVICE_TYPE;
 
 			curr_game->device_flags|=curr_device->device_flags;
 		}
@@ -6680,6 +6705,8 @@ int save_dat(struct dat *dat)
 			if ((lost=~dat->device_saved & dat->device_flags))
 			{
 				if (lost & FLAG_DEVICE_NAME)
+					fprintf(dat->log_file, "Devices have been lost entirely!\n\n");
+				if (lost & FLAG_DEVICE_TYPE)
 					fprintf(dat->log_file, "Devices have been lost entirely!\n\n");
 			}
 
