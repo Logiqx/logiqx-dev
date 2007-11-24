@@ -187,7 +187,7 @@ struct video
 	uint16_t height;
 	uint16_t aspectx;
 	uint16_t aspecty;
-	float refresh;
+	double refresh;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -210,7 +210,7 @@ struct display
 	char *flipx;
 	uint16_t width;
 	uint16_t height;
-	float refresh;
+	double refresh;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -379,6 +379,7 @@ struct device
 	/* --- Fields that appear in data files */
 
 	char *name;
+	char *type;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -640,6 +641,7 @@ struct emulator
 {
 	char *name;
 	char *build;
+	char *debug;
 };
 
 struct clrmamepro
@@ -1169,6 +1171,7 @@ struct ini_entry
 /* --- Device Flags --- */
 
 #define FLAG_DEVICE_NAME		0x01
+#define FLAG_DEVICE_TYPE		0x02
 
 
 /* --- Extension Flags --- */
