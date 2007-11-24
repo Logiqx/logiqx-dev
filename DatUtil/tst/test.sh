@@ -223,6 +223,9 @@ case "$1" in
 	mame)
 		DATA_FILE="mame.xml"
 		;;
+	mess)
+		DATA_FILE="mess.xml"
+		;;
 	*)
 		echo "Error: Unrecognised test file '$1'"
 		;;
