@@ -432,6 +432,8 @@ int load_tab_delimited(struct dat *dat)
 
 			BUFFER1_GET_FIELD(TOKEN_DEVICE_NAME)
 			BUFFER1_GET_FIELD(TOKEN_DEVICE_TYPE)
+			BUFFER1_GET_FIELD(TOKEN_DEVICE_TAG)
+			BUFFER1_GET_FIELD(TOKEN_DEVICE_MANDATORY)
 		}
 
 		if (BUFFER1_RECORD_TYPE("game_extension\t"))
@@ -867,6 +869,8 @@ int save_tab_delimited(struct dat *dat)
 			fprintf(dat->out, "game_device\t%s\t%s\t", dat_name, curr_game->name);
 			OUTPUT_STRING_FIELD(device, name, FLAG_DEVICE_NAME)
 			OUTPUT_STRING_FIELD(device, type, FLAG_DEVICE_TYPE)
+			OUTPUT_STRING_FIELD(device, tag, FLAG_DEVICE_TAG)
+			OUTPUT_STRING_FIELD(device, mandatory, FLAG_DEVICE_MANDATORY)
 			fprintf(dat->out, "\n");
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)

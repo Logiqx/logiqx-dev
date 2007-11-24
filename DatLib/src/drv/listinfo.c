@@ -459,6 +459,8 @@ int load_mame_listinfo(struct dat *dat)
 
 					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("type", TOKEN_DEVICE_TYPE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("tag", TOKEN_DEVICE_TAG)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("mandatory", TOKEN_DEVICE_MANDATORY)
 					else BUFFER2_PUT_INFO_ATTRIBUTE("extension", TOKEN_EXTENSION_NAME)
 				}
 			}
@@ -1027,6 +1029,9 @@ int save_mame_listinfo(struct dat *dat)
 			{
 				OUTPUT_UNQUOTED_STRING(device, name, "name", FLAG_DEVICE_NAME)
 			}
+
+			OUTPUT_UNQUOTED_STRING(device, tag, "tag", FLAG_DEVICE_TAG)
+			OUTPUT_UNQUOTED_STRING(device, mandatory, "mandatory", FLAG_DEVICE_MANDATORY)
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)
 			{

@@ -784,7 +784,7 @@ int load_sourcefile_selections(struct dat *dat)
 
 int allocate_dat_memory(struct dat *dat)
 {
-	char type;
+	unsigned char type;
 	int game_type=0;
 
 	int errflg=0;
@@ -1169,7 +1169,7 @@ int store_tokenized_dat(struct dat *dat)
 	struct game_idx *game_match;
 
 	struct comment *comments=0;
-	char type;
+	unsigned char type;
 
 	int i, j, num_comments=0, errflg=0;
 
@@ -1982,6 +1982,12 @@ int store_tokenized_dat(struct dat *dat)
 					{
 						if (type==TOKEN_DEVICE_NAME || type==TOKEN_DEVICE_TYPE)
 							curr_device++;
+
+						else if (type==TOKEN_DEVICE_TAG)
+							curr_device->tag=BUFFER2_PTR;
+	
+						else if (type==TOKEN_DEVICE_MANDATORY)
+							curr_device->mandatory=BUFFER2_PTR;
 					}
 	
 					if (type==TOKEN_DEVICE_NAME)
@@ -3729,6 +3735,12 @@ int summarise_dat(struct dat *dat)
 
 			if (curr_device->type)
 				curr_device->device_flags|=FLAG_DEVICE_TYPE;
+
+			if (curr_device->tag)
+				curr_device->device_flags|=FLAG_DEVICE_TAG;
+
+			if (curr_device->mandatory)
+				curr_device->device_flags|=FLAG_DEVICE_MANDATORY;
 
 			curr_game->device_flags|=curr_device->device_flags;
 		}
@@ -6704,10 +6716,19 @@ int save_dat(struct dat *dat)
 
 			if ((lost=~dat->device_saved & dat->device_flags))
 			{
-				if (lost & FLAG_DEVICE_NAME)
+				if (lost & (FLAG_DEVICE_NAME | FLAG_DEVICE_TYPE))
 					fprintf(dat->log_file, "Devices have been lost entirely!\n\n");
-				if (lost & FLAG_DEVICE_TYPE)
-					fprintf(dat->log_file, "Devices have been lost entirely!\n\n");
+				else
+				{
+					fprintf(dat->log_file, "Device information that has been lost:\n\n");
+
+					if (lost & FLAG_DEVICE_TAG)
+						fprintf(dat->log_file, "    Tag\n");
+					if (lost & FLAG_DEVICE_MANDATORY)
+						fprintf(dat->log_file, "    Mandatory\n");
+
+					fprintf(dat->log_file, "\n");
+				}
 			}
 
 			/* --- Extensions --- */

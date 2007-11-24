@@ -390,6 +390,8 @@ int load_mame_listxml(struct dat *dat)
 			{
 				GET_XML_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
 			}
+			GET_XML_ATTRIBUTE("tag", TOKEN_DEVICE_TAG)
+			GET_XML_ATTRIBUTE("mandatory", TOKEN_DEVICE_MANDATORY)
 		}
 		else if (strstr(BUFFER1_PTR, "<extension "))
 		{
@@ -830,6 +832,10 @@ int save_mame_listxml(struct dat *dat)
 		else
 			fprintf(dat->out, "\t\t<!ELEMENT device EMPTY>\n");
 		fprintf(dat->out, "\t\t\t<!ATTLIST device name CDATA #REQUIRED>\n");
+		if (dat->device_flags & FLAG_DEVICE_TAG)
+			fprintf(dat->out, "\t\t\t<!ATTLIST device tag CDATA #IMPLIED>\n");
+		if (dat->device_flags & FLAG_DEVICE_MANDATORY)
+			fprintf(dat->out, "\t\t\t<!ATTLIST device mandatory CDATA #IMPLIED>\n");
 	}
 
 	if (dat->num_extensions)
@@ -1093,6 +1099,8 @@ int save_mame_listxml(struct dat *dat)
 			{
 				OUTPUT_STRING_ATTRIBUTE(device, name, "name", FLAG_DEVICE_NAME)
 			}
+			OUTPUT_STRING_ATTRIBUTE(device, tag, "tag", FLAG_DEVICE_TAG)
+			OUTPUT_STRING_ATTRIBUTE(device, mandatory, "mandatory", FLAG_DEVICE_MANDATORY)
 			fprintf(dat->out, ">\n");
 
 			for (k=0, curr_extension=curr_device->extensions; k<curr_device->num_extensions; k++, curr_extension++)

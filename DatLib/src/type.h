@@ -380,6 +380,8 @@ struct device
 
 	char *name;
 	char *type;
+	char *tag;
+	char *mandatory;
 
 	/* --- Fields that are calculated by DatLib */
 
@@ -1172,6 +1174,8 @@ struct ini_entry
 
 #define FLAG_DEVICE_NAME		0x01
 #define FLAG_DEVICE_TYPE		0x02
+#define FLAG_DEVICE_TAG			0x04
+#define FLAG_DEVICE_MANDATORY		0x08
 
 
 /* --- Extension Flags --- */
