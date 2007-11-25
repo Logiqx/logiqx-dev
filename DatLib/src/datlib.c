@@ -890,6 +890,9 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_ARCHIVE_NAME && dat->num_games>0)
 			dat->num_archives++;
 
+		else if (type==TOKEN_RAMOPTION_SIZE && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
+			dat->num_ramoptions++;
+
 		BUFFER2_ADVANCE_LINE
 	}
 
@@ -1142,6 +1145,18 @@ int allocate_dat_memory(struct dat *dat)
 			STRUCT_CALLOC(dat->archives, dat->num_archives, sizeof(struct archive))
 	}
 
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d ramoptions identified\n", dat->num_ramoptions);
+		}
+
+		if (dat->num_ramoptions>0)
+			STRUCT_CALLOC(dat->ramoptions, dat->num_ramoptions, sizeof(struct ramoption))
+	}
+
 	return(errflg);
 }
 
@@ -1165,6 +1180,7 @@ int store_tokenized_dat(struct dat *dat)
 	struct device *curr_device=dat->devices;
 	struct extension *curr_extension=dat->extensions;
 	struct archive *curr_archive=dat->archives;
+	struct ramoption *curr_ramoption=dat->ramoptions;
 
 	struct game_idx *game_match;
 
@@ -2047,6 +2063,33 @@ int store_tokenized_dat(struct dat *dat)
 	
 						curr_device->num_extensions++;
 						curr_game->num_extensions++;
+					}
+	
+					/* --- RAM Option elements --- */
+	
+					if (curr_ramoption!=0 && curr_ramoption->size!=0)
+					{
+						if (type==TOKEN_RAMOPTION_SIZE)
+							curr_ramoption++;
+	
+						else if (type==TOKEN_RAMOPTION_DEFAULT)
+							curr_ramoption->_default=BUFFER2_PTR;
+					}
+	
+					if (type==TOKEN_RAMOPTION_SIZE)
+					{
+						/* --- The current RAM option must remember its size --- */
+	
+						curr_ramoption->size=strtoul(BUFFER2_PTR, NULL, 10);
+	
+						/* --- If this is the first RAM option for the current game then set up the ramoptions pointer --- */
+	
+						if (curr_game->ramoptions==0)
+							curr_game->ramoptions=curr_ramoption;
+	
+						/* --- Whatever happens, increase the RAM option count for the current game --- */
+	
+						curr_game->num_ramoptions++;
 					}
 				}
 			}
@@ -3362,6 +3405,7 @@ int summarise_dat(struct dat *dat)
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
 	struct archive *curr_archive=0;
+	struct ramoption *curr_ramoption=0;
 	uint32_t i, j;
 
 	uint32_t num_roms=dat->num_roms;
@@ -3761,6 +3805,17 @@ int summarise_dat(struct dat *dat)
 			curr_game->archive_flags|=curr_archive->archive_flags;
 		}
 
+		for (j=0, curr_ramoption=curr_game->ramoptions; j<curr_game->num_ramoptions; j++, curr_ramoption++)
+		{
+			if (curr_ramoption->size)
+				curr_ramoption->ramoption_flags|=FLAG_RAMOPTION_SIZE;
+
+			if (curr_ramoption->_default)
+				curr_ramoption->ramoption_flags|=FLAG_RAMOPTION_DEFAULT;
+
+			curr_game->ramoption_flags|=curr_ramoption->ramoption_flags;
+		}
+
 		dat->game_flags|=curr_game->game_flags;
 		dat->comment_flags|=curr_game->comment_flags;
 		dat->biosset_flags|=curr_game->biosset_flags;
@@ -3779,6 +3834,7 @@ int summarise_dat(struct dat *dat)
 		dat->device_flags|=curr_game->device_flags;
 		dat->extension_flags|=curr_game->extension_flags;
 		dat->archive_flags|=curr_game->archive_flags;
+		dat->ramoption_flags|=curr_game->ramoption_flags;
 
 		/* --- Keep count of parents, clones and others --- */
 
@@ -3850,6 +3906,8 @@ int summarise_dat(struct dat *dat)
 		printf("Extension flags=%02x\n", dat->extension_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Archive flags=%02x\n", dat->archive_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RAM option flags=%02x\n", dat->ramoption_flags);
 	}
 
 	return(errflg);
@@ -4223,7 +4281,8 @@ int report_warnings(struct dat *dat)
 		for (j=0, curr_driver=curr_game->drivers; j<curr_game->num_drivers; j++, curr_driver++)
 		{
 			curr_driver->driver_warnings|=(curr_driver->driver_flags ^ dat->driver_flags) &
-				(FLAG_DRIVER_EMULATION | FLAG_DRIVER_COLOR | FLAG_DRIVER_SOUND | FLAG_DRIVER_GRAPHIC | FLAG_DRIVER_PALETTESIZE |
+				(FLAG_DRIVER_EMULATION | FLAG_DRIVER_COLOR | FLAG_DRIVER_SOUND | FLAG_DRIVER_GRAPHIC |
+				 FLAG_DRIVER_SAVESTATE | FLAG_DRIVER_PALETTESIZE |
 				 FLAG_DRIVER_COLORDEEP | FLAG_DRIVER_CREDITS);
 
 			curr_game->driver_warnings|=curr_driver->driver_warnings;
@@ -4247,6 +4306,7 @@ int report_warnings(struct dat *dat)
 		dat->device_warnings|=curr_game->device_warnings;
 		dat->extension_warnings|=curr_game->extension_warnings;
 		dat->archive_warnings|=curr_game->archive_warnings;
+		dat->ramoption_warnings|=curr_game->ramoption_warnings;
 	}
 
 	/* --- Report warnings --- */
@@ -4293,6 +4353,8 @@ int report_warnings(struct dat *dat)
 		printf("Extension warnings=%02x\n", dat->extension_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Archive warnings=%02x\n", dat->archive_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RAM option warnings=%02x\n", dat->ramoption_warnings);
 
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Reporting warnings...\n");
@@ -4466,6 +4528,8 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing Sound\n");
 			if (dat->driver_warnings & FLAG_DRIVER_GRAPHIC)
 				fprintf(dat->log_file, "    Missing Graphic\n");
+			if (dat->driver_warnings & FLAG_DRIVER_SAVESTATE)
+				fprintf(dat->log_file, "    Missing Savestate\n");
 			if (dat->driver_warnings & FLAG_DRIVER_PALETTESIZE)
 				fprintf(dat->log_file, "    Missing Palettesize\n");
 			if (dat->driver_warnings & FLAG_DRIVER_COLORDEEP)
@@ -4645,6 +4709,8 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    Driver - Missing Sound\n");
 						if (curr_driver->driver_warnings & FLAG_DRIVER_GRAPHIC)
 							fprintf(dat->log_file, "    Driver - Missing Graphic\n");
+						if (curr_driver->driver_warnings & FLAG_DRIVER_SAVESTATE)
+							fprintf(dat->log_file, "    Driver - Missing Savestate\n");
 						if (curr_driver->driver_warnings & FLAG_DRIVER_PALETTESIZE)
 							fprintf(dat->log_file, "    Driver - Missing Palettesize\n");
 						if (curr_driver->driver_warnings & FLAG_DRIVER_COLORDEEP)
@@ -4737,6 +4803,8 @@ int report_fixes(struct dat *dat)
 		printf("Extension fixes=%02x\n", dat->extension_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Archive fixes=%02x\n", dat->archive_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RAM option fixes=%02x\n", dat->ramoption_fixes);
 
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Reporting fixes...\n");
@@ -6241,7 +6309,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
@@ -6345,6 +6413,9 @@ int save_dat(struct dat *dat)
 
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Archive losses=%02x.\n", ~dat->archive_saved & dat->archive_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("RAM option losses=%02x.\n", ~dat->ramoption_saved & dat->ramoption_flags);
 		}
 		else
 		{
@@ -6370,7 +6441,8 @@ int save_dat(struct dat *dat)
 			~dat->driver_saved & dat->driver_flags ||
 			~dat->device_saved & dat->device_flags ||
 			~dat->extension_saved & dat->extension_flags ||
-			~dat->archive_saved & dat->archive_flags))
+			~dat->archive_saved & dat->archive_flags ||
+			~dat->ramoption_saved & dat->ramoption_flags))
 		{
 			fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 			fprintf(dat->log_file, "Features that were lost by saving in %s format\n", dat->save->description);
@@ -6749,6 +6821,23 @@ int save_dat(struct dat *dat)
 
 			if (!datlib_debug)
 				printf("\nNote: Some game information could not be saved (see %s for details).\n", dat->log_name);
+
+			/* --- RAM options --- */
+
+			if ((lost=~dat->ramoption_saved & dat->ramoption_flags))
+			{
+				if (lost & FLAG_RAMOPTION_SIZE)
+					fprintf(dat->log_file, "RAM options have been lost entirely!\n\n");
+				else
+				{
+					fprintf(dat->log_file, "RAM option information that has been lost:\n\n");
+
+					if (lost & FLAG_RAMOPTION_DEFAULT)
+						fprintf(dat->log_file, "    Default\n");
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
 		}
 	}
 
@@ -6858,6 +6947,13 @@ struct dat *free_dat(struct dat *dat)
 			printf("Closing log file...\n");
 		}
 		FCLOSE(dat->log_file)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of RAM options...\n");
+		}
+		FREE(dat->ramoptions)
 
 		if (datlib_debug)
 		{

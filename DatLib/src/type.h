@@ -415,6 +415,25 @@ struct archive
 };
 
 
+/* --- RAM Option Structures --- */
+
+struct ramoption
+{
+	/* --- Fields that appear in data files */
+
+	uint32_t size;
+	char *_default;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t ramoption_flags;
+	uint8_t ramoption_warnings;
+	uint8_t ramoption_fixes;
+};
+
+
 /* --- Game Structures --- */
 
 struct game
@@ -475,6 +494,8 @@ struct game
 
 	struct archive *archives;
 
+	struct ramoption *ramoptions;
+
 	uint32_t num_comments;
 	uint32_t num_biossets;
 	uint32_t num_roms;
@@ -492,6 +513,7 @@ struct game
 	uint32_t num_devices;
 	uint32_t num_extensions;
 	uint32_t num_archives;
+	uint32_t num_ramoptions;
 
 	uint32_t size;
 	uint32_t crc;
@@ -517,6 +539,7 @@ struct game
 	uint8_t device_flags;
 	uint8_t extension_flags;
 	uint8_t archive_flags;
+	uint8_t ramoption_flags;
 
 	uint32_t game_warnings;
 
@@ -537,6 +560,7 @@ struct game
 	uint8_t device_warnings;
 	uint8_t extension_warnings;
 	uint8_t archive_warnings;
+	uint8_t ramoption_warnings;
 
 	uint32_t game_fixes;
 
@@ -557,6 +581,7 @@ struct game
 	uint8_t device_fixes;
 	uint8_t extension_fixes;
 	uint8_t archive_fixes;
+	uint8_t ramoption_fixes;
 
 	/* --- Fields that are specific to external tools */
 
@@ -814,6 +839,8 @@ struct dat
 
 	struct archive *archives;
 
+	struct ramoption *ramoptions;
+
 	struct game_zip *game_zips;
 	struct game_zip_idx *game_zip_name_idx;
 	struct game_zip_rom *game_zip_roms;
@@ -838,6 +865,7 @@ struct dat
 	uint32_t num_devices;
 	uint32_t num_extensions;
 	uint32_t num_archives;
+	uint32_t num_ramoptions;
 
 	uint32_t num_game_zips;
 	uint32_t num_game_zip_roms;
@@ -866,6 +894,7 @@ struct dat
 	uint8_t device_flags;
 	uint8_t extension_flags;
 	uint8_t archive_flags;
+	uint8_t ramoption_flags;
 
 	uint8_t game_selection_warnings;
 	uint8_t sourcefile_selection_warnings;
@@ -888,6 +917,7 @@ struct dat
 	uint8_t device_warnings;
 	uint8_t extension_warnings;
 	uint8_t archive_warnings;
+	uint8_t ramoption_warnings;
 
 	uint32_t game_fixes;
 	uint8_t comment_fixes;
@@ -907,6 +937,7 @@ struct dat
 	uint8_t device_fixes;
 	uint8_t extension_fixes;
 	uint8_t archive_fixes;
+	uint8_t ramoption_fixes;
 
 	uint32_t game_saved;
 	uint8_t comment_saved;
@@ -926,6 +957,7 @@ struct dat
 	uint8_t device_saved;
 	uint8_t extension_saved;
 	uint8_t archive_saved;
+	uint8_t ramoption_saved;
 };
 
 
@@ -1186,6 +1218,12 @@ struct ini_entry
 /* --- Archive Flags --- */
 
 #define FLAG_ARCHIVE_NAME		0x01
+
+
+/* --- RAM Option Flags --- */
+
+#define FLAG_RAMOPTION_SIZE		0x01
+#define FLAG_RAMOPTION_DEFAULT		0x02
 
 
 #endif /* _DATLIB_TYPE_H_ */

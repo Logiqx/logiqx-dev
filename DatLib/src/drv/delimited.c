@@ -466,6 +466,24 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_ARCHIVE_NAME)
 		}
 
+		/* --- RAM option information --- */
+
+		if (BUFFER1_RECORD_TYPE("game_ramoption\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_RAMOPTION_SIZE)
+			BUFFER1_GET_FIELD(TOKEN_RAMOPTION_DEFAULT)
+		}
+
+		/* --- Line processed! --- */
+
 		BUFFER1_ADVANCE_LINE
 	}
 
@@ -592,6 +610,7 @@ int save_tab_delimited(struct dat *dat)
 	struct device *curr_device=dat->devices;
 	struct extension *curr_extension=dat->extensions;
 	struct archive *curr_archive=dat->archives;
+	struct ramoption *curr_ramoption=dat->ramoptions;
 
 	char dat_name[MAX_STRING_LENGTH];
 
@@ -893,6 +912,18 @@ int save_tab_delimited(struct dat *dat)
 		{
 			fprintf(dat->out, "game_archive\t%s\t%s\t", dat_name, curr_game->name);
 			OUTPUT_STRING_FIELD(archive, name, FLAG_ARCHIVE_NAME)
+			fprintf(dat->out, "\n");
+		}
+
+		/* --- RAM option information --- */
+
+		for (j=0, curr_ramoption=curr_game->ramoptions; j<curr_game->num_ramoptions; j++, curr_ramoption++)
+		{
+			fprintf(dat->out, "game_ramoption\t%s\t%s\t", dat_name, curr_game->name);
+
+			OUTPUT_UNSIGNED_LONG_FIELD(ramoption, size, FLAG_RAMOPTION_SIZE)
+			OUTPUT_STRING_FIELD(ramoption, _default, FLAG_RAMOPTION_DEFAULT)
+
 			fprintf(dat->out, "\n");
 		}
 	}

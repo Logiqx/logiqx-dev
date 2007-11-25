@@ -449,7 +449,7 @@ int load_mame_listinfo(struct dat *dat)
 				}
 			}
 
-			/* --- Dipswitches --- */
+			/* --- Devices --- */
 
 			else if (!strcmp(TOKEN, "device"))
 			{
@@ -474,6 +474,19 @@ int load_mame_listinfo(struct dat *dat)
 					BUFFER1_GET_TOKEN
 
 					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
+				}
+			}
+
+			/* --- RAM options --- */
+
+			else if (!strcmp(TOKEN, "ramoption"))
+			{
+				while (strchr(BUFFER1_PTR, ')') && BUFFER1_REMAINING && strcmp(TOKEN, ")"))
+				{
+					BUFFER1_GET_TOKEN
+
+					BUFFER2_PUT_INFO_ATTRIBUTE("size", TOKEN_RAMOPTION_SIZE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("default", TOKEN_RAMOPTION_DEFAULT)
 				}
 			}
 		}
@@ -663,6 +676,7 @@ int save_mame_listinfo(struct dat *dat)
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
 	struct archive *curr_archive=0;
+	struct ramoption *curr_ramoption=0;
 
 	uint32_t ordering=LOGIQX_ORDERING, i, j, k;
 	int errflg=0;
@@ -1053,6 +1067,20 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (curr_game->archives)
 			fprintf(dat->out, ")\n");
+
+		/* --- RAM option information --- */
+
+		for (j=0, curr_ramoption=curr_game->ramoptions; j<curr_game->num_ramoptions; j++, curr_ramoption++)
+		{
+			fprintf(dat->out, "\tramoption ( ");
+
+			OUTPUT_UNSIGNED_LONG(ramoption, size, "size", FLAG_RAMOPTION_SIZE)
+			OUTPUT_UNQUOTED_STRING(ramoption, _default, "default", FLAG_RAMOPTION_DEFAULT)
+
+			fprintf(dat->out, ")\n");
+		}
+
+		/* --- End of game --- */
 
 		fprintf(dat->out, ")\n\n");
 	}

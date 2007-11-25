@@ -401,6 +401,11 @@ int load_mame_listxml(struct dat *dat)
 		{
 			GET_XML_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
 		}
+		else if (strstr(BUFFER1_PTR, "<ramoption ") || strstr(BUFFER1_PTR, "<ramoption>"))
+		{
+			GET_XML_ELEMENT(TOKEN_RAMOPTION_SIZE)
+			GET_XML_ATTRIBUTE("default", TOKEN_RAMOPTION_DEFAULT)
+		}
 
 		BUFFER1_ADVANCE_LINE
 	}
@@ -541,6 +546,7 @@ int save_mame_listxml(struct dat *dat)
 	struct device *curr_device=0;
 	struct extension *curr_extension=0;
 	struct archive *curr_archive=0;
+	struct ramoption *curr_ramoption=0;
 
 	uint32_t i, j, k;
 	int errflg=0;
@@ -603,6 +609,8 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, ", device*");
 	if (dat->num_archives)
 		fprintf(dat->out, ", archive*");
+	if (dat->num_ramoptions)
+		fprintf(dat->out, ", ramoption*");
 	fprintf(dat->out, ")>\n");
 	fprintf(dat->out, "\t\t<!ATTLIST %s name CDATA #REQUIRED>\n", game_type);
 	if (dat->game_flags & FLAG_GAME_SOURCEFILE)
@@ -848,6 +856,13 @@ int save_mame_listxml(struct dat *dat)
 	{
 		fprintf(dat->out, "\t\t<!ELEMENT archive EMPTY>\n");
 		fprintf(dat->out, "\t\t\t<!ATTLIST archive name CDATA #REQUIRED>\n");
+	}
+
+	if (dat->num_ramoptions)
+	{
+		fprintf(dat->out, "\t\t<!ELEMENT ramoption (#PCDATA)>\n");
+		if (dat->ramoption_flags & FLAG_RAMOPTION_DEFAULT)
+			fprintf(dat->out, "\t\t\t<!ATTLIST ramoption default CDATA #IMPLIED>\n");
 	}
 
 	fprintf(dat->out, "]>\n\n");
@@ -1122,6 +1137,23 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<archive");
 			OUTPUT_STRING_ATTRIBUTE(archive, name, "name", FLAG_ARCHIVE_NAME)
 			fprintf(dat->out, "/>\n");
+		}
+
+		/* --- RAM option information --- */
+
+		for (j=0, curr_ramoption=curr_game->ramoptions; j<curr_game->num_ramoptions; j++, curr_ramoption++)
+		{
+			fprintf(dat->out, "\t\t<ramoption");
+			OUTPUT_STRING_ATTRIBUTE(ramoption, _default, "default", FLAG_RAMOPTION_DEFAULT)
+			fprintf(dat->out, ">");
+
+			if (curr_ramoption->size)
+			{
+				fprintf(dat->out, "%d", curr_ramoption->size);
+				dat->ramoption_saved|=FLAG_RAMOPTION_SIZE;
+			}
+
+			fprintf(dat->out, "</ramoption>\n");
 		}
 
 		fprintf(dat->out, "\t</%s>\n", game_type);
