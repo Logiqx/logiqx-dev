@@ -839,7 +839,10 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<!ELEMENT device (extension*)>\n");
 		else
 			fprintf(dat->out, "\t\t<!ELEMENT device EMPTY>\n");
-		fprintf(dat->out, "\t\t\t<!ATTLIST device name CDATA #REQUIRED>\n");
+		if (dat->device_flags & FLAG_DEVICE_TYPE)
+			fprintf(dat->out, "\t\t\t<!ATTLIST device type CDATA #REQUIRED>\n");
+		if (dat->device_flags & FLAG_DEVICE_NAME)
+			fprintf(dat->out, "\t\t\t<!ATTLIST device name CDATA #REQUIRED>\n");
 		if (dat->device_flags & FLAG_DEVICE_TAG)
 			fprintf(dat->out, "\t\t\t<!ATTLIST device tag CDATA #IMPLIED>\n");
 		if (dat->device_flags & FLAG_DEVICE_MANDATORY)
