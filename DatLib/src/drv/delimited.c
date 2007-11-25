@@ -444,6 +444,7 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_SKIP_FIELD
 			BUFFER1_SKIP_FIELD
 			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
 
 			/* --- Process the other fields --- */
 
