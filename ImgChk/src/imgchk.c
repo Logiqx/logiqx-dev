@@ -4,8 +4,8 @@
  * A simple little utility for checking resource images
  * -------------------------------------------------------------------------- */
 
-#define IMGCHK_VERSION "v2.8"
-#define IMGCHK_DATE "12 November 2007"
+#define IMGCHK_VERSION "v2.9"
+#define IMGCHK_DATE "26 November 2007"
 
 
 /* --- The standard includes --- */
