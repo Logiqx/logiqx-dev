@@ -1,6 +1,11 @@
 History
 -------
 
+26/11/2007  *** v2.9 ***
+
+            - Uses DatLib v2.22.
+            - Fixed crash when loading full MESS XML (0.105 upwards).
+
 12/11/2007  *** v2.8 ***
 
             - Enhanced 'AllowNonWorking' behavior when AllowClones=0
