@@ -1,6 +1,15 @@
 History
 -------
 
+26/11/2007  *** v2.22 ***
+
+            - Fixed crash when loading full MESS XML (0.105 upwards).
+            - MESS: Support for device new attributes (type, tag and madatory).
+            - MESS: Support for machine "RAM options".
+            - MAME + MESS: Support for new emulator "debug" attribute.
+            - MAME + MESS: Changed "refresh" attributes from float to double.
+            - MAME + MESS: Added driver "savestate" warnings.
+
 29/07/2007  *** v2.21 ***
 
             - Empty attributes are now ignored (e.g. sha1="")
