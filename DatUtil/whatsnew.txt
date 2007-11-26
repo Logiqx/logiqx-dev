@@ -5,7 +5,7 @@ History
 
             - Uses DatLib v2.22.
             - Fixed crash when loading full MESS XML (0.105 upwards).
-            - MESS: Support for device new attributes (type, tag and madatory).
+            - MESS: Support for new device attributes (type, tag and mandatory).
             - MESS: Support for machine "RAM options".
             - MAME + MESS: Support for new emulator "debug" attribute.
             - MAME + MESS: Changed "refresh" attributes from float to double.
