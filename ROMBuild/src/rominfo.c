@@ -3557,6 +3557,7 @@ struct Rom neoragex_roms[] =
 		{"superspy", "n138001a.178", 524288, 0xb993bc83, 0, 524288},
 		{"superspy", "011-v11.bin", 1048576, 0x5c674d5c, 0, 524288},
 	},
+	/* No longer possible from MAME v0.122 onwards
 	{
 		FULL_COPY,
 		{"superspy", "n138001a.278", 524288, 0x426cd040, 0, 524288},
@@ -3582,11 +3583,13 @@ struct Rom neoragex_roms[] =
 		{"superspy", "n138001b.17c", 524288, 0x9f513d5a, 0, 524288},
 		{"superspy", "011-v12.bin", 1048576, 0x7df8898b, 0, 524288},
 	},
+	*/
 	{
 		FULL_COPY,
 		{"superspy", "n138001c.178", 524288, 0xb993bc83, 0, 524288},
 		{"superspy", "011-v11.bin", 1048576, 0x5c674d5c, 0, 524288},
 	},
+	/* No longer possible from MAME v0.122 onwards
 	{
 		FULL_COPY,
 		{"superspy", "n138001d.178", 524288, 0x9f513d5a, 0, 524288},
@@ -3597,6 +3600,7 @@ struct Rom neoragex_roms[] =
 		{"superspy", "n138001d.17c", 524288, 0x9f513d5a, 0, 524288},
 		{"superspy", "011-v12.bin", 1048576, 0x7df8898b, 0, 524288},
 	},
+	*/
 	{
 		FULL_COPY,
 		{"superspy", "n138001a.17c", 524288, 0xd7a059b1, 0, 524288},
@@ -3780,42 +3784,42 @@ struct Rom neoragex_roms[] =
 	{
 		EVEN_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 0, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 65536, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 131072, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 196608, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 262144, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 327680, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 393216, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"superspy", "n138001a.03c", 524288, 0x54443d72, 458752, 65536},
-		{"superspy", "011-p2.bin", 131072, 0x811a4faf, 0, 65536},
+		{"superspy", "011-sp2.bin", 131072, 0x811a4faf, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -7845,17 +7849,17 @@ struct Rom shark_roms[] =
 	{
 		FULL_COPY,
 		{"kikikaikai",    "a85-08.rom", 128, 0x00fa7ca0,     0, 128},
-		{"kikikai",       "a85-08.rom", 256, 0xd15f61a8,     0, 128},
+		{"kikikai",       "a85-08.g15", 256, 0xd15f61a8,     0, 128},
 	},
 	{
 		FULL_COPY,
 		{"kikikaikai",    "a85-09.rom", 128, 0x25a369af,     0, 128},
-		{"kikikai",       "a85-09.rom", 256, 0xb931c94d,     0, 128},
+		{"kikikai",       "a85-09.g14", 256, 0xb931c94d,     0, 128},
 	},
 	{
 		FULL_COPY,
 		{"kikikaikai",    "a85-10.rom", 128, 0x5e62bab4,     0, 128},
-		{"kikikai",       "a85-10.rom", 256, 0x8fc3fa86,     0, 128},
+		{"kikikai",       "a85-10.g12", 256, 0x8fc3fa86,     0, 128},
 	},
 	{
 		FULL_COPY,

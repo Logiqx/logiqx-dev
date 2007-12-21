@@ -1,6 +1,7 @@
 xx/xx/2007  *** v2.10 ***
 
             Updated details for World Heroes (NeoRAGEx) to match MAME v0.120.
+            Removed some superspy and kikikai ROMs not needed with MAME v0.122.
 
 
 09/09/2007  *** v2.9 ***
