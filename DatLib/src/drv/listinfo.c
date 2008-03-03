@@ -139,13 +139,19 @@ int load_mame_listinfo(struct dat *dat)
 
 		else if (game_type==FLAG_CLRMAMEPRO_HEADER)
 		{
-			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_CLRMAMEPRO_NAME)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_CLRMAMEPRO_DESCRIPTION)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("category", TOKEN_CLRMAMEPRO_CATEGORY)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_CLRMAMEPRO_VERSION)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("author", TOKEN_CLRMAMEPRO_AUTHOR)
+			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_DATAFILE_NAME)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_DATAFILE_DESCRIPTION)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("category", TOKEN_DATAFILE_CATEGORY)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_DATAFILE_VERSION)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("date", TOKEN_DATAFILE_DATE)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("author", TOKEN_DATAFILE_AUTHOR)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("email", TOKEN_DATAFILE_EMAIL)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("homepage", TOKEN_DATAFILE_HOMEPAGE)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("url", TOKEN_DATAFILE_URL)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("comment", TOKEN_DATAFILE_COMMENT)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP)
 		}
 
 		/* --- Games --- */
@@ -684,22 +690,7 @@ int save_mame_listinfo(struct dat *dat)
 	if (dat->options->options & OPTION_KEEP_FULL_DETAILS)
 		ordering=XML2INFO_ORDERING;
 
-	/* --- Copy RomCenter header to ClrMamePro header if details are missing --- */
-
-	if (!dat->clrmamepro.name && dat->romcenter_emulator.refname)
-		dat->clrmamepro.name=dat->romcenter_emulator.refname;
-
-	if (!dat->clrmamepro.description && dat->romcenter_emulator.version)
-		dat->clrmamepro.description=dat->romcenter_emulator.version;
-
-	if (!dat->clrmamepro.category && dat->romcenter_credits.comment)
-		dat->clrmamepro.category=dat->romcenter_credits.comment;
-
-	if (!dat->clrmamepro.version && dat->romcenter_credits.version)
-		dat->clrmamepro.version=dat->romcenter_credits.version;
-
-	if (!dat->clrmamepro.author && dat->romcenter_credits.author)
-		dat->clrmamepro.author=dat->romcenter_credits.author;
+	/* --- Determine the type of merging based on dat flags --- */
 
 	if (dat->dat_flags & FLAG_DAT_FULL_MERGING)
 		dat->clrmamepro.forcemerging="full";
@@ -708,44 +699,79 @@ int save_mame_listinfo(struct dat *dat)
 	else if (dat->dat_flags & FLAG_DAT_NO_MERGING)
 		dat->clrmamepro.forcemerging="none";
 
-	if (dat->romcenter_dat.plugin && strcmp(dat->romcenter_dat.plugin, "arcade.dll"))
+	if (dat->romcenter.plugin && strcmp(dat->romcenter.plugin, "arcade.dll"))
 	{
-		fprintf(stderr, "Warning: The RomCenter plugin for the data file was '%s'.\n", dat->romcenter_dat.plugin);
+		fprintf(stderr, "Warning: The RomCenter plugin for the data file was '%s'.\n", dat->romcenter.plugin);
 		fprintf(stderr, "         It is likely that the data file will not work correctly in ClrMamePro!\n\n");
 	}
 
 	/* --- Output ClrMamePro Header (no clever macros like everything else!) --- */
 
-	if (dat->clrmamepro.name!=0)
+	if (dat->datafile.name!=0)
 	{
 		fprintf(dat->out, "clrmamepro (\n");
 
-		if (strchr(dat->clrmamepro.name, ' '))
-			fprintf(dat->out, "\tname \"%s\"\n", dat->clrmamepro.name);
+		if (strchr(dat->datafile.name, ' '))
+			fprintf(dat->out, "\tname \"%s\"\n", dat->datafile.name);
 		else
-			fprintf(dat->out, "\tname %s\n", dat->clrmamepro.name);
+			fprintf(dat->out, "\tname %s\n", dat->datafile.name);
 
-		if (dat->clrmamepro.description!=0)
-			fprintf(dat->out, "\tdescription \"%s\"\n", dat->clrmamepro.description);
+		if (dat->datafile.description!=0)
+			fprintf(dat->out, "\tdescription \"%s\"\n", dat->datafile.description);
 
-		if (dat->clrmamepro.category!=0)
-			fprintf(dat->out, "\tcategory \"%s\"\n", dat->clrmamepro.category);
+		if (dat->datafile.category!=0)
+			fprintf(dat->out, "\tcategory \"%s\"\n", dat->datafile.category);
 
-		if (dat->clrmamepro.version!=0)
+		if (dat->datafile.version!=0)
 		{
-			if (strchr(dat->clrmamepro.version, ' '))
-				fprintf(dat->out, "\tversion \"%s\"\n", dat->clrmamepro.version);
+			if (strchr(dat->datafile.version, ' '))
+				fprintf(dat->out, "\tversion \"%s\"\n", dat->datafile.version);
 			else
-				fprintf(dat->out, "\tversion %s\n", dat->clrmamepro.version);
+				fprintf(dat->out, "\tversion %s\n", dat->datafile.version);
 		}
 
-		if (dat->clrmamepro.author!=0)
+		if (dat->datafile.date!=0)
 		{
-			if (strchr(dat->clrmamepro.author, ' '))
-				fprintf(dat->out, "\tauthor \"%s\"\n", dat->clrmamepro.author);
+			if (strchr(dat->datafile.date, ' '))
+				fprintf(dat->out, "\tdate \"%s\"\n", dat->datafile.date);
 			else
-				fprintf(dat->out, "\tauthor %s\n", dat->clrmamepro.author);
+				fprintf(dat->out, "\tdate %s\n", dat->datafile.date);
 		}
+
+		if (dat->datafile.author!=0)
+		{
+			if (strchr(dat->datafile.author, ' '))
+				fprintf(dat->out, "\tauthor \"%s\"\n", dat->datafile.author);
+			else
+				fprintf(dat->out, "\tauthor %s\n", dat->datafile.author);
+		}
+
+		if (dat->datafile.email!=0)
+		{
+			if (strchr(dat->datafile.email, ' '))
+				fprintf(dat->out, "\temail \"%s\"\n", dat->datafile.email);
+			else
+				fprintf(dat->out, "\temail %s\n", dat->datafile.email);
+		}
+
+		if (dat->datafile.homepage!=0)
+		{
+			if (strchr(dat->datafile.homepage, ' '))
+				fprintf(dat->out, "\thomepage \"%s\"\n", dat->datafile.homepage);
+			else
+				fprintf(dat->out, "\thomepage %s\n", dat->datafile.homepage);
+		}
+
+		if (dat->datafile.url!=0)
+		{
+			if (strchr(dat->datafile.url, ' '))
+				fprintf(dat->out, "\turl \"%s\"\n", dat->datafile.url);
+			else
+				fprintf(dat->out, "\turl %s\n", dat->datafile.url);
+		}
+
+		if (dat->datafile.comment!=0)
+			fprintf(dat->out, "\tcomment \"%s\"\n", dat->datafile.comment);
 
 		if (dat->clrmamepro.forcemerging!=0)
 		{
@@ -761,6 +787,14 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tforcezipping \"%s\"\n", dat->clrmamepro.forcezipping);
 			else
 				fprintf(dat->out, "\tforcezipping %s\n", dat->clrmamepro.forcezipping);
+		}
+
+		if (dat->clrmamepro.forcenodump!=0)
+		{
+			if (strchr(dat->clrmamepro.forcenodump, ' '))
+				fprintf(dat->out, "\tforcenodump \"%s\"\n", dat->clrmamepro.forcenodump);
+			else
+				fprintf(dat->out, "\tforcenodump %s\n", dat->clrmamepro.forcenodump);
 		}
 
 		fprintf(dat->out, ")\n\n");

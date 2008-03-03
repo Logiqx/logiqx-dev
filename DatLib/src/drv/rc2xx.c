@@ -146,37 +146,37 @@ int load_romcenter_250(struct dat *dat)
 				if (!strcmp(TOKEN, "author"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_AUTHOR)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_AUTHOR)
 				}
 				else if (!strcmp(TOKEN, "email"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_EMAIL)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_EMAIL)
 				}
 				else if (!strcmp(TOKEN, "homepage"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_HOMEPAGE)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_HOMEPAGE)
 				}
 				else if (!strcmp(TOKEN, "url"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_URL)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_URL)
 				}
 				else if (!strcmp(TOKEN, "version"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_VERSION)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_VERSION)
 				}
 				else if (!strcmp(TOKEN, "date"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_DATE)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_DATE)
 				}
 				else if (!strcmp(TOKEN, "comment"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_CREDITS_COMMENT)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_COMMENT)
 				}
 			}
 		}
@@ -195,17 +195,17 @@ int load_romcenter_250(struct dat *dat)
 				if (!strcmp(TOKEN, "plugin"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_DAT_PLUGIN)
+					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_PLUGIN)
 				}
 				else if (!strcmp(TOKEN, "split"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_DAT_SPLIT)
+					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_SPLIT)
 				}
 				else if (!strcmp(TOKEN, "merge"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_DAT_MERGE)
+					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_MERGE)
 				}
 			}
 		}
@@ -224,12 +224,17 @@ int load_romcenter_250(struct dat *dat)
 				if (!strcmp(TOKEN, "refname"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_EMULATOR_REFNAME)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_NAME)
 				}
 				else if (!strcmp(TOKEN, "version"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_ROMCENTER_EMULATOR_VERSION)
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_DESCRIPTION)
+				}
+				else if (!strcmp(TOKEN, "category"))
+				{
+					strcpy(TOKEN, value);
+					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_CATEGORY)
 				}
 			}
 		}
@@ -385,91 +390,79 @@ int save_romcenter_250(struct dat *dat)
 
 	int errflg=0, invalid=0;
 
-	/* --- Copy ClrMamePro header to RomCenter header --- */
-
-	if (dat->clrmamepro.name)
-		dat->romcenter_emulator.refname=dat->clrmamepro.name;
-
-	if (dat->clrmamepro.description)
-		dat->romcenter_emulator.version=dat->clrmamepro.description;
-
-	if (dat->clrmamepro.category)
-		dat->romcenter_credits.comment=dat->clrmamepro.category;
-
-	if (dat->clrmamepro.version)
-		dat->romcenter_credits.version=dat->clrmamepro.version;
-
-	if (dat->clrmamepro.author)
-		dat->romcenter_credits.author=dat->clrmamepro.author;
+	/* --- Initialise RomCenter header members --- */
 
 	if (dat->dat_flags & FLAG_DAT_FULL_MERGING)
 	{
-		dat->romcenter_dat.merge="1";
-		dat->romcenter_dat.split="0";
+		dat->romcenter.merge="1";
+		dat->romcenter.split="0";
 	}
 	else if (dat->dat_flags & FLAG_DAT_SPLIT_MERGING)
 	{
-		dat->romcenter_dat.merge="1";
-		dat->romcenter_dat.split="1";
+		dat->romcenter.merge="1";
+		dat->romcenter.split="1";
 	}
 	else if (dat->dat_flags & FLAG_DAT_NO_MERGING)
 	{
-		dat->romcenter_dat.merge="0";
-		dat->romcenter_dat.split="1";
+		dat->romcenter.merge="0";
+		dat->romcenter.split="1";
 	}
 
-	if (!dat->romcenter_dat.version)
-		dat->romcenter_dat.version="2.50";
+	if (!dat->romcenter.version)
+		dat->romcenter.version="2.50";
 
-	if (!dat->romcenter_dat.plugin)
-		dat->romcenter_dat.plugin="arcade.dll";
+	if (!dat->romcenter.plugin)
+		dat->romcenter.plugin="arcade.dll";
 
 	/* --- Save RomCenter data file --- */
 
 	fprintf(dat->out, "[CREDITS]");
 	fprintf(dat->out, "\nauthor=");
-	if (dat->romcenter_credits.author)
-		fprintf(dat->out, "%s", dat->romcenter_credits.author);
+	if (dat->datafile.author)
+		fprintf(dat->out, "%s", dat->datafile.author);
 	fprintf(dat->out, "\nemail=");
-	if (dat->romcenter_credits.email)
-		fprintf(dat->out, "%s", dat->romcenter_credits.email);
+	if (dat->datafile.email)
+		fprintf(dat->out, "%s", dat->datafile.email);
 	fprintf(dat->out, "\nhomepage=");
-	if (dat->romcenter_credits.homepage)
-		fprintf(dat->out, "%s", dat->romcenter_credits.homepage);
+	if (dat->datafile.homepage)
+		fprintf(dat->out, "%s", dat->datafile.homepage);
 	fprintf(dat->out, "\nurl=");
-	if (dat->romcenter_credits.url)
-		fprintf(dat->out, "%s", dat->romcenter_credits.url);
+	if (dat->datafile.url)
+		fprintf(dat->out, "%s", dat->datafile.url);
 	fprintf(dat->out, "\nversion=");
-	if (dat->romcenter_credits.version)
-		fprintf(dat->out, "%s", dat->romcenter_credits.version);
+	if (dat->datafile.version)
+		fprintf(dat->out, "%s", dat->datafile.version);
 	fprintf(dat->out, "\ndate=");
-	if (dat->romcenter_credits.date)
-		fprintf(dat->out, "%s", dat->romcenter_credits.date);
+	if (dat->datafile.date)
+		fprintf(dat->out, "%s", dat->datafile.date);
 	fprintf(dat->out, "\ncomment=");
-	if (dat->romcenter_credits.comment)
-		fprintf(dat->out, "%s", dat->romcenter_credits.comment);
+	if (dat->datafile.comment)
+		fprintf(dat->out, "%s", dat->datafile.comment);
 
 	fprintf(dat->out, "\n[DAT]");
 	fprintf(dat->out, "\nversion=");
-	if (dat->romcenter_dat.version)
-		fprintf(dat->out, "%s", dat->romcenter_dat.version);
+	if (dat->romcenter.version)
+		fprintf(dat->out, "%s", dat->romcenter.version);
 	fprintf(dat->out, "\nplugin=");
-	if (dat->romcenter_dat.plugin)
-		fprintf(dat->out, "%s", dat->romcenter_dat.plugin);
+	if (dat->romcenter.plugin)
+		fprintf(dat->out, "%s", dat->romcenter.plugin);
 	fprintf(dat->out, "\nsplit=");
-	if (dat->romcenter_dat.split)
-		fprintf(dat->out, "%s", dat->romcenter_dat.split);
+	if (dat->romcenter.split)
+		fprintf(dat->out, "%s", dat->romcenter.split);
 	fprintf(dat->out, "\nmerge=");
-	if (dat->romcenter_dat.merge)
-		fprintf(dat->out, "%s", dat->romcenter_dat.merge);
+	if (dat->romcenter.merge)
+		fprintf(dat->out, "%s", dat->romcenter.merge);
 
 	fprintf(dat->out, "\n[EMULATOR]");
 	fprintf(dat->out, "\nrefname=");
-	if (dat->romcenter_emulator.refname)
-		fprintf(dat->out, "%s", dat->romcenter_emulator.refname);
+	if (dat->datafile.name)
+		fprintf(dat->out, "%s", dat->datafile.name);
 	fprintf(dat->out, "\nversion=");
-	if (dat->romcenter_emulator.version)
-		fprintf(dat->out, "%s", dat->romcenter_emulator.version);
+	if (dat->datafile.description)
+		fprintf(dat->out, "%s", dat->datafile.description);
+	fprintf(dat->out, "\ncategory=");
+	if (dat->datafile.category)
+		fprintf(dat->out, "%s", dat->datafile.category);
 
 	fprintf(dat->out, "\n[GAMES]");
 

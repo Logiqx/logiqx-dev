@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.22"
-#define DATLIB_DATE "26 November 2007"
+#define DATLIB_VERSION "v2.23"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -1222,71 +1222,67 @@ int store_tokenized_dat(struct dat *dat)
 				dat->emulator.debug=BUFFER2_PTR;
 		}
 
+		/* --- Datafile header --- */
+
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		{
+			if (type==TOKEN_DATAFILE_NAME)
+				dat->datafile.name=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_DESCRIPTION)
+				dat->datafile.description=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_CATEGORY)
+				dat->datafile.category=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_VERSION)
+				dat->datafile.version=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_AUTHOR)
+				dat->datafile.author=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_EMAIL)
+				dat->datafile.email=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_HOMEPAGE)
+				dat->datafile.homepage=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_URL)
+				dat->datafile.url=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_DATE)
+				dat->datafile.date=BUFFER2_PTR;
+
+			else if (type==TOKEN_DATAFILE_COMMENT)
+				dat->datafile.comment=BUFFER2_PTR;
+		}
+
 		/* --- ClrMamePro header --- */
 
 		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		{
-			if (type==TOKEN_CLRMAMEPRO_NAME)
-				dat->clrmamepro.name=BUFFER2_PTR;
-
-			else if (type==TOKEN_CLRMAMEPRO_DESCRIPTION)
-				dat->clrmamepro.description=BUFFER2_PTR;
-
-			else if (type==TOKEN_CLRMAMEPRO_CATEGORY)
-				dat->clrmamepro.category=BUFFER2_PTR;
-
-			else if (type==TOKEN_CLRMAMEPRO_VERSION)
-				dat->clrmamepro.version=BUFFER2_PTR;
-
-			else if (type==TOKEN_CLRMAMEPRO_AUTHOR)
-				dat->clrmamepro.author=BUFFER2_PTR;
-
-			else if (type==TOKEN_CLRMAMEPRO_FORCEMERGING)
+			if (type==TOKEN_CLRMAMEPRO_FORCEMERGING)
 				dat->clrmamepro.forcemerging=BUFFER2_PTR;
 
 			else if (type==TOKEN_CLRMAMEPRO_FORCEZIPPING)
 				dat->clrmamepro.forcezipping=BUFFER2_PTR;
+
+			else if (type==TOKEN_CLRMAMEPRO_FORCENODUMP)
+				dat->clrmamepro.forcenodump=BUFFER2_PTR;
 		}
 
 		/* --- RomCenter header --- */
 
 		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		{
-			if (type==TOKEN_ROMCENTER_CREDITS_AUTHOR)
-				dat->romcenter_credits.author=BUFFER2_PTR;
+			if (type==TOKEN_ROMCENTER_PLUGIN)
+				dat->romcenter.plugin=BUFFER2_PTR;
 
-			else if (type==TOKEN_ROMCENTER_CREDITS_EMAIL)
-				dat->romcenter_credits.email=BUFFER2_PTR;
+			else if (type==TOKEN_ROMCENTER_SPLIT)
+				dat->romcenter.split=BUFFER2_PTR;
 
-			else if (type==TOKEN_ROMCENTER_CREDITS_HOMEPAGE)
-				dat->romcenter_credits.homepage=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_CREDITS_URL)
-				dat->romcenter_credits.url=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_CREDITS_VERSION)
-				dat->romcenter_credits.version=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_CREDITS_DATE)
-				dat->romcenter_credits.date=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_CREDITS_COMMENT)
-				dat->romcenter_credits.comment=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_DAT_PLUGIN)
-				dat->romcenter_dat.plugin=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_DAT_SPLIT)
-				dat->romcenter_dat.split=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_DAT_MERGE)
-				dat->romcenter_dat.merge=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_EMULATOR_REFNAME)
-				dat->romcenter_emulator.refname=BUFFER2_PTR;
-
-			else if (type==TOKEN_ROMCENTER_EMULATOR_VERSION)
-				dat->romcenter_emulator.version=BUFFER2_PTR;
+			else if (type==TOKEN_ROMCENTER_MERGE)
+				dat->romcenter.merge=BUFFER2_PTR;
 		}
 	
 		/* --- Bear in mind that the actual parameter may be missing) --- */
@@ -2273,24 +2269,39 @@ int store_tokenized_dat(struct dat *dat)
 		}
 	}
 
+	/* --- Override the datafile header with user parameters --- */
+
+	if (dat->options->datafile.name)
+		dat->datafile.name=dat->options->datafile.name;
+	if (dat->options->datafile.description)
+		dat->datafile.description=dat->options->datafile.description;
+	if (dat->options->datafile.category)
+		dat->datafile.category=dat->options->datafile.category;
+	if (dat->options->datafile.version)
+		dat->datafile.version=dat->options->datafile.version;
+	if (dat->options->datafile.author)
+		dat->datafile.author=dat->options->datafile.author;
+	if (dat->options->datafile.email)
+		dat->datafile.email=dat->options->datafile.email;
+	if (dat->options->datafile.homepage)
+		dat->datafile.homepage=dat->options->datafile.homepage;
+	if (dat->options->datafile.url)
+		dat->datafile.url=dat->options->datafile.url;
+	if (dat->options->datafile.date)
+		dat->datafile.date=dat->options->datafile.date;
+	if (dat->options->datafile.comment)
+		dat->datafile.comment=dat->options->datafile.comment;
+
 	/* --- Override the ClrMamePro header in the dat with user parameters --- */
 
-	if (dat->options->clrmamepro.name)
-		dat->clrmamepro.name=dat->options->clrmamepro.name;
-	if (dat->options->clrmamepro.description)
-		dat->clrmamepro.description=dat->options->clrmamepro.description;
-	if (dat->options->clrmamepro.category)
-		dat->clrmamepro.category=dat->options->clrmamepro.category;
-	if (dat->options->clrmamepro.version)
-		dat->clrmamepro.version=dat->options->clrmamepro.version;
-	if (dat->options->clrmamepro.author)
-		dat->clrmamepro.author=dat->options->clrmamepro.author;
 	if (dat->options->clrmamepro.forcemerging)
 		dat->clrmamepro.forcemerging=dat->options->clrmamepro.forcemerging;
 	if (dat->options->clrmamepro.forcezipping)
 		dat->clrmamepro.forcezipping=dat->options->clrmamepro.forcezipping;
+	if (dat->options->clrmamepro.forcenodump)
+		dat->clrmamepro.forcenodump=dat->options->clrmamepro.forcenodump;
 
-	/* --- Copy merge preferences between ClrMamePro and RomCenter headers --- */
+	/* --- Interpret merge preferences from ClrMamePro and RomCenter headers --- */
 
 	if (dat->clrmamepro.forcemerging)
 	{
@@ -2302,13 +2313,13 @@ int store_tokenized_dat(struct dat *dat)
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 
-	if (dat->romcenter_dat.merge && dat->romcenter_dat.split)
+	if (dat->romcenter.merge && dat->romcenter.split)
 	{
-		if (!strcmp(dat->romcenter_dat.merge, "1") && !strcmp(dat->romcenter_dat.split, "0"))
+		if (!strcmp(dat->romcenter.merge, "1") && !strcmp(dat->romcenter.split, "0"))
 			dat->dat_flags|=FLAG_DAT_FULL_MERGING;
-		else if (!strcmp(dat->romcenter_dat.merge, "1") && !strcmp(dat->romcenter_dat.split, "1"))
+		else if (!strcmp(dat->romcenter.merge, "1") && !strcmp(dat->romcenter.split, "1"))
 			dat->dat_flags|=FLAG_DAT_SPLIT_MERGING;
-		else if (!strcmp(dat->romcenter_dat.merge, "0") && !strcmp(dat->romcenter_dat.split, "1"))
+		else if (!strcmp(dat->romcenter.merge, "0") && !strcmp(dat->romcenter.split, "1"))
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 

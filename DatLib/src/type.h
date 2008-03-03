@@ -671,40 +671,33 @@ struct emulator
 	char *debug;
 };
 
-struct clrmamepro
+struct datafile
 {
 	char *name;           // DatUtil -R option
 	char *description;    // DatUtil -F option
-	char *category;       // DatUtil -C option (not actually used by CMPro though)
+	char *category;       // DatUtil -C option
 	char *version;        // DatUtil -V option
 	char *author;         // DatUtil -A option
+	char *email;          // DatUtil -E option
+	char *homepage;       // DatUtil -H option
+	char *url;            // DatUtil -U option
+	char *date;           // DatUtil -T option
+	char *comment;        // DatUtil -O option
+};
+
+struct clrmamepro
+{
 	char *forcemerging;   // DatUtil -M option (none, split or full)
 	char *forcezipping;   // DatUtil -Z option (zip or unzip)
+	char *forcenodump;    // DatUtil -N option (obsolete, required or ignore)
 };
 
-struct romcenter_credits
-{
-	char *author;         // DatUtil -A option
-	char *email;          // DatUtil has no option for this. New in the 2.50 format
-	char *homepage;       // DatUtil has no option for this. New in the 2.50 format
-	char *url;            // DatUtil has no option for this. New in the 2.50 format
-	char *version;        // DatUtil -V option
-	char *date;           // DatUtil has no option for this. New in the 2.50 format
-	char *comment;        // DatUtil -C option
-};
-
-struct romcenter_dat
+struct romcenter
 {
 	char *version;        // Default is 2.50
-	char *plugin;         // DatUtil -P option. New in the 2.50 format. Default is arcade.dll
-	char *split;          // DatUtil -M option. New in the 2.50 format
-	char *merge;          // DatUtil -M option. New in the 2.50 format
-};
-
-struct romcenter_emulator
-{
-	char *refname;        // DatUtil -R option
-	char *version;        // DatUtil -F option
+	char *plugin;         // Default is arcade.dll
+	char *split;          // DatUtil -M option (smart conversion).
+	char *merge;          // DatUtil -M option (smart conversion).
 };
 
 
@@ -724,6 +717,7 @@ struct options
 	struct dat *info;
 	struct dat *incorporate;
 
+	struct datafile datafile;
 	struct clrmamepro clrmamepro;
 	uint32_t options;
 
@@ -784,11 +778,11 @@ struct dat
 
 	struct emulator emulator;
 
+	struct datafile datafile;
+
 	struct clrmamepro clrmamepro;
 
-	struct romcenter_credits romcenter_credits;
-	struct romcenter_dat romcenter_dat;
-	struct romcenter_emulator romcenter_emulator;
+	struct romcenter romcenter;
 
 	/* --- Fields that are calculated by DatLib */
 
