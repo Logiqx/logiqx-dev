@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.33 - 26/11/2007
+                         DatUtil v2.34 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -119,9 +119,11 @@ read) then convert it to RomCenter afterwards. DatUtil will create a RomCenter
 dat just as good as you could have done by hand but less prone to errors.  ;-)
 
 You will have noticed that ROMCenter dats and CMPro dats have a header section.
-To specify values for the fields in the header, use the '-A', '-V', '-C', '-R'
-and '-F' options (author, version, comment, refname, fullname/emu version).
+To specify values for the fields in the header, use the '-A', '-V', '-C', '-R',
+'-F', '-T', '-E', '-H', '-U' and '-O' options (author, version, category,
+name/refname, fullname/description, date, email, homepage, url, comment).
 '-M' and '-Z' are used to specify the type of merging and zipping required.
+'-N' is used to specify how nodump ROMs should be handled in CMPro.
 Note that these options are all upper case (you must use the correct case).
 
 The log file generated is by default a summary. If you want detailed warning
@@ -290,11 +292,17 @@ Header text:
 
   -A  author
   -V  version
-  -C  comment/category
+  -C  category
   -R  ref name
   -F  full name (i.e. description)
+  -T  date
+  -E  e-mail
+  -H  homepage
+  -U  url
+  -O  comment
   -M  merging (none, split or full)
   -Z  zipping (zip or unzip)
+  -N  nodump (obsolete, required or ignore)
 
 Game selection:
 

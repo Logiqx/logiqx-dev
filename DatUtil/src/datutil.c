@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.33"
-#define DATUTIL_DATE "26 November 2007"
+#define DATUTIL_VERSION "v2.34"
+#define DATUTIL_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:M:Z:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:Z:N:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -102,25 +102,43 @@ int main(int argc, char **argv)
 			break;
 		/* --- Header text --- */
 		case 'A':
-			options->clrmamepro.author=optarg;
+			options->datafile.author=optarg;
 			break;
 		case 'V':
-			options->clrmamepro.version=optarg;
+			options->datafile.version=optarg;
 			break;
 		case 'C':
-			options->clrmamepro.category=optarg;
+			options->datafile.category=optarg;
 			break;
 		case 'R':
-			options->clrmamepro.name=optarg;
+			options->datafile.name=optarg;
 			break;
 		case 'F':
-			options->clrmamepro.description=optarg;
+			options->datafile.description=optarg;
+			break;
+		case 'T':
+			options->datafile.date=optarg;
+			break;
+		case 'E':
+			options->datafile.email=optarg;
+			break;
+		case 'H':
+			options->datafile.homepage=optarg;
+			break;
+		case 'U':
+			options->datafile.url=optarg;
+			break;
+		case 'O':
+			options->datafile.comment=optarg;
 			break;
 		case 'M':
 			options->clrmamepro.forcemerging=optarg;
 			break;
 		case 'Z':
 			options->clrmamepro.forcezipping=optarg;
+			break;
+		case 'N':
+			options->clrmamepro.forcenodump=optarg;
 			break;
 		/* --- Game selection --- */
 		case 'g':
@@ -202,8 +220,10 @@ int main(int argc, char **argv)
 		printf("a brief summary of the options... far greater detail is in the documentation.\n\n");
 
 		printf("Saving          [-f <output format>] [-q] [-k] [-j] [-o|a <output file>] [-t]\n");
-		printf("ClrMamePro +    [-A <author>] [-V <version>] [-C <category>]\n");
-		printf("  RomCenter     [-R <refname>] [-F <fullname>] [-M <merging>] [-Z <zipping>]\n");
+		printf("ClrMamePro +    [-R <refname>] [-F <fullname>] [-C <category>]\n");
+		printf("  RomCenter     [-V <version>] [-T <date>] [-O <comment>]\n");
+		printf("                [-A <author>] [-E <email>] [-H <homepage>] [-U <url>]\n");
+		printf("                [-M <merging>] [-Z <zipping>] [-N <nodump>]\n");
 		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
 		printf("Cleansing       [-l] [-s] [-X] [-D] [-p[rom|disk|sample]]\n");
 		printf("Blending        [-i <info file>] [-I <incorporate file>]\n");
