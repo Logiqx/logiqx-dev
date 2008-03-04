@@ -234,6 +234,7 @@ int main(int argc, char **argv)
 
 		printf("MAME ListInfo   listinfo info li clrmamepro clrmame cmpro cmp cm\n");
   		printf("MAME ListXML    listxml xml lx\n");
+  		printf("Generic XML     genericxml generic gx\n");
   		printf("RomCenter 2     romcenter2 rc2 romcenter rc\n");
   		printf("Tab Delimited   delimited tab text\n");
   		printf("MAME GameList   gamelist gl\n");
