@@ -687,6 +687,7 @@ struct header
 
 struct clrmamepro
 {
+	char *header;
 	char *forcemerging;   // DatUtil -M option (none, split or full)
 	char *forcezipping;   // DatUtil -Z option (zip or unzip)
 	char *forcenodump;    // DatUtil -N option (obsolete, required or ignore)
@@ -698,6 +699,12 @@ struct romcenter
 	char *plugin;         // Default is arcade.dll
 	char *split;          // DatUtil -M option (smart conversion).
 	char *merge;          // DatUtil -M option (smart conversion).
+	char *forcedrommode;
+	char *forcedbiosmode;
+	char *forcedsamplemode;
+	char *lockrommode;
+	char *lockbiosmode;
+	char *locksamplemode;
 };
 
 

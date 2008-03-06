@@ -87,7 +87,7 @@ int identify_generic_xml(struct dat *dat)
 		if (!strcmp(TOKEN, "<?xml"))
 			xml++;
 
-		if (xml && (!strcmp(TOKEN, "<emulator>") || !strcmp(TOKEN, "<emulator")))
+		if (xml && (!strcmp(TOKEN, "<datafile>") || !strcmp(TOKEN, "<datafile")))
 			match++;
 
 		BUFFER1_ADVANCE_LINE
@@ -198,243 +198,298 @@ int identify_generic_xml(struct dat *dat)
 
 int load_mame_listxml(struct dat *dat)
 {
-	int game_type=0, errflg=0;
+	int in_header=0, game_type=0, errflg=0;
 
 	BUFFER1_REWIND
 
 	while (!errflg && BUFFER1_REMAINING)
 	{
-		if (strstr(BUFFER1_PTR, "<mame "))
+		if (in_header)
 		{
-			strcpy(TOKEN, "mame");
-			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
-			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
-			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
-		}
-		if (strstr(BUFFER1_PTR, "<Raine32 "))
-		{
-			strcpy(TOKEN, "Raine32");
-			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
-			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
-			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
-		}
-		else if (strstr(BUFFER1_PTR, "<mess "))
-		{
-			strcpy(TOKEN, "mess");
-			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
-			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
-			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
-		}
-		else if (strstr(BUFFER1_PTR, "<datafile "))
-		{
-			strcpy(TOKEN, "datafile");
-			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
-			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
-			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
-		}
-		else if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
-		{
-			if (strstr(BUFFER1_PTR, "runnable=\"no\"") || strstr(BUFFER1_PTR, "isbios=\"yes\""))
-				game_type=FLAG_RESOURCE_NAME;
-			else if (strstr(BUFFER1_PTR, "<game "))
-				game_type=FLAG_GAME_NAME;
-			else if (strstr(BUFFER1_PTR, "<machine "))
-				game_type=FLAG_MACHINE_NAME;
+			if (strstr(BUFFER1_PTR, "</header>"))
+				in_header=0;
+			else if (strstr(BUFFER1_PTR, "<name>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_NAME)
+			else if (strstr(BUFFER1_PTR, "<description>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_DESCRIPTION)
+			else if (strstr(BUFFER1_PTR, "<category>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_CATEGORY)
+			else if (strstr(BUFFER1_PTR, "<version>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_VERSION)
+			else if (strstr(BUFFER1_PTR, "<date>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_DATE)
+			else if (strstr(BUFFER1_PTR, "<author>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_AUTHOR)
+			else if (strstr(BUFFER1_PTR, "<email>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_EMAIL)
+			else if (strstr(BUFFER1_PTR, "<homepage>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_HOMEPAGE)
+			else if (strstr(BUFFER1_PTR, "<url>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_URL)
+			else if (strstr(BUFFER1_PTR, "<comment>"))
+				GET_XML_ELEMENT(TOKEN_HEADER_COMMENT)
 
-			if (game_type==FLAG_GAME_NAME)
+			else if (strstr(BUFFER1_PTR, "<clrmamepro "))
 			{
-				GET_XML_ATTRIBUTE("name", TOKEN_GAME_NAME)
-				GET_XML_ATTRIBUTE("sourcefile", TOKEN_GAME_SOURCEFILE)
-				GET_XML_ATTRIBUTE("cloneof", TOKEN_GAME_CLONEOF)
-				GET_XML_ATTRIBUTE("romof", TOKEN_GAME_ROMOF)
-				GET_XML_ATTRIBUTE("sampleof", TOKEN_GAME_SAMPLEOF)
-				GET_XML_ATTRIBUTE("rebuildto", TOKEN_GAME_REBUILDTO)
-				GET_XML_ATTRIBUTE("board", TOKEN_GAME_BOARD)
+				GET_XML_ATTRIBUTE("header", TOKEN_CLRMAMEPRO_HEADER) 
+				GET_XML_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING) 
+				GET_XML_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP) 
+				GET_XML_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING) 
 			}
-			else if (game_type==FLAG_RESOURCE_NAME)
+
+			else if (strstr(BUFFER1_PTR, "<romcenter "))
 			{
-				GET_XML_ATTRIBUTE("name", TOKEN_RESOURCE_NAME) 
-				GET_XML_ATTRIBUTE("sourcefile", TOKEN_RESOURCE_SOURCEFILE) 
-				GET_XML_ATTRIBUTE("board", TOKEN_RESOURCE_BOARD) 
-			}
-			if (game_type==FLAG_MACHINE_NAME)
-			{
-				GET_XML_ATTRIBUTE("name", TOKEN_MACHINE_NAME) 
-				GET_XML_ATTRIBUTE("sourcefile", TOKEN_MACHINE_SOURCEFILE) 
-				GET_XML_ATTRIBUTE("cloneof", TOKEN_MACHINE_CLONEOF) 
-				GET_XML_ATTRIBUTE("romof", TOKEN_MACHINE_ROMOF) 
-				GET_XML_ATTRIBUTE("sampleof", TOKEN_MACHINE_SAMPLEOF)
-				GET_XML_ATTRIBUTE("board", TOKEN_MACHINE_BOARD)
+				GET_XML_ATTRIBUTE("plugin", TOKEN_ROMCENTER_PLUGIN) 
+				GET_XML_ATTRIBUTE("forcedrommode", TOKEN_ROMCENTER_FORCEDROMMODE) 
+				GET_XML_ATTRIBUTE("forcedbiosmode", TOKEN_ROMCENTER_FORCEDBIOSMODE) 
+				GET_XML_ATTRIBUTE("forcedsamplemode", TOKEN_ROMCENTER_FORCEDSAMPLEMODE) 
+				GET_XML_ATTRIBUTE("lockrommode", TOKEN_ROMCENTER_LOCKROMMODE) 
+				GET_XML_ATTRIBUTE("lockbiosmode", TOKEN_ROMCENTER_LOCKBIOSMODE) 
+				GET_XML_ATTRIBUTE("locksamplemode", TOKEN_ROMCENTER_LOCKSAMPLEMODE) 
 			}
 		}
-		else if (strstr(BUFFER1_PTR, "<description>"))
+		else
 		{
-			if (game_type==FLAG_GAME_NAME)
-				GET_XML_ELEMENT(TOKEN_GAME_DESCRIPTION)
-			else if (game_type==FLAG_RESOURCE_NAME)
-				GET_XML_ELEMENT(TOKEN_RESOURCE_DESCRIPTION)
-			else if (game_type==FLAG_MACHINE_NAME)
-				GET_XML_ELEMENT(TOKEN_MACHINE_DESCRIPTION)
-		}
-		else if (strstr(BUFFER1_PTR, "<year>"))
-		{
-			if (game_type==FLAG_GAME_NAME)
-				GET_XML_ELEMENT(TOKEN_GAME_YEAR)
-			else if (game_type==FLAG_RESOURCE_NAME)
-				GET_XML_ELEMENT(TOKEN_RESOURCE_YEAR)
-			else if (game_type==FLAG_MACHINE_NAME)
-				GET_XML_ELEMENT(TOKEN_MACHINE_YEAR)
-		}
-		else if (strstr(BUFFER1_PTR, "<manufacturer>"))
-		{
-			if (game_type==FLAG_GAME_NAME)
-				GET_XML_ELEMENT(TOKEN_GAME_MANUFACTURER)
-			else if (game_type==FLAG_RESOURCE_NAME)
-				GET_XML_ELEMENT(TOKEN_RESOURCE_MANUFACTURER)
-			else if (game_type==FLAG_MACHINE_NAME)
-				GET_XML_ELEMENT(TOKEN_MACHINE_MANUFACTURER)
-		}
-		else if (strstr(BUFFER1_PTR, "<history>"))
-		{
-			if (game_type==FLAG_GAME_NAME)
-				GET_XML_ELEMENT(TOKEN_GAME_HISTORY)
-			else if (game_type==FLAG_RESOURCE_NAME)
-				GET_XML_ELEMENT(TOKEN_RESOURCE_HISTORY)
-			else if (game_type==FLAG_MACHINE_NAME)
-				GET_XML_ELEMENT(TOKEN_MACHINE_HISTORY)
-		}
-		else if (strstr(BUFFER1_PTR, "<biosset "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_BIOSSET_NAME) 
-			GET_XML_ATTRIBUTE("description", TOKEN_BIOSSET_DESCRIPTION) 
-			GET_XML_ATTRIBUTE("default", TOKEN_BIOSSET_DEFAULT)
-		}
-		else if (strstr(BUFFER1_PTR, "<rom "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_ROM_NAME) 
-			GET_XML_ATTRIBUTE("bios", TOKEN_ROM_BIOS) 
-			GET_XML_ATTRIBUTE("size", TOKEN_ROM_SIZE) 
-			GET_XML_ATTRIBUTE("crc", TOKEN_ROM_CRC) 
-			GET_XML_ATTRIBUTE("md5", TOKEN_ROM_MD5) 
-			GET_XML_ATTRIBUTE("sha1", TOKEN_ROM_SHA1) 
-			GET_XML_ATTRIBUTE("merge", TOKEN_ROM_MERGE) 
-			GET_XML_ATTRIBUTE("region", TOKEN_ROM_REGION) 
-			GET_XML_ATTRIBUTE("offset", TOKEN_ROM_OFFSET) 
-			GET_XML_ATTRIBUTE("status", TOKEN_ROM_STATUS) 
-			GET_XML_ATTRIBUTE("dispose", TOKEN_ROM_DISPOSE) 
-			GET_XML_ATTRIBUTE("soundonly", TOKEN_ROM_SOUNDONLY)
-		}
-		else if (strstr(BUFFER1_PTR, "<disk "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_DISK_NAME) 
-			GET_XML_ATTRIBUTE("md5", TOKEN_DISK_MD5) 
-			GET_XML_ATTRIBUTE("sha1", TOKEN_DISK_SHA1) 
-			GET_XML_ATTRIBUTE("merge", TOKEN_DISK_MERGE) 
-			GET_XML_ATTRIBUTE("region", TOKEN_DISK_REGION) 
-			GET_XML_ATTRIBUTE("index", TOKEN_DISK_INDEX) 
-			GET_XML_ATTRIBUTE("status", TOKEN_DISK_STATUS)
-		}
-		else if (strstr(BUFFER1_PTR, "<sample "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_SAMPLE_NAME)
-		}
-		else if (strstr(BUFFER1_PTR, "<chip "))
-		{
-			GET_XML_ATTRIBUTE("type", TOKEN_CHIP_TYPE) 
-			GET_XML_ATTRIBUTE("name", TOKEN_CHIP_NAME) 
-			GET_XML_ATTRIBUTE("soundonly", TOKEN_CHIP_SOUNDONLY)
-			GET_XML_ATTRIBUTE("clock", TOKEN_CHIP_CLOCK) 
-		}
-		else if (strstr(BUFFER1_PTR, "<video "))
-		{
-			GET_XML_ATTRIBUTE("screen", TOKEN_VIDEO_SCREEN) 
-			GET_XML_ATTRIBUTE("orientation", TOKEN_VIDEO_ORIENTATION) 
-			GET_XML_ATTRIBUTE("width", TOKEN_VIDEO_WIDTH) 
-			GET_XML_ATTRIBUTE("height", TOKEN_VIDEO_HEIGHT) 
-			GET_XML_ATTRIBUTE("aspectx", TOKEN_VIDEO_ASPECTX) 
-			GET_XML_ATTRIBUTE("aspecty", TOKEN_VIDEO_ASPECTY) 
-			GET_XML_ATTRIBUTE("refresh", TOKEN_VIDEO_REFRESH) 
-		}
-		else if (strstr(BUFFER1_PTR, "<display "))
-		{
-			GET_XML_ATTRIBUTE("type", TOKEN_DISPLAY_TYPE) 
-			GET_XML_ATTRIBUTE("rotate", TOKEN_DISPLAY_ROTATE) 
-			GET_XML_ATTRIBUTE("flipx", TOKEN_DISPLAY_FLIPX) 
-			GET_XML_ATTRIBUTE("width", TOKEN_DISPLAY_WIDTH) 
-			GET_XML_ATTRIBUTE("height", TOKEN_DISPLAY_HEIGHT) 
-			GET_XML_ATTRIBUTE("refresh", TOKEN_DISPLAY_REFRESH) 
-		}
-		else if (strstr(BUFFER1_PTR, "<sound "))
-		{
-			GET_XML_ATTRIBUTE("channels", TOKEN_SOUND_CHANNELS)
-		}
-		else if (strstr(BUFFER1_PTR, "<input "))
-		{
-			GET_XML_ATTRIBUTE("players", TOKEN_INPUT_PLAYERS)
-			GET_XML_ATTRIBUTE("service", TOKEN_INPUT_SERVICE)
-			GET_XML_ATTRIBUTE("tilt", TOKEN_INPUT_TILT)
-			GET_XML_ATTRIBUTE("control", TOKEN_INPUT_CONTROL)
-			GET_XML_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
-			GET_XML_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
-			GET_XML_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
-		}
-		else if (strstr(BUFFER1_PTR, "<control "))
-		{
-			GET_XML_ATTRIBUTE("type", TOKEN_CONTROL_TYPE)
-			GET_XML_ATTRIBUTE("minimum", TOKEN_CONTROL_MINIMUM)
-			GET_XML_ATTRIBUTE("maximum", TOKEN_CONTROL_MAXIMUM)
-			GET_XML_ATTRIBUTE("sensitivity", TOKEN_CONTROL_SENSITIVITY)
-			GET_XML_ATTRIBUTE("keydelta", TOKEN_CONTROL_KEYDELTA)
-			GET_XML_ATTRIBUTE("reverse", TOKEN_CONTROL_REVERSE)
-		}
-		else if (strstr(BUFFER1_PTR, "<dipswitch "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_DIPSWITCH_NAME)
-		}
-		else if (strstr(BUFFER1_PTR, "<dipvalue "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_DIPVALUE_NAME)
-			GET_XML_ATTRIBUTE("default", TOKEN_DIPVALUE_DEFAULT)
-		}
-		else if (strstr(BUFFER1_PTR, "<driver "))
-		{
-			GET_XML_ATTRIBUTE("status", TOKEN_DRIVER_STATUS)
-			GET_XML_ATTRIBUTE("emulation", TOKEN_DRIVER_EMULATION)
-			GET_XML_ATTRIBUTE("color", TOKEN_DRIVER_COLOR)
-			GET_XML_ATTRIBUTE("sound", TOKEN_DRIVER_SOUND)
-			GET_XML_ATTRIBUTE("graphic", TOKEN_DRIVER_GRAPHIC)
-			GET_XML_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
-			GET_XML_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
-			GET_XML_ATTRIBUTE("savestate", TOKEN_DRIVER_SAVESTATE)
-			GET_XML_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
-			GET_XML_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
-			GET_XML_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
-		}
-		else if (strstr(BUFFER1_PTR, "<device "))
-		{
-			if (strstr(BUFFER1_PTR, "type="))
+			if (strstr(BUFFER1_PTR, "<header>"))
 			{
-				GET_XML_ATTRIBUTE("type", TOKEN_DEVICE_TYPE)
+				in_header++;
 			}
-			else
+			else if (strstr(BUFFER1_PTR, "<mame "))
 			{
-				GET_XML_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
+				strcpy(TOKEN, "mame");
+				BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+				GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+				GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
 			}
-			GET_XML_ATTRIBUTE("tag", TOKEN_DEVICE_TAG)
-			GET_XML_ATTRIBUTE("mandatory", TOKEN_DEVICE_MANDATORY)
-		}
-		else if (strstr(BUFFER1_PTR, "<extension "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_EXTENSION_NAME)
-		}
-		else if (strstr(BUFFER1_PTR, "<archive "))
-		{
-			GET_XML_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
-		}
-		else if (strstr(BUFFER1_PTR, "<ramoption ") || strstr(BUFFER1_PTR, "<ramoption>"))
-		{
-			GET_XML_ELEMENT(TOKEN_RAMOPTION_SIZE)
-			GET_XML_ATTRIBUTE("default", TOKEN_RAMOPTION_DEFAULT)
+			else if (strstr(BUFFER1_PTR, "<Raine32 "))
+			{
+				strcpy(TOKEN, "Raine32");
+				BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+				GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+				GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
+			}
+			else if (strstr(BUFFER1_PTR, "<mess "))
+			{
+				strcpy(TOKEN, "mess");
+				BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+				GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+				GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
+			}
+			else if (strstr(BUFFER1_PTR, "<datafile "))
+			{
+				strcpy(TOKEN, "datafile");
+				BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
+				GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
+				GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
+			}
+			else if (strstr(BUFFER1_PTR, "<game ") || strstr(BUFFER1_PTR, "<machine "))
+			{
+				if (strstr(BUFFER1_PTR, "runnable=\"no\"") || strstr(BUFFER1_PTR, "isbios=\"yes\""))
+					game_type=FLAG_RESOURCE_NAME;
+				else if (strstr(BUFFER1_PTR, "<game "))
+					game_type=FLAG_GAME_NAME;
+				else if (strstr(BUFFER1_PTR, "<machine "))
+					game_type=FLAG_MACHINE_NAME;
+
+				if (game_type==FLAG_GAME_NAME)
+				{
+					GET_XML_ATTRIBUTE("name", TOKEN_GAME_NAME)
+					GET_XML_ATTRIBUTE("sourcefile", TOKEN_GAME_SOURCEFILE)
+					GET_XML_ATTRIBUTE("cloneof", TOKEN_GAME_CLONEOF)
+					GET_XML_ATTRIBUTE("romof", TOKEN_GAME_ROMOF)
+					GET_XML_ATTRIBUTE("sampleof", TOKEN_GAME_SAMPLEOF)
+					GET_XML_ATTRIBUTE("rebuildto", TOKEN_GAME_REBUILDTO)
+					GET_XML_ATTRIBUTE("board", TOKEN_GAME_BOARD)
+				}
+				else if (game_type==FLAG_RESOURCE_NAME)
+				{
+					GET_XML_ATTRIBUTE("name", TOKEN_RESOURCE_NAME) 
+					GET_XML_ATTRIBUTE("sourcefile", TOKEN_RESOURCE_SOURCEFILE) 
+					GET_XML_ATTRIBUTE("board", TOKEN_RESOURCE_BOARD) 
+				}
+				if (game_type==FLAG_MACHINE_NAME)
+				{
+					GET_XML_ATTRIBUTE("name", TOKEN_MACHINE_NAME) 
+					GET_XML_ATTRIBUTE("sourcefile", TOKEN_MACHINE_SOURCEFILE) 
+					GET_XML_ATTRIBUTE("cloneof", TOKEN_MACHINE_CLONEOF) 
+					GET_XML_ATTRIBUTE("romof", TOKEN_MACHINE_ROMOF) 
+					GET_XML_ATTRIBUTE("sampleof", TOKEN_MACHINE_SAMPLEOF)
+					GET_XML_ATTRIBUTE("board", TOKEN_MACHINE_BOARD)
+				}
+			}
+			//else if (strstr(BUFFER1_PTR, "<comment>"))
+			//{
+				//GET_XML_ELEMENT(TOKEN_COMMENT_TEXT)
+			//}
+			else if (strstr(BUFFER1_PTR, "<description>"))
+			{
+				if (game_type==FLAG_GAME_NAME)
+					GET_XML_ELEMENT(TOKEN_GAME_DESCRIPTION)
+				else if (game_type==FLAG_RESOURCE_NAME)
+					GET_XML_ELEMENT(TOKEN_RESOURCE_DESCRIPTION)
+				else if (game_type==FLAG_MACHINE_NAME)
+					GET_XML_ELEMENT(TOKEN_MACHINE_DESCRIPTION)
+			}
+			else if (strstr(BUFFER1_PTR, "<year>"))
+			{
+				if (game_type==FLAG_GAME_NAME)
+					GET_XML_ELEMENT(TOKEN_GAME_YEAR)
+				else if (game_type==FLAG_RESOURCE_NAME)
+					GET_XML_ELEMENT(TOKEN_RESOURCE_YEAR)
+				else if (game_type==FLAG_MACHINE_NAME)
+					GET_XML_ELEMENT(TOKEN_MACHINE_YEAR)
+			}
+			else if (strstr(BUFFER1_PTR, "<manufacturer>"))
+			{
+				if (game_type==FLAG_GAME_NAME)
+					GET_XML_ELEMENT(TOKEN_GAME_MANUFACTURER)
+				else if (game_type==FLAG_RESOURCE_NAME)
+					GET_XML_ELEMENT(TOKEN_RESOURCE_MANUFACTURER)
+				else if (game_type==FLAG_MACHINE_NAME)
+					GET_XML_ELEMENT(TOKEN_MACHINE_MANUFACTURER)
+			}
+			else if (strstr(BUFFER1_PTR, "<history>"))
+			{
+				if (game_type==FLAG_GAME_NAME)
+					GET_XML_ELEMENT(TOKEN_GAME_HISTORY)
+				else if (game_type==FLAG_RESOURCE_NAME)
+					GET_XML_ELEMENT(TOKEN_RESOURCE_HISTORY)
+				else if (game_type==FLAG_MACHINE_NAME)
+					GET_XML_ELEMENT(TOKEN_MACHINE_HISTORY)
+			}
+			else if (strstr(BUFFER1_PTR, "<biosset "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_BIOSSET_NAME) 
+				GET_XML_ATTRIBUTE("description", TOKEN_BIOSSET_DESCRIPTION) 
+				GET_XML_ATTRIBUTE("default", TOKEN_BIOSSET_DEFAULT)
+			}
+			else if (strstr(BUFFER1_PTR, "<rom "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_ROM_NAME) 
+				GET_XML_ATTRIBUTE("bios", TOKEN_ROM_BIOS) 
+				GET_XML_ATTRIBUTE("size", TOKEN_ROM_SIZE) 
+				GET_XML_ATTRIBUTE("crc", TOKEN_ROM_CRC) 
+				GET_XML_ATTRIBUTE("md5", TOKEN_ROM_MD5) 
+				GET_XML_ATTRIBUTE("sha1", TOKEN_ROM_SHA1) 
+				GET_XML_ATTRIBUTE("merge", TOKEN_ROM_MERGE) 
+				GET_XML_ATTRIBUTE("region", TOKEN_ROM_REGION) 
+				GET_XML_ATTRIBUTE("offset", TOKEN_ROM_OFFSET) 
+				GET_XML_ATTRIBUTE("status", TOKEN_ROM_STATUS) 
+				GET_XML_ATTRIBUTE("dispose", TOKEN_ROM_DISPOSE) 
+				GET_XML_ATTRIBUTE("soundonly", TOKEN_ROM_SOUNDONLY)
+			}
+			else if (strstr(BUFFER1_PTR, "<disk "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_DISK_NAME) 
+				GET_XML_ATTRIBUTE("md5", TOKEN_DISK_MD5) 
+				GET_XML_ATTRIBUTE("sha1", TOKEN_DISK_SHA1) 
+				GET_XML_ATTRIBUTE("merge", TOKEN_DISK_MERGE) 
+				GET_XML_ATTRIBUTE("region", TOKEN_DISK_REGION) 
+				GET_XML_ATTRIBUTE("index", TOKEN_DISK_INDEX) 
+				GET_XML_ATTRIBUTE("status", TOKEN_DISK_STATUS)
+			}
+			else if (strstr(BUFFER1_PTR, "<sample "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_SAMPLE_NAME)
+			}
+			else if (strstr(BUFFER1_PTR, "<chip "))
+			{
+				GET_XML_ATTRIBUTE("type", TOKEN_CHIP_TYPE) 
+				GET_XML_ATTRIBUTE("name", TOKEN_CHIP_NAME) 
+				GET_XML_ATTRIBUTE("soundonly", TOKEN_CHIP_SOUNDONLY)
+				GET_XML_ATTRIBUTE("clock", TOKEN_CHIP_CLOCK) 
+			}
+			else if (strstr(BUFFER1_PTR, "<video "))
+			{
+				GET_XML_ATTRIBUTE("screen", TOKEN_VIDEO_SCREEN) 
+				GET_XML_ATTRIBUTE("orientation", TOKEN_VIDEO_ORIENTATION) 
+				GET_XML_ATTRIBUTE("width", TOKEN_VIDEO_WIDTH) 
+				GET_XML_ATTRIBUTE("height", TOKEN_VIDEO_HEIGHT) 
+				GET_XML_ATTRIBUTE("aspectx", TOKEN_VIDEO_ASPECTX) 
+				GET_XML_ATTRIBUTE("aspecty", TOKEN_VIDEO_ASPECTY) 
+				GET_XML_ATTRIBUTE("refresh", TOKEN_VIDEO_REFRESH) 
+			}
+			else if (strstr(BUFFER1_PTR, "<display "))
+			{
+				GET_XML_ATTRIBUTE("type", TOKEN_DISPLAY_TYPE) 
+				GET_XML_ATTRIBUTE("rotate", TOKEN_DISPLAY_ROTATE) 
+				GET_XML_ATTRIBUTE("flipx", TOKEN_DISPLAY_FLIPX) 
+				GET_XML_ATTRIBUTE("width", TOKEN_DISPLAY_WIDTH) 
+				GET_XML_ATTRIBUTE("height", TOKEN_DISPLAY_HEIGHT) 
+				GET_XML_ATTRIBUTE("refresh", TOKEN_DISPLAY_REFRESH) 
+			}
+			else if (strstr(BUFFER1_PTR, "<sound "))
+			{
+				GET_XML_ATTRIBUTE("channels", TOKEN_SOUND_CHANNELS)
+			}
+			else if (strstr(BUFFER1_PTR, "<input "))
+			{
+				GET_XML_ATTRIBUTE("players", TOKEN_INPUT_PLAYERS)
+				GET_XML_ATTRIBUTE("service", TOKEN_INPUT_SERVICE)
+				GET_XML_ATTRIBUTE("tilt", TOKEN_INPUT_TILT)
+				GET_XML_ATTRIBUTE("control", TOKEN_INPUT_CONTROL)
+				GET_XML_ATTRIBUTE("buttons", TOKEN_INPUT_BUTTONS)
+				GET_XML_ATTRIBUTE("coins", TOKEN_INPUT_COINS)
+				GET_XML_ATTRIBUTE("dipswitches", TOKEN_INPUT_DIPSWITCHES)
+			}
+			else if (strstr(BUFFER1_PTR, "<control "))
+			{
+				GET_XML_ATTRIBUTE("type", TOKEN_CONTROL_TYPE)
+				GET_XML_ATTRIBUTE("minimum", TOKEN_CONTROL_MINIMUM)
+				GET_XML_ATTRIBUTE("maximum", TOKEN_CONTROL_MAXIMUM)
+				GET_XML_ATTRIBUTE("sensitivity", TOKEN_CONTROL_SENSITIVITY)
+				GET_XML_ATTRIBUTE("keydelta", TOKEN_CONTROL_KEYDELTA)
+				GET_XML_ATTRIBUTE("reverse", TOKEN_CONTROL_REVERSE)
+			}
+			else if (strstr(BUFFER1_PTR, "<dipswitch "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_DIPSWITCH_NAME)
+			}
+			else if (strstr(BUFFER1_PTR, "<dipvalue "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_DIPVALUE_NAME)
+				GET_XML_ATTRIBUTE("default", TOKEN_DIPVALUE_DEFAULT)
+			}
+			else if (strstr(BUFFER1_PTR, "<driver "))
+			{
+				GET_XML_ATTRIBUTE("status", TOKEN_DRIVER_STATUS)
+				GET_XML_ATTRIBUTE("emulation", TOKEN_DRIVER_EMULATION)
+				GET_XML_ATTRIBUTE("color", TOKEN_DRIVER_COLOR)
+				GET_XML_ATTRIBUTE("sound", TOKEN_DRIVER_SOUND)
+				GET_XML_ATTRIBUTE("graphic", TOKEN_DRIVER_GRAPHIC)
+				GET_XML_ATTRIBUTE("cocktail", TOKEN_DRIVER_COCKTAIL)
+				GET_XML_ATTRIBUTE("protection", TOKEN_DRIVER_PROTECTION)
+				GET_XML_ATTRIBUTE("savestate", TOKEN_DRIVER_SAVESTATE)
+				GET_XML_ATTRIBUTE("palettesize", TOKEN_DRIVER_PALETTESIZE)
+				GET_XML_ATTRIBUTE("colordeep", TOKEN_DRIVER_COLORDEEP)
+				GET_XML_ATTRIBUTE("credits", TOKEN_DRIVER_CREDITS)
+			}
+			else if (strstr(BUFFER1_PTR, "<device "))
+			{
+				if (strstr(BUFFER1_PTR, "type="))
+				{
+					GET_XML_ATTRIBUTE("type", TOKEN_DEVICE_TYPE)
+				}
+				else
+				{
+					GET_XML_ATTRIBUTE("name", TOKEN_DEVICE_NAME)
+				}
+				GET_XML_ATTRIBUTE("tag", TOKEN_DEVICE_TAG)
+				GET_XML_ATTRIBUTE("mandatory", TOKEN_DEVICE_MANDATORY)
+			}
+			else if (strstr(BUFFER1_PTR, "<extension "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_EXTENSION_NAME)
+			}
+			else if (strstr(BUFFER1_PTR, "<archive "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_ARCHIVE_NAME)
+			}
+			else if (strstr(BUFFER1_PTR, "<ramoption ") || strstr(BUFFER1_PTR, "<ramoption>"))
+			{
+				GET_XML_ELEMENT(TOKEN_RAMOPTION_SIZE)
+				GET_XML_ATTRIBUTE("default", TOKEN_RAMOPTION_DEFAULT)
+			}
 		}
 
 		BUFFER1_ADVANCE_LINE
@@ -601,6 +656,24 @@ int save_mame_listxml(struct dat *dat)
 
 	uint32_t i, j, k;
 	int errflg=0;
+
+	/* --- Determine the type of merging based on dat flags --- */
+
+	if (dat->dat_flags & FLAG_DAT_FULL_MERGING)
+	{
+		dat->clrmamepro.forcemerging="full";
+		dat->romcenter.forcedrommode="m";
+	}
+	else if (dat->dat_flags & FLAG_DAT_SPLIT_MERGING)
+	{
+		dat->clrmamepro.forcemerging="split";
+		dat->romcenter.forcedrommode="s";
+	}
+	else if (dat->dat_flags & FLAG_DAT_NO_MERGING)
+	{
+		dat->clrmamepro.forcemerging="none";
+		dat->romcenter.forcedrommode="n";
+	}
 
 	/* --- Write the DTD --- */
 
@@ -928,7 +1001,7 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, "<!DOCTYPE datafile PUBLIC \"-//Logiqx//DTD ROM Management Datafile//EN\" \"http://www.logiqx.com/Dats/datafile.dtd\">\n");
 	}
 
-	/* --- For every game, machine and resource --- */
+	/* --- Main element --- */
 
 	fprintf(dat->out, "<%s", doc_type);
 
@@ -939,6 +1012,74 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, " debug=\"%s\"", dat->emulator.debug);
 
 	fprintf(dat->out, ">\n");
+
+	/* --- Header element --- */
+
+	if (!strcmp(doc_type, "datafile"))
+	{
+		fprintf(dat->out, "\t<header>\n");
+		if (dat->header.name!=0)
+			fprintf(dat->out, "\t\t<name>%s</name>\n", dat->header.name);
+		if (dat->header.description!=0)
+			fprintf(dat->out, "\t\t<description>%s</description>\n", dat->header.description);
+		if (dat->header.category!=0)
+			fprintf(dat->out, "\t\t<category>%s</category>\n", dat->header.category);
+		if (dat->header.version!=0)
+			fprintf(dat->out, "\t\t<version>%s</version>\n", dat->header.version);
+		if (dat->header.date!=0)
+			fprintf(dat->out, "\t\t<date>%s</date>\n", dat->header.date);
+		if (dat->header.author!=0)
+			fprintf(dat->out, "\t\t<author>%s</author>\n", dat->header.author);
+		if (dat->header.email!=0)
+			fprintf(dat->out, "\t\t<email>%s</email>\n", dat->header.email);
+		if (dat->header.homepage!=0)
+			fprintf(dat->out, "\t\t<homepage>%s</homepage>\n", dat->header.homepage);
+		if (dat->header.url!=0)
+			fprintf(dat->out, "\t\t<url>%s</url>\n", dat->header.url);
+		if (dat->header.comment!=0)
+			fprintf(dat->out, "\t\t<comment>%s</comment>\n", dat->header.comment);
+
+		if (dat->clrmamepro.header!= 0 || dat->clrmamepro.forcemerging ||
+			dat->clrmamepro.forcenodump || dat->clrmamepro.forcezipping)
+		{
+			fprintf(dat->out, "\t\t<clrmamepro");
+			if (dat->clrmamepro.header!=0)
+				fprintf(dat->out, " header=\"%s\"", dat->clrmamepro.header);
+			if (dat->clrmamepro.forcemerging!=0)
+				fprintf(dat->out, " forcemerging=\"%s\"", dat->clrmamepro.forcemerging);
+			if (dat->clrmamepro.forcenodump!=0)
+				fprintf(dat->out, " forcenodump=\"%s\"", dat->clrmamepro.forcenodump);
+			if (dat->clrmamepro.forcezipping!=0)
+				fprintf(dat->out, " forcezipping=\"%s\"", dat->clrmamepro.forcezipping);
+			fprintf(dat->out, "/>\n");
+		}
+
+		if (dat->romcenter.plugin!= 0 ||
+			dat->romcenter.forcedrommode || dat->romcenter.forcedbiosmode || dat->romcenter.forcedsamplemode ||
+			dat->romcenter.lockrommode || dat->romcenter.lockbiosmode || dat->romcenter.locksamplemode)
+		{
+			fprintf(dat->out, "\t\t<romcenter");
+			if (dat->romcenter.plugin!=0)
+				fprintf(dat->out, " plugin=\"%s\"", dat->romcenter.plugin);
+			if (dat->romcenter.forcedrommode!=0)
+				fprintf(dat->out, " forcedrommode=\"%s\"", dat->romcenter.forcedrommode);
+			if (dat->romcenter.forcedbiosmode!=0)
+				fprintf(dat->out, " forcedbiosmode=\"%s\"", dat->romcenter.forcedbiosmode);
+			if (dat->romcenter.forcedsamplemode!=0)
+				fprintf(dat->out, " forcedsamplemode=\"%s\"", dat->romcenter.forcedsamplemode);
+			if (dat->romcenter.lockrommode!=0)
+				fprintf(dat->out, " lockrommode=\"%s\"", dat->romcenter.lockrommode);
+			if (dat->romcenter.lockbiosmode!=0)
+				fprintf(dat->out, " lockbiosmode=\"%s\"", dat->romcenter.lockbiosmode);
+			if (dat->romcenter.locksamplemode!=0)
+				fprintf(dat->out, " locksamplemode=\"%s\"", dat->romcenter.locksamplemode);
+			fprintf(dat->out, "/>\n");
+		}
+
+		fprintf(dat->out, "\t</header>\n");
+	}
+
+	/* --- For every game, machine and resource --- */
 
 	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
 	{

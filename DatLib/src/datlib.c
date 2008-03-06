@@ -2323,6 +2323,16 @@ int store_tokenized_dat(struct dat *dat)
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 
+	if (dat->romcenter.forcedrommode)
+	{
+		if (!strcmp(dat->romcenter.forcedrommode, "m"))
+			dat->dat_flags|=FLAG_DAT_FULL_MERGING;
+		else if (!strcmp(dat->romcenter.forcedrommode, "s"))
+			dat->dat_flags|=FLAG_DAT_SPLIT_MERGING;
+		else if (!strcmp(dat->romcenter.forcedrommode, "n"))
+			dat->dat_flags|=FLAG_DAT_NO_MERGING;
+	}
+
 	return(errflg);
 }
 
