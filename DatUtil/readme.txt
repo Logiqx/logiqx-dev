@@ -17,6 +17,7 @@ Load and Save:
   - MAME ListInfo (ClrMamePro, MAME, MESS, RAINE, Shark)
   - RomCenter 2.50
   - MAME ListXML (MAME and MESS)
+  - Generic XML
   - Tab Delimited
 
 Load only:
