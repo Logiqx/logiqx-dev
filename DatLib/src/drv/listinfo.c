@@ -149,6 +149,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("homepage", TOKEN_HEADER_HOMEPAGE)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("url", TOKEN_HEADER_URL)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("comment", TOKEN_HEADER_COMMENT)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("header", TOKEN_CLRMAMEPRO_HEADER)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP)
@@ -772,6 +773,14 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.comment!=0)
 			fprintf(dat->out, "\tcomment \"%s\"\n", dat->header.comment);
+
+		if (dat->clrmamepro.header!=0)
+		{
+			if (strchr(dat->clrmamepro.header, ' '))
+				fprintf(dat->out, "\theader \"%s\"\n", dat->clrmamepro.header);
+			else
+				fprintf(dat->out, "\theader %s\n", dat->clrmamepro.header);
+		}
 
 		if (dat->clrmamepro.forcemerging!=0)
 		{
