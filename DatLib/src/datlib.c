@@ -1261,7 +1261,10 @@ int store_tokenized_dat(struct dat *dat)
 
 		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		{
-			if (type==TOKEN_CLRMAMEPRO_FORCEMERGING)
+			if (type==TOKEN_CLRMAMEPRO_HEADER)
+				dat->clrmamepro.header=BUFFER2_PTR;
+
+			else if (type==TOKEN_CLRMAMEPRO_FORCEMERGING)
 				dat->clrmamepro.forcemerging=BUFFER2_PTR;
 
 			else if (type==TOKEN_CLRMAMEPRO_FORCEZIPPING)
@@ -1283,6 +1286,24 @@ int store_tokenized_dat(struct dat *dat)
 
 			else if (type==TOKEN_ROMCENTER_MERGE)
 				dat->romcenter.merge=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_FORCEDROMMODE)
+				dat->romcenter.forcedrommode=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_FORCEDBIOSMODE)
+				dat->romcenter.forcedbiosmode=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_FORCEDSAMPLEMODE)
+				dat->romcenter.forcedsamplemode=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_LOCKROMMODE)
+				dat->romcenter.lockrommode=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_LOCKBIOSMODE)
+				dat->romcenter.lockbiosmode=BUFFER2_PTR;
+
+			else if (type==TOKEN_ROMCENTER_LOCKSAMPLEMODE)
+				dat->romcenter.locksamplemode=BUFFER2_PTR;
 		}
 	
 		/* --- Bear in mind that the actual parameter may be missing) --- */
