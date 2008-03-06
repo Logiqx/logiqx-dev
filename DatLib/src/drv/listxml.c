@@ -225,9 +225,9 @@ int load_mame_listxml(struct dat *dat)
 			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
 			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
 		}
-		else if (strstr(BUFFER1_PTR, "<emulator "))
+		else if (strstr(BUFFER1_PTR, "<datafile "))
 		{
-			strcpy(TOKEN, "emulator");
+			strcpy(TOKEN, "datafile");
 			BUFFER2_PUT_TOKEN(TOKEN_EMULATOR_NAME)
 			GET_XML_ATTRIBUTE("build", TOKEN_EMULATOR_BUILD) 
 			GET_XML_ATTRIBUTE("debug", TOKEN_EMULATOR_DEBUG) 
@@ -617,7 +617,7 @@ int save_mame_listxml(struct dat *dat)
 
 	fprintf(dat->out, "<?xml version=\"1.0\"?>\n");
 
-	if (strcmp(doc_type, "emulator"))
+	if (strcmp(doc_type, "datafile"))
 	{
 		fprintf(dat->out, "<!DOCTYPE %s [\n", doc_type);
 		fprintf(dat->out, "<!ELEMENT %s (%s+)>\n", doc_type, game_type);
@@ -925,7 +925,7 @@ int save_mame_listxml(struct dat *dat)
 	}
 	else
 	{
-		fprintf(dat->out, "<!DOCTYPE emulator PUBLIC \"-//Logiqx//DTD Emulator Data//EN\" \"http://www.logiqx.com/Dats/emulator.dtd\">\n");
+		fprintf(dat->out, "<!DOCTYPE datafile PUBLIC \"-//Logiqx//DTD ROM Management Datafile//EN\" \"http://www.logiqx.com/Dats/datafile.dtd\">\n");
 	}
 
 	/* --- For every game, machine and resource --- */
@@ -1232,6 +1232,6 @@ int save_mess_listxml(struct dat *dat)
 
 int save_generic_xml(struct dat *dat)
 {
-	dat->emulator.name="emulator";
+	dat->emulator.name="datafile";
 	return(save_mame_listxml(dat));
 }

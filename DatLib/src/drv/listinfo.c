@@ -139,16 +139,16 @@ int load_mame_listinfo(struct dat *dat)
 
 		else if (game_type==FLAG_CLRMAMEPRO_HEADER)
 		{
-			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_DATAFILE_NAME)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_DATAFILE_DESCRIPTION)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("category", TOKEN_DATAFILE_CATEGORY)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_DATAFILE_VERSION)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("date", TOKEN_DATAFILE_DATE)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("author", TOKEN_DATAFILE_AUTHOR)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("email", TOKEN_DATAFILE_EMAIL)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("homepage", TOKEN_DATAFILE_HOMEPAGE)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("url", TOKEN_DATAFILE_URL)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("comment", TOKEN_DATAFILE_COMMENT)
+			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_HEADER_NAME)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_HEADER_DESCRIPTION)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("category", TOKEN_HEADER_CATEGORY)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_HEADER_VERSION)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("date", TOKEN_HEADER_DATE)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("author", TOKEN_HEADER_AUTHOR)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("email", TOKEN_HEADER_EMAIL)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("homepage", TOKEN_HEADER_HOMEPAGE)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("url", TOKEN_HEADER_URL)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("comment", TOKEN_HEADER_COMMENT)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP)
@@ -707,71 +707,71 @@ int save_mame_listinfo(struct dat *dat)
 
 	/* --- Output ClrMamePro Header (no clever macros like everything else!) --- */
 
-	if (dat->datafile.name!=0)
+	if (dat->header.name!=0)
 	{
 		fprintf(dat->out, "clrmamepro (\n");
 
-		if (strchr(dat->datafile.name, ' '))
-			fprintf(dat->out, "\tname \"%s\"\n", dat->datafile.name);
+		if (strchr(dat->header.name, ' '))
+			fprintf(dat->out, "\tname \"%s\"\n", dat->header.name);
 		else
-			fprintf(dat->out, "\tname %s\n", dat->datafile.name);
+			fprintf(dat->out, "\tname %s\n", dat->header.name);
 
-		if (dat->datafile.description!=0)
-			fprintf(dat->out, "\tdescription \"%s\"\n", dat->datafile.description);
+		if (dat->header.description!=0)
+			fprintf(dat->out, "\tdescription \"%s\"\n", dat->header.description);
 
-		if (dat->datafile.category!=0)
-			fprintf(dat->out, "\tcategory \"%s\"\n", dat->datafile.category);
+		if (dat->header.category!=0)
+			fprintf(dat->out, "\tcategory \"%s\"\n", dat->header.category);
 
-		if (dat->datafile.version!=0)
+		if (dat->header.version!=0)
 		{
-			if (strchr(dat->datafile.version, ' '))
-				fprintf(dat->out, "\tversion \"%s\"\n", dat->datafile.version);
+			if (strchr(dat->header.version, ' '))
+				fprintf(dat->out, "\tversion \"%s\"\n", dat->header.version);
 			else
-				fprintf(dat->out, "\tversion %s\n", dat->datafile.version);
+				fprintf(dat->out, "\tversion %s\n", dat->header.version);
 		}
 
-		if (dat->datafile.date!=0)
+		if (dat->header.date!=0)
 		{
-			if (strchr(dat->datafile.date, ' '))
-				fprintf(dat->out, "\tdate \"%s\"\n", dat->datafile.date);
+			if (strchr(dat->header.date, ' '))
+				fprintf(dat->out, "\tdate \"%s\"\n", dat->header.date);
 			else
-				fprintf(dat->out, "\tdate %s\n", dat->datafile.date);
+				fprintf(dat->out, "\tdate %s\n", dat->header.date);
 		}
 
-		if (dat->datafile.author!=0)
+		if (dat->header.author!=0)
 		{
-			if (strchr(dat->datafile.author, ' '))
-				fprintf(dat->out, "\tauthor \"%s\"\n", dat->datafile.author);
+			if (strchr(dat->header.author, ' '))
+				fprintf(dat->out, "\tauthor \"%s\"\n", dat->header.author);
 			else
-				fprintf(dat->out, "\tauthor %s\n", dat->datafile.author);
+				fprintf(dat->out, "\tauthor %s\n", dat->header.author);
 		}
 
-		if (dat->datafile.email!=0)
+		if (dat->header.email!=0)
 		{
-			if (strchr(dat->datafile.email, ' '))
-				fprintf(dat->out, "\temail \"%s\"\n", dat->datafile.email);
+			if (strchr(dat->header.email, ' '))
+				fprintf(dat->out, "\temail \"%s\"\n", dat->header.email);
 			else
-				fprintf(dat->out, "\temail %s\n", dat->datafile.email);
+				fprintf(dat->out, "\temail %s\n", dat->header.email);
 		}
 
-		if (dat->datafile.homepage!=0)
+		if (dat->header.homepage!=0)
 		{
-			if (strchr(dat->datafile.homepage, ' '))
-				fprintf(dat->out, "\thomepage \"%s\"\n", dat->datafile.homepage);
+			if (strchr(dat->header.homepage, ' '))
+				fprintf(dat->out, "\thomepage \"%s\"\n", dat->header.homepage);
 			else
-				fprintf(dat->out, "\thomepage %s\n", dat->datafile.homepage);
+				fprintf(dat->out, "\thomepage %s\n", dat->header.homepage);
 		}
 
-		if (dat->datafile.url!=0)
+		if (dat->header.url!=0)
 		{
-			if (strchr(dat->datafile.url, ' '))
-				fprintf(dat->out, "\turl \"%s\"\n", dat->datafile.url);
+			if (strchr(dat->header.url, ' '))
+				fprintf(dat->out, "\turl \"%s\"\n", dat->header.url);
 			else
-				fprintf(dat->out, "\turl %s\n", dat->datafile.url);
+				fprintf(dat->out, "\turl %s\n", dat->header.url);
 		}
 
-		if (dat->datafile.comment!=0)
-			fprintf(dat->out, "\tcomment \"%s\"\n", dat->datafile.comment);
+		if (dat->header.comment!=0)
+			fprintf(dat->out, "\tcomment \"%s\"\n", dat->header.comment);
 
 		if (dat->clrmamepro.forcemerging!=0)
 		{

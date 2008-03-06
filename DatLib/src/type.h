@@ -671,7 +671,7 @@ struct emulator
 	char *debug;
 };
 
-struct datafile
+struct header
 {
 	char *name;           // DatUtil -R option
 	char *description;    // DatUtil -F option
@@ -717,7 +717,7 @@ struct options
 	struct dat *info;
 	struct dat *incorporate;
 
-	struct datafile datafile;
+	struct header header;
 	struct clrmamepro clrmamepro;
 	uint32_t options;
 
@@ -778,7 +778,7 @@ struct dat
 
 	struct emulator emulator;
 
-	struct datafile datafile;
+	struct header header;
 
 	struct clrmamepro clrmamepro;
 

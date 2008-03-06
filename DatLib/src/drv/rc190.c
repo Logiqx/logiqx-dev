@@ -104,17 +104,17 @@ int load_romcenter_190(struct dat *dat)
 			if (!strcmp(TOKEN, "author"))
 			{
 				strcpy(TOKEN, value);
-				BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_AUTHOR)
+				BUFFER2_PUT_TOKEN(TOKEN_HEADER_AUTHOR)
 			}
 			else if (!strcmp(TOKEN, "version"))
 			{
 				strcpy(TOKEN, value);
-				BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_VERSION)
+				BUFFER2_PUT_TOKEN(TOKEN_HEADER_VERSION)
 			}
 			else if (!strcmp(TOKEN, "comment"))
 			{
 				strcpy(TOKEN, value);
-				BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_COMMENT)
+				BUFFER2_PUT_TOKEN(TOKEN_HEADER_COMMENT)
 			}
 		}
 		else if (in_romcenter_emulator && strchr(BUFFER1_PTR, '='))
@@ -129,12 +129,12 @@ int load_romcenter_190(struct dat *dat)
 			if (!strcmp(TOKEN, "refname"))
 			{
 				strcpy(TOKEN, value);
-				BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_NAME)
+				BUFFER2_PUT_TOKEN(TOKEN_HEADER_NAME)
 			}
 			else if (!strcmp(TOKEN, "version"))
 			{
 				strcpy(TOKEN, value);
-				BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_DESCRIPTION)
+				BUFFER2_PUT_TOKEN(TOKEN_HEADER_DESCRIPTION)
 			}
 		}
 		else if (in_romcenter_games && *BUFFER1_PTR=='¬')

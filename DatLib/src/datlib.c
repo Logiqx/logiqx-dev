@@ -1226,35 +1226,35 @@ int store_tokenized_dat(struct dat *dat)
 
 		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
 		{
-			if (type==TOKEN_DATAFILE_NAME)
-				dat->datafile.name=BUFFER2_PTR;
+			if (type==TOKEN_HEADER_NAME)
+				dat->header.name=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_DESCRIPTION)
-				dat->datafile.description=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_DESCRIPTION)
+				dat->header.description=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_CATEGORY)
-				dat->datafile.category=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_CATEGORY)
+				dat->header.category=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_VERSION)
-				dat->datafile.version=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_VERSION)
+				dat->header.version=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_AUTHOR)
-				dat->datafile.author=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_AUTHOR)
+				dat->header.author=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_EMAIL)
-				dat->datafile.email=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_EMAIL)
+				dat->header.email=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_HOMEPAGE)
-				dat->datafile.homepage=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_HOMEPAGE)
+				dat->header.homepage=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_URL)
-				dat->datafile.url=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_URL)
+				dat->header.url=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_DATE)
-				dat->datafile.date=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_DATE)
+				dat->header.date=BUFFER2_PTR;
 
-			else if (type==TOKEN_DATAFILE_COMMENT)
-				dat->datafile.comment=BUFFER2_PTR;
+			else if (type==TOKEN_HEADER_COMMENT)
+				dat->header.comment=BUFFER2_PTR;
 		}
 
 		/* --- ClrMamePro header --- */
@@ -2271,26 +2271,26 @@ int store_tokenized_dat(struct dat *dat)
 
 	/* --- Override the datafile header with user parameters --- */
 
-	if (dat->options->datafile.name)
-		dat->datafile.name=dat->options->datafile.name;
-	if (dat->options->datafile.description)
-		dat->datafile.description=dat->options->datafile.description;
-	if (dat->options->datafile.category)
-		dat->datafile.category=dat->options->datafile.category;
-	if (dat->options->datafile.version)
-		dat->datafile.version=dat->options->datafile.version;
-	if (dat->options->datafile.author)
-		dat->datafile.author=dat->options->datafile.author;
-	if (dat->options->datafile.email)
-		dat->datafile.email=dat->options->datafile.email;
-	if (dat->options->datafile.homepage)
-		dat->datafile.homepage=dat->options->datafile.homepage;
-	if (dat->options->datafile.url)
-		dat->datafile.url=dat->options->datafile.url;
-	if (dat->options->datafile.date)
-		dat->datafile.date=dat->options->datafile.date;
-	if (dat->options->datafile.comment)
-		dat->datafile.comment=dat->options->datafile.comment;
+	if (dat->options->header.name)
+		dat->header.name=dat->options->header.name;
+	if (dat->options->header.description)
+		dat->header.description=dat->options->header.description;
+	if (dat->options->header.category)
+		dat->header.category=dat->options->header.category;
+	if (dat->options->header.version)
+		dat->header.version=dat->options->header.version;
+	if (dat->options->header.author)
+		dat->header.author=dat->options->header.author;
+	if (dat->options->header.email)
+		dat->header.email=dat->options->header.email;
+	if (dat->options->header.homepage)
+		dat->header.homepage=dat->options->header.homepage;
+	if (dat->options->header.url)
+		dat->header.url=dat->options->header.url;
+	if (dat->options->header.date)
+		dat->header.date=dat->options->header.date;
+	if (dat->options->header.comment)
+		dat->header.comment=dat->options->header.comment;
 
 	/* --- Override the ClrMamePro header in the dat with user parameters --- */
 

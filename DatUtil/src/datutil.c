@@ -102,34 +102,34 @@ int main(int argc, char **argv)
 			break;
 		/* --- Header text --- */
 		case 'A':
-			options->datafile.author=optarg;
+			options->header.author=optarg;
 			break;
 		case 'V':
-			options->datafile.version=optarg;
+			options->header.version=optarg;
 			break;
 		case 'C':
-			options->datafile.category=optarg;
+			options->header.category=optarg;
 			break;
 		case 'R':
-			options->datafile.name=optarg;
+			options->header.name=optarg;
 			break;
 		case 'F':
-			options->datafile.description=optarg;
+			options->header.description=optarg;
 			break;
 		case 'T':
-			options->datafile.date=optarg;
+			options->header.date=optarg;
 			break;
 		case 'E':
-			options->datafile.email=optarg;
+			options->header.email=optarg;
 			break;
 		case 'H':
-			options->datafile.homepage=optarg;
+			options->header.homepage=optarg;
 			break;
 		case 'U':
-			options->datafile.url=optarg;
+			options->header.url=optarg;
 			break;
 		case 'O':
-			options->datafile.comment=optarg;
+			options->header.comment=optarg;
 			break;
 		case 'M':
 			options->clrmamepro.forcemerging=optarg;

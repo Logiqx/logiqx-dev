@@ -146,37 +146,37 @@ int load_romcenter_250(struct dat *dat)
 				if (!strcmp(TOKEN, "author"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_AUTHOR)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_AUTHOR)
 				}
 				else if (!strcmp(TOKEN, "email"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_EMAIL)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_EMAIL)
 				}
 				else if (!strcmp(TOKEN, "homepage"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_HOMEPAGE)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_HOMEPAGE)
 				}
 				else if (!strcmp(TOKEN, "url"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_URL)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_URL)
 				}
 				else if (!strcmp(TOKEN, "version"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_VERSION)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_VERSION)
 				}
 				else if (!strcmp(TOKEN, "date"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_DATE)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_DATE)
 				}
 				else if (!strcmp(TOKEN, "comment"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_COMMENT)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_COMMENT)
 				}
 			}
 		}
@@ -224,17 +224,17 @@ int load_romcenter_250(struct dat *dat)
 				if (!strcmp(TOKEN, "refname"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_NAME)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_NAME)
 				}
 				else if (!strcmp(TOKEN, "version"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_DESCRIPTION)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_DESCRIPTION)
 				}
 				else if (!strcmp(TOKEN, "category"))
 				{
 					strcpy(TOKEN, value);
-					BUFFER2_PUT_TOKEN(TOKEN_DATAFILE_CATEGORY)
+					BUFFER2_PUT_TOKEN(TOKEN_HEADER_CATEGORY)
 				}
 			}
 		}
@@ -418,26 +418,26 @@ int save_romcenter_250(struct dat *dat)
 
 	fprintf(dat->out, "[CREDITS]");
 	fprintf(dat->out, "\nauthor=");
-	if (dat->datafile.author)
-		fprintf(dat->out, "%s", dat->datafile.author);
+	if (dat->header.author)
+		fprintf(dat->out, "%s", dat->header.author);
 	fprintf(dat->out, "\nemail=");
-	if (dat->datafile.email)
-		fprintf(dat->out, "%s", dat->datafile.email);
+	if (dat->header.email)
+		fprintf(dat->out, "%s", dat->header.email);
 	fprintf(dat->out, "\nhomepage=");
-	if (dat->datafile.homepage)
-		fprintf(dat->out, "%s", dat->datafile.homepage);
+	if (dat->header.homepage)
+		fprintf(dat->out, "%s", dat->header.homepage);
 	fprintf(dat->out, "\nurl=");
-	if (dat->datafile.url)
-		fprintf(dat->out, "%s", dat->datafile.url);
+	if (dat->header.url)
+		fprintf(dat->out, "%s", dat->header.url);
 	fprintf(dat->out, "\nversion=");
-	if (dat->datafile.version)
-		fprintf(dat->out, "%s", dat->datafile.version);
+	if (dat->header.version)
+		fprintf(dat->out, "%s", dat->header.version);
 	fprintf(dat->out, "\ndate=");
-	if (dat->datafile.date)
-		fprintf(dat->out, "%s", dat->datafile.date);
+	if (dat->header.date)
+		fprintf(dat->out, "%s", dat->header.date);
 	fprintf(dat->out, "\ncomment=");
-	if (dat->datafile.comment)
-		fprintf(dat->out, "%s", dat->datafile.comment);
+	if (dat->header.comment)
+		fprintf(dat->out, "%s", dat->header.comment);
 
 	fprintf(dat->out, "\n[DAT]");
 	fprintf(dat->out, "\nversion=");
@@ -455,14 +455,14 @@ int save_romcenter_250(struct dat *dat)
 
 	fprintf(dat->out, "\n[EMULATOR]");
 	fprintf(dat->out, "\nrefname=");
-	if (dat->datafile.name)
-		fprintf(dat->out, "%s", dat->datafile.name);
+	if (dat->header.name)
+		fprintf(dat->out, "%s", dat->header.name);
 	fprintf(dat->out, "\nversion=");
-	if (dat->datafile.description)
-		fprintf(dat->out, "%s", dat->datafile.description);
+	if (dat->header.description)
+		fprintf(dat->out, "%s", dat->header.description);
 	fprintf(dat->out, "\ncategory=");
-	if (dat->datafile.category)
-		fprintf(dat->out, "%s", dat->datafile.category);
+	if (dat->header.category)
+		fprintf(dat->out, "%s", dat->header.category);
 
 	fprintf(dat->out, "\n[GAMES]");
 
