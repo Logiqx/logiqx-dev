@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.34 - xx/xx/xxxx
+                         DatUtil v2.34 - 17/03/2008
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -81,13 +81,14 @@ option. Valid formats are 'listinfo', 'listxml', 'romcenter2', 'delimited',
 
 There are a number of aliases for each format:
 
-  listinfo    listinfo info li clrmamepro clrmame cmpro cmp cm
-  listxml     listxml xml lx
-  romcenter2  romcenter2 rc2 romcenter rc
-  delimited   delimited tab text
-  gamelist    gamelist gl
-  titlelist   titlelist titles
-  sublist     sublist sub rcsublist rcsub
+  MAME ListInfo   listinfo info li clrmamepro clrmame cmpro cmp cm
+  MAME ListXML    listxml xml lx
+  Generic XML     genericxml generic gx
+  RomCenter 2     romcenter2 rc2 romcenter rc
+  Tab Delimited   delimited tab text
+  MAME GameList   gamelist gl
+  TitleList       titlelist titles
+  RC2 Sublist     sublist sub rcsublist rcsub
 
 By default, non-essential details for ROM management are removed (e.g. chips
 and dipswitch information) but these can be retained using the -k option. Only

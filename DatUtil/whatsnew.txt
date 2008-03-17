@@ -1,12 +1,13 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.34 ***
+17/03/2008  *** v2.34 ***
 
             - Uses DatLib v2.23.
             - Added date, email, homepage, url, comment, forcenodump to CMPro.
             - Added category to RomCenter header (for completeness).
             - Added the Generic XML format.
+            - Note: CMPro, RomCenter and XML headers all contain the same info.
             - Added -T, -E, -H, -U, -O and -N (options for header information).
 
 26/11/2007  *** v2.33 ***
