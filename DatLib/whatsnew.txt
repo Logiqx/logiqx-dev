@@ -1,12 +1,13 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.23 ***
+17/03/2008  *** v2.23 ***
 
             - Simplified the internal handling of CMPro and RomCenter headers.
             - Added date, email, homepage, url, comment, forcenodump to CMPro.
             - Added category to RomCenter header (for completeness).
             - Added the Generic XML format.
+            - Note: CMPro, RomCenter and XML headers all contain the same info.
 
 26/11/2007  *** v2.22 ***
 

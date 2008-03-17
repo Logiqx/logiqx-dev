@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          DatLib v2.23 - xx/xx/xxxx
+                          DatLib v2.23 - 17/03/2008
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -17,6 +17,7 @@ Load and Save:
   - MAME ListInfo (ClrMamePro, MAME, MESS, RAINE, Shark)
   - RomCenter 2.50
   - MAME ListXML (MAME and MESS)
+  - Generic XML
   - Tab Delimited
 
 Load only:
@@ -32,6 +33,7 @@ Load only:
 
 Save only:
 
+  - MAME GameList
   - Title List (for listing game titles - used by CPS-2 readme and RAINE docs)
   - RomCenter Sublist
 
