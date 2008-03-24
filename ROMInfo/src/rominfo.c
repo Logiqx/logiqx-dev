@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ROMINFO_VERSION "v2.7"
-#define ROMINFO_DATE "11 July 2006"
+#define ROMINFO_VERSION "v2.8"
+#define ROMINFO_DATE "24 March 2008"
 
 
 /* --- The standard includes --- */
