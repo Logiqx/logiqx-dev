@@ -1,6 +1,10 @@
 History
 -------
 
+24/03/2008  *** v2.24 ***
+
+            - Fixed crash (allzip had spurious carriage returns in kyukaidk).
+
 17/03/2008  *** v2.23 ***
 
             - Simplified the internal handling of CMPro and RomCenter headers.

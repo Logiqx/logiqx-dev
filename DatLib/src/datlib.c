@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.23"
-#define DATLIB_DATE "17 March 2008"
+#define DATLIB_VERSION "v2.24"
+#define DATLIB_DATE "24 March 2008"
 
 
 /* --- Standard includes --- */
@@ -5895,14 +5895,16 @@ int init_buffer1(struct dat *dat, int buf_size, char *size_prefix)
 
 		while (BUFFER1_REMAINING)
 		{
-			if (*BUFFER1_PTR==10 || *BUFFER1_PTR==13)
+			if (*BUFFER1_PTR=='\r' || *BUFFER1_PTR=='\n')
 			{
 				if (line_length>dat->token_size)
 					dat->token_size=line_length;
 
-				while (BUFFER1_REMAINING && (*BUFFER1_PTR==10 || *BUFFER1_PTR==13))
+				while (BUFFER1_REMAINING && (*BUFFER1_PTR=='\r' || *BUFFER1_PTR=='\n'))
 				{
-					*BUFFER1_PTR='\0';
+					/* --- Only remove carriage returns if they are followed by line feed --- */
+					if ((*BUFFER1_PTR=='\r' && *(BUFFER1_PTR+1)=='\n') || *BUFFER1_PTR=='\n')
+						*BUFFER1_PTR='\0';
 					BUFFER1_PTR++;
 				}
 
