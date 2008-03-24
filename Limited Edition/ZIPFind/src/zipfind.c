@@ -4,8 +4,8 @@
  * Little tool that tries to find ZIP files that you need!
  * -------------------------------------------------------------------------- */
 
-#define ZIPFIND_VERSION "v2.3"
-#define ZIPFIND_DATE "31 October 2005"
+#define ZIPFIND_VERSION "v2.4"
+#define ZIPFIND_DATE "24 March 2008"
 
 
 /* --- The standard includes --- */

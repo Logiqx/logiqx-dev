@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         ZIPFind v2.3 - 31/10/2005
+                         ZIPFind v2.4 - 24/03/2008
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -105,33 +105,3 @@ Future
 I'm not sure that I plan to take this any further, I'm kind of happy with
 what it does already!
 
-
-History
--------
-
-31/10/2005  *** v2.3 ***
-
-            - Uses DatLib v2.10.
-            - Fixed identification of ListXML for MAME+MESS v0.101u4 onwards.
-
-22/07/2004  *** v2.2 ***
-
-            - Uses DatLib v1.8.
-            - Removed the need for xml2info by adding my own MAME XML parser.
-            - A nice side effect is that names like "Alien³: The Gun" work now!
-            - The parser also supports MESS XML.
-
-11/07/2004  *** v2.1 ***
-
-            - Updated the source to use the new functions of DatLib v1.4.
-            - There is no functional change within ZIPFind though.
-
-02/07/2004  *** v2.0 ***
-
-            Modified to use DatLib - there are no game or ROM limits anymore!
-            Also supports all DatLib formats (ListInfo, XML, RomCenter, etc).
-            Note: For XML support to work, you need xml2info.exe in your path.
-
-02/02/2003  *** v1.00 ***
-
-            First public release.
