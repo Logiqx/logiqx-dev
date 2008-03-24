@@ -1,6 +1,12 @@
 History
 -------
 
+24/03/2008  *** v2.10 ***
+
+            - Uses DatLib v2.24.
+            - Fixed crash (allzip had spurious carriage returns in kyukaidk).
+            - DatLib 2.23 also added the Generic XML format.
+
 26/11/2007  *** v2.9 ***
 
             - Uses DatLib v2.22.
