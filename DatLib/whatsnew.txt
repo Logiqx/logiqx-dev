@@ -1,6 +1,16 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.25 ***
+
+            - Added automatic date logic (based on the version number).
+            - Renamed forcezipping to forcepacking (CMPro).
+            - Renamed forcedrommode to rommode (RomCenter 3).
+            - Renamed forcedbiosmode to biosmode (RomCenter 3).
+            - Renamed forcedsamplemode to samplemode (RomCenter 3).
+            - Changed from m/s/n to merged/split/unmerged (RomCenter 3).
+            - Changed from y/n to yes/no (RomCenter 3).
+
 24/03/2008  *** v2.24 ***
 
             - Fixed crash (allzip had spurious carriage returns in kyukaidk).

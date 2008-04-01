@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.24"
-#define DATLIB_DATE "24 March 2008"
+#define DATLIB_VERSION "v2.25"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -20,6 +20,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <zlib.h>
+#include <time.h>
 
 #if !defined (__MINGW32_VERSION) && !defined (__CYGWIN__) && !defined (_MSC_VER)
 #include <unistd.h>
@@ -1238,6 +1239,9 @@ int store_tokenized_dat(struct dat *dat)
 			else if (type==TOKEN_HEADER_VERSION)
 				dat->header.version=BUFFER2_PTR;
 
+			else if (type==TOKEN_HEADER_DATE)
+				dat->header.date=BUFFER2_PTR;
+
 			else if (type==TOKEN_HEADER_AUTHOR)
 				dat->header.author=BUFFER2_PTR;
 
@@ -1249,9 +1253,6 @@ int store_tokenized_dat(struct dat *dat)
 
 			else if (type==TOKEN_HEADER_URL)
 				dat->header.url=BUFFER2_PTR;
-
-			else if (type==TOKEN_HEADER_DATE)
-				dat->header.date=BUFFER2_PTR;
 
 			else if (type==TOKEN_HEADER_COMMENT)
 				dat->header.comment=BUFFER2_PTR;
@@ -1267,8 +1268,8 @@ int store_tokenized_dat(struct dat *dat)
 			else if (type==TOKEN_CLRMAMEPRO_FORCEMERGING)
 				dat->clrmamepro.forcemerging=BUFFER2_PTR;
 
-			else if (type==TOKEN_CLRMAMEPRO_FORCEZIPPING)
-				dat->clrmamepro.forcezipping=BUFFER2_PTR;
+			else if (type==TOKEN_CLRMAMEPRO_FORCEPACKING)
+				dat->clrmamepro.forcepacking=BUFFER2_PTR;
 
 			else if (type==TOKEN_CLRMAMEPRO_FORCENODUMP)
 				dat->clrmamepro.forcenodump=BUFFER2_PTR;
@@ -1287,14 +1288,14 @@ int store_tokenized_dat(struct dat *dat)
 			else if (type==TOKEN_ROMCENTER_MERGE)
 				dat->romcenter.merge=BUFFER2_PTR;
 
-			else if (type==TOKEN_ROMCENTER_FORCEDROMMODE)
-				dat->romcenter.forcedrommode=BUFFER2_PTR;
+			else if (type==TOKEN_ROMCENTER_ROMMODE)
+				dat->romcenter.rommode=BUFFER2_PTR;
 
-			else if (type==TOKEN_ROMCENTER_FORCEDBIOSMODE)
-				dat->romcenter.forcedbiosmode=BUFFER2_PTR;
+			else if (type==TOKEN_ROMCENTER_BIOSMODE)
+				dat->romcenter.biosmode=BUFFER2_PTR;
 
-			else if (type==TOKEN_ROMCENTER_FORCEDSAMPLEMODE)
-				dat->romcenter.forcedsamplemode=BUFFER2_PTR;
+			else if (type==TOKEN_ROMCENTER_SAMPLEMODE)
+				dat->romcenter.samplemode=BUFFER2_PTR;
 
 			else if (type==TOKEN_ROMCENTER_LOCKROMMODE)
 				dat->romcenter.lockrommode=BUFFER2_PTR;
@@ -2300,6 +2301,8 @@ int store_tokenized_dat(struct dat *dat)
 		dat->header.category=dat->options->header.category;
 	if (dat->options->header.version)
 		dat->header.version=dat->options->header.version;
+	if (dat->options->header.date)
+		dat->header.date=dat->options->header.date;
 	if (dat->options->header.author)
 		dat->header.author=dat->options->header.author;
 	if (dat->options->header.email)
@@ -2308,17 +2311,57 @@ int store_tokenized_dat(struct dat *dat)
 		dat->header.homepage=dat->options->header.homepage;
 	if (dat->options->header.url)
 		dat->header.url=dat->options->header.url;
-	if (dat->options->header.date)
-		dat->header.date=dat->options->header.date;
 	if (dat->options->header.comment)
 		dat->header.comment=dat->options->header.comment;
+
+	/* --- Determine the date automatically (from the version) --- */
+
+	if (dat->header.date==0 || dat->header.date[0]=='\0')
+	{
+		if (dat->header.version!=0 && strlen(dat->header.version)==8)
+		{
+			for (i=j=0; i<8; i++)
+			{
+				if (isdigit(dat->header.version[i]))
+				{
+					j++;
+				}
+			}
+
+			if (j==8)
+			{
+				sprintf(dat->header.auto_date, "%c%c%c%c-%c%c-%c%c",
+					dat->header.version[0], dat->header.version[1],
+					dat->header.version[2], dat->header.version[3],
+					dat->header.version[4], dat->header.version[5],
+					dat->header.version[6], dat->header.version[7]);
+
+				dat->header.date = dat->header.auto_date;
+			}
+		}
+	}
+
+	/* --- Determine the date automatically (currently disabled, although the code is fine) --- */
+	/*
+	if (dat->header.date==0 || dat->header.date[0]=='\0')
+	{
+		time_t time_t;
+		struct tm *tm;
+
+		time(&time_t);
+		tm = localtime(&time_t);
+		strftime(dat->header.auto_date, sizeof(dat->header.auto_date), "%Y-%m-%d", tm);
+
+		dat->header.date = dat->header.auto_date;
+	}
+	*/
 
 	/* --- Override the ClrMamePro header in the dat with user parameters --- */
 
 	if (dat->options->clrmamepro.forcemerging)
 		dat->clrmamepro.forcemerging=dat->options->clrmamepro.forcemerging;
-	if (dat->options->clrmamepro.forcezipping)
-		dat->clrmamepro.forcezipping=dat->options->clrmamepro.forcezipping;
+	if (dat->options->clrmamepro.forcepacking)
+		dat->clrmamepro.forcepacking=dat->options->clrmamepro.forcepacking;
 	if (dat->options->clrmamepro.forcenodump)
 		dat->clrmamepro.forcenodump=dat->options->clrmamepro.forcenodump;
 
@@ -2344,13 +2387,13 @@ int store_tokenized_dat(struct dat *dat)
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 
-	if (dat->romcenter.forcedrommode)
+	if (dat->romcenter.rommode)
 	{
-		if (!strcmp(dat->romcenter.forcedrommode, "m"))
+		if (!strcmp(dat->romcenter.rommode, "merged"))
 			dat->dat_flags|=FLAG_DAT_FULL_MERGING;
-		else if (!strcmp(dat->romcenter.forcedrommode, "s"))
+		else if (!strcmp(dat->romcenter.rommode, "split"))
 			dat->dat_flags|=FLAG_DAT_SPLIT_MERGING;
-		else if (!strcmp(dat->romcenter.forcedrommode, "n"))
+		else if (!strcmp(dat->romcenter.rommode, "unmerged"))
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 

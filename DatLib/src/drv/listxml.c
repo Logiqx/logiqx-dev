@@ -234,15 +234,15 @@ int load_mame_listxml(struct dat *dat)
 				GET_XML_ATTRIBUTE("header", TOKEN_CLRMAMEPRO_HEADER) 
 				GET_XML_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING) 
 				GET_XML_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP) 
-				GET_XML_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING) 
+				GET_XML_ATTRIBUTE("forcepacking", TOKEN_CLRMAMEPRO_FORCEPACKING) 
 			}
 
 			else if (strstr(BUFFER1_PTR, "<romcenter "))
 			{
 				GET_XML_ATTRIBUTE("plugin", TOKEN_ROMCENTER_PLUGIN) 
-				GET_XML_ATTRIBUTE("forcedrommode", TOKEN_ROMCENTER_FORCEDROMMODE) 
-				GET_XML_ATTRIBUTE("forcedbiosmode", TOKEN_ROMCENTER_FORCEDBIOSMODE) 
-				GET_XML_ATTRIBUTE("forcedsamplemode", TOKEN_ROMCENTER_FORCEDSAMPLEMODE) 
+				GET_XML_ATTRIBUTE("rommode", TOKEN_ROMCENTER_ROMMODE) 
+				GET_XML_ATTRIBUTE("biosmode", TOKEN_ROMCENTER_BIOSMODE) 
+				GET_XML_ATTRIBUTE("samplemode", TOKEN_ROMCENTER_SAMPLEMODE) 
 				GET_XML_ATTRIBUTE("lockrommode", TOKEN_ROMCENTER_LOCKROMMODE) 
 				GET_XML_ATTRIBUTE("lockbiosmode", TOKEN_ROMCENTER_LOCKBIOSMODE) 
 				GET_XML_ATTRIBUTE("locksamplemode", TOKEN_ROMCENTER_LOCKSAMPLEMODE) 
@@ -662,17 +662,17 @@ int save_mame_listxml(struct dat *dat)
 	if (dat->dat_flags & FLAG_DAT_FULL_MERGING)
 	{
 		dat->clrmamepro.forcemerging="full";
-		dat->romcenter.forcedrommode="m";
+		dat->romcenter.rommode="merged";
 	}
 	else if (dat->dat_flags & FLAG_DAT_SPLIT_MERGING)
 	{
 		dat->clrmamepro.forcemerging="split";
-		dat->romcenter.forcedrommode="s";
+		dat->romcenter.rommode="split";
 	}
 	else if (dat->dat_flags & FLAG_DAT_NO_MERGING)
 	{
 		dat->clrmamepro.forcemerging="none";
-		dat->romcenter.forcedrommode="n";
+		dat->romcenter.rommode="unmerged";
 	}
 
 	/* --- Write the DTD --- */
@@ -1040,7 +1040,7 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<comment>%s</comment>\n", dat->header.comment);
 
 		if (dat->clrmamepro.header!= 0 || dat->clrmamepro.forcemerging ||
-			dat->clrmamepro.forcenodump || dat->clrmamepro.forcezipping)
+			dat->clrmamepro.forcenodump || dat->clrmamepro.forcepacking)
 		{
 			fprintf(dat->out, "\t\t<clrmamepro");
 			if (dat->clrmamepro.header!=0)
@@ -1049,24 +1049,24 @@ int save_mame_listxml(struct dat *dat)
 				fprintf(dat->out, " forcemerging=\"%s\"", dat->clrmamepro.forcemerging);
 			if (dat->clrmamepro.forcenodump!=0)
 				fprintf(dat->out, " forcenodump=\"%s\"", dat->clrmamepro.forcenodump);
-			if (dat->clrmamepro.forcezipping!=0)
-				fprintf(dat->out, " forcezipping=\"%s\"", dat->clrmamepro.forcezipping);
+			if (dat->clrmamepro.forcepacking!=0)
+				fprintf(dat->out, " forcepacking=\"%s\"", dat->clrmamepro.forcepacking);
 			fprintf(dat->out, "/>\n");
 		}
 
 		if (dat->romcenter.plugin!= 0 ||
-			dat->romcenter.forcedrommode || dat->romcenter.forcedbiosmode || dat->romcenter.forcedsamplemode ||
+			dat->romcenter.rommode || dat->romcenter.biosmode || dat->romcenter.samplemode ||
 			dat->romcenter.lockrommode || dat->romcenter.lockbiosmode || dat->romcenter.locksamplemode)
 		{
 			fprintf(dat->out, "\t\t<romcenter");
 			if (dat->romcenter.plugin!=0)
 				fprintf(dat->out, " plugin=\"%s\"", dat->romcenter.plugin);
-			if (dat->romcenter.forcedrommode!=0)
-				fprintf(dat->out, " forcedrommode=\"%s\"", dat->romcenter.forcedrommode);
-			if (dat->romcenter.forcedbiosmode!=0)
-				fprintf(dat->out, " forcedbiosmode=\"%s\"", dat->romcenter.forcedbiosmode);
-			if (dat->romcenter.forcedsamplemode!=0)
-				fprintf(dat->out, " forcedsamplemode=\"%s\"", dat->romcenter.forcedsamplemode);
+			if (dat->romcenter.rommode!=0)
+				fprintf(dat->out, " rommode=\"%s\"", dat->romcenter.rommode);
+			if (dat->romcenter.biosmode!=0)
+				fprintf(dat->out, " biosmode=\"%s\"", dat->romcenter.biosmode);
+			if (dat->romcenter.samplemode!=0)
+				fprintf(dat->out, " samplemode=\"%s\"", dat->romcenter.samplemode);
 			if (dat->romcenter.lockrommode!=0)
 				fprintf(dat->out, " lockrommode=\"%s\"", dat->romcenter.lockrommode);
 			if (dat->romcenter.lockbiosmode!=0)

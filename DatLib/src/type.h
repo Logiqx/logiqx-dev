@@ -677,19 +677,21 @@ struct header
 	char *description;    // DatUtil -F option
 	char *category;       // DatUtil -C option
 	char *version;        // DatUtil -V option
+	char *date;           // DatUtil -T option
 	char *author;         // DatUtil -A option
 	char *email;          // DatUtil -E option
 	char *homepage;       // DatUtil -H option
 	char *url;            // DatUtil -U option
-	char *date;           // DatUtil -T option
 	char *comment;        // DatUtil -O option
+
+	char auto_date[11];   // Automatic date
 };
 
 struct clrmamepro
 {
 	char *header;
 	char *forcemerging;   // DatUtil -M option (none, split or full)
-	char *forcezipping;   // DatUtil -Z option (zip or unzip)
+	char *forcepacking;   // DatUtil -P option (zip or unzip)
 	char *forcenodump;    // DatUtil -N option (obsolete, required or ignore)
 };
 
@@ -699,9 +701,9 @@ struct romcenter
 	char *plugin;         // Default is arcade.dll
 	char *split;          // DatUtil -M option (smart conversion).
 	char *merge;          // DatUtil -M option (smart conversion).
-	char *forcedrommode;
-	char *forcedbiosmode;
-	char *forcedsamplemode;
+	char *rommode;
+	char *biosmode;
+	char *samplemode;
 	char *lockrommode;
 	char *lockbiosmode;
 	char *locksamplemode;

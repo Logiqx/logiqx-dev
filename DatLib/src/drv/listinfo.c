@@ -151,7 +151,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("comment", TOKEN_HEADER_COMMENT)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("header", TOKEN_CLRMAMEPRO_HEADER)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING)
-			else BUFFER2_PUT_INFO_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEZIPPING)
+			else BUFFER2_PUT_INFO_ATTRIBUTE("forcepacking", TOKEN_CLRMAMEPRO_FORCEPACKING)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP)
 		}
 
@@ -790,12 +790,12 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tforcemerging %s\n", dat->clrmamepro.forcemerging);
 		}
 
-		if (dat->clrmamepro.forcezipping!=0)
+		if (dat->clrmamepro.forcepacking!=0)
 		{
-			if (strchr(dat->clrmamepro.forcezipping, ' '))
-				fprintf(dat->out, "\tforcezipping \"%s\"\n", dat->clrmamepro.forcezipping);
+			if (strchr(dat->clrmamepro.forcepacking, ' '))
+				fprintf(dat->out, "\tforcepacking \"%s\"\n", dat->clrmamepro.forcepacking);
 			else
-				fprintf(dat->out, "\tforcezipping %s\n", dat->clrmamepro.forcezipping);
+				fprintf(dat->out, "\tforcepacking %s\n", dat->clrmamepro.forcepacking);
 		}
 
 		if (dat->clrmamepro.forcenodump!=0)
