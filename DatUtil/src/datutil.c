@@ -7,8 +7,8 @@
 
 /* --- Version information --- */
 
-#define DATUTIL_VERSION "v2.35"
-#define DATUTIL_DATE "24 March 2008"
+#define DATUTIL_VERSION "v2.36"
+#define DATUTIL_DATE "Private Beta"
 
 
 /* --- The standard includes --- */
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:Z:N:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:P:Z:N:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -134,8 +134,9 @@ int main(int argc, char **argv)
 		case 'M':
 			options->clrmamepro.forcemerging=optarg;
 			break;
+		case 'P':
 		case 'Z':
-			options->clrmamepro.forcezipping=optarg;
+			options->clrmamepro.forcepacking=optarg;
 			break;
 		case 'N':
 			options->clrmamepro.forcenodump=optarg;
@@ -223,7 +224,7 @@ int main(int argc, char **argv)
 		printf("ClrMamePro +    [-R <refname>] [-F <fullname>] [-C <category>]\n");
 		printf("  RomCenter     [-V <version>] [-T <date>] [-O <comment>]\n");
 		printf("                [-A <author>] [-E <email>] [-H <homepage>] [-U <url>]\n");
-		printf("                [-M <merging>] [-Z <zipping>] [-N <nodump>]\n");
+		printf("                [-M <merging>] [-P <packing>] [-N <nodump>]\n");
 		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
 		printf("Cleansing       [-l] [-s] [-X] [-D] [-p[rom|disk|sample]]\n");
 		printf("Blending        [-i <info file>] [-I <incorporate file>]\n");

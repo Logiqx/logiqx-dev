@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.35 - 24/03/2008
+                         DatUtil v2.36 - xx/xx/xxxx
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ You will have noticed that ROMCenter dats and CMPro dats have a header section.
 To specify values for the fields in the header, use the '-A', '-V', '-C', '-R',
 '-F', '-T', '-E', '-H', '-U' and '-O' options (author, version, category,
 name/refname, fullname/description, date, email, homepage, url, comment).
-'-M' and '-Z' are used to specify the type of merging and zipping required.
+'-M' and '-P' are used to specify the type of merging and packing required.
 '-N' is used to specify how nodump ROMs should be handled in CMPro.
 Note that these options are all upper case (you must use the correct case).
 
@@ -303,7 +303,7 @@ Header text:
   -U  url
   -O  comment
   -M  merging (none, split or full)
-  -Z  zipping (zip or unzip)
+  -P  packing (zip or unzip)
   -N  nodump (obsolete, required or ignore)
 
 Game selection:
