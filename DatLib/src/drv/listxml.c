@@ -235,6 +235,7 @@ int load_mame_listxml(struct dat *dat)
 				GET_XML_ATTRIBUTE("forcemerging", TOKEN_CLRMAMEPRO_FORCEMERGING) 
 				GET_XML_ATTRIBUTE("forcenodump", TOKEN_CLRMAMEPRO_FORCENODUMP) 
 				GET_XML_ATTRIBUTE("forcepacking", TOKEN_CLRMAMEPRO_FORCEPACKING) 
+				GET_XML_ATTRIBUTE("forcezipping", TOKEN_CLRMAMEPRO_FORCEPACKING) 
 			}
 
 			else if (strstr(BUFFER1_PTR, "<romcenter "))
