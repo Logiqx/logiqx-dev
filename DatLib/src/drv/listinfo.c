@@ -103,19 +103,19 @@ int load_mame_listinfo(struct dat *dat)
 		/* --- Need to know whether we are processing a game/resource/machine etc --- */
 
 		if (!strcmp(TOKEN, "game"))
-			game_type=FLAG_GAME_NAME;
+			game_type=TOKEN_GAME_NAME;
 
 		else if (!strcmp(TOKEN, "resource"))
-			game_type=FLAG_RESOURCE_NAME;
+			game_type=TOKEN_RESOURCE_NAME;
 
 		else if (!strcmp(TOKEN, "machine"))
-			game_type=FLAG_MACHINE_NAME;
+			game_type=TOKEN_MACHINE_NAME;
 
 		else if (!strcmp(TOKEN, "clrmamepro"))
-			game_type=FLAG_CLRMAMEPRO_HEADER;
+			game_type=TOKEN_HEADER_NAME;
 
 		else if (!strcmp(TOKEN, "emulator"))
-			game_type=FLAG_EMULATOR_HEADER;
+			game_type=TOKEN_EMULATOR_NAME;
 
 		/* --- Comments --- */
 
@@ -128,7 +128,7 @@ int load_mame_listinfo(struct dat *dat)
 
 		/* --- Emulator header --- */
 
-		if (game_type==FLAG_EMULATOR_HEADER)
+		if (game_type==TOKEN_EMULATOR_NAME)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_EMULATOR_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("version", TOKEN_EMULATOR_BUILD)
@@ -137,7 +137,7 @@ int load_mame_listinfo(struct dat *dat)
 
 		/* --- ClrMamePro header --- */
 
-		else if (game_type==FLAG_CLRMAMEPRO_HEADER)
+		else if (game_type==TOKEN_HEADER_NAME)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_HEADER_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("description", TOKEN_HEADER_DESCRIPTION)
@@ -158,7 +158,7 @@ int load_mame_listinfo(struct dat *dat)
 
 		/* --- Games --- */
 
-		else if (game_type==FLAG_GAME_NAME)
+		else if (game_type==TOKEN_GAME_NAME)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_GAME_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("sourcefile", TOKEN_GAME_SOURCEFILE)
@@ -175,7 +175,7 @@ int load_mame_listinfo(struct dat *dat)
 
 		/* --- Resources --- */
 
-		else if (game_type==FLAG_RESOURCE_NAME)
+		else if (game_type==TOKEN_RESOURCE_NAME)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_RESOURCE_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("sourcefile", TOKEN_RESOURCE_SOURCEFILE)
@@ -189,7 +189,7 @@ int load_mame_listinfo(struct dat *dat)
 
 		/* --- Machines --- */
 
-		else if (game_type==FLAG_MACHINE_NAME)
+		else if (game_type==TOKEN_MACHINE_NAME)
 		{
 			BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_MACHINE_NAME)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("sourcefile", TOKEN_MACHINE_SOURCEFILE)
@@ -204,7 +204,7 @@ int load_mame_listinfo(struct dat *dat)
 			else BUFFER2_PUT_INFO_ATTRIBUTE("board", TOKEN_MACHINE_BOARD)
 		}
 
-		if (game_type==FLAG_GAME_NAME || game_type==FLAG_RESOURCE_NAME || game_type==FLAG_MACHINE_NAME)
+		if (game_type==TOKEN_GAME_NAME || game_type==TOKEN_RESOURCE_NAME || game_type==TOKEN_MACHINE_NAME)
 		{
 			/* --- Biossets --- */
 

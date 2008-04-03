@@ -11,6 +11,9 @@ xx/xx/xxxx  *** v2.25 ***
             - Changed from m/s/n to merged/split/unmerged (RomCenter 3).
             - Changed from y/n to yes/no (RomCenter 3).
 
+              WIP
+            - Added internal flags for emulator, header, clrmamepro, romcenter.
+
 24/03/2008  *** v2.24 ***
 
             - Fixed crash (allzip had spurious carriage returns in kyukaidk).

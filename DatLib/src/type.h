@@ -879,6 +879,10 @@ struct dat
 
 	uint16_t dat_flags;
 
+	uint8_t emulator_flags;
+	uint16_t header_flags;
+	uint8_t clrmamepro_flags;
+	uint16_t romcenter_flags;
 	uint32_t game_flags;
 	uint8_t comment_flags;
 	uint8_t biosset_flags;
@@ -902,6 +906,10 @@ struct dat
 	uint8_t game_selection_warnings;
 	uint8_t sourcefile_selection_warnings;
 
+	uint8_t emulator_warnings;
+	uint16_t header_warnings;
+	uint8_t clrmamepro_warnings;
+	uint16_t romcenter_warnings;
 	uint32_t game_warnings;
 	uint8_t comment_warnings;
 	uint8_t biosset_warnings;
@@ -922,6 +930,10 @@ struct dat
 	uint8_t archive_warnings;
 	uint8_t ramoption_warnings;
 
+	uint8_t emulator_fixes;
+	uint16_t header_fixes;
+	uint8_t clrmamepro_fixes;
+	uint16_t romcenter_fixes;
 	uint32_t game_fixes;
 	uint8_t comment_fixes;
 	uint8_t biosset_fixes;
@@ -942,6 +954,10 @@ struct dat
 	uint8_t archive_fixes;
 	uint8_t ramoption_fixes;
 
+	uint8_t emulator_saved;
+	uint16_t header_saved;
+	uint8_t clrmamepro_saved;
+	uint16_t romcenter_saved;
 	uint32_t game_saved;
 	uint8_t comment_saved;
 	uint8_t biosset_saved;
@@ -1013,12 +1029,6 @@ struct ini_entry
 #define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// Used by MAMEDiff
 
 
-/* --- Parser Flags --- */
-
-#define	FLAG_EMULATOR_HEADER		0x4000
-#define	FLAG_CLRMAMEPRO_HEADER		0x8000
-
-
 /* --- Dat Flags --- */
 
 #define	FLAG_DAT_FULL_MERGING		0x0001
@@ -1036,6 +1046,40 @@ struct ini_entry
 /* --- String Index Flags --- */
 
 #define	FLAG_STRING_INDEX_USED		0x0001
+
+
+/* ---- Header Flags --- */
+
+#define FLAG_EMULATOR_NAME		0x01
+#define FLAG_EMULATOR_BUILD		0x02
+#define FLAG_EMULATOR_DEBUG		0x04
+
+#define FLAG_HEADER_NAME		0x0001
+#define FLAG_HEADER_DESCRIPTION		0x0002
+#define FLAG_HEADER_CATEGORY		0x0004
+#define FLAG_HEADER_VERSION		0x0008
+#define FLAG_HEADER_AUTHOR		0x0010
+#define FLAG_HEADER_EMAIL		0x0020
+#define FLAG_HEADER_HOMEPAGE		0x0040
+#define FLAG_HEADER_URL			0x0080
+#define FLAG_HEADER_DATE		0x0100
+#define FLAG_HEADER_COMMENT		0x0200
+
+#define FLAG_CLRMAMEPRO_HEADER		0x01
+#define FLAG_CLRMAMEPRO_FORCEMERGING	0x02
+#define FLAG_CLRMAMEPRO_FORCEPACKING	0x04
+#define FLAG_CLRMAMEPRO_FORCENODUMP	0x08
+
+#define FLAG_ROMCENTER_VERSION		0x0001
+#define FLAG_ROMCENTER_PLUGIN		0x0002
+#define FLAG_ROMCENTER_SPLIT		0x0004
+#define FLAG_ROMCENTER_MERGE		0x0008
+#define FLAG_ROMCENTER_ROMMODE		0x0010
+#define FLAG_ROMCENTER_BIOSMODE		0x0020
+#define FLAG_ROMCENTER_SAMPLEMODE	0x0040
+#define FLAG_ROMCENTER_LOCKROMMODE	0x0080
+#define FLAG_ROMCENTER_LOCKBIOSMODE	0x0100
+#define FLAG_ROMCENTER_LOCKSAMPLEMODE	0x0200
 
 
 /* --- Game Flags --- */

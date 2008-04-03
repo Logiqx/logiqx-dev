@@ -3499,13 +3499,96 @@ int summarise_dat(struct dat *dat)
 
 	int errflg=0;
 
-	/* --- Summarise games --- */
+	/* --- Summarise dat --- */
 
 	if (datlib_debug)
 	{
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Summarising data file...\n");
 	}
+
+	if (dat->emulator.name)
+		dat->emulator_flags|=FLAG_EMULATOR_NAME;
+
+	if (dat->emulator.build)
+		dat->emulator_flags|=FLAG_EMULATOR_BUILD;
+
+	if (dat->emulator.debug)
+		dat->emulator_flags|=FLAG_EMULATOR_DEBUG;
+
+	if (dat->header.name)
+		dat->header_flags|=FLAG_HEADER_NAME;
+
+	if (dat->header.description)
+		dat->header_flags|=FLAG_HEADER_DESCRIPTION;
+
+	if (dat->header.category)
+		dat->header_flags|=FLAG_HEADER_CATEGORY;
+
+	if (dat->header.version)
+		dat->header_flags|=FLAG_HEADER_VERSION;
+
+	if (dat->header.date)
+		dat->header_flags|=FLAG_HEADER_DATE;
+
+	if (dat->header.author)
+		dat->header_flags|=FLAG_HEADER_AUTHOR;
+
+	if (dat->header.email)
+		dat->header_flags|=FLAG_HEADER_EMAIL;
+
+	if (dat->header.homepage)
+		dat->header_flags|=FLAG_HEADER_HOMEPAGE;
+
+	if (dat->header.url)
+		dat->header_flags|=FLAG_HEADER_URL;
+
+	if (dat->header.comment)
+		dat->header_flags|=FLAG_HEADER_COMMENT;
+
+	if (dat->clrmamepro.header)
+		dat->clrmamepro_flags|=FLAG_CLRMAMEPRO_HEADER;
+
+	if (dat->clrmamepro.forcemerging)
+		dat->clrmamepro_flags|=FLAG_CLRMAMEPRO_FORCEMERGING;
+
+	if (dat->clrmamepro.forcepacking)
+		dat->clrmamepro_flags|=FLAG_CLRMAMEPRO_FORCEPACKING;
+
+	if (dat->clrmamepro.forcenodump)
+		dat->clrmamepro_flags|=FLAG_CLRMAMEPRO_FORCENODUMP;
+
+	if (dat->romcenter.version)
+		dat->romcenter_flags|=FLAG_ROMCENTER_VERSION;
+
+	if (dat->romcenter.plugin)
+		dat->romcenter_flags|=FLAG_ROMCENTER_PLUGIN;
+
+	if (dat->romcenter.split)
+		dat->romcenter_flags|=FLAG_ROMCENTER_SPLIT;
+
+	if (dat->romcenter.merge)
+		dat->romcenter_flags|=FLAG_ROMCENTER_MERGE;
+
+	if (dat->romcenter.rommode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_ROMMODE;
+
+	if (dat->romcenter.biosmode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_BIOSMODE;
+
+	if (dat->romcenter.samplemode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_SAMPLEMODE;
+
+	if (dat->romcenter.lockrommode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_LOCKROMMODE;
+
+	if (dat->romcenter.lockbiosmode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_LOCKBIOSMODE;
+
+	if (dat->romcenter.locksamplemode)
+		dat->romcenter_flags|=FLAG_ROMCENTER_LOCKSAMPLEMODE;
+
+	/* --- Summarise games --- */
 
 	dat->num_resources=dat->num_machines=0;
 	dat->num_roms=dat->num_resource_roms=dat->num_machine_roms=0;
@@ -3955,6 +4038,14 @@ int summarise_dat(struct dat *dat)
 
 	if (datlib_debug)
 	{
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Emulator flags=%02x\n", dat->emulator_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Header flags=%04x\n", dat->header_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("ClrMamePro flags=%02x\n", dat->clrmamepro_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RomCenter flags=%04x\n", dat->romcenter_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Game flags=%04x\n", dat->game_flags);
 		printf("%-16s: ", "Datlib.init_dat");

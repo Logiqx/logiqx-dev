@@ -296,6 +296,10 @@ int save_mame_gamelist(struct dat *dat)
 
 	/* --- User only wants the names so don't report other details that are not saved! --- */
 
+	dat->emulator_saved=0xff;
+	dat->header_saved=0xffff;
+	dat->clrmamepro_saved=0xff;
+	dat->romcenter_saved=0xffff;
 	dat->game_saved=0xffff;
 	dat->biosset_saved=0xff;
 	dat->rom_saved=0xffff;
