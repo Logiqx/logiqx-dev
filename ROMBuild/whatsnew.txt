@@ -3,7 +3,7 @@
             Updated details for World Heroes (NeoRAGEx) to match MAME v0.120.
             Removed some superspy and kikikai ROMs not needed with MAME v0.122.
             Removed llander/034597.01 since it was never a real dump!
-            Renamed desterugu ROMs to match MAME v0.124a (needed by Sideway).
+            Renamed desertgu ROMs to match MAME v0.124a (needed by Sideway).
             Removed Grytra ROMs (since they match MAME v0.124a).
             Emus no longer listed: Vectro Dream 2.3, EMU 2.3, Grytra v1.0.
 
