@@ -1,16 +1,19 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.36 ***
+04/04/2008  *** v2.36 ***
 
             - Uses DatLib v2.25.
-            - Added automatic date logic (based on the version number).
+            - Added automatic date population (based on the version number).
             - Renamed forcezipping to forcepacking (CMPro).
             - Renamed forcedrommode to rommode (RomCenter 3).
             - Renamed forcedbiosmode to biosmode (RomCenter 3).
             - Renamed forcedsamplemode to samplemode (RomCenter 3).
             - Changed from m/s/n to merged/split/unmerged (RomCenter 3).
             - Changed from y/n to yes/no (RomCenter 3).
+            - Added fix summary for header items (appears in datutil.log).
+            - Added warnings for invalid header items (appear in datutil.log).
+            - Added notices for lost header items (appear in datutil.log).
             - Changed -Z to -P (although -Z also works as before).
 
 24/03/2008  *** v2.35 ***
