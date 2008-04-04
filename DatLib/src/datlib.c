@@ -2365,6 +2365,41 @@ int store_tokenized_dat(struct dat *dat)
 	if (dat->options->clrmamepro.forcenodump)
 		dat->clrmamepro.forcenodump=dat->options->clrmamepro.forcenodump;
 
+	/* --- Validate the Emulator header --- */
+
+	if (dat->emulator.debug && strcmp(dat->emulator.debug, "yes") && strcmp(dat->emulator.debug, "no"))
+		dat->emulator_warnings|=FLAG_EMULATOR_DEBUG;
+
+	/* --- Validate the ClrMamePro header --- */
+
+	if (dat->clrmamepro.forcemerging && strcmp(dat->clrmamepro.forcemerging, "none") && strcmp(dat->clrmamepro.forcemerging, "split") && strcmp(dat->clrmamepro.forcemerging, "full"))
+		dat->clrmamepro_warnings|=FLAG_CLRMAMEPRO_FORCEMERGING;
+	if (dat->clrmamepro.forcepacking && strcmp(dat->clrmamepro.forcepacking, "zip") && strcmp(dat->clrmamepro.forcepacking, "unzip"))
+		dat->clrmamepro_warnings|=FLAG_CLRMAMEPRO_FORCEPACKING;
+	if (dat->clrmamepro.forcenodump && strcmp(dat->clrmamepro.forcenodump, "obsolete") && strcmp(dat->clrmamepro.forcenodump, "required") && strcmp(dat->clrmamepro.forcenodump, "ignore"))
+		dat->clrmamepro_warnings|=FLAG_CLRMAMEPRO_FORCENODUMP;
+
+	/* --- Validate the RomCenter header --- */
+
+	if (dat->romcenter.version && strcmp(dat->romcenter.version, "1.90") && strcmp(dat->romcenter.version, "2.00") && strcmp(dat->romcenter.version, "2.50"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_VERSION;
+	if (dat->romcenter.split && strcmp(dat->romcenter.split, "0") && strcmp(dat->romcenter.split, "1"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_SPLIT;
+	if (dat->romcenter.merge && strcmp(dat->romcenter.merge, "0") && strcmp(dat->romcenter.merge, "1"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_MERGE;
+	if (dat->romcenter.rommode && strcmp(dat->romcenter.rommode, "merged") && strcmp(dat->romcenter.rommode, "split") && strcmp(dat->romcenter.rommode, "unmerged"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_ROMMODE;
+	if (dat->romcenter.biosmode && strcmp(dat->romcenter.biosmode, "merged") && strcmp(dat->romcenter.biosmode, "split") && strcmp(dat->romcenter.biosmode, "unmerged"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_BIOSMODE;
+	if (dat->romcenter.samplemode && strcmp(dat->romcenter.samplemode, "merged") && strcmp(dat->romcenter.samplemode, "unmerged"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_SAMPLEMODE;
+	if (dat->romcenter.lockrommode && strcmp(dat->romcenter.lockrommode, "yes") && strcmp(dat->romcenter.lockrommode, "no"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_LOCKROMMODE;
+	if (dat->romcenter.lockbiosmode && strcmp(dat->romcenter.lockbiosmode, "yes") && strcmp(dat->romcenter.lockbiosmode, "no"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_LOCKBIOSMODE;
+	if (dat->romcenter.locksamplemode && strcmp(dat->romcenter.locksamplemode, "yes") && strcmp(dat->romcenter.locksamplemode, "no"))
+		dat->romcenter_warnings|=FLAG_ROMCENTER_LOCKSAMPLEMODE;
+
 	/* --- Interpret merge preferences from ClrMamePro and RomCenter headers --- */
 
 	if (dat->clrmamepro.forcemerging)
@@ -4494,6 +4529,14 @@ int report_warnings(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Sourcefile selection warnings=%04x\n", dat->sourcefile_selection_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Emulator warnings=%04x\n", dat->emulator_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Header warnings=%04x\n", dat->header_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("ClrMamePro warnings=%04x\n", dat->clrmamepro_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RomCenter warnings=%04x\n", dat->romcenter_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Game warnings=%04x\n", dat->game_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment warnings=%04x\n", dat->comment_warnings);
@@ -4536,13 +4579,15 @@ int report_warnings(struct dat *dat)
 		printf("Reporting warnings...\n");
 	}
 
-	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Warning Summary\n");
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n\n");
+
+		/* --- Selections --- */
 
 		if (dat->game_selection_warnings & FLAG_BAD_GAME_SELECTION)
 		{
@@ -4552,6 +4597,100 @@ int report_warnings(struct dat *dat)
 		if (dat->sourcefile_selection_warnings & FLAG_BAD_SOURCEFILE_SELECTION)
 		{
 			fprintf(dat->log_file, "Invalid sourcefile selections were provided to -G.\n\n");
+		}
+
+		/* --- Emulator --- */
+
+		if (dat->emulator_warnings)
+		{
+			fprintf(dat->log_file, "Emulator warnings:\n\n");
+
+			if (dat->emulator_warnings & FLAG_EMULATOR_NAME)
+				fprintf(dat->log_file, "    Missing Name\n");
+			if (dat->emulator_warnings & FLAG_EMULATOR_BUILD)
+				fprintf(dat->log_file, "    Missing Build\n");
+			if (dat->emulator_warnings & FLAG_EMULATOR_DEBUG)
+				fprintf(dat->log_file, "    Invalid Debug (%s)\n", dat->emulator.debug);
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- Header --- */
+
+		if (dat->header_warnings)
+		{
+			fprintf(dat->log_file, "Header warnings:\n\n");
+
+			if (dat->header_warnings & FLAG_HEADER_NAME)
+				fprintf(dat->log_file, "    Missing Name\n");
+			if (dat->header_warnings & FLAG_HEADER_DESCRIPTION)
+				fprintf(dat->log_file, "    Missing Description\n");
+			if (dat->header_warnings & FLAG_HEADER_CATEGORY)
+				fprintf(dat->log_file, "    Missing Category\n");
+			if (dat->header_warnings & FLAG_HEADER_VERSION)
+				fprintf(dat->log_file, "    Missing Version\n");
+			if (dat->header_warnings & FLAG_HEADER_AUTHOR)
+				fprintf(dat->log_file, "    Missing Author\n");
+			if (dat->header_warnings & FLAG_HEADER_EMAIL)
+				fprintf(dat->log_file, "    Missing Email\n");
+			if (dat->header_warnings & FLAG_HEADER_HOMEPAGE)
+				fprintf(dat->log_file, "    Missing Homepage\n");
+			if (dat->header_warnings & FLAG_HEADER_URL)
+				fprintf(dat->log_file, "    Missing URL\n");
+			if (dat->header_warnings & FLAG_HEADER_DATE)
+				fprintf(dat->log_file, "    Missing Date\n");
+			if (dat->header_warnings & FLAG_HEADER_COMMENT)
+				fprintf(dat->log_file, "    Missing Comment\n");
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- ClrMamePro --- */
+
+		if (dat->clrmamepro_warnings)
+		{
+			fprintf(dat->log_file, "ClrMamePro warnings:\n\n");
+
+			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_HEADER)
+				fprintf(dat->log_file, "    Missing Header\n");
+			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_FORCEMERGING)
+				fprintf(dat->log_file, "    Invalid forcemerging (%s)\n", dat->clrmamepro.forcemerging);
+			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_FORCEPACKING)
+				fprintf(dat->log_file, "    Invalid forcepacking (%s)\n", dat->clrmamepro.forcepacking);
+			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_FORCENODUMP)
+				fprintf(dat->log_file, "    Invalid forcenodump (%s)\n", dat->clrmamepro.forcenodump);
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- RomCenter --- */
+
+		if (dat->romcenter_warnings)
+		{
+			fprintf(dat->log_file, "RomCenter warnings:\n\n");
+
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_VERSION)
+				fprintf(dat->log_file, "    Invalid version (%s)\n", dat->romcenter.version);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_PLUGIN)
+				fprintf(dat->log_file, "    Invalid plugin (%s)\n", dat->romcenter.plugin);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_SPLIT)
+				fprintf(dat->log_file, "    Invalid split (%s)\n", dat->romcenter.split);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_MERGE)
+				fprintf(dat->log_file, "    Invalid merge (%s)\n", dat->romcenter.merge);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_ROMMODE)
+				fprintf(dat->log_file, "    Invalid rommode (%s)\n", dat->romcenter.rommode);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_BIOSMODE)
+				fprintf(dat->log_file, "    Invalid biosmode (%s)\n", dat->romcenter.biosmode);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_SAMPLEMODE)
+				fprintf(dat->log_file, "    Invalid samplemode (%s)\n", dat->romcenter.samplemode);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_LOCKROMMODE)
+				fprintf(dat->log_file, "    Invalid locrommode (%s)\n", dat->romcenter.lockrommode);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_LOCKBIOSMODE)
+				fprintf(dat->log_file, "    Invalid lockbiosmode (%s)\n", dat->romcenter.lockbiosmode);
+			if (dat->romcenter_warnings & FLAG_ROMCENTER_LOCKSAMPLEMODE)
+				fprintf(dat->log_file, "    Invalid locksamplemode (%s)\n", dat->romcenter.locksamplemode);
+
+			fprintf(dat->log_file, "\n");
 		}
 
 		/* --- Games --- */
@@ -6487,7 +6626,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)

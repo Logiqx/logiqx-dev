@@ -10,9 +10,8 @@ xx/xx/xxxx  *** v2.25 ***
             - Renamed forcedsamplemode to samplemode (RomCenter 3).
             - Changed from m/s/n to merged/split/unmerged (RomCenter 3).
             - Changed from y/n to yes/no (RomCenter 3).
-
-              WIP
-            - Added internal flags for emulator, header, clrmamepro, romcenter.
+            - Added internal flags for all header items (fixes, warnings, etc).
+            - Added warnings for invalid header items (appear in datutil.log).
 
 24/03/2008  *** v2.24 ***
 
