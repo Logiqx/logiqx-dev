@@ -1,9 +1,9 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.25 ***
+04/04/2008  *** v2.25 ***
 
-            - Added automatic date logic (based on the version number).
+            - Added automatic date population (based on the version number).
             - Renamed forcezipping to forcepacking (CMPro).
             - Renamed forcedrommode to rommode (RomCenter 3).
             - Renamed forcedbiosmode to biosmode (RomCenter 3).
@@ -14,6 +14,8 @@ xx/xx/xxxx  *** v2.25 ***
             - Added fix summary for header items (appears in datutil.log).
             - Added warnings for invalid header items (appear in datutil.log).
             - Added notices for lost header items (appear in datutil.log).
+            - Added the DTD for ROM Management Datafiles (revision 1.1).
+            - Documented the limitations of the XML parser in readme.txt.
 
 24/03/2008  *** v2.24 ***
 
