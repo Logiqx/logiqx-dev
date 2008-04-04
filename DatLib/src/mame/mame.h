@@ -1,1 +1,0 @@
-void logerror(char *, ...);
