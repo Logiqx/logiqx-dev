@@ -99,12 +99,12 @@ struct Rom sideway_roms[] =
 	{
 		FULL_COPY,
 		{"rr",       "rr.h",       1024, 0xcf44da32,    0, 1024},
-		{"desertgu", "desertgu.h", 2048, 0xc0030d7c, 1024, 1024},
+		{"desertgu", "9316.1h",    2048, 0xc0030d7c, 1024, 1024},
 	},
 	{
 		FULL_COPY,
 		{"rr",       "rr.g",       1024, 0x1c8a04e7,    0, 1024},
-		{"desertgu", "desertgu.g", 2048, 0x1ddde10b, 1024, 1024},
+		{"desertgu", "9316.1g",    2048, 0x1ddde10b, 1024, 1024},
 	},
 	{0}
 };
@@ -6627,6 +6627,7 @@ struct Rom sage_roms[] =
 
 struct Rom grytra_roms[] =
 {
+	/*
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-7.rom", 65536, 0x57f467d2, 0, 65536},
@@ -6737,7 +6738,7 @@ struct Rom grytra_roms[] =
 		{"gryzor", "g-6.rom", 65536, 0xaeea6744, 0, 65536},
 		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x10000, 32768},
 	},
-	/* g-14.rom was slightly different in the original set. Last 8k is now empty (all 0xff) */
+	// g-14.rom was slightly different in the original set. Last 8k is now empty (all 0xff)
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-14.rom", 65536, 0x765afdc7, 0, 65536},
@@ -6778,7 +6779,7 @@ struct Rom grytra_roms[] =
 		{"gryzor", "g-13.rom", 65536, 0x2b513d12, 0, 65536},
 		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x30000, 32768},
 	},
-	/* This ROM isn't needed by Gryzor (never really existed ;)
+	// This ROM isn't needed by Gryzor (never really existed ;)
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-19.rom", 65536, 0xdeab7e4e, 0, 65536},
@@ -8860,11 +8861,6 @@ struct Rom retrocade_roms[] =
 		{"	", "  ",	     0, 0xffffffff,   0,     0},
 	},
 	{
-		BLOCK_FILL,
-		{"llander", "034597.01",  2048, 0x3f55d17f,   0, 2048},
-		{"       ", "	 ",     0, 0xffffffff,   0,    0},
-	},
-	{
 		FULL_COPY,
 		{"dotron",   "loc-cpu4",    16384, 0x0477e9a2,      0, 8192},
 		{"dotrone",  "loc-cpu4",     8192, 0xc137383c,      0, 8192},
@@ -8892,26 +8888,6 @@ struct Rom retrocade_roms[] =
 		FULL_COPY,
 		{"nibbler",  "ic53",	 2048, 0x34eca7be,      0, 2048},
 		{"zzzzzzzz", "zzzzzzzz.zzz", 2048, 0x34eca7be,      0, 2048},
-	},
-	{0}
-};
-
-struct Rom emu_roms[] =
-{
-	{
-		BLOCK_FILL,
-		{"llander", "034597.01",  2048, 0x3f55d17f,   0, 2048},
-		{"       ", "	 ",     0, 0xffffffff,   0,    0},
-	},
-	{0}
-};
-
-struct Rom vectordream_roms[] =
-{
-	{
-		BLOCK_FILL,
-		{"llander", "034597.01",  2048, 0x3f55d17f,   0, 2048},
-		{"       ", "	 ",     0, 0xffffffff,   0,    0},
 	},
 	{0}
 };
@@ -11875,9 +11851,8 @@ struct Emulator ems[] =
 	{"callus", "Callus v0.42", callus_roms},
 	{"cinelator95", "Cinelator 95 Beta", cinelator95_roms},
 	{"classicemu", "ClassicEmu v0.01", classicemu_roms},
-	{"emu", "EMU v2.3", emu_roms},
 	{"galemu", "GalEmu v40.9", galemu_roms},
-	{"grytra", "Grytra v1.0", grytra_roms},
+	//{"grytra", "Grytra v1.0", grytra_roms},
 	{"hive", "HiVE v1.04", hive_roms},
 	{"hoot", "Hoot 20011002", hoot_roms},
 	{"invadersaver", "Invader Saver v2.00a", invadersaver_roms},
@@ -11919,7 +11894,6 @@ struct Emulator ems[] =
 	{"tnzsemu", "TNZS-EMU v2.10b", tnzs_roms},
 	{"vantage", "VAntAGE v1.12", vantage_roms},
 	{"vbemusaver", "VBEmu Screen Saver v1.01a", vbemusaver_roms},
-	{"vectordream", "Vector Dream v2.3", vectordream_roms},
 	{"xcade", "Xcade v0.85", xcade_roms},
 	{"xpac", "XPac Beta 1-2-3", xpac_roms},
 	{"zem", "ZEM v0.001", zem_roms},
