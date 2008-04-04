@@ -2337,6 +2337,7 @@ int store_tokenized_dat(struct dat *dat)
 					dat->header.version[6], dat->header.version[7]);
 
 				dat->header.date = dat->header.auto_date;
+				dat->header_fixes|=FLAG_HEADER_DATE;
 			}
 		}
 	}
@@ -5083,6 +5084,14 @@ int report_fixes(struct dat *dat)
 	if (datlib_debug)
 	{
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Emulator fixes=%04x\n", dat->emulator_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Header fixes=%04x\n", dat->header_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("ClrMamePro fixes=%04x\n", dat->clrmamepro_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("RomCenter fixes=%04x\n", dat->romcenter_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Game fixes=%04x\n", dat->game_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment fixes=%04x\n", dat->comment_fixes);
@@ -5125,11 +5134,71 @@ int report_fixes(struct dat *dat)
 		printf("Reporting fixes...\n");
 	}
 
-	if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
+	if (dat->header_fixes || dat->clrmamepro_fixes || dat->romcenter_fixes || dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
 	{
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 		fprintf(dat->log_file, "Fix Summary\n");
 		fprintf(dat->log_file, "-------------------------------------------------------------------------------\n\n");
+
+		/* --- Header --- */
+
+		if (dat->header_fixes)
+		{
+			fprintf(dat->log_file, "Header information that was changed:\n\n");
+
+			if (dat->header_fixes & FLAG_HEADER_DATE)
+				fprintf(dat->log_file, "    Date -> %s\n", dat->header.date);
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- ClrMamePro --- */
+
+		if (dat->clrmamepro_fixes)
+		{
+			fprintf(dat->log_file, "ClrMamePro information that was changed:\n\n");
+
+			if (dat->clrmamepro_fixes & FLAG_CLRMAMEPRO_HEADER)
+				fprintf(dat->log_file, "    header -> %s\n", dat->clrmamepro.header);
+			if (dat->clrmamepro_fixes & FLAG_CLRMAMEPRO_FORCEMERGING)
+				fprintf(dat->log_file, "    forcemerging -> %s\n", dat->clrmamepro.forcemerging);
+			if (dat->clrmamepro_fixes & FLAG_CLRMAMEPRO_FORCEPACKING)
+				fprintf(dat->log_file, "    forcepacking -> %s\n", dat->clrmamepro.forcepacking);
+			if (dat->clrmamepro_fixes & FLAG_CLRMAMEPRO_FORCENODUMP)
+				fprintf(dat->log_file, "    forcenodump -> %s\n", dat->clrmamepro.forcenodump);
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- RomCenter --- */
+
+		if (dat->romcenter_fixes)
+		{
+			fprintf(dat->log_file, "RomCenter information that was changed:\n\n");
+
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_VERSION)
+				fprintf(dat->log_file, "    version -> %s\n", dat->romcenter.version);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_PLUGIN)
+				fprintf(dat->log_file, "    plugin -> %s\n", dat->romcenter.plugin);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_SPLIT)
+				fprintf(dat->log_file, "    split -> %s\n", dat->romcenter.split);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_MERGE)
+				fprintf(dat->log_file, "    merge -> %s\n", dat->romcenter.merge);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_ROMMODE)
+				fprintf(dat->log_file, "    rommode -> %s\n", dat->romcenter.rommode);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_BIOSMODE)
+				fprintf(dat->log_file, "    biosmode -> %s\n", dat->romcenter.biosmode);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_SAMPLEMODE)
+				fprintf(dat->log_file, "    samplemode -> %s\n", dat->romcenter.samplemode);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_LOCKROMMODE)
+				fprintf(dat->log_file, "    lockrommode -> %s\n", dat->romcenter.lockrommode);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_LOCKBIOSMODE)
+				fprintf(dat->log_file, "    lockbiosmode -> %s\n", dat->romcenter.lockbiosmode);
+			if (dat->clrmamepro_fixes & FLAG_ROMCENTER_LOCKSAMPLEMODE)
+				fprintf(dat->log_file, "    locksamplemode -> %s\n", dat->romcenter.locksamplemode);
+
+			fprintf(dat->log_file, "\n");
+		}
 
 		/* --- Games --- */
 
@@ -6629,7 +6698,7 @@ struct dat *init_dat(struct options *options)
 			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
-			if (dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
+			if (dat->header_fixes || dat->clrmamepro_fixes || dat->romcenter_fixes || dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
 				printf("\nNote: Fixes were applied to the data file (see %s for details).\n", options->log_fn);
 
 			printf("-------------------------------------------------------------------------------\n");
@@ -6676,6 +6745,18 @@ int save_dat(struct dat *dat)
 		{
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Saved in '%s' format.\n", dat->save->description);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("Emulator losses=%04x.\n", ~dat->emulator_saved & dat->emulator_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("Header losses=%04x.\n", ~dat->header_saved & dat->header_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("ClrMamePro losses=%04x.\n", ~dat->clrmamepro_saved & dat->clrmamepro_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
+			printf("RomCenter losses=%04x.\n", ~dat->romcenter_saved & dat->romcenter_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
 			printf("Game losses=%04x.\n", ~dat->game_saved & dat->game_flags);
@@ -6741,7 +6822,12 @@ int save_dat(struct dat *dat)
 
 		/* --- Report information that could not be saved (ignore flags that are derived by DatLib) --- */
 		 
-		if (dat->log_file && (~dat->game_saved & dat->game_flags ||
+		if (dat->log_file && (
+			~dat->emulator_saved & dat->emulator_flags ||
+			~dat->header_saved & dat->header_flags ||
+			~dat->clrmamepro_saved & dat->clrmamepro_flags ||
+			~dat->romcenter_saved & dat->romcenter_flags ||
+			~dat->game_saved & dat->game_flags ||
 			~dat->comment_saved & dat->comment_flags ||
 			~dat->biosset_saved & dat->biosset_flags ||
 			~dat->rom_saved & dat->rom_flags ||
@@ -6764,6 +6850,114 @@ int save_dat(struct dat *dat)
 			fprintf(dat->log_file, "-------------------------------------------------------------------------------\n");
 			fprintf(dat->log_file, "Features that were lost by saving in %s format\n", dat->save->description);
 			fprintf(dat->log_file, "-------------------------------------------------------------------------------\n\n");
+
+			/* --- Emulator --- */
+
+			if ((lost=~dat->emulator_saved & dat->emulator_flags))
+			{
+				if (lost & FLAG_EMULATOR_NAME)
+				{
+					fprintf(dat->log_file, "Emulator has been lost entirely!\n\n");
+				}
+				else
+				{
+					fprintf(dat->log_file, "Emulator information that has been lost:\n\n");
+
+					if (lost & FLAG_EMULATOR_BUILD)
+						fprintf(dat->log_file, "    Build (%s)\n", dat->emulator.build);
+					if (lost & FLAG_EMULATOR_DEBUG)
+						fprintf(dat->log_file, "    Debug (%s)\n", dat->emulator.debug);
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
+
+			/* --- Header --- */
+
+			if ((lost=~dat->header_saved & dat->header_flags))
+			{
+				if (lost & FLAG_HEADER_NAME)
+				{
+					fprintf(dat->log_file, "Header has been lost entirely!\n\n");
+				}
+				else
+				{
+					fprintf(dat->log_file, "Header information that has been lost:\n\n");
+
+					if (lost & FLAG_HEADER_DESCRIPTION)
+						fprintf(dat->log_file, "    description (%s)\n", dat->header.description);
+					if (lost & FLAG_HEADER_CATEGORY)
+						fprintf(dat->log_file, "    category (%s)\n", dat->header.category);
+					if (lost & FLAG_HEADER_VERSION)
+						fprintf(dat->log_file, "    version (%s)\n", dat->header.version);
+					if (lost & FLAG_HEADER_AUTHOR)
+						fprintf(dat->log_file, "    author (%s)\n", dat->header.author);
+					if (lost & FLAG_HEADER_EMAIL)
+						fprintf(dat->log_file, "    email (%s)\n", dat->header.email);
+					if (lost & FLAG_HEADER_HOMEPAGE)
+						fprintf(dat->log_file, "    homepage (%s)\n", dat->header.homepage);
+					if (lost & FLAG_HEADER_URL)
+						fprintf(dat->log_file, "    url (%s)\n", dat->header.url);
+					if (lost & FLAG_HEADER_DATE)
+						fprintf(dat->log_file, "    date (%s)\n", dat->header.date);
+					if (lost & FLAG_HEADER_COMMENT)
+						fprintf(dat->log_file, "    comment (%s)\n", dat->header.comment);
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
+
+			/* --- ClrMamePro --- */
+
+			if ((lost=~dat->clrmamepro_saved & dat->clrmamepro_flags))
+			{
+				if (lost)
+				{
+					fprintf(dat->log_file, "ClrMamePro information that has been lost:\n\n");
+
+					if (lost & FLAG_CLRMAMEPRO_HEADER)
+						fprintf(dat->log_file, "    header (%s)\n", dat->clrmamepro.header);
+					if (lost & FLAG_CLRMAMEPRO_FORCEMERGING)
+						fprintf(dat->log_file, "    forcemerging (%s)\n", dat->clrmamepro.forcemerging);
+					if (lost & FLAG_CLRMAMEPRO_FORCEPACKING)
+						fprintf(dat->log_file, "    forcepacking (%s)\n", dat->clrmamepro.forcepacking);
+					if (lost & FLAG_CLRMAMEPRO_FORCENODUMP)
+						fprintf(dat->log_file, "    forcenodump (%s)\n", dat->clrmamepro.forcenodump);
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
+
+			/* --- RomCenter --- */
+
+			if ((lost=~dat->romcenter_saved & dat->romcenter_flags))
+			{
+				if (lost)
+				{
+					fprintf(dat->log_file, "RomCenter information that has been lost:\n\n");
+
+					if (lost & FLAG_ROMCENTER_PLUGIN)
+						fprintf(dat->log_file, "    plugin (%s)\n", dat->romcenter.plugin);
+					if (lost & FLAG_ROMCENTER_SPLIT)
+						fprintf(dat->log_file, "    split (%s)\n", dat->romcenter.split);
+					if (lost & FLAG_ROMCENTER_MERGE)
+						fprintf(dat->log_file, "    merge (%s)\n", dat->romcenter.merge);
+					if (lost & FLAG_ROMCENTER_ROMMODE)
+						fprintf(dat->log_file, "    rommode (%s)\n", dat->romcenter.rommode);
+					if (lost & FLAG_ROMCENTER_BIOSMODE)
+						fprintf(dat->log_file, "    biosmode (%s)\n", dat->romcenter.biosmode);
+					if (lost & FLAG_ROMCENTER_SAMPLEMODE)
+						fprintf(dat->log_file, "    samplemode (%s)\n", dat->romcenter.samplemode);
+					if (lost & FLAG_ROMCENTER_LOCKROMMODE)
+						fprintf(dat->log_file, "    lockrommode (%s)\n", dat->romcenter.lockrommode);
+					if (lost & FLAG_ROMCENTER_LOCKBIOSMODE)
+						fprintf(dat->log_file, "    lockbiosmode (%s)\n", dat->romcenter.lockbiosmode);
+					if (lost & FLAG_ROMCENTER_LOCKSAMPLEMODE)
+						fprintf(dat->log_file, "    locksamplemode (%s)\n", dat->romcenter.locksamplemode);
+
+					fprintf(dat->log_file, "\n");
+				}
+			}
 
 			/* --- Games --- */
 
@@ -7136,9 +7330,6 @@ int save_dat(struct dat *dat)
 					fprintf(dat->log_file, "Archives have been lost entirely!\n\n");
 			}
 
-			if (!datlib_debug)
-				printf("\nNote: Some game information could not be saved (see %s for details).\n", dat->log_name);
-
 			/* --- RAM options --- */
 
 			if ((lost=~dat->ramoption_saved & dat->ramoption_flags))
@@ -7155,6 +7346,11 @@ int save_dat(struct dat *dat)
 					fprintf(dat->log_file, "\n");
 				}
 			}
+
+			/* --- Notify the user --- */
+
+			if (!datlib_debug)
+				printf("\nNote: Some game information could not be saved (see %s for details).\n", dat->log_name);
 		}
 	}
 

@@ -1005,12 +1005,15 @@ int save_mame_listxml(struct dat *dat)
 	/* --- Main element --- */
 
 	fprintf(dat->out, "<%s", doc_type);
+	dat->emulator_saved|=FLAG_EMULATOR_NAME;
 
 	if (dat->emulator.build)
 		fprintf(dat->out, " build=\"%s\"", dat->emulator.build);
+	dat->emulator_saved|=FLAG_EMULATOR_BUILD;
 
 	if (dat->emulator.debug)
 		fprintf(dat->out, " debug=\"%s\"", dat->emulator.debug);
+	dat->emulator_saved|=FLAG_EMULATOR_DEBUG;
 
 	fprintf(dat->out, ">\n");
 
@@ -1021,24 +1024,43 @@ int save_mame_listxml(struct dat *dat)
 		fprintf(dat->out, "\t<header>\n");
 		if (dat->header.name!=0)
 			fprintf(dat->out, "\t\t<name>%s</name>\n", dat->header.name);
+		dat->header_saved|=FLAG_HEADER_NAME;
+
 		if (dat->header.description!=0)
 			fprintf(dat->out, "\t\t<description>%s</description>\n", dat->header.description);
+		dat->header_saved|=FLAG_HEADER_DESCRIPTION;
+
 		if (dat->header.category!=0)
 			fprintf(dat->out, "\t\t<category>%s</category>\n", dat->header.category);
+		dat->header_saved|=FLAG_HEADER_CATEGORY;
+
 		if (dat->header.version!=0)
 			fprintf(dat->out, "\t\t<version>%s</version>\n", dat->header.version);
+		dat->header_saved|=FLAG_HEADER_VERSION;
+
 		if (dat->header.date!=0)
 			fprintf(dat->out, "\t\t<date>%s</date>\n", dat->header.date);
+		dat->header_saved|=FLAG_HEADER_DATE;
+
 		if (dat->header.author!=0)
 			fprintf(dat->out, "\t\t<author>%s</author>\n", dat->header.author);
+		dat->header_saved|=FLAG_HEADER_AUTHOR;
+
 		if (dat->header.email!=0)
 			fprintf(dat->out, "\t\t<email>%s</email>\n", dat->header.email);
+		dat->header_saved|=FLAG_HEADER_EMAIL;
+
 		if (dat->header.homepage!=0)
 			fprintf(dat->out, "\t\t<homepage>%s</homepage>\n", dat->header.homepage);
+		dat->header_saved|=FLAG_HEADER_HOMEPAGE;
+
 		if (dat->header.url!=0)
 			fprintf(dat->out, "\t\t<url>%s</url>\n", dat->header.url);
+		dat->header_saved|=FLAG_HEADER_URL;
+
 		if (dat->header.comment!=0)
 			fprintf(dat->out, "\t\t<comment>%s</comment>\n", dat->header.comment);
+		dat->header_saved|=FLAG_HEADER_COMMENT;
 
 		if (dat->clrmamepro.header!= 0 || dat->clrmamepro.forcemerging ||
 			dat->clrmamepro.forcenodump || dat->clrmamepro.forcepacking)
@@ -1046,12 +1068,20 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<clrmamepro");
 			if (dat->clrmamepro.header!=0)
 				fprintf(dat->out, " header=\"%s\"", dat->clrmamepro.header);
+			dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_HEADER;
+
 			if (dat->clrmamepro.forcemerging!=0)
 				fprintf(dat->out, " forcemerging=\"%s\"", dat->clrmamepro.forcemerging);
+			dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCEMERGING;
+
 			if (dat->clrmamepro.forcenodump!=0)
 				fprintf(dat->out, " forcenodump=\"%s\"", dat->clrmamepro.forcenodump);
+			dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCENODUMP;
+
 			if (dat->clrmamepro.forcepacking!=0)
 				fprintf(dat->out, " forcepacking=\"%s\"", dat->clrmamepro.forcepacking);
+			dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCEPACKING;
+
 			fprintf(dat->out, "/>\n");
 		}
 
@@ -1062,18 +1092,32 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<romcenter");
 			if (dat->romcenter.plugin!=0)
 				fprintf(dat->out, " plugin=\"%s\"", dat->romcenter.plugin);
+			dat->romcenter_saved|=FLAG_ROMCENTER_PLUGIN;
+
 			if (dat->romcenter.rommode!=0)
 				fprintf(dat->out, " rommode=\"%s\"", dat->romcenter.rommode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_ROMMODE;
+
 			if (dat->romcenter.biosmode!=0)
 				fprintf(dat->out, " biosmode=\"%s\"", dat->romcenter.biosmode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_BIOSMODE;
+
 			if (dat->romcenter.samplemode!=0)
 				fprintf(dat->out, " samplemode=\"%s\"", dat->romcenter.samplemode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_SAMPLEMODE;
+
 			if (dat->romcenter.lockrommode!=0)
 				fprintf(dat->out, " lockrommode=\"%s\"", dat->romcenter.lockrommode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_LOCKROMMODE;
+
 			if (dat->romcenter.lockbiosmode!=0)
 				fprintf(dat->out, " lockbiosmode=\"%s\"", dat->romcenter.lockbiosmode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_LOCKBIOSMODE;
+
 			if (dat->romcenter.locksamplemode!=0)
 				fprintf(dat->out, " locksamplemode=\"%s\"", dat->romcenter.locksamplemode);
+			dat->romcenter_saved|=FLAG_ROMCENTER_LOCKSAMPLEMODE;
+
 			fprintf(dat->out, "/>\n");
 		}
 

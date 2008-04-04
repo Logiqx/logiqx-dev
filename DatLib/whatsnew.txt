@@ -11,7 +11,9 @@ xx/xx/xxxx  *** v2.25 ***
             - Changed from m/s/n to merged/split/unmerged (RomCenter 3).
             - Changed from y/n to yes/no (RomCenter 3).
             - Added internal flags for all header items (fixes, warnings, etc).
+            - Added fix summary for header items (appears in datutil.log).
             - Added warnings for invalid header items (appear in datutil.log).
+            - Added notices for lost header items (appear in datutil.log).
 
 24/03/2008  *** v2.24 ***
 

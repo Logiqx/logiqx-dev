@@ -420,49 +420,74 @@ int save_romcenter_250(struct dat *dat)
 	fprintf(dat->out, "\nauthor=");
 	if (dat->header.author)
 		fprintf(dat->out, "%s", dat->header.author);
+	dat->header_saved|=FLAG_HEADER_AUTHOR;
+
 	fprintf(dat->out, "\nemail=");
 	if (dat->header.email)
 		fprintf(dat->out, "%s", dat->header.email);
+	dat->header_saved|=FLAG_HEADER_EMAIL;
+
 	fprintf(dat->out, "\nhomepage=");
 	if (dat->header.homepage)
 		fprintf(dat->out, "%s", dat->header.homepage);
+	dat->header_saved|=FLAG_HEADER_HOMEPAGE;
+
 	fprintf(dat->out, "\nurl=");
 	if (dat->header.url)
 		fprintf(dat->out, "%s", dat->header.url);
+	dat->header_saved|=FLAG_HEADER_URL;
+
 	fprintf(dat->out, "\nversion=");
 	if (dat->header.version)
 		fprintf(dat->out, "%s", dat->header.version);
+	dat->header_saved|=FLAG_HEADER_VERSION;
+
 	fprintf(dat->out, "\ndate=");
 	if (dat->header.date)
 		fprintf(dat->out, "%s", dat->header.date);
+	dat->header_saved|=FLAG_HEADER_DATE;
+
 	fprintf(dat->out, "\ncomment=");
 	if (dat->header.comment)
 		fprintf(dat->out, "%s", dat->header.comment);
+	dat->header_saved|=FLAG_HEADER_COMMENT;
 
 	fprintf(dat->out, "\n[DAT]");
 	fprintf(dat->out, "\nversion=");
 	if (dat->romcenter.version)
 		fprintf(dat->out, "%s", dat->romcenter.version);
+	dat->romcenter_saved|=FLAG_ROMCENTER_VERSION;
+
 	fprintf(dat->out, "\nplugin=");
 	if (dat->romcenter.plugin)
 		fprintf(dat->out, "%s", dat->romcenter.plugin);
+	dat->romcenter_saved|=FLAG_ROMCENTER_PLUGIN;
+
 	fprintf(dat->out, "\nsplit=");
 	if (dat->romcenter.split)
 		fprintf(dat->out, "%s", dat->romcenter.split);
+	dat->romcenter_saved|=FLAG_ROMCENTER_SPLIT;
+
 	fprintf(dat->out, "\nmerge=");
 	if (dat->romcenter.merge)
 		fprintf(dat->out, "%s", dat->romcenter.merge);
+	dat->romcenter_saved|=FLAG_ROMCENTER_MERGE;
 
 	fprintf(dat->out, "\n[EMULATOR]");
 	fprintf(dat->out, "\nrefname=");
 	if (dat->header.name)
 		fprintf(dat->out, "%s", dat->header.name);
+	dat->header_saved|=FLAG_HEADER_NAME;
+
 	fprintf(dat->out, "\nversion=");
 	if (dat->header.description)
 		fprintf(dat->out, "%s", dat->header.description);
+	dat->header_saved|=FLAG_HEADER_DESCRIPTION;
+
 	fprintf(dat->out, "\ncategory=");
 	if (dat->header.category)
 		fprintf(dat->out, "%s", dat->header.category);
+	dat->header_saved|=FLAG_HEADER_CATEGORY;
 
 	fprintf(dat->out, "\n[GAMES]");
 

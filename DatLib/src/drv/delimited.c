@@ -635,16 +635,19 @@ int save_tab_delimited(struct dat *dat)
 		fprintf(dat->out, "emulator\t%s\t", dat_name);
 
 		fprintf(dat->out, "%s\t", dat->emulator.name);
+		dat->emulator_saved|=FLAG_EMULATOR_NAME;
 
 		if (dat->emulator.build)
 			fprintf(dat->out, "%s\t", dat->emulator.build);
 		else
 			fprintf(dat->out, "\\N\t");
+		dat->emulator_saved|=FLAG_EMULATOR_BUILD;
 
 		if (dat->emulator.debug)
 			fprintf(dat->out, "%s\t", dat->emulator.debug);
 		else
 			fprintf(dat->out, "\\N\t");
+		dat->emulator_saved|=FLAG_EMULATOR_DEBUG;
 
 		fprintf(dat->out, "\n");
 	}

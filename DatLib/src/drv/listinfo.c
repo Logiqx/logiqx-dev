@@ -718,11 +718,17 @@ int save_mame_listinfo(struct dat *dat)
 		else
 			fprintf(dat->out, "\tname %s\n", dat->header.name);
 
+		dat->header_saved|=FLAG_HEADER_NAME;
+
 		if (dat->header.description!=0)
 			fprintf(dat->out, "\tdescription \"%s\"\n", dat->header.description);
 
+		dat->header_saved|=FLAG_HEADER_DESCRIPTION;
+
 		if (dat->header.category!=0)
 			fprintf(dat->out, "\tcategory \"%s\"\n", dat->header.category);
+
+		dat->header_saved|=FLAG_HEADER_CATEGORY;
 
 		if (dat->header.version!=0)
 		{
@@ -732,6 +738,8 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tversion %s\n", dat->header.version);
 		}
 
+		dat->header_saved|=FLAG_HEADER_VERSION;
+
 		if (dat->header.date!=0)
 		{
 			if (strchr(dat->header.date, ' '))
@@ -739,6 +747,8 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\tdate %s\n", dat->header.date);
 		}
+
+		dat->header_saved|=FLAG_HEADER_DATE;
 
 		if (dat->header.author!=0)
 		{
@@ -748,6 +758,8 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tauthor %s\n", dat->header.author);
 		}
 
+		dat->header_saved|=FLAG_HEADER_AUTHOR;
+
 		if (dat->header.email!=0)
 		{
 			if (strchr(dat->header.email, ' '))
@@ -755,6 +767,8 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\temail %s\n", dat->header.email);
 		}
+
+		dat->header_saved|=FLAG_HEADER_EMAIL;
 
 		if (dat->header.homepage!=0)
 		{
@@ -764,6 +778,8 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\thomepage %s\n", dat->header.homepage);
 		}
 
+		dat->header_saved|=FLAG_HEADER_HOMEPAGE;
+
 		if (dat->header.url!=0)
 		{
 			if (strchr(dat->header.url, ' '))
@@ -772,8 +788,12 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\turl %s\n", dat->header.url);
 		}
 
+		dat->header_saved|=FLAG_HEADER_URL;
+
 		if (dat->header.comment!=0)
 			fprintf(dat->out, "\tcomment \"%s\"\n", dat->header.comment);
+
+		dat->header_saved|=FLAG_HEADER_COMMENT;
 
 		if (dat->clrmamepro.header!=0)
 		{
@@ -783,6 +803,8 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\theader %s\n", dat->clrmamepro.header);
 		}
 
+		dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_HEADER;
+
 		if (dat->clrmamepro.forcemerging!=0)
 		{
 			if (strchr(dat->clrmamepro.forcemerging, ' '))
@@ -790,6 +812,8 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\tforcemerging %s\n", dat->clrmamepro.forcemerging);
 		}
+
+		dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCEMERGING;
 
 		if (dat->clrmamepro.forcepacking!=0)
 		{
@@ -799,6 +823,8 @@ int save_mame_listinfo(struct dat *dat)
 				fprintf(dat->out, "\tforcepacking %s\n", dat->clrmamepro.forcepacking);
 		}
 
+		dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCEPACKING;
+
 		if (dat->clrmamepro.forcenodump!=0)
 		{
 			if (strchr(dat->clrmamepro.forcenodump, ' '))
@@ -806,6 +832,8 @@ int save_mame_listinfo(struct dat *dat)
 			else
 				fprintf(dat->out, "\tforcenodump %s\n", dat->clrmamepro.forcenodump);
 		}
+
+		dat->clrmamepro_saved|=FLAG_CLRMAMEPRO_FORCENODUMP;
 
 		fprintf(dat->out, ")\n\n");
 	}
@@ -817,11 +845,15 @@ int save_mame_listinfo(struct dat *dat)
 		fprintf(dat->out, "emulator (\n");
 
 		fprintf(dat->out, "\tname \"%s\"\n", dat->emulator.name);
+		dat->emulator_saved|=FLAG_EMULATOR_NAME;
 
-		fprintf(dat->out, "\tversion \"%s\"\n", dat->emulator.build);
+		if (dat->emulator.build!=0)
+			fprintf(dat->out, "\tversion \"%s\"\n", dat->emulator.build);
+		dat->emulator_saved|=FLAG_EMULATOR_BUILD;
 
 		if (dat->emulator.debug!=0)
 			fprintf(dat->out, "\tdebug \"%s\"\n", dat->emulator.debug);
+		dat->emulator_saved|=FLAG_EMULATOR_DEBUG;
 
 		fprintf(dat->out, ")\n\n");
 	}
