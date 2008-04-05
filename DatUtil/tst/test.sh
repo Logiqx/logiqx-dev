@@ -207,6 +207,9 @@ unset DATA_FILE
 unset DATA_OPTION
 
 case "$1" in
+	fba)
+		DATA_FILE="FB Alpha v0.2.96.77 (ClrMame Pro).dat"
+		;;
 	m1)
 		DATA_FILE="m1.xml"
 		;;
