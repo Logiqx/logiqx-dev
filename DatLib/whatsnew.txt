@@ -1,6 +1,12 @@
 History
 -------
 
+06/04/2008  *** v2.26 ***
+
+            - Minor tweaks to the DTD (header and manufacturer now optional).
+            - Fixed empty header being written to Generic XML datafiles.
+            - Fixed conversion of MESS XML to Generic XML (machines -> games).
+
 04/04/2008  *** v2.25 ***
 
             - Added automatic date population (based on the version number).

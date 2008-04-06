@@ -676,20 +676,33 @@ int save_mame_listxml(struct dat *dat)
 		dat->romcenter.rommode="unmerged";
 	}
 
-	/* --- Write the DTD --- */
+	/* --- Determine the document type and game type (n.b. Generic XML only supports games, not machines) --- */
 
-	if (dat->num_machines)
+	doc_type=dat->emulator.name;
+
+	if (doc_type && !(strcmp(doc_type, "datafile")))
 	{
-		doc_type=dat->emulator.name ? dat->emulator.name : "mess";
-		game_type="machine";
+		game_type="game";
 	}
 	else
 	{
-		doc_type=dat->emulator.name ? dat->emulator.name : "mame";
-		game_type="game";
+		if (dat->num_machines)
+		{
+			doc_type=doc_type ? doc_type : "mess";
+			game_type="machine";
+		}
+		else
+		{
+			doc_type=doc_type ? doc_type : "mame";
+			game_type="game";
+		}
 	}
 
+	/* --- Write XML header --- */
+
 	fprintf(dat->out, "<?xml version=\"1.0\"?>\n");
+
+	/* --- Write the DTD --- */
 
 	if (strcmp(doc_type, "datafile"))
 	{
@@ -1021,7 +1034,9 @@ int save_mame_listxml(struct dat *dat)
 
 	if (!strcmp(doc_type, "datafile"))
 	{
-		fprintf(dat->out, "\t<header>\n");
+		if (dat->header_flags || dat->clrmamepro_flags || dat->romcenter_flags)
+			fprintf(dat->out, "\t<header>\n");
+
 		if (dat->header.name!=0)
 			fprintf(dat->out, "\t\t<name>%s</name>\n", dat->header.name);
 		dat->header_saved|=FLAG_HEADER_NAME;
@@ -1121,7 +1136,8 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "/>\n");
 		}
 
-		fprintf(dat->out, "\t</header>\n");
+		if (dat->header_flags || dat->clrmamepro_flags || dat->romcenter_flags)
+			fprintf(dat->out, "\t</header>\n");
 	}
 
 	/* --- For every game, machine and resource --- */
