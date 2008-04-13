@@ -1,6 +1,10 @@
 History
 -------
 
+xx/04/2008  *** v2.27 ***
+
+            - Fixed generation of url within CMPro datafiles (needs quotes).
+
 06/04/2008  *** v2.26 ***
 
             - Minor tweaks to the DTD (header and manufacturer now optional).

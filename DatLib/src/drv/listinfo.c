@@ -591,7 +591,7 @@ void output_info_string(FILE *out, unsigned char *ptr)
 #define OUTPUT_SMART_STRING(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 { \
-	if (dat->options->options & OPTION_ALWAYS_QUOTE || strchr(curr_##OBJECT->ATTRIBUTE, ' ')) \
+	if (dat->options->options & OPTION_ALWAYS_QUOTE || strchr(curr_##OBJECT->ATTRIBUTE, ' ') || strstr(curr_##OBJECT->ATTRIBUTE, "//")) \
 		OUTPUT_QUOTED_STRING(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
 	else \
 		OUTPUT_UNQUOTED_STRING(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
@@ -713,7 +713,7 @@ int save_mame_listinfo(struct dat *dat)
 	{
 		fprintf(dat->out, "clrmamepro (\n");
 
-		if (strchr(dat->header.name, ' '))
+		if (strchr(dat->header.name, ' ') || strstr(dat->header.name, "//"))
 			fprintf(dat->out, "\tname \"%s\"\n", dat->header.name);
 		else
 			fprintf(dat->out, "\tname %s\n", dat->header.name);
@@ -732,7 +732,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.version!=0)
 		{
-			if (strchr(dat->header.version, ' '))
+			if (strchr(dat->header.version, ' ') || strstr(dat->header.version, "//"))
 				fprintf(dat->out, "\tversion \"%s\"\n", dat->header.version);
 			else
 				fprintf(dat->out, "\tversion %s\n", dat->header.version);
@@ -742,7 +742,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.date!=0)
 		{
-			if (strchr(dat->header.date, ' '))
+			if (strchr(dat->header.date, ' ') || strstr(dat->header.date, "//"))
 				fprintf(dat->out, "\tdate \"%s\"\n", dat->header.date);
 			else
 				fprintf(dat->out, "\tdate %s\n", dat->header.date);
@@ -752,7 +752,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.author!=0)
 		{
-			if (strchr(dat->header.author, ' '))
+			if (strchr(dat->header.author, ' ') || strstr(dat->header.author, "//"))
 				fprintf(dat->out, "\tauthor \"%s\"\n", dat->header.author);
 			else
 				fprintf(dat->out, "\tauthor %s\n", dat->header.author);
@@ -762,7 +762,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.email!=0)
 		{
-			if (strchr(dat->header.email, ' '))
+			if (strchr(dat->header.email, ' ') || strstr(dat->header.email, "//"))
 				fprintf(dat->out, "\temail \"%s\"\n", dat->header.email);
 			else
 				fprintf(dat->out, "\temail %s\n", dat->header.email);
@@ -772,7 +772,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.homepage!=0)
 		{
-			if (strchr(dat->header.homepage, ' '))
+			if (strchr(dat->header.homepage, ' ') || strstr(dat->header.homepage, "//"))
 				fprintf(dat->out, "\thomepage \"%s\"\n", dat->header.homepage);
 			else
 				fprintf(dat->out, "\thomepage %s\n", dat->header.homepage);
@@ -782,10 +782,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->header.url!=0)
 		{
-			if (strchr(dat->header.url, ' '))
-				fprintf(dat->out, "\turl \"%s\"\n", dat->header.url);
-			else
-				fprintf(dat->out, "\turl %s\n", dat->header.url);
+			fprintf(dat->out, "\turl \"%s\"\n", dat->header.url);
 		}
 
 		dat->header_saved|=FLAG_HEADER_URL;
@@ -797,7 +794,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->clrmamepro.header!=0)
 		{
-			if (strchr(dat->clrmamepro.header, ' '))
+			if (strchr(dat->clrmamepro.header, ' ') || strstr(dat->clrmamepro.header, "//"))
 				fprintf(dat->out, "\theader \"%s\"\n", dat->clrmamepro.header);
 			else
 				fprintf(dat->out, "\theader %s\n", dat->clrmamepro.header);
@@ -807,7 +804,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->clrmamepro.forcemerging!=0)
 		{
-			if (strchr(dat->clrmamepro.forcemerging, ' '))
+			if (strchr(dat->clrmamepro.forcemerging, ' ') || strstr(dat->clrmamepro.forcemerging, "//"))
 				fprintf(dat->out, "\tforcemerging \"%s\"\n", dat->clrmamepro.forcemerging);
 			else
 				fprintf(dat->out, "\tforcemerging %s\n", dat->clrmamepro.forcemerging);
@@ -817,7 +814,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->clrmamepro.forcepacking!=0)
 		{
-			if (strchr(dat->clrmamepro.forcepacking, ' '))
+			if (strchr(dat->clrmamepro.forcepacking, ' ') || strstr(dat->clrmamepro.forcepacking, "//"))
 				fprintf(dat->out, "\tforcepacking \"%s\"\n", dat->clrmamepro.forcepacking);
 			else
 				fprintf(dat->out, "\tforcepacking %s\n", dat->clrmamepro.forcepacking);
@@ -827,7 +824,7 @@ int save_mame_listinfo(struct dat *dat)
 
 		if (dat->clrmamepro.forcenodump!=0)
 		{
-			if (strchr(dat->clrmamepro.forcenodump, ' '))
+			if (strchr(dat->clrmamepro.forcenodump, ' ') || strstr(dat->clrmamepro.forcenodump, "//"))
 				fprintf(dat->out, "\tforcenodump \"%s\"\n", dat->clrmamepro.forcenodump);
 			else
 				fprintf(dat->out, "\tforcenodump %s\n", dat->clrmamepro.forcenodump);
