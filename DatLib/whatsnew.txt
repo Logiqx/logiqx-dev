@@ -4,6 +4,7 @@ History
 xx/04/2008  *** v2.27 ***
 
             - Fixed generation of url within CMPro datafiles (needs quotes).
+            - Added the <release> element to the ROM Management Datafile DTD.
 
 06/04/2008  *** v2.26 ***
 
