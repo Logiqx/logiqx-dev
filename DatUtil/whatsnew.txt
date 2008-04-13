@@ -1,6 +1,11 @@
 History
 -------
 
+xx/04/2008  *** v2.38 ***
+
+            - Uses DatLib v2.27.
+            - Fixed generation of url within CMPro datafiles (needs quotes).
+
 06/04/2008  *** v2.37 ***
 
             - Uses DatLib v2.26.
