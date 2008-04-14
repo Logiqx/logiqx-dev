@@ -31,6 +31,7 @@ DECLARE_DRIVER(romcenter_sublist, "RomCenter Sublist", 0)
 DECLARE_DRIVER(mame_gamelist, "MAME GameList", 0)
 DECLARE_DRIVER(allzip, "All Zip", 5)
 DECLARE_DRIVER(ziplist, "ZIP List", 5)
+DECLARE_DRIVER(map_file, "Map File", 0)
 
 
 /* --- List the drivers that have already been declared --- */
@@ -58,6 +59,7 @@ const struct datlib_driver *datlib_drivers[] =
 	DRIVER(mame_gamelist)
 	DRIVER(allzip)
 	DRIVER(ziplist)
+	DRIVER(map_file)
 	0
 };
 

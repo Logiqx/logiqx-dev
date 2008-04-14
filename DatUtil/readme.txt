@@ -36,6 +36,7 @@ Save only:
   - MAME GameList
   - Title List (for listing game titles - used by CPS-2 readme and RAINE docs)
   - RomCenter Sublist
+  - Game Launcher / GameEx Map File
 
 Adding support for additional formats is really easy too. If you do add support
 for a new format please let me know and send me a copy of the code!
@@ -89,6 +90,7 @@ There are a number of aliases for each format:
   MAME GameList   gamelist gl
   TitleList       titlelist titles
   RC2 Sublist     sublist sub rcsublist rcsub
+  Map File        mapfile map
 
 By default, non-essential details for ROM management are removed (e.g. chips
 and dipswitch information) but these can be retained using the -k option. Only

@@ -36,6 +36,7 @@ Save only:
   - MAME GameList
   - Title List (for listing game titles - used by CPS-2 readme and RAINE docs)
   - RomCenter Sublist
+  - Game Launcher / GameEx Map File
 
 This package is a source only release and is only required if you want to
 compile any of my tools.

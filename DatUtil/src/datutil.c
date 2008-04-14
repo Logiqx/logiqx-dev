@@ -240,7 +240,8 @@ int main(int argc, char **argv)
   		printf("Tab Delimited   delimited tab text\n");
   		printf("MAME GameList   gamelist gl\n");
   		printf("TitleList       titlelist titles\n");
-  		printf("RC2 Sublist     sublist sub rcsublist rcsub\n\n");
+  		printf("RC2 Sublist     sublist sub rcsublist rcsub\n");
+  		printf("Map File        mapfile map\n\n");
 
 	}
 
