@@ -9,7 +9,7 @@
    SYSTEM "http://www.logiqx.com/Dats/datafile.dtd"
 
    $Revision: 1.3 $
-   $Date: 2008/04/09 11:45:00 $
+   $Date: 2008/04/13 13:09:33 $
 
 -->
 
@@ -40,7 +40,7 @@
 			<!ATTLIST romcenter lockrommode (yes|no) "no">
 			<!ATTLIST romcenter lockbiosmode (yes|no) "no">
 			<!ATTLIST romcenter locksamplemode (yes|no) "no">
-	<!ELEMENT game (comment*, release*, description, year?, manufacturer?, biosset*, rom*, disk*, sample*, archive*)>
+	<!ELEMENT game (comment*, description, year?, manufacturer?, release*, biosset*, rom*, disk*, sample*, archive*)>
 		<!ATTLIST game name CDATA #REQUIRED>
 		<!ATTLIST game sourcefile CDATA #IMPLIED>
 		<!ATTLIST game isbios (yes|no) "no">
@@ -49,13 +49,14 @@
 		<!ATTLIST game sampleof CDATA #IMPLIED>
 		<!ATTLIST game board CDATA #IMPLIED>
 		<!ATTLIST game rebuildto CDATA #IMPLIED>
-		<!ELEMENT release (#PCDATA)>
+		<!ELEMENT year (#PCDATA)>
+		<!ELEMENT manufacturer (#PCDATA)>
+		<!ELEMENT release EMPTY>
+			<!ATTLIST release name CDATA #REQUIRED>
 			<!ATTLIST release region CDATA #REQUIRED>
 			<!ATTLIST release language CDATA #IMPLIED>
 			<!ATTLIST release date CDATA #IMPLIED>
 			<!ATTLIST release default (yes|no) "no">	
-		<!ELEMENT year (#PCDATA)>
-		<!ELEMENT manufacturer (#PCDATA)>
 		<!ELEMENT biosset EMPTY>
 			<!ATTLIST biosset name CDATA #REQUIRED>
 			<!ATTLIST biosset description CDATA #REQUIRED>
