@@ -206,6 +206,22 @@ int load_mame_listinfo(struct dat *dat)
 
 		if (game_type==TOKEN_GAME_NAME || game_type==TOKEN_RESOURCE_NAME || game_type==TOKEN_MACHINE_NAME)
 		{
+			/* --- Releases --- */
+
+			if (!strcmp(TOKEN, "release"))
+			{
+				while (strchr(BUFFER1_PTR, ')') && BUFFER1_REMAINING && strcmp(TOKEN, ")"))
+				{
+					BUFFER1_GET_TOKEN
+
+					BUFFER2_PUT_INFO_ATTRIBUTE("name", TOKEN_RELEASE_NAME)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("region", TOKEN_RELEASE_REGION)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("language", TOKEN_RELEASE_LANGUAGE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("date", TOKEN_RELEASE_DATE)
+					else BUFFER2_PUT_INFO_ATTRIBUTE("default", TOKEN_RELEASE_DEFAULT)
+				}
+			}
+
 			/* --- Biossets --- */
 
 			if (!strcmp(TOKEN, "biosset"))
@@ -668,6 +684,7 @@ int save_mame_listinfo(struct dat *dat)
 {
 	struct game *curr_game=0;
 	struct comment *curr_comment=0;
+	struct release *curr_release=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
@@ -904,6 +921,21 @@ int save_mame_listinfo(struct dat *dat)
 		OUTPUT_QUOTED_STRING(game, history, "\thistory", FLAG_GAME_HISTORY)
 		OUTPUT_SMART_STRING(game, rebuildto, "\trebuildto", FLAG_GAME_REBUILDTO)
 		OUTPUT_QUOTED_STRING(game, board, "\tboard", FLAG_GAME_BOARD)
+
+		/* --- Release information --- */
+
+		for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+		{
+			fprintf(dat->out, "\trelease ( ");
+
+			OUTPUT_SMART_STRING(release, name, "name", FLAG_RELEASE_NAME)
+			OUTPUT_SMART_STRING(release, region, "region", FLAG_RELEASE_REGION)
+			OUTPUT_SMART_STRING(release, language, "language", FLAG_RELEASE_LANGUAGE)
+			OUTPUT_SMART_STRING(release, date, "date", FLAG_RELEASE_DATE)
+			OUTPUT_UNQUOTED_STRING(release, _default, "default", FLAG_RELEASE_DEFAULT)
+
+			fprintf(dat->out, ")\n");
+		}
 
 		/* --- BIOS Set information --- */
 

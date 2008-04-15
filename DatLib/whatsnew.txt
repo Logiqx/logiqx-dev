@@ -4,6 +4,8 @@ History
 xx/04/2008  *** v2.27 ***
 
             - Fixed generation of url within CMPro datafiles (needs quotes).
+            - Added support for release information (mainly for console ROMs).
+            - Added release support to list+generic xml, listinfo, delimited.
             - Added the <release> element to the ROM Management Datafile DTD.
             - Added support for Game Launcher and GameEx Map Files (untested).
 

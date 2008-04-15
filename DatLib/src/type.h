@@ -32,6 +32,28 @@ struct comment
 };
 
 
+/* --- Releases --- */
+
+struct release
+{
+	/* --- Fields that appear in data files */
+
+	char *name;
+	char *region;
+	char *language;
+	char *date;
+	char *_default;
+
+	/* --- Fields that are calculated by DatLib */
+
+	struct game *game;
+
+	uint8_t release_flags;
+	uint8_t release_warnings;
+	uint8_t release_fixes;
+};
+
+
 /* --- BIOS Set Structures --- */
 
 struct biosset
@@ -460,6 +482,8 @@ struct game
 
 	struct comment *comments;
 
+	struct release *releases;
+
 	struct biosset *biossets;
 
 	struct rom *roms;
@@ -497,6 +521,7 @@ struct game
 	struct ramoption *ramoptions;
 
 	uint32_t num_comments;
+	uint32_t num_releases;
 	uint32_t num_biossets;
 	uint32_t num_roms;
 	uint32_t num_disks;
@@ -523,6 +548,7 @@ struct game
 	uint32_t game_flags;
 
 	uint8_t comment_flags;
+	uint8_t release_flags;
 	uint8_t biosset_flags;
 	uint32_t rom_flags;
 	uint16_t disk_flags;
@@ -544,6 +570,7 @@ struct game
 	uint32_t game_warnings;
 
 	uint8_t comment_warnings;
+	uint8_t release_warnings;
 	uint8_t biosset_warnings;
 	uint32_t rom_warnings;
 	uint16_t disk_warnings;
@@ -565,6 +592,7 @@ struct game
 	uint32_t game_fixes;
 
 	uint8_t comment_fixes;
+	uint8_t release_fixes;
 	uint8_t biosset_fixes;
 	uint32_t rom_fixes;
 	uint16_t disk_fixes;
@@ -803,6 +831,8 @@ struct dat
 
 	struct comment *comments;
 
+	struct release *releases;
+
 	struct biosset *biossets;
 
 	struct rom *roms;
@@ -851,6 +881,7 @@ struct dat
 	struct game_zip_sample *game_zip_samples;
 
 	uint32_t num_comments;
+	uint32_t num_releases;
 	uint32_t num_biossets;
 	uint32_t num_games, num_resources, num_machines;
 	uint32_t num_roms, num_resource_roms, num_machine_roms;
@@ -885,6 +916,7 @@ struct dat
 	uint16_t romcenter_flags;
 	uint32_t game_flags;
 	uint8_t comment_flags;
+	uint8_t release_flags;
 	uint8_t biosset_flags;
 	uint32_t rom_flags;
 	uint16_t disk_flags;
@@ -912,6 +944,7 @@ struct dat
 	uint16_t romcenter_warnings;
 	uint32_t game_warnings;
 	uint8_t comment_warnings;
+	uint8_t release_warnings;
 	uint8_t biosset_warnings;
 	uint32_t rom_warnings;
 	uint16_t disk_warnings;
@@ -936,6 +969,7 @@ struct dat
 	uint16_t romcenter_fixes;
 	uint32_t game_fixes;
 	uint8_t comment_fixes;
+	uint8_t release_fixes;
 	uint8_t biosset_fixes;
 	uint32_t rom_fixes;
 	uint16_t disk_fixes;
@@ -960,6 +994,7 @@ struct dat
 	uint16_t romcenter_saved;
 	uint32_t game_saved;
 	uint8_t comment_saved;
+	uint8_t release_saved;
 	uint8_t biosset_saved;
 	uint32_t rom_saved;
 	uint16_t disk_saved;
@@ -1112,6 +1147,15 @@ struct ini_entry
 /* --- Comment Flags --- */
 
 #define FLAG_COMMENT_TEXT		0x01
+
+
+/* --- Release Flags --- */
+
+#define FLAG_RELEASE_NAME		0x01
+#define FLAG_RELEASE_REGION		0x02
+#define FLAG_RELEASE_LANGUAGE		0x04
+#define FLAG_RELEASE_DATE		0x08
+#define FLAG_RELEASE_DEFAULT		0x10
 
 
 /* --- BIOS Set Flags --- */

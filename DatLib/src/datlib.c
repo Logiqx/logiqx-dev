@@ -840,6 +840,9 @@ int allocate_dat_memory(struct dat *dat)
 		else if (type==TOKEN_COMMENT_TEXT)
 			dat->num_comments++;
 
+		else if (type==TOKEN_RELEASE_NAME && dat->num_games>0)
+			dat->num_releases++;
+
 		else if (type==TOKEN_BIOSSET_NAME && dat->num_games>0 && dat->options->options & OPTION_KEEP_FULL_DETAILS)
 			dat->num_biossets++;
 
@@ -930,6 +933,18 @@ int allocate_dat_memory(struct dat *dat)
 
 		if (dat->num_comments>0)
 			STRUCT_CALLOC(dat->comments, dat->num_comments, sizeof(struct comment))
+	}
+
+	if (!errflg)
+	{
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.init_dat");
+			printf("%d releases identified\n", dat->num_releases);
+		}
+
+		if (dat->num_releases>0)
+			STRUCT_CALLOC(dat->releases, dat->num_releases, sizeof(struct release))
 	}
 
 	if (!errflg)
@@ -1165,6 +1180,7 @@ int store_tokenized_dat(struct dat *dat)
 {
 	struct game *curr_game=dat->games;
 	struct comment *curr_comment=dat->comments;
+	struct release *curr_release=dat->releases;
 	struct biosset *curr_biosset=dat->biossets;
 	struct rom *curr_rom=dat->roms;
 	struct disk *curr_disk=dat->disks;
@@ -1348,6 +1364,42 @@ int store_tokenized_dat(struct dat *dat)
 				else if (type==TOKEN_GAME_BOARD || type==TOKEN_RESOURCE_BOARD || type==TOKEN_MACHINE_BOARD)
 					curr_game->board=BUFFER2_PTR;
 	
+				/* --- Release elements --- */
+
+				if (curr_release!=0 && curr_release->name!=0)
+				{
+					if (type==TOKEN_RELEASE_NAME)
+						curr_release++;
+
+					else if (type==TOKEN_RELEASE_REGION)
+						curr_release->region=BUFFER2_PTR;
+
+					else if (type==TOKEN_RELEASE_LANGUAGE)
+						curr_release->language=BUFFER2_PTR;
+
+					else if (type==TOKEN_RELEASE_DATE)
+						curr_release->date=BUFFER2_PTR;
+
+					else if (type==TOKEN_RELEASE_DEFAULT)
+						curr_release->_default=BUFFER2_PTR;
+				}
+
+				if (type==TOKEN_RELEASE_NAME)
+				{
+					/* --- The current release must remember its name --- */
+
+					curr_release->name=BUFFER2_PTR;
+
+					/* --- If this is the first release for the current game then set up the releases pointer --- */
+
+					if (curr_game->releases==0)
+						curr_game->releases=curr_release;
+
+					/* --- Whatever happens, increase the release count for the current game --- */
+
+					curr_game->num_releases++;
+				}
+
 				/* --- ROM elements --- */
 	
 				if (curr_rom!=0 && curr_rom->name!=0)
@@ -3510,6 +3562,7 @@ int summarise_dat(struct dat *dat)
 {
 	struct game *curr_game=0;
 	struct comment *curr_comment=0;
+	struct release *curr_release=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
@@ -3701,6 +3754,26 @@ int summarise_dat(struct dat *dat)
 				curr_comment->comment_flags|=FLAG_COMMENT_TEXT;
 
 			curr_game->comment_flags|=curr_comment->comment_flags;
+		}
+
+		for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+		{
+			if (curr_release->name)
+				curr_release->release_flags|=FLAG_RELEASE_NAME;
+
+			if (curr_release->region)
+				curr_release->release_flags|=FLAG_RELEASE_REGION;
+
+			if (curr_release->language)
+				curr_release->release_flags|=FLAG_RELEASE_LANGUAGE;
+
+			if (curr_release->date)
+				curr_release->release_flags|=FLAG_RELEASE_DATE;
+
+			if (curr_release->_default)
+				curr_release->release_flags|=FLAG_RELEASE_DEFAULT;
+
+			curr_game->release_flags|=curr_release->release_flags;
 		}
 
 		for (j=0, curr_biosset=curr_game->biossets; j<curr_game->num_biossets; j++, curr_biosset++)
@@ -4022,6 +4095,7 @@ int summarise_dat(struct dat *dat)
 
 		dat->game_flags|=curr_game->game_flags;
 		dat->comment_flags|=curr_game->comment_flags;
+		dat->release_flags|=curr_game->release_flags;
 		dat->biosset_flags|=curr_game->biosset_flags;
 		dat->rom_flags|=curr_game->rom_flags;
 		dat->disk_flags|=curr_game->disk_flags;
@@ -4086,6 +4160,8 @@ int summarise_dat(struct dat *dat)
 		printf("Game flags=%04x\n", dat->game_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment flags=%04x\n", dat->comment_flags);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Release flags=%04x\n", dat->release_flags);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Biosset flags=%04x\n", dat->biosset_flags);
 		printf("%-16s: ", "Datlib.init_dat");
@@ -4368,6 +4444,7 @@ int report_warnings(struct dat *dat)
 	struct st_idx *st_idx;
 	struct game_idx *curr_game_idx=0;
 	struct game *curr_game=0;
+	struct release *curr_release=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
@@ -4433,6 +4510,14 @@ int report_warnings(struct dat *dat)
 	{
 		curr_game->game_warnings|=(curr_game->game_flags ^ dat->game_flags) &
 			(FLAG_GAME_DESCRIPTION | FLAG_GAME_MANUFACTURER | FLAG_GAME_REBUILDTO);
+
+		for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+		{
+			curr_release->release_warnings|=(curr_release->release_flags ^ dat->release_flags) &
+				(FLAG_RELEASE_REGION|FLAG_RELEASE_LANGUAGE|FLAG_RELEASE_DATE);
+
+			curr_game->release_warnings|=curr_release->release_warnings;
+		}
 
 		for (j=0, curr_biosset=curr_game->biossets; j<curr_game->num_biossets; j++, curr_biosset++)
 		{
@@ -4502,6 +4587,7 @@ int report_warnings(struct dat *dat)
 
 		dat->game_warnings|=curr_game->game_warnings;
 		dat->comment_warnings|=curr_game->comment_warnings;
+		dat->release_warnings|=curr_game->release_warnings;
 		dat->biosset_warnings|=curr_game->biosset_warnings;
 		dat->rom_warnings|=curr_game->rom_warnings;
 		dat->disk_warnings|=curr_game->disk_warnings;
@@ -4542,6 +4628,8 @@ int report_warnings(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment warnings=%04x\n", dat->comment_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Release warnings=%04x\n", dat->release_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Biosset warnings=%04x\n", dat->biosset_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("ROM warnings=%04x\n", dat->rom_warnings);
@@ -4580,7 +4668,7 @@ int report_warnings(struct dat *dat)
 		printf("Reporting warnings...\n");
 	}
 
-	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 	{
@@ -4712,6 +4800,22 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Duplicate Description\n");
 			if (dat->game_warnings & FLAG_GAME_DUPLICATE_CRC)
 				fprintf(dat->log_file, "    Duplicate CRC (i.e. all ROMs match another game)\n");
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		/* --- Releases --- */
+
+		if (dat->release_warnings)
+		{
+			fprintf(dat->log_file, "Release warnings:\n\n");
+
+			if (dat->release_warnings & FLAG_RELEASE_REGION)
+				fprintf(dat->log_file, "    Missing Region\n");
+			if (dat->release_warnings & FLAG_RELEASE_LANGUAGE)
+				fprintf(dat->log_file, "    Missing Language\n");
+			if (dat->release_warnings & FLAG_RELEASE_DATE)
+				fprintf(dat->log_file, "    Missing Date\n");
 
 			fprintf(dat->log_file, "\n");
 		}
@@ -4857,7 +4961,7 @@ int report_warnings(struct dat *dat)
 		}
 	}
 
-	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings) &&
 		dat->options->options & OPTION_VERBOSE_LOGGING)
@@ -4894,7 +4998,7 @@ int report_warnings(struct dat *dat)
 
 		for (i=0, curr_game=dat->games; dat->log_file && i<dat->num_games; i++, curr_game++)
 		{
-			if (curr_game->game_warnings || curr_game->comment_warnings || curr_game->biosset_warnings || curr_game->rom_warnings || curr_game->disk_warnings || curr_game->sample_warnings ||
+			if (curr_game->game_warnings || curr_game->comment_warnings || curr_game->release_warnings || curr_game->biosset_warnings || curr_game->rom_warnings || curr_game->disk_warnings || curr_game->sample_warnings ||
 				curr_game->chip_warnings || curr_game->video_warnings || curr_game->display_warnings || curr_game->sound_warnings || curr_game->input_warnings || curr_game->control_warnings ||
 				curr_game->dipswitch_warnings || curr_game->dipvalue_warnings || curr_game->driver_warnings  ||
 				curr_game->device_warnings || curr_game->extension_warnings || curr_game->archive_warnings)
@@ -4917,6 +5021,19 @@ int report_warnings(struct dat *dat)
 						fprintf(dat->log_file, "    Duplicate CRC (i.e. all ROMs match another game)\n");
 				}
 
+				if (curr_game->release_warnings)
+				{
+					for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+					{
+						if (curr_release->release_warnings & FLAG_RELEASE_REGION)
+							fprintf(dat->log_file, "    Release %s - Missing Region\n", curr_release->region);
+						if (curr_release->release_warnings & FLAG_RELEASE_LANGUAGE)
+							fprintf(dat->log_file, "    Release %s - Missing Language\n", curr_release->region);
+						if (curr_release->release_warnings & FLAG_RELEASE_DATE)
+							fprintf(dat->log_file, "    Release %s - Missing Date\n", curr_release->region);
+					}
+				}
+	
 				if (curr_game->biosset_warnings)
 				{
 					for (j=0, curr_biosset=curr_game->biossets; j<curr_game->num_biossets; j++, curr_biosset++)
@@ -5095,6 +5212,8 @@ int report_fixes(struct dat *dat)
 		printf("Game fixes=%04x\n", dat->game_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Comment fixes=%04x\n", dat->comment_fixes);
+		printf("%-16s: ", "Datlib.init_dat");
+		printf("Release fixes=%04x\n", dat->release_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Biosset fixes=%04x\n", dat->biosset_fixes);
 		printf("%-16s: ", "Datlib.init_dat");
@@ -6695,7 +6814,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->header_fixes || dat->clrmamepro_fixes || dat->romcenter_fixes || dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
@@ -6765,6 +6884,9 @@ int save_dat(struct dat *dat)
 			printf("Comment losses=%04x.\n", ~dat->comment_saved & dat->comment_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
+			printf("Release losses=%04x.\n", ~dat->release_saved & dat->release_flags);
+
+			printf("%-16s: ", "Datlib.save_dat");
 			printf("Biosset losses=%04x.\n", ~dat->biosset_saved & dat->biosset_flags);
 
 			printf("%-16s: ", "Datlib.save_dat");
@@ -6829,6 +6951,7 @@ int save_dat(struct dat *dat)
 			~dat->romcenter_saved & dat->romcenter_flags ||
 			~dat->game_saved & dat->game_flags ||
 			~dat->comment_saved & dat->comment_flags ||
+			~dat->release_saved & dat->release_flags ||
 			~dat->biosset_saved & dat->biosset_flags ||
 			~dat->rom_saved & dat->rom_flags ||
 			~dat->disk_saved & dat->disk_flags ||
@@ -7005,6 +7128,29 @@ int save_dat(struct dat *dat)
 			{
 				if (lost & FLAG_COMMENT_TEXT)
 					fprintf(dat->log_file, "Comments have been lost entirely!\n\n");
+			}
+
+			/* --- Releases --- */
+
+			if ((lost=~dat->release_saved & dat->release_flags))
+			{
+				if (lost & FLAG_RELEASE_NAME)
+					fprintf(dat->log_file, "Releases have been lost entirely!\n\n");
+				else
+				{
+					fprintf(dat->log_file, "Release information that has been lost:\n\n");
+
+					if (lost & FLAG_RELEASE_REGION)
+						fprintf(dat->log_file, "    Region\n");
+					if (lost & FLAG_RELEASE_LANGUAGE)
+						fprintf(dat->log_file, "    Language\n");
+					if (lost & FLAG_RELEASE_DATE)
+						fprintf(dat->log_file, "    Date\n");
+					if (lost & FLAG_RELEASE_DEFAULT)
+						fprintf(dat->log_file, "    Default\n");
+
+					fprintf(dat->log_file, "\n");
+				}
 			}
 
 			/* --- BIOS Sets --- */
@@ -7592,6 +7738,13 @@ struct dat *free_dat(struct dat *dat)
 			printf("Freeing memory of bios sets...\n");
 		}
 		FREE(dat->biossets)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of releases...\n");
+		}
+		FREE(dat->releases)
 
 		if (datlib_debug)
 		{

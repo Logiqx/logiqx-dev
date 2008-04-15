@@ -168,6 +168,25 @@ int load_tab_delimited(struct dat *dat)
 			BUFFER1_GET_FIELD(TOKEN_COMMENT_TEXT)
 		}
 
+		/* --- Release information --- */
+
+		if (BUFFER1_RECORD_TYPE("game_release\t"))
+		{
+			/* --- Skip record type and data file name --- */
+
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+			BUFFER1_SKIP_FIELD
+
+			/* --- Process the other fields --- */
+
+			BUFFER1_GET_FIELD(TOKEN_RELEASE_NAME)
+			BUFFER1_GET_FIELD(TOKEN_RELEASE_REGION)
+			BUFFER1_GET_FIELD(TOKEN_RELEASE_LANGUAGE)
+			BUFFER1_GET_FIELD(TOKEN_RELEASE_DATE)
+			BUFFER1_GET_FIELD(TOKEN_RELEASE_DEFAULT)
+		}
+
 		/* --- BIOS Set information --- */
 
 		if (BUFFER1_RECORD_TYPE("game_biosset\t"))
@@ -594,6 +613,7 @@ int save_tab_delimited(struct dat *dat)
 {
 	struct game *curr_game;
 	struct comment *curr_comment=dat->comments;
+	struct release *curr_release=dat->releases;
 	struct biosset *curr_biosset=dat->biossets;
 	struct rom *curr_rom=dat->roms;
 	struct disk *curr_disk=dat->disks;
@@ -685,6 +705,21 @@ int save_tab_delimited(struct dat *dat)
 			fprintf(dat->out, "game_comment\t%s\t%s\t", dat_name, curr_game->name);
 
 			OUTPUT_STRING_FIELD(comment, text, FLAG_COMMENT_TEXT)
+
+			fprintf(dat->out, "\n");
+		}
+
+		/* --- Release information --- */
+
+		for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+		{
+			fprintf(dat->out, "game_release\t%s\t%s\t", dat_name, curr_game->name);
+
+			OUTPUT_STRING_FIELD(release, name, FLAG_RELEASE_NAME)
+			OUTPUT_STRING_FIELD(release, region, FLAG_RELEASE_REGION)
+			OUTPUT_STRING_FIELD(release, language, FLAG_RELEASE_LANGUAGE)
+			OUTPUT_STRING_FIELD(release, date, FLAG_RELEASE_DATE)
+			OUTPUT_STRING_FIELD(release, _default, FLAG_RELEASE_DEFAULT)
 
 			fprintf(dat->out, "\n");
 		}

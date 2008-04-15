@@ -358,6 +358,14 @@ int load_mame_listxml(struct dat *dat)
 				else if (game_type==FLAG_MACHINE_NAME)
 					GET_XML_ELEMENT(TOKEN_MACHINE_HISTORY)
 			}
+			else if (strstr(BUFFER1_PTR, "<release "))
+			{
+				GET_XML_ATTRIBUTE("name", TOKEN_RELEASE_NAME) 
+				GET_XML_ATTRIBUTE("region", TOKEN_RELEASE_REGION) 
+				GET_XML_ATTRIBUTE("language", TOKEN_RELEASE_LANGUAGE) 
+				GET_XML_ATTRIBUTE("date", TOKEN_RELEASE_DATE) 
+				GET_XML_ATTRIBUTE("default", TOKEN_RELEASE_DEFAULT)
+			}
 			else if (strstr(BUFFER1_PTR, "<biosset "))
 			{
 				GET_XML_ATTRIBUTE("name", TOKEN_BIOSSET_NAME) 
@@ -637,6 +645,7 @@ int save_mame_listxml(struct dat *dat)
 
 	struct game *curr_game=0;
 	struct comment *curr_comment=0;
+	struct release *curr_release=0;
 	struct biosset *curr_biosset=0;
 	struct rom *curr_rom=0;
 	struct disk *curr_disk=0;
@@ -723,6 +732,8 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, ", manufacturer");
 		if (dat->game_flags & FLAG_GAME_HISTORY)
 			fprintf(dat->out, ", history?");
+		if (dat->num_releases)
+			fprintf(dat->out, ", releases*");
 		if (dat->num_biossets)
 			fprintf(dat->out, ", biosset*");
 		if (dat->num_roms)
@@ -770,6 +781,7 @@ int save_mame_listxml(struct dat *dat)
 
 		if (dat->comment_flags & FLAG_COMMENT_TEXT)
 			fprintf(dat->out, "\t\t<!ELEMENT comment (#PCDATA)>\n");
+
 		fprintf(dat->out, "\t\t<!ELEMENT description (#PCDATA)>\n");
 		if (dat->game_flags & FLAG_GAME_YEAR)
 			fprintf(dat->out, "\t\t<!ELEMENT year (#PCDATA)>\n");
@@ -777,6 +789,19 @@ int save_mame_listxml(struct dat *dat)
 			fprintf(dat->out, "\t\t<!ELEMENT manufacturer (#PCDATA)>\n");
 		if (dat->game_flags & FLAG_GAME_HISTORY)
 			fprintf(dat->out, "\t\t<!ELEMENT history (#PCDATA)>\n");
+
+		if (dat->num_releases)
+		{
+			fprintf(dat->out, "\t\t<!ELEMENT release EMPTY>\n");
+			fprintf(dat->out, "\t\t\t<!ATTLIST release name CDATA #REQUIRED>\n");
+			fprintf(dat->out, "\t\t\t<!ATTLIST release region CDATA #REQUIRED>\n");
+			if (dat->release_flags & FLAG_RELEASE_LANGUAGE)
+				fprintf(dat->out, "\t\t\t<!ATTLIST release language CDATA #IMPLIED>\n");
+			if (dat->release_flags & FLAG_RELEASE_DATE)
+				fprintf(dat->out, "\t\t\t<!ATTLIST release date CDATA #IMPLIED>\n");
+			if (dat->release_flags & FLAG_RELEASE_DEFAULT)
+				fprintf(dat->out, "\t\t\t<!ATTLIST release default (yes|no) \"no\">\n");
+		}
 
 		if (dat->num_biossets)
 		{
@@ -1167,6 +1192,21 @@ int save_mame_listxml(struct dat *dat)
 		OUTPUT_STRING_ELEMENT(game, year, "\t\t", "year", FLAG_GAME_YEAR)
 		OUTPUT_STRING_ELEMENT(game, manufacturer, "\t\t", "manufacturer", FLAG_GAME_MANUFACTURER)
 		OUTPUT_STRING_ELEMENT(game, history, "\t\t", "history", FLAG_GAME_HISTORY)
+
+		/* --- Release information --- */
+
+		for (j=0, curr_release=curr_game->releases; j<curr_game->num_releases; j++, curr_release++)
+		{
+			fprintf(dat->out, "\t\t<release");
+
+			OUTPUT_STRING_ATTRIBUTE(release, name, "name", FLAG_RELEASE_NAME)
+			OUTPUT_STRING_ATTRIBUTE(release, region, "region", FLAG_RELEASE_REGION)
+			OUTPUT_STRING_ATTRIBUTE(release, language, "language", FLAG_RELEASE_LANGUAGE)
+			OUTPUT_STRING_ATTRIBUTE(release, date, "date", FLAG_RELEASE_DATE)
+			OUTPUT_STRING_ATTRIBUTE(release, _default, "default", FLAG_RELEASE_DEFAULT)
+
+			fprintf(dat->out, "/>\n");
+		}
 
 		/* --- BIOS Set information --- */
 
