@@ -96,6 +96,7 @@ int save_title_list(struct dat *dat)
 	dat->clrmamepro_saved=0xff;
 	dat->romcenter_saved=0xffff;
 	dat->game_saved=0xffff;
+	dat->release_saved=0xff;
 	dat->biosset_saved=0xff;
 	dat->rom_saved=0xffff;
 	dat->disk_saved=0xff;
