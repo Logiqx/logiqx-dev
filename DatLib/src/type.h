@@ -768,6 +768,11 @@ struct options
 	struct st_idx *sourcefile_selections;
 	uint32_t num_sourcefile_selections;
 
+	char *substring_selection;
+	char *substring_selection_buffer;
+	struct st_idx *substring_selections;
+	uint32_t num_substring_selections;
+
 	uint8_t prune_roms;
 	uint8_t prune_disks;
 	uint8_t prune_samples;
@@ -937,6 +942,7 @@ struct dat
 
 	uint8_t game_selection_warnings;
 	uint8_t sourcefile_selection_warnings;
+	uint8_t substring_selection_warnings;
 
 	uint8_t emulator_warnings;
 	uint16_t header_warnings;
@@ -1040,16 +1046,17 @@ struct ini_entry
 #define OPTION_GAME_SELECTION		0x00000100	// DatUtil -g option
 #define OPTION_CLONE_SELECTION		0x00000200	// DatUtil -c option
 #define OPTION_SOURCEFILE_SELECTION	0x00000400	// DatUtil -G option
-#define OPTION_INVERT_SELECTION		0x00000800	// DatUtil -! option
+#define OPTION_SUBSTRING_SELECTION	0x00000800	// DatUtil -S option
+#define OPTION_INVERT_SELECTION		0x00001000	// DatUtil -! option
 
-#define OPTION_REMOVE_CLONES		0x00001000	// DatUtil -r option
-#define OPTION_KEEP_FULL_DETAILS	0x00002000	// DatUtil -k option
-#define OPTION_NEBULA_JUKEBOX		0x00004000	// DatUtil -j option
-#define OPTION_ALWAYS_QUOTE		0x00008000	// DatUtil -q option
+#define OPTION_EXTENDED_CHECKSUMS	0x00002000	// DatUtil -x option
+#define OPTION_SHA1_CHECKSUMS		0x00004000	// DatUtil default
+#define OPTION_MD5_CHECKSUMS		0x00008000	// DatUtil -m option
 
-#define OPTION_EXTENDED_CHECKSUMS	0x00010000	// DatUtil -x option
-#define OPTION_SHA1_CHECKSUMS		0x00020000	// DatUtil default
-#define OPTION_MD5_CHECKSUMS		0x00040000	// DatUtil -m option
+#define OPTION_REMOVE_CLONES		0x00010000	// DatUtil -r option
+#define OPTION_KEEP_FULL_DETAILS	0x00020000	// DatUtil -k option
+#define OPTION_NEBULA_JUKEBOX		0x00040000	// DatUtil -j option
+#define OPTION_ALWAYS_QUOTE		0x00080000	// DatUtil -q option
 
 #define	OPTION_DAT_FULL_MERGING		0x00100000	// Used by MAMEDiff
 #define	OPTION_DAT_SPLIT_MERGING	0x00200000	// Used by MAMEDiff
@@ -1074,8 +1081,8 @@ struct ini_entry
 /* --- Selection Flags --- */
 
 #define	FLAG_BAD_GAME_SELECTION		0x01
-
 #define	FLAG_BAD_SOURCEFILE_SELECTION	0x01
+#define	FLAG_BAD_SUBSTRING_SELECTION	0x01
 
 
 /* --- String Index Flags --- */

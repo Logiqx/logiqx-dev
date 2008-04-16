@@ -783,6 +783,116 @@ int load_sourcefile_selections(struct dat *dat)
 	return(errflg);
 }
 
+int load_substring_selections(struct dat *dat)
+{
+	struct st_idx *curr_substring_selection;
+	struct stat buf;
+
+	char *fn=dat->options->substring_selection+1, *ptr;
+	int i, fs;
+
+	int errflg=0;
+
+	/* --- Remember the dat name and check the file status --- */
+
+	if (!errflg)
+	{
+		if (*dat->options->substring_selection=='@' && stat(fn, &buf)!=0)
+		{
+			fprintf(stderr, "File not found - '%s'.\n", fn);
+			errflg++;
+		}
+	}
+
+	/* --- Allocate memory for substring selection buffer --- */
+
+	if (!errflg)
+	{
+		if (*dat->options->substring_selection=='@')
+		{
+			fs=buf.st_size;
+
+			if (datlib_debug)
+			{
+				printf("%-16s: ", "Datlib.init_dat");
+				printf("File size of '%s' is %d bytes.\n", fn, fs);
+
+				printf("%-16s: ", "Datlib.init_dat");
+				printf("Allocating memory for substring selection buffer (%d bytes)...\n", fs+1);
+			}
+		}
+		else
+		{
+			fs=strlen(dat->options->substring_selection);
+		}
+
+		BYTE_MALLOC(dat->options->substring_selection_buffer, fs+1)
+	}
+
+	/* --- Read file into substring selection buffer, tidy it up (i.e. remove CR/LF) and count entries --- */
+
+	if (!errflg)
+	{
+		if (*dat->options->substring_selection=='@')
+		{
+			float kb=(float)fs/1024, mb=kb/1024;
+
+			if (datlib_debug)
+			{
+				printf("%-16s: ", "Datlib.init_dat");
+				printf("Loading substring selections into buffer (%d bytes)...\n", fs);
+			}
+			else
+			{
+				if (!(dat->options->options & OPTION_LOAD_QUIETLY))
+				{
+					if (kb <= 1023)
+						printf("  Loading substring selection file into memory (%.0f.%.0fKB)...\n", floor(kb), ceil(100*(kb-floor(kb))));
+					else
+						printf("  Loading substring selection file into memory (%.0f.%.0fMB)...\n", floor(mb), ceil(100*(mb-floor(mb))));
+				}
+			}
+
+			BYTE_READ(dat->options->substring_selection_buffer, fs, fn)
+		}
+		else
+		{
+			strcpy(dat->options->substring_selection_buffer, dat->options->substring_selection);
+		}
+	}
+
+	if (!errflg)
+	{
+		for (i=0, ptr=dat->options->substring_selection_buffer; i<fs; i++, ptr++)
+		{
+			if (*ptr=='\r' || *ptr=='\n' || *ptr=='\t' || *ptr==',')
+				*ptr='\0';
+			else if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
+				dat->options->num_substring_selections++;
+		}
+		if (i==fs)
+		{
+			*ptr='\0';
+		}
+
+		STRUCT_CALLOC(dat->options->substring_selections, dat->options->num_substring_selections, sizeof(struct st_idx))
+	}
+
+	/* --- Create substring selection list but no need to sort --- */
+
+	if (!errflg)
+	{
+		for (i=0, ptr=dat->options->substring_selection_buffer, curr_substring_selection=dat->options->substring_selections;
+			i<fs; i++, ptr++)
+		{
+			if ((i==0 && *ptr!=0) || (i>0 && *(ptr-1)==0 && *ptr!=0))
+				curr_substring_selection++->st=ptr;
+		}
+	}
+
+	return(errflg);
+}
+
 int allocate_dat_memory(struct dat *dat)
 {
 	unsigned char type;
@@ -1227,7 +1337,7 @@ int store_tokenized_dat(struct dat *dat)
 	{
 		/* --- Emulator header --- */
 
-		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_SUBSTRING_SELECTION)))
 		{
 			if (type==TOKEN_EMULATOR_NAME)
 				dat->emulator.name=BUFFER2_PTR;
@@ -1241,7 +1351,7 @@ int store_tokenized_dat(struct dat *dat)
 
 		/* --- Datafile header --- */
 
-		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_SUBSTRING_SELECTION)))
 		{
 			if (type==TOKEN_HEADER_NAME)
 				dat->header.name=BUFFER2_PTR;
@@ -1276,7 +1386,7 @@ int store_tokenized_dat(struct dat *dat)
 
 		/* --- ClrMamePro header --- */
 
-		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_SUBSTRING_SELECTION)))
 		{
 			if (type==TOKEN_CLRMAMEPRO_HEADER)
 				dat->clrmamepro.header=BUFFER2_PTR;
@@ -1293,7 +1403,7 @@ int store_tokenized_dat(struct dat *dat)
 
 		/* --- RomCenter header --- */
 
-		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
+		if (!(dat->options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_SUBSTRING_SELECTION)))
 		{
 			if (type==TOKEN_ROMCENTER_PLUGIN)
 				dat->romcenter.plugin=BUFFER2_PTR;
@@ -2649,7 +2759,7 @@ int remove_clones(struct dat *dat)
 	return(errflg);
 }
 
-int game_sourcefile_selections(struct dat *dat)
+int game_sourcefile_substring_selections(struct dat *dat)
 {
 	struct game_idx *curr_game_name_idx;
 	struct game_idx *game_match;
@@ -2658,7 +2768,7 @@ int game_sourcefile_selections(struct dat *dat)
 	struct game *curr_parent;
 	struct st_idx *st_idx;
 	uint32_t num_games=dat->num_games;
-	uint32_t i, match_value=1;
+	uint32_t i, j, match_value=1;
 
 	int errflg=0;
 
@@ -2704,6 +2814,20 @@ int game_sourcefile_selections(struct dat *dat)
 			{
 				curr_game->match=match_value;
 				st_idx->flags|=FLAG_STRING_INDEX_USED;
+			}
+		}
+
+		/* --- substring check is simple, no nested iterations need to be handled (note that it is case sensitive) --- */
+
+		if (dat->options->options & OPTION_SUBSTRING_SELECTION && curr_game->description)
+		{
+			for (j=0, st_idx=dat->options->substring_selections; j<dat->options->num_substring_selections; j++, st_idx++)
+			{
+				if (strstr(curr_game->description, st_idx->st)!=0)
+				{
+					curr_game->match=match_value;
+					st_idx->flags|=FLAG_STRING_INDEX_USED;
+				}
 			}
 		}
 
@@ -4478,6 +4602,12 @@ int report_warnings(struct dat *dat)
 			dat->sourcefile_selection_warnings|=FLAG_BAD_SOURCEFILE_SELECTION;
 	}
 
+	for (i=0, st_idx=dat->options->substring_selections; i<dat->options->num_substring_selections; i++, st_idx++)
+	{
+		if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+			dat->substring_selection_warnings|=FLAG_BAD_SUBSTRING_SELECTION;
+	}
+
 	for (i=0, curr_game_idx=dat->game_name_idx; i<dat->num_games; i++, curr_game_idx++)
 	{
 		if (i>0 && !strcmp(curr_game_idx->game->name, (curr_game_idx-1)->game->name))
@@ -4616,6 +4746,8 @@ int report_warnings(struct dat *dat)
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Sourcefile selection warnings=%04x\n", dat->sourcefile_selection_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
+		printf("Substring selection warnings=%04x\n", dat->substring_selection_warnings);
+		printf("%-16s: ", "Datlib.init_dat");
 		printf("Emulator warnings=%04x\n", dat->emulator_warnings);
 		printf("%-16s: ", "Datlib.init_dat");
 		printf("Header warnings=%04x\n", dat->header_warnings);
@@ -4668,7 +4800,7 @@ int report_warnings(struct dat *dat)
 		printf("Reporting warnings...\n");
 	}
 
-	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->substring_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings)
 	{
@@ -4686,6 +4818,11 @@ int report_warnings(struct dat *dat)
 		if (dat->sourcefile_selection_warnings & FLAG_BAD_SOURCEFILE_SELECTION)
 		{
 			fprintf(dat->log_file, "Invalid sourcefile selections were provided to -G.\n\n");
+		}
+
+		if (dat->substring_selection_warnings & FLAG_BAD_SUBSTRING_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid substring selections were provided to -S.\n\n");
 		}
 
 		/* --- Emulator --- */
@@ -4961,7 +5098,7 @@ int report_warnings(struct dat *dat)
 		}
 	}
 
-	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
+	if ((dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->substring_selection_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings ||
 		dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings ||
 		dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings) &&
 		dat->options->options & OPTION_VERBOSE_LOGGING)
@@ -4988,6 +5125,19 @@ int report_warnings(struct dat *dat)
 			fprintf(dat->log_file, "Invalid sourcefile selections provided to -G:\n\n");
 
 			for (i=0, st_idx=dat->options->sourcefile_selections; i<dat->options->num_sourcefile_selections; i++, st_idx++)
+			{
+				if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
+					fprintf(dat->log_file, "    %s\n", st_idx->st);
+			}
+
+			fprintf(dat->log_file, "\n");
+		}
+
+		if (dat->substring_selection_warnings & FLAG_BAD_SUBSTRING_SELECTION)
+		{
+			fprintf(dat->log_file, "Invalid substring selections provided to -S:\n\n");
+
+			for (i=0, st_idx=dat->options->substring_selections; i<dat->options->num_substring_selections; i++, st_idx++)
 			{
 				if (!(st_idx->flags & FLAG_STRING_INDEX_USED))
 					fprintf(dat->log_file, "    %s\n", st_idx->st);
@@ -6494,6 +6644,9 @@ struct dat *init_dat(struct options *options)
 	if (!errflg && (dat->options->options & OPTION_SOURCEFILE_SELECTION))
 		errflg=load_sourcefile_selections(dat);
 
+	if (!errflg && (dat->options->options & OPTION_SUBSTRING_SELECTION))
+		errflg=load_substring_selections(dat);
+
 	/* --- Directory scan generates an intermediate data file --- */
 
 	if (!errflg)
@@ -6586,7 +6739,7 @@ struct dat *init_dat(struct options *options)
 				(strcmp(datlib_drivers[i]->description, dat->load->description) ||
 				options->info || options->incorporate ||
 				options->prune_roms || options->prune_disks || options->prune_samples ||
-				options->game_selection || options->sourcefile_selection ||
+				options->game_selection || options->sourcefile_selection || options->substring_selection ||
 				options->options & OPTION_REMOVE_CLONES)
 			)
 			{
@@ -6738,15 +6891,15 @@ struct dat *init_dat(struct options *options)
 	if (!errflg && (options->options & OPTION_REMOVE_CLONES))
 		errflg=remove_clones(dat);
 
-	if (!errflg && (options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION)))
-		errflg=game_sourcefile_selections(dat);
+	if (!errflg && (options->options & (OPTION_GAME_SELECTION|OPTION_SOURCEFILE_SELECTION|OPTION_SUBSTRING_SELECTION)))
+		errflg=game_sourcefile_substring_selections(dat);
 
 	if (!errflg && (options->prune_roms || options->prune_disks || options->prune_samples))
 		errflg=prune_objects(dat);
 
 	if (!errflg && dat->num_games==0)
 	{
-		if (dat->options->game_selection || dat->options->sourcefile_selection)
+		if (dat->options->game_selection || dat->options->sourcefile_selection || dat->options->substring_selection)
 			fprintf(stderr, "  Error - No games were loaded (check your game/sourcefile selections).\n");
 		else
 			fprintf(stderr, "  Error - No games were loaded.\n");
@@ -6814,7 +6967,7 @@ struct dat *init_dat(struct options *options)
 
 		if (options->log_fn)
 		{
-			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
+			if (dat->game_selection_warnings || dat->sourcefile_selection_warnings || dat->substring_selection_warnings || dat->emulator_warnings || dat->header_warnings || dat->clrmamepro_warnings || dat->romcenter_warnings || dat->game_warnings || dat->comment_warnings || dat->release_warnings || dat->biosset_warnings || dat->rom_warnings || dat->disk_warnings || dat->sample_warnings || dat->chip_warnings || dat->video_warnings || dat->display_warnings || dat->sound_warnings || dat->input_warnings || dat->control_warnings || dat->dipswitch_warnings || dat->dipvalue_warnings || dat->driver_warnings || dat->device_warnings || dat->extension_warnings || dat->archive_warnings || dat->ramoption_warnings)
 				printf("\nNote: There are some warnings for the processing (see %s for details).\n", options->log_fn);
 
 			if (dat->header_fixes || dat->clrmamepro_fixes || dat->romcenter_fixes || dat->game_fixes || dat->rom_fixes || dat->disk_fixes || dat->sample_fixes)
@@ -7789,6 +7942,20 @@ struct dat *free_dat(struct dat *dat)
 			}
 			unlink(dat->name);
 		}
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of substring selections...\n");
+		}
+		FREE(dat->options->substring_selections)
+
+		if (datlib_debug)
+		{
+			printf("%-16s: ", "Datlib.free_dat");
+			printf("Freeing memory of substring selection buffer...\n");
+		}
+		FREE(dat->options->substring_selection_buffer)
 
 		if (datlib_debug)
 		{
