@@ -1,7 +1,7 @@
 History
 -------
 
-xx/04/2008  *** v2.38 ***
+16/04/2008  *** v2.38 ***
 
             - Uses DatLib v2.27.
             - Fixed generation of url within CMPro datafiles (needs quotes).
@@ -9,6 +9,8 @@ xx/04/2008  *** v2.38 ***
             - Added release support to list+generic xml, listinfo, delimited.
             - Added the <release> element to the ROM Management Datafile DTD.
             - Added support for Game Launcher and GameEx Map Files (untested).
+            - Added support for substring selections (within descriptions).
+            - Added the -S option for selections based on game descriptions.
 
 06/04/2008  *** v2.37 ***
 

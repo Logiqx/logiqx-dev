@@ -8,7 +8,7 @@
 /* --- Version information --- */
 
 #define DATUTIL_VERSION "v2.38"
-#define DATUTIL_DATE "xx April 2008"
+#define DATUTIL_DATE "16 April 2008"
 
 
 /* --- The standard includes --- */
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:P:Z:N:g:cG:!rlsXDp:i:I:xmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:P:Z:N:g:cG:S:!rlsXDp:i:I:xmvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -153,6 +153,10 @@ int main(int argc, char **argv)
 			options->options|=OPTION_SOURCEFILE_SELECTION;
 			options->sourcefile_selection=optarg;
 			break;
+		case 'S':
+			options->options|=OPTION_SUBSTRING_SELECTION;
+			options->substring_selection=optarg;
+			break;
 		case '!':
 			options->options|=OPTION_INVERT_SELECTION;
 			break;
@@ -222,10 +226,11 @@ int main(int argc, char **argv)
 
 		printf("Saving          [-f <output format>] [-q] [-k] [-j] [-o|a <output file>] [-t]\n");
 		printf("ClrMamePro +    [-R <refname>] [-F <fullname>] [-C <category>]\n");
-		printf("  RomCenter     [-V <version>] [-T <date>] [-O <comment>]\n");
-		printf("                [-A <author>] [-E <email>] [-H <homepage>] [-U <url>]\n");
-		printf("                [-M <merging>] [-P <packing>] [-N <nodump>]\n");
-		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>] [-!] [-r]\n");
+		printf("  RomCenter       [-V <version>] [-T <date>] [-O <comment>]\n");
+		printf("                  [-A <author>] [-E <email>] [-H <homepage>] [-U <url>]\n");
+		printf("                  [-M <merging>] [-P <packing>] [-N <nodump>]\n");
+		printf("Game Selection  [-g <game names> [-c]] [-G <sourcefile names>]\n");
+		printf("                  [-S <substring of description>] [-!] [-r]\n");
 		printf("Cleansing       [-l] [-s] [-X] [-D] [-p[rom|disk|sample]]\n");
 		printf("Blending        [-i <info file>] [-I <incorporate file>]\n");
 		printf("MD5/SHA1        [-x] [-m]\n");

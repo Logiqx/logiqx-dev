@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                         DatUtil v2.37 - 06/04/2008
+                         DatUtil v2.38 - 16/04/2008
 
                   Written by Logiqx (http://www.logiqx.com)
 -------------------------------------------------------------------------------
@@ -150,10 +150,13 @@ that uses ROM sets like those in MAME (extract from the output of listinfo).
 When using -g and -c together you can specify a system such as neogeo or cpzn1
 to extract all games on that system.
 
+To select games based on a substring appearing in their description, use the -S
+option (e.g. 'datutil -S"(US,(Eu" cps2.dat' to select US and Euro games).
+
 If the datafile includes 'sourcefile' information (added to MAME in v0.85),
 you can select all games from an individual sourcefile using the -G option.
 
-Both the -g and -G options allow you to provide a list of game/sourcefile names
+The -g, -G and -S options allow you to provide a list of game/sourcefile names
 in an external text file (put each entry on a separate line). This is utilised
 by putting and @ symbol after the option. For example, if you have a text file
 called cpzn.txt that contains two lines (cpzn1 and cpzn2 in this case):
@@ -171,8 +174,8 @@ I should also mention that game names including spaces do not require quotes
 around them when using the @ method. If you are specifying them on the command
 line then yes, they do require quotes.
 
-One last thing to mention about the -g and -G options is that you can use the
--! option to invert your selection (i.e. exclude games). This works for
+One last thing to mention about the -g, -G and -S options is that you can use
+the -! option to invert your selection (i.e. exclude games). This works for
 individual game/sourcefile names and lists of names when using the @ symbol.
 
 If you wish to exclude clones from the newly saved dat, you can use the '-r'
@@ -312,8 +315,9 @@ Game selection:
 
   -g  individual game selection. use the @ symbol to specify a file of names
   -c  include clones (for use with the -g option)
-  -G  select games from a specified sourcefile. the @ method is also supported
-  -!  changes the -g and -G options (including the -c option) to exclude games
+  -G  select games from a specified sourcefile. The @ method is also supported
+  -S  select games using substring of description. The @ method is supported
+  -!  changes the -g, -G, -S options (including the -c option) to exclude games
   -r  remove clones
 
 Cleansing:
