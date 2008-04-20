@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.28 ***
+
+            - Fixed parsing of listinfo comments
+
 16/04/2008  *** v2.27 ***
 
             - Fixed generation of url within CMPro datafiles (needs quotes).

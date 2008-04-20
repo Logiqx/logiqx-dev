@@ -121,7 +121,10 @@ int load_mame_listinfo(struct dat *dat)
 
 		if (!strcmp(TOKEN, "//"))
 		{
-			strcpy(TOKEN, BUFFER1_PTR);
+			if (*BUFFER1_PTR == ' ')
+				strcpy(TOKEN, BUFFER1_PTR + 1);
+			else
+				strcpy(TOKEN, BUFFER1_PTR);
 			BUFFER2_PUT_TOKEN(TOKEN_COMMENT_TEXT)
 			TOKEN[0]='\0';
 		}
@@ -881,7 +884,7 @@ int save_mame_listinfo(struct dat *dat)
 		if (curr_game->comment_flags & FLAG_COMMENT_TEXT)
 		{
 			for (j=0, curr_comment=curr_game->comments; j<curr_game->num_comments; j++, curr_comment++)
-				fprintf(dat->out, "//%s\n", curr_comment->text);
+				fprintf(dat->out, "// %s\n", curr_comment->text);
 
 			fprintf(dat->out, "\n");
 
