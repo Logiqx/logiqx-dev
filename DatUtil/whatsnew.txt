@@ -1,6 +1,11 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.39 ***
+
+            - Uses DatLib v2.28.
+            - Fixed parsing of listinfo comments
+
 16/04/2008  *** v2.38 ***
 
             - Uses DatLib v2.27.
