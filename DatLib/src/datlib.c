@@ -2595,6 +2595,16 @@ int store_tokenized_dat(struct dat *dat)
 			dat->dat_flags|=FLAG_DAT_NO_MERGING;
 	}
 
+	/* --- Interpret nodump preferences from ClrMamePro header --- */
+
+	if (dat->clrmamepro.forcenodump)
+	{
+		if (!strcmp(dat->clrmamepro.forcenodump, "required"))
+			dat->dat_flags|=FLAG_DAT_NODUMP_REQUIRED;
+		else if (!strcmp(dat->clrmamepro.forcenodump, "obsolete"))
+			dat->dat_flags|=FLAG_DAT_NODUMP_OBSOLETE;
+	}
+
 	return(errflg);
 }
 
@@ -6153,6 +6163,16 @@ int build_zip_structures(struct dat *dat)
 
 	if (!(dat->options->options & (OPTION_DAT_FULL_MERGING|OPTION_DAT_SPLIT_MERGING|OPTION_DAT_NO_MERGING)))
 		dat->options->options|=OPTION_DAT_SPLIT_MERGING;
+
+	/* --- Override user 'nodumps in zips' if 'forcenodump' is used in the data file --- */
+
+	if (dat->dat_flags & (FLAG_DAT_NODUMP_REQUIRED|FLAG_DAT_NODUMP_OBSOLETE))
+	{
+		dat->options->options&=~(OPTION_INCLUDE_NODUMPS_IN_ZIPS);
+
+		if (dat->dat_flags & FLAG_DAT_NODUMP_REQUIRED)
+			dat->options->options|=OPTION_INCLUDE_NODUMPS_IN_ZIPS;
+	}
 
 	/* --- Firstly, build the game_zip array and index --- */
 

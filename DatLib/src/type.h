@@ -1072,11 +1072,14 @@ struct ini_entry
 #define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// MAMEDiff -[dT] options
 
 
-/* --- Dat Flags --- */
+/* --- Datafile Flags (header information takes priority over command line options) --- */
 
 #define	FLAG_DAT_FULL_MERGING		0x0001
 #define	FLAG_DAT_SPLIT_MERGING		0x0002
 #define	FLAG_DAT_NO_MERGING		0x0004
+
+#define	FLAG_DAT_NODUMP_REQUIRED	0x0010
+#define	FLAG_DAT_NODUMP_OBSOLETE	0x0020
 
 
 /* --- Selection Flags --- */

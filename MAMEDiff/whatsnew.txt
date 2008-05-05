@@ -4,6 +4,7 @@ History
 xx/xx/xxxx  *** v2.28 ***
 
             - Uses DatLib v2.28.
+            - MAMEDiff -z option is inferred from 'forcenodump' (if present).
             - Log file now shows the MAMEDiff version as well as the options.
 
 24/03/2008  *** v2.27 ***
