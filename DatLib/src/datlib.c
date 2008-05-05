@@ -6344,6 +6344,7 @@ int build_zip_structures(struct dat *dat)
 	{
 		if (i>0 && !strcmp((curr_game_zip_rom-1)->game_zip->game->name, orig_game_zip_rom->game_zip->game->name) &&
 			 (curr_game_zip_rom-1)->rom->crc == orig_game_zip_rom->rom->crc &&
+			 (curr_game_zip_rom-1)->rom->crc != 0 && orig_game_zip_rom->rom->crc != 0 &&
 			 (dat->options->options & OPTION_REDUCE_ZIP_STRUCTURES ||
 			  !strcmp((curr_game_zip_rom-1)->rom->name, orig_game_zip_rom->rom->name)))
 		{
@@ -6380,6 +6381,7 @@ int build_zip_structures(struct dat *dat)
 	{
 		if (i>0 && !strcmp((curr_game_zip_disk-1)->game_zip->game->name, orig_game_zip_disk->game_zip->game->name) &&
 			 (curr_game_zip_disk-1)->disk->crc == orig_game_zip_disk->disk->crc &&
+			 (curr_game_zip_disk-1)->disk->crc != 0 &&  orig_game_zip_disk->disk->crc != 0 &&
 			 (dat->options->options & OPTION_REDUCE_ZIP_STRUCTURES ||
 			  !strcmp((curr_game_zip_disk-1)->disk->name, orig_game_zip_disk->disk->name)))
 		{
