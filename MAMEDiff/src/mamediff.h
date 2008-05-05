@@ -5,6 +5,11 @@
  * changes required to your ROM sets.
  * -------------------------------------------------------------------------- */
 
+
+#define MAMEDIFF_VERSION "v2.28"
+#define MAMEDIFF_DATE "Private Beta"
+
+
 /* --- Macros that used to be in DatLib but only used by MAMEDiff now! --- */
 
 #define FORMAT_GAME_NAME(ST, GAME) \

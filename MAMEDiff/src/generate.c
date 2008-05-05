@@ -487,7 +487,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			if (strchr(st, '\\')) strcpy(st, strrchr(st, '\\')+1);
 			fprintf(changes_log, " set for %s\n\n", st);
 
-			fprintf(changes_log, "Created with the MAMEDiff option(s): -d%d ", diff_type);
+			fprintf(changes_log, "Created using MAMEDiff %s with option(s): -d%d ", MAMEDIFF_VERSION, diff_type);
 
 			if (object_type==OPTION_OBJECT_TYPE_DISK)
 				fprintf(changes_log, "-o disk ");
@@ -660,7 +660,7 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			if (strchr(st, '\\')) strcpy(st, strrchr(st, '\\')+1);
 			fprintf(changes_log, " set for %s\n\n", st);
 
-			fprintf(changes_log, "Created with the MAMEDiff option(s): -d%d ", diff_type);
+			fprintf(changes_log, "Created using MAMEDiff %s with option(s): -d%d ", MAMEDIFF_VERSION, diff_type);
 
 			if (object_type==OPTION_OBJECT_TYPE_DISK)
 				fprintf(changes_log, "-o disk ");
