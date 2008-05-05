@@ -1,7 +1,7 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.28 ***
+05/05/2008  *** v2.28 ***
 
             - Uses DatLib v2.28.
             - MAMEDiff -z option is inferred from 'forcenodump' (if present).
