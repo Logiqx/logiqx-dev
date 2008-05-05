@@ -1033,8 +1033,9 @@ struct ini_entry
 
 /* --- Options for the loader/cleanser --- */
 
-#define OPTION_LOAD_QUIETLY		0x00000001	// Tool specific
-#define OPTION_SHOW_SUMMARY		0x00000002	// Tool specific
+#define OPTION_LOAD_QUIETLY		0x00000001	// ROMInfo and ROMBChk load datafiles quietly
+#define OPTION_SHOW_SUMMARY		0x00000002	// Several tools show the datafile summary
+
 #define OPTION_VERBOSE_LOGGING		0x00000004	// DatUtil -v option
 #define OPTION_SHOW_DEBUG_INFO		0x00000008	// DatUtil -d option
 
@@ -1058,17 +1059,17 @@ struct ini_entry
 #define OPTION_NEBULA_JUKEBOX		0x00040000	// DatUtil -j option
 #define OPTION_ALWAYS_QUOTE		0x00080000	// DatUtil -q option
 
-#define	OPTION_DAT_FULL_MERGING		0x00100000	// Used by MAMEDiff
-#define	OPTION_DAT_SPLIT_MERGING	0x00200000	// Used by MAMEDiff
-#define	OPTION_DAT_NO_MERGING		0x00400000	// Used by MAMEDiff
-#define	OPTION_NON_SEPERATED_BIOS_ROMS	0x00800000	// Used by MAMEDiff
+#define	OPTION_DAT_FULL_MERGING		0x00100000	// MAMEDiff -[mM] options
+#define	OPTION_DAT_SPLIT_MERGING	0x00200000	// MAMEDiff -[sS] options
+#define	OPTION_DAT_NO_MERGING		0x00400000	// MAMEDiff -[nN] options
+#define	OPTION_NON_SEPERATED_BIOS_ROMS	0x00800000	// MAMEDiff -b option
 
-#define	OPTION_OBJECT_TYPE_ROM		0x01000000	// MAMEDiff -o option
-#define	OPTION_OBJECT_TYPE_DISK		0x02000000	// MAMEDiff -o option
-#define	OPTION_OBJECT_TYPE_SAMPLE	0x04000000	// MAMEDiff -o option
+#define	OPTION_OBJECT_TYPE_ROM		0x01000000	// MAMEDiff -o rom option
+#define	OPTION_OBJECT_TYPE_DISK		0x02000000	// MAMEDiff -o disk option
+#define	OPTION_OBJECT_TYPE_SAMPLE	0x04000000	// MAMEDiff -o sample option
 #define	OPTION_INCLUDE_NODUMPS_IN_ZIPS	0x08000000	// MAMEDiff -z option
 
-#define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// Used by MAMEDiff
+#define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// MAMEDiff -[dT] options
 
 
 /* --- Dat Flags --- */
