@@ -7,7 +7,7 @@
 
 /* --- Function prototypes for the sorting functions --- */
 
-int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int renames, int zeros, int object_type);
+int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int renames, int zeros, int exclude_removals, int object_type);
 
 
 /* --- Flags --- */

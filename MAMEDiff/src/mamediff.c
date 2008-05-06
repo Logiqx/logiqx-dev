@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	extern int optind;
 	char c;
 
-	int verbose=0, equality_only=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, object_type=OPTION_OBJECT_TYPE_ROM;
+	int verbose=0, equality_only=0, set_type=0, diff_type=0, renames=0, zeros=0, bios=0, exclude_removals=0, object_type=OPTION_OBJECT_TYPE_ROM;
 
 	struct options *options1=0, *options2=0;
 	struct dat *dat1=0, *dat2=0;
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while ((c = getopt(argc, argv, "v=msnd:rzbo:?MSNtT")) != EOF)
+	while ((c = getopt(argc, argv, "v=msnd:rzbxo:?MSNtT")) != EOF)
 	switch (c)
 	{
 		case 'v':
@@ -100,6 +100,9 @@ int main(int argc, char **argv)
 			break;
 		case 'z':
 			zeros++;
+			break;
+		case 'x':
+			exclude_removals++;
 			break;
 		case 'o':
 			if (!strcmp(optarg, "rom"))
@@ -207,11 +210,11 @@ int main(int argc, char **argv)
 
 	if (errflg)
 	{
-		printf("Usage: mamediff [-m|-s|-n]\n       [[-v] | [-d[1|2|3|4] [[-o[rom|disk|sample]] [-r] [-z] [-b]]]]\n       <old data file> <new data file>\n\n");
+		printf("Usage: mamediff [-m|-s|-n]\n       [[-v] | [-d[1|2|3|4 [-x]] [[-o[rom|disk|sample]] [-r] [-z] [-b]]]]\n       <old data file> <new data file>\n\n");
 		printf("Running MAMEDiff without specifying a type of ROM set will produce a summary of\nchanges made to the ROM sets of individual games. If you specify a type of ROM\nset, MAMEDiff will tell you which ZIP files need rebuilding (if you have them).\n\n");
 		printf("The three ROM set types are 'm'erged, 's'plit (default) or 'n'on-merged.\n\n");
 		printf("Use verbose mode (the -v option) for a detailed report of ROM changes.\n\n");
-		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -b option is for use if you like to have non-separated BIOS ROMs.\nThe -o option dictates the type of object to be processed (default=rom).\n");
+		printf("Use -d to generate data files containing ROM changes. When using -d, the -r\noption will consider ROM renames and -z will include zero CRCs (no dumps).\nThe -x option will exclude ROM removals from the supplement creation.\nThe -b option is for use if you like to have non-separated BIOS ROMs.\nThe -o option dictates the type of object to be processed (default=rom).\n");
 		exit (1);
 	}
 
@@ -271,7 +274,7 @@ int main(int argc, char **argv)
 		if (diff_type==0)
 			errflg=standard_compare(dat1, dat2, verbose, equality_only, set_type);
 		else
-			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros, object_type);
+			errflg=generate_changes(dat1, dat2, diff_type, renames, zeros, exclude_removals, object_type);
 	}
 
 	/* --- Free memory --- */

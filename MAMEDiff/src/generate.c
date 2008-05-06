@@ -32,7 +32,7 @@ extern int datlib_debug;
 
 /* --- Dat generation --- */
 
-int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int renames, int zeros, int object_type)
+int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int renames, int zeros, int exclude_removals, int object_type)
 {
 	FILE *changes_log=0, *changes_dat=0;
 
@@ -73,129 +73,132 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 	/* --- Search for ZIP and ROM removals --- */
 
-	for (i=0, curr_game_zip1=dat1->game_zips; !errflg && i<dat1->num_game_zips; i++, curr_game_zip1++)
+	if (!exclude_removals)
 	{
-		curr_game_zip_name_idx2=bsearch((void *)curr_game_zip1->game->name, dat2->game_zip_name_idx, dat2->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
-
-		if (curr_game_zip_name_idx2)
+		for (i=0, curr_game_zip1=dat1->game_zips; !errflg && i<dat1->num_game_zips; i++, curr_game_zip1++)
 		{
-			curr_game_zip2=curr_game_zip_name_idx2->game_zip;
+			curr_game_zip_name_idx2=bsearch((void *)curr_game_zip1->game->name, dat2->game_zip_name_idx, dat2->num_game_zips, sizeof(struct game_zip_idx), find_game_zip_by_name);
 
-			/* --- ROMs --- */
-
-			for (j=0, curr_game_zip_rom1=curr_game_zip1->game_zip_roms;
-				object_type==OPTION_OBJECT_TYPE_ROM && j<curr_game_zip1->num_game_zip_roms;
-				j++, curr_game_zip_rom1++)
+			if (curr_game_zip_name_idx2)
 			{
-				found=0;
+				curr_game_zip2=curr_game_zip_name_idx2->game_zip;
 
-				for (k=0, curr_game_zip_rom2=curr_game_zip2->game_zip_roms;
-					!found && k<curr_game_zip2->num_game_zip_roms; k++, curr_game_zip_rom2++)
+				/* --- ROMs --- */
+
+				for (j=0, curr_game_zip_rom1=curr_game_zip1->game_zip_roms;
+					object_type==OPTION_OBJECT_TYPE_ROM && j<curr_game_zip1->num_game_zip_roms;
+					j++, curr_game_zip_rom1++)
 				{
-					if ((!strcmp(curr_game_zip_rom2->rom->status, "nodump") ||
-						curr_game_zip_rom1->rom->crc==curr_game_zip_rom2->rom->crc ||
-						curr_game_zip_rom1->rom->crc==~curr_game_zip_rom2->rom->crc) &&
-						curr_game_zip_rom1->rom->size==curr_game_zip_rom2->rom->size &&
-						((renames==0 && strcmp(curr_game_zip_rom2->rom->status, "nodump")) ||
-						 !strcmp(curr_game_zip_rom1->rom->name, curr_game_zip_rom2->rom->name)))
+					found=0;
+
+					for (k=0, curr_game_zip_rom2=curr_game_zip2->game_zip_roms;
+						!found && k<curr_game_zip2->num_game_zip_roms; k++, curr_game_zip_rom2++)
 					{
-						found++;
+						if ((!strcmp(curr_game_zip_rom2->rom->status, "nodump") ||
+							curr_game_zip_rom1->rom->crc==curr_game_zip_rom2->rom->crc ||
+							curr_game_zip_rom1->rom->crc==~curr_game_zip_rom2->rom->crc) &&
+							curr_game_zip_rom1->rom->size==curr_game_zip_rom2->rom->size &&
+							((renames==0 && strcmp(curr_game_zip_rom2->rom->status, "nodump")) ||
+							 !strcmp(curr_game_zip_rom1->rom->name, curr_game_zip_rom2->rom->name)))
+						{
+							found++;
+						}
+					}
+
+					if (!found)
+					{
+						if (curr_game_zip2->num_game_zip_roms>0)
+						{
+							curr_game_zip_rom1->flags|=GAME_ZIP_ROM_REMOVED;
+							curr_game_zip1->flags|=GAME_ZIP_ROM_REMOVED;
+							num_game_zip_rom_removals++;
+						}
+						else
+						{
+							curr_game_zip1->flags|=GAME_ZIP_REMOVED;
+							num_game_zip_removals++;
+						}
 					}
 				}
 
-				if (!found)
+				/* --- Disks --- */
+
+				for (j=0, curr_game_zip_disk1=curr_game_zip1->game_zip_disks;
+					object_type==OPTION_OBJECT_TYPE_DISK && j<curr_game_zip1->num_game_zip_disks;
+					j++, curr_game_zip_disk1++)
 				{
-					if (curr_game_zip2->num_game_zip_roms>0)
+					found=0;
+
+					for (k=0, curr_game_zip_disk2=curr_game_zip2->game_zip_disks;
+						!found && k<curr_game_zip2->num_game_zip_disks; k++, curr_game_zip_disk2++)
 					{
-						curr_game_zip_rom1->flags|=GAME_ZIP_ROM_REMOVED;
-						curr_game_zip1->flags|=GAME_ZIP_ROM_REMOVED;
-						num_game_zip_rom_removals++;
+						if ((!strcmp(curr_game_zip_disk2->disk->status, "nodump") ||
+							curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
+							((renames==0 && strcmp(curr_game_zip_disk2->disk->status, "nodump")) ||
+							 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
+						{
+							found++;
+						}
 					}
-					else
+
+					if (!found)
 					{
-						curr_game_zip1->flags|=GAME_ZIP_REMOVED;
-						num_game_zip_removals++;
+						if (curr_game_zip2->num_game_zip_disks>0)
+						{
+							curr_game_zip_disk1->flags|=GAME_ZIP_DISK_REMOVED;
+							curr_game_zip1->flags|=GAME_ZIP_DISK_REMOVED;
+							num_game_zip_disk_removals++;
+						}
+						else
+						{
+							curr_game_zip1->flags|=GAME_ZIP_REMOVED;
+							num_game_zip_removals++;
+						}
+					}
+				}
+
+				/* --- Samples --- */
+
+				for (j=0, curr_game_zip_sample1=curr_game_zip1->game_zip_samples;
+					object_type==OPTION_OBJECT_TYPE_SAMPLE && j<curr_game_zip1->num_game_zip_samples;
+					j++, curr_game_zip_sample1++)
+				{
+					found=0;
+
+					for (k=0, curr_game_zip_sample2=curr_game_zip2->game_zip_samples;
+						!found && k<curr_game_zip2->num_game_zip_samples; k++, curr_game_zip_sample2++)
+					{
+						if (!strcmp(curr_game_zip_sample1->sample->name, curr_game_zip_sample2->sample->name))
+						{
+							found++;
+						}
+					}
+
+					if (!found)
+					{
+						if (curr_game_zip2->num_game_zip_samples>0)
+						{
+							curr_game_zip_sample1->flags|=GAME_ZIP_SAMPLE_REMOVED;
+							curr_game_zip1->flags|=GAME_ZIP_SAMPLE_REMOVED;
+							num_game_zip_sample_removals++;
+						}
+						else
+						{
+							curr_game_zip1->flags|=GAME_ZIP_REMOVED;
+							num_game_zip_removals++;
+						}
 					}
 				}
 			}
-
-			/* --- Disks --- */
-
-			for (j=0, curr_game_zip_disk1=curr_game_zip1->game_zip_disks;
-				object_type==OPTION_OBJECT_TYPE_DISK && j<curr_game_zip1->num_game_zip_disks;
-				j++, curr_game_zip_disk1++)
+			else
 			{
-				found=0;
-
-				for (k=0, curr_game_zip_disk2=curr_game_zip2->game_zip_disks;
-					!found && k<curr_game_zip2->num_game_zip_disks; k++, curr_game_zip_disk2++)
+				if ((object_type==OPTION_OBJECT_TYPE_ROM && curr_game_zip1->num_game_zip_roms>0) ||
+					(object_type==OPTION_OBJECT_TYPE_DISK && curr_game_zip1->num_game_zip_disks>0) ||
+					(object_type==OPTION_OBJECT_TYPE_SAMPLE && curr_game_zip1->num_game_zip_samples>0))
 				{
-					if ((!strcmp(curr_game_zip_disk2->disk->status, "nodump") ||
-						curr_game_zip_disk1->disk->crc==curr_game_zip_disk2->disk->crc) &&
-						((renames==0 && strcmp(curr_game_zip_disk2->disk->status, "nodump")) ||
-						 !strcmp(curr_game_zip_disk1->disk->name, curr_game_zip_disk2->disk->name)))
-					{
-						found++;
-					}
+					curr_game_zip1->flags|=GAME_ZIP_REMOVED;
+					num_game_zip_removals++;
 				}
-
-				if (!found)
-				{
-					if (curr_game_zip2->num_game_zip_disks>0)
-					{
-						curr_game_zip_disk1->flags|=GAME_ZIP_DISK_REMOVED;
-						curr_game_zip1->flags|=GAME_ZIP_DISK_REMOVED;
-						num_game_zip_disk_removals++;
-					}
-					else
-					{
-						curr_game_zip1->flags|=GAME_ZIP_REMOVED;
-						num_game_zip_removals++;
-					}
-				}
-			}
-
-			/* --- Samples --- */
-
-			for (j=0, curr_game_zip_sample1=curr_game_zip1->game_zip_samples;
-				object_type==OPTION_OBJECT_TYPE_SAMPLE && j<curr_game_zip1->num_game_zip_samples;
-				j++, curr_game_zip_sample1++)
-			{
-				found=0;
-
-				for (k=0, curr_game_zip_sample2=curr_game_zip2->game_zip_samples;
-					!found && k<curr_game_zip2->num_game_zip_samples; k++, curr_game_zip_sample2++)
-				{
-					if (!strcmp(curr_game_zip_sample1->sample->name, curr_game_zip_sample2->sample->name))
-					{
-						found++;
-					}
-				}
-
-				if (!found)
-				{
-					if (curr_game_zip2->num_game_zip_samples>0)
-					{
-						curr_game_zip_sample1->flags|=GAME_ZIP_SAMPLE_REMOVED;
-						curr_game_zip1->flags|=GAME_ZIP_SAMPLE_REMOVED;
-						num_game_zip_sample_removals++;
-					}
-					else
-					{
-						curr_game_zip1->flags|=GAME_ZIP_REMOVED;
-						num_game_zip_removals++;
-					}
-				}
-			}
-		}
-		else
-		{
-			if ((object_type==OPTION_OBJECT_TYPE_ROM && curr_game_zip1->num_game_zip_roms>0) ||
-				(object_type==OPTION_OBJECT_TYPE_DISK && curr_game_zip1->num_game_zip_disks>0) ||
-				(object_type==OPTION_OBJECT_TYPE_SAMPLE && curr_game_zip1->num_game_zip_samples>0))
-			{
-				curr_game_zip1->flags|=GAME_ZIP_REMOVED;
-				num_game_zip_removals++;
 			}
 		}
 	}
