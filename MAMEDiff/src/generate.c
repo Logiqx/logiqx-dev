@@ -474,9 +474,18 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 		{
 			strcpy(st, dat2->name);
 			if (strstr(st, ".dat")) *strstr(st, ".dat")=0;
-			fprintf(changes_log, "Changes dat for use with %s\n", st);
+			if (!exclude_removals)
+			{
+				fprintf(changes_log, "Changes dat for use with %s\n", st);
 
-			fprintf(changes_log, "Copy changes over a perfect ");
+				fprintf(changes_log, "Copy changes over a perfect ");
+			}
+			else
+			{
+				fprintf(changes_log, "Supplementary dat for use with %s\n", st);
+
+				fprintf(changes_log, "Use in addition to a perfect ");
+			}
 			if (dat1->options->options & OPTION_DAT_NO_MERGING)
 				fprintf(changes_log, "non-merged");
 			if (dat1->options->options & OPTION_DAT_SPLIT_MERGING)
