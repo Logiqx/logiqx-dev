@@ -497,6 +497,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 			else if (object_type==OPTION_OBJECT_TYPE_SAMPLE)
 				fprintf(changes_log, "-o sample ");
 
+			if (exclude_removals)
+				fprintf(changes_log, "-x ");
+
 			if (renames)
 				fprintf(changes_log, "-r ");
 
@@ -510,43 +513,46 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 
 			/* --- Report ZIP removals --- */
 
-			if (object_type==OPTION_OBJECT_TYPE_DISK)
+			if (!exclude_removals)
 			{
-				if (dat2->options->options & OPTION_DAT_FULL_MERGING)
-					LRPAD(st, " Directories Removed (n.b. directories include clones) ", "-", 80)
-				else
-					LRPAD(st, " Directories Removed ", "-", 80)
-			}
-			else
-			{
-				if (dat2->options->options & OPTION_DAT_FULL_MERGING)
-					LRPAD(st, " ZIPs Removed (n.b. ZIPs include clones) ", "-", 80)
-				else
-					LRPAD(st, " ZIPs Removed ", "-", 80)
-			}
-			fprintf(changes_log, "%s\n\n", st);
-			for (j=i=0, curr_game_zip_name_idx1=dat1->game_zip_name_idx; i<dat1->num_game_zips; i++, curr_game_zip_name_idx1++)
-			{
-				curr_game_zip1=curr_game_zip_name_idx1->game_zip;
-
-				if (curr_game_zip1->flags & GAME_ZIP_REMOVED)
+				if (object_type==OPTION_OBJECT_TYPE_DISK)
 				{
-					if (object_type==OPTION_OBJECT_TYPE_DISK)
-						fprintf(changes_log, "%8s - %s\n", curr_game_zip1->game->name, curr_game_zip1->game->description);
+					if (dat2->options->options & OPTION_DAT_FULL_MERGING)
+						LRPAD(st, " Directories Removed (n.b. directories include clones) ", "-", 80)
 					else
-						fprintf(changes_log, "%8s.zip - %s\n", curr_game_zip1->game->name, curr_game_zip1->game->description);
-					j++;
+						LRPAD(st, " Directories Removed ", "-", 80)
 				}
+				else
+				{
+					if (dat2->options->options & OPTION_DAT_FULL_MERGING)
+						LRPAD(st, " ZIPs Removed (n.b. ZIPs include clones) ", "-", 80)
+					else
+						LRPAD(st, " ZIPs Removed ", "-", 80)
+				}
+				fprintf(changes_log, "%s\n\n", st);
+				for (j=i=0, curr_game_zip_name_idx1=dat1->game_zip_name_idx; i<dat1->num_game_zips; i++, curr_game_zip_name_idx1++)
+				{
+					curr_game_zip1=curr_game_zip_name_idx1->game_zip;
+
+					if (curr_game_zip1->flags & GAME_ZIP_REMOVED)
+					{
+						if (object_type==OPTION_OBJECT_TYPE_DISK)
+							fprintf(changes_log, "%8s - %s\n", curr_game_zip1->game->name, curr_game_zip1->game->description);
+						else
+							fprintf(changes_log, "%8s.zip - %s\n", curr_game_zip1->game->name, curr_game_zip1->game->description);
+						j++;
+					}
+				}
+				if (object_type==OPTION_OBJECT_TYPE_DISK)
+				{
+					if (!j) fprintf(changes_log, "No directories removed.\n");
+				}
+				else
+				{
+					if (!j) fprintf(changes_log, "No ZIPs removed.\n");
+				}
+				fprintf(changes_log, "\n");
 			}
-			if (object_type==OPTION_OBJECT_TYPE_DISK)
-			{
-				if (!j) fprintf(changes_log, "No directories removed.\n");
-			}
-			else
-			{
-				if (!j) fprintf(changes_log, "No ZIPs removed.\n");
-			}
-			fprintf(changes_log, "\n");
 
 			/* --- Report ZIP changes --- */
 
@@ -669,6 +675,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 				fprintf(changes_log, "-o disk ");
 			else if (object_type==OPTION_OBJECT_TYPE_SAMPLE)
 				fprintf(changes_log, "-o sample ");
+
+			if (exclude_removals)
+				fprintf(changes_log, "-x ");
 
 			if (renames)
 				fprintf(changes_log, "-r ");
