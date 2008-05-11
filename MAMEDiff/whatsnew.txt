@@ -1,7 +1,7 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.29 ***
+11/05/2008  *** v2.29 ***
 
             - Added the -x option for Final Burn and FBA. Use it with -d1.
 

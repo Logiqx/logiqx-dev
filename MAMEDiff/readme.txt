@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
-                          MAMEDiff v2.29 - xx/xx/xxxx
+                          MAMEDiff v2.29 - 11/05/2008
 
                    Written by Logiqx (http://www.logiqx.com/)
 -------------------------------------------------------------------------------
@@ -148,6 +148,12 @@ archiving). If you prefer ROMCenter to CMPro then convert the dat using DatUtil
 This option is ideal for webmasters as it will allow them to build just the new
 and changed ROM sets that need uploading to their website following a new MAME
 release. The resultant ZIPs will be 100% complete and not miss any ROMs.
+
+Some emulators may require supplements of this nature (i.e. complete ZIPs) and
+an example of this is FBA. However, to reduce the size of the supplement ROMs
+there is an aditional option -x which will exclude ROM removals from the
+algorithm. The result is complete ZIPs where the emulator requires additional
+ROMs, rather than when it is just different in some way (e.g. due to removals).
 
 Note: -d1 is the direct equivalent of the old -M, -S and -N options.
 
