@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.28"
-#define DATLIB_DATE "5 May 2008"
+#define DATLIB_VERSION "v2.29"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -3954,7 +3954,11 @@ int summarise_dat(struct dat *dat)
 				curr_rom->rom_flags|=FLAG_ROM_OFFSET;
 
 			if (strcmp(curr_rom->status, ""))
+			{
 				curr_rom->rom_flags|=FLAG_ROM_STATUS;
+				if (!strcmp(curr_rom->status, "nodump") && dat->header_flags && !(dat->clrmamepro_flags & FLAG_CLRMAMEPRO_FORCENODUMP))
+					dat->clrmamepro_warnings |= FLAG_CLRMAMEPRO_FORCENODUMP;
+			}
 			else
 				curr_rom->rom_flags&=~FLAG_ROM_STATUS;
 
@@ -3988,7 +3992,11 @@ int summarise_dat(struct dat *dat)
 				curr_disk->disk_flags|=FLAG_DISK_INDEX;
 
 			if (strcmp(curr_disk->status, ""))
+			{
 				curr_disk->disk_flags|=FLAG_DISK_STATUS;
+				if (!strcmp(curr_disk->status, "nodump") && dat->header_flags && !(dat->clrmamepro_flags & FLAG_CLRMAMEPRO_FORCENODUMP))
+					dat->clrmamepro_warnings |= FLAG_CLRMAMEPRO_FORCENODUMP;
+			}
 			else
 				curr_disk->disk_flags&=~FLAG_DISK_STATUS;
 
@@ -4894,7 +4902,12 @@ int report_warnings(struct dat *dat)
 			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_FORCEPACKING)
 				fprintf(dat->log_file, "    Invalid forcepacking (%s)\n", dat->clrmamepro.forcepacking);
 			if (dat->clrmamepro_warnings & FLAG_CLRMAMEPRO_FORCENODUMP)
-				fprintf(dat->log_file, "    Invalid forcenodump (%s)\n", dat->clrmamepro.forcenodump);
+			{
+				if (dat->clrmamepro_flags & FLAG_CLRMAMEPRO_FORCENODUMP)
+					fprintf(dat->log_file, "    Invalid forcenodump (%s)\n", dat->clrmamepro.forcenodump);
+				else
+					fprintf(dat->log_file, "    Missing forcenodump\n");
+			}
 
 			fprintf(dat->log_file, "\n");
 		}

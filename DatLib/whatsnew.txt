@@ -1,6 +1,10 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.29 ***
+
+            - Added warning when forcenodump is missing.
+
 05/05/2008  *** v2.28 ***
 
             - Fixed parsing of listinfo comments.
