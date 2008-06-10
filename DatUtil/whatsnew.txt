@@ -1,10 +1,11 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.39 ***
+10/06/2008  *** v2.39 ***
 
-            - Uses DatLib v2.28.
+            - Uses DatLib v2.29.
             - Fixed parsing of listinfo comments
+            - Added warning when forcenodump is missing.
 
 16/04/2008  *** v2.38 ***
 
