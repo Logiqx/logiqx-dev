@@ -713,6 +713,10 @@ struct header
 	char *comment;        // DatUtil -O option
 
 	char auto_date[11];   // Automatic date
+
+	/* --- Fields that are calculated by DatLib */
+
+	uint16_t header_flags;
 };
 
 struct clrmamepro
@@ -721,6 +725,10 @@ struct clrmamepro
 	char *forcemerging;   // DatUtil -M option (none, split or full)
 	char *forcepacking;   // DatUtil -P option (zip or unzip)
 	char *forcenodump;    // DatUtil -N option (obsolete, required or ignore)
+
+	/* --- Fields that are calculated by DatLib */
+
+	uint8_t clrmamepro_flags;
 };
 
 struct romcenter
@@ -735,6 +743,10 @@ struct romcenter
 	char *lockrommode;
 	char *lockbiosmode;
 	char *locksamplemode;
+	
+	/* --- Fields that are calculated by DatLib */
+
+	uint16_t romcenter_flags;
 };
 
 

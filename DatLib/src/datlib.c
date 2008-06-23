@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.29"
-#define DATLIB_DATE "10 June 2008"
+#define DATLIB_VERSION "v2.30"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -3810,6 +3810,12 @@ int summarise_dat(struct dat *dat)
 
 	if (dat->romcenter.locksamplemode)
 		dat->romcenter_flags|=FLAG_ROMCENTER_LOCKSAMPLEMODE;
+
+	/* --- Used by XML macros --- */
+
+	dat->header.header_flags=dat->header_flags;
+	dat->clrmamepro.clrmamepro_flags=dat->clrmamepro_flags;
+	dat->romcenter.romcenter_flags=dat->romcenter_flags;
 
 	/* --- Summarise games --- */
 
