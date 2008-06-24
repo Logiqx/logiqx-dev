@@ -1,7 +1,7 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.40 ***
+24/06/2008  *** v2.40 ***
 
             - Uses DatLib v2.30.
             - Added XML entity support to generic XML headers (when saving).
