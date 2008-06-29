@@ -579,9 +579,6 @@ int specify_generic_xml(struct dat *dat)
 			case '\"': \
 				fprintf(dat->out, "&quot;"); \
 				break; \
-			case '\'': \
-				fprintf(dat->out, "&apos;"); \
-				break; \
 			default: \
 				if (*ptr>=' ' && *ptr<='~') \
 					fprintf(dat->out, "%c", *ptr); \
