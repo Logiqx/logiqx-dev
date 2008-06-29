@@ -1,6 +1,11 @@
 History
 -------
 
+29/06/2008  *** v2.41 ***
+
+            - Uses DatLib v2.31.
+            - Added support for &apos; in the XML formats.
+
 24/06/2008  *** v2.40 ***
 
             - Uses DatLib v2.30.
