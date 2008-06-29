@@ -1,6 +1,10 @@
 History
 -------
 
+29/06/2008  *** v2.31 ***
+
+            - Added support for &apos; in the XML formats.
+
 24/06/2008  *** v2.30 ***
 
             - Added XML entity support to generic XML headers (when saving).

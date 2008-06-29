@@ -128,6 +128,11 @@ int identify_generic_xml(struct dat *dat)
 				*write_ptr++='\"'; \
 				read_ptr+=6; \
 			} \
+			else if (!strncmp(read_ptr, "&apos;", 6)) \
+			{ \
+				*write_ptr++='\''; \
+				read_ptr+=6; \
+			} \
 			else \
 			{ \
 				read_ptr++; \
@@ -144,7 +149,7 @@ int identify_generic_xml(struct dat *dat)
 						printf("Panic: Unrecognised XML entity '&"); \
 						while (*read_ptr!=';') \
 							printf("%c", *read_ptr++); \
-						printf("'\n"); \
+						printf(";'\n"); \
 						*read_ptr++; \
 					} \
 				} \
@@ -573,6 +578,9 @@ int specify_generic_xml(struct dat *dat)
 				break; \
 			case '\"': \
 				fprintf(dat->out, "&quot;"); \
+				break; \
+			case '\'': \
+				fprintf(dat->out, "&apos;"); \
 				break; \
 			default: \
 				if (*ptr>=' ' && *ptr<='~') \

@@ -81,6 +81,11 @@ int identify_m1_xml(struct dat *dat)
 				*write_ptr++='\"'; \
 				read_ptr+=6; \
 			} \
+			else if (!strncmp(read_ptr, "&apos;", 6)) \
+			{ \
+				*write_ptr++='\''; \
+				read_ptr+=6; \
+			} \
 			else \
 			{ \
 				read_ptr++; \
@@ -97,7 +102,7 @@ int identify_m1_xml(struct dat *dat)
 						printf("Panic: Unrecognised XML entity '&"); \
 						while (*read_ptr!=';') \
 							printf("%c", *read_ptr++); \
-						printf("'\n"); \
+						printf(";'\n"); \
 						*read_ptr++; \
 					} \
 				} \
