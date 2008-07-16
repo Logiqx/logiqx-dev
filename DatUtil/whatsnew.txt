@@ -1,6 +1,11 @@
 History
 -------
 
+16/07/2008  *** v2.42 ***
+
+            - Uses DatLib v2.32.
+            - Improved datutil -i to search for ROMs by CRC as well as name.
+
 29/06/2008  *** v2.41 ***
 
             - Uses DatLib v2.31.
