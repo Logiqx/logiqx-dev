@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.31"
-#define DATLIB_DATE "29 June 2008"
+#define DATLIB_VERSION "v2.32"
+#define DATLIB_DATE "16 July 2008"
 
 
 /* --- Standard includes --- */
@@ -2952,6 +2952,9 @@ int add_missing_info(struct dat *dat)
 			for (j=0, curr_rom=curr_game->roms; j<curr_game->num_roms; j++, curr_rom++)
 			{
 				rom_match=bsearch((void *)curr_rom->name, game_match->game->rom_name_idx, game_match->game->num_roms, sizeof(struct rom_idx), find_rom_by_name);
+
+				if (!rom_match && curr_rom->crc)
+					rom_match=bsearch((void *)&curr_rom->crc, game_match->game->rom_crc_idx, game_match->game->num_roms, sizeof(struct rom_idx), find_rom_by_crc);
 
 				if (rom_match)
 				{
