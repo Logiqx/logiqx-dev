@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.32"
-#define DATLIB_DATE "16 July 2008"
+#define DATLIB_VERSION "v2.33"
+#define DATLIB_DATE "Private Beta"
 
 
 /* --- Standard includes --- */
@@ -55,6 +55,15 @@ int datlib_debug=0;
 
 extern const struct datlib_driver *datlib_drivers[];
 extern const struct datlib_token datlib_tokens[];
+
+
+/* --- Details of the KGPE hacked ROM by Neil Corlett --- */
+/* --- See http://2012.frontnet.org/kgpe/ and http://web.archive.org/web/20041012040309/www.neillcorlett.com/kgpe/ ---*/
+
+char *kgpe_game_name = "kgpe";
+char *kgpe_rom_name  = "ma02rom5.bin";
+char *kgpe_rom_md5   = "f6e2d8b157ffbd731e015a4bd1e1eb95";
+char *kgpe_rom_sha1  = "99b25c4ee9bbed8f23c5b5bf4a0a34ff8773c273";
 
 
 /* --------------------------------------------------------------------------
@@ -3304,16 +3313,41 @@ int fix_merging_phase_1(struct dat *dat)
 							}
 						}
 
-						if (!curr_rom->sha1 && merge_rom->sha1)
-						{
-							curr_rom->sha1=merge_rom->sha1;
-							curr_rom->rom_fixes|=FLAG_ROM_SHA1;
-						}
+						/* --- Hard-coded hack to deal with the kgpe --- */
 
-						if (!curr_rom->md5 && merge_rom->md5)
+						if (strcmp(curr_game->name, kgpe_game_name) || strcmp(curr_rom->name, kgpe_rom_name))
 						{
-							curr_rom->md5=merge_rom->md5;
-							curr_rom->rom_fixes|=FLAG_ROM_MD5;
+							/* --- Standard ROM --- */
+
+							if (!curr_rom->sha1 && merge_rom->sha1)
+							{
+								curr_rom->sha1=merge_rom->sha1;
+								curr_rom->rom_fixes|=FLAG_ROM_SHA1;
+							}
+
+							if (!curr_rom->md5 && merge_rom->md5)
+							{
+								curr_rom->md5=merge_rom->md5;
+								curr_rom->rom_fixes|=FLAG_ROM_MD5;
+							}
+						}
+						else
+						{
+							/* --- Hacked ROM --- */
+
+							if (dat->options->options & OPTION_SHA1_CHECKSUMS &&
+								(!curr_rom->sha1 || strcmp(curr_rom->sha1, kgpe_rom_sha1)))
+							{
+								curr_rom->sha1=kgpe_rom_sha1;
+								curr_rom->rom_fixes|=FLAG_ROM_SHA1;
+							}
+
+							if (dat->options->options & OPTION_MD5_CHECKSUMS &&
+								(!curr_rom->md5 || strcmp(curr_rom->md5, kgpe_rom_md5)))
+							{
+								curr_rom->md5=kgpe_rom_md5;
+								curr_rom->rom_fixes|=FLAG_ROM_MD5;
+							}
 						}
 					}
 				}
@@ -4448,8 +4482,12 @@ int fix_merging_phase_2(struct dat *dat)
 					dat->rom_name_idx[j].rom->rom_warnings|=FLAG_ROM_CRC_CONFLICT;
 				}
 
+				/* --- Do not propogate MD5 or SHA1 for CRC conflicts or kgpe/ma02rom5.bin --- */
+
 				if (!(dat->rom_name_idx[i].rom->rom_warnings & FLAG_ROM_CRC_CONFLICT) &&
-					!(dat->rom_name_idx[j].rom->rom_warnings & FLAG_ROM_CRC_CONFLICT))
+					!(dat->rom_name_idx[j].rom->rom_warnings & FLAG_ROM_CRC_CONFLICT) &&
+					strcmp(dat->rom_name_idx[i].rom->name, kgpe_rom_name) &&
+					strcmp(dat->rom_name_idx[j].rom->name, kgpe_rom_name))
 				{
 					if (dat->rom_name_idx[i].rom->sha1 && !dat->rom_name_idx[j].rom->sha1)
 					{
