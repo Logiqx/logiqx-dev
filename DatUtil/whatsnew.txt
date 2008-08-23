@@ -1,6 +1,11 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.43 ***
+
+            - Uses DatLib v2.33.
+            - Added SHA1 / MD5 information for Neil Corlett's KGPE hack.
+
 16/07/2008  *** v2.42 ***
 
             - Uses DatLib v2.32.
