@@ -19,6 +19,7 @@ Load and Save:
   - MAME ListXML (MAME and MESS)
   - Generic XML
   - Tab Delimited
+  - AAE RomList
 
 Load only:
 

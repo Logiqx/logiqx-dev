@@ -1,6 +1,11 @@
 History
 -------
 
+xx/xx/xxxx  *** v2.30 ***
+
+            - Uses DatLib v2.33.
+            - Added support for AAE RomList.
+
 11/05/2008  *** v2.29 ***
 
             - Added the -x option for Final Burn and FBA. Use it with -d1.

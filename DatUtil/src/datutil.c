@@ -243,6 +243,7 @@ int main(int argc, char **argv)
   		printf("Generic XML     genericxml generic gx\n");
   		printf("RomCenter 2     romcenter2 rc2 romcenter rc\n");
   		printf("Tab Delimited   delimited tab text\n");
+  		printf("AAE RomList     aaeromlist aae romlist\n");
   		printf("MAME GameList   gamelist gl\n");
   		printf("TitleList       titlelist titles\n");
   		printf("RC2 Sublist     sublist sub rcsublist rcsub\n");
