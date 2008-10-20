@@ -62,7 +62,7 @@ int load_aae_romlist(struct dat *dat)
 
 			in_game++;
 		}
-		else if (in_game && *TOKEN && !strchr(TOKEN, '/'))
+		else if (in_game && *TOKEN)
 		{
 			BUFFER2_PUT_TOKEN(TOKEN_ROM_NAME)
 		}
