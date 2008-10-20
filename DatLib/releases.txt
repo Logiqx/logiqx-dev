@@ -1,0 +1,126 @@
+// Let's assume some user preferences (which would be maintained from a GUI)
+
+preferences.regions = ['uk', 'eu', 'us']            // Indexed from 0 to 2
+preferences.languages = ['en', 'de']                // Indexed from 0 to 1
+
+numRegionPrefs = count(preferences.regions)         // i.e. 3
+numLanguagePrefs = count(preferences.languages)     // i.e. 2
+
+// Iterate through games in the datafile, looking for parents (i.e. families)
+for game in datafile.games
+{
+    // Decide if the game is a parent - if it doesn't specify "cloneof" it is a parent!
+    if game.cloneof is null
+    {
+        // Retain the parent details initially - better details will overwrite them soon!
+        preferredGame = parent
+        preferredName = parent.name
+        bestScore = 0
+
+        // Iterate through all of the games in the family (i.e. the parent + clones)
+        for clone in parent + parent.clones
+        {
+            // Iterate through all of the release entries
+            for each release in clone.releases
+            {
+                // Start with a score of zero
+                score = 0
+            
+                // Region is the most important attribute
+                if release.region is not null
+                {
+                    // Check if it appears in the user preferences
+                    for regionNo in 0 to numRegionPrefs - 1
+                    {
+                        if preferences.regions[regionNo] == release.region
+                        {
+                            // Increase the current score (uk=3, eu=2, us=1)
+                            score += numRegionPrefs - regionNo;
+                        }
+                    }
+                }
+
+                // Score will now be 3 to 0 based on the following matches:
+                // uk=3, eu=2, us=1, <none>=0
+
+                // Shift the score left to make way for the language
+                score *= (numLanguagePrefs + 1);
+
+                // Score will now be 9 to 0 based on the following matches:
+                // uk=9, eu=6, us=3, <none>=0
+
+                // Language is the next most important attribute
+                if release.language is not null
+                {
+                    // Check if it appears in the user preferences
+                    for languageNo in 0 to numLanguagePrefs - 1
+                    {
+                        if preferences.languages[langauageNo] == release.language
+                        {
+                            // Increase the current score (en=2, de=1)
+                            score += numLanguagePrefs - languageNo;
+                        }
+                    }
+                }
+
+                // Score will now be 11 to 0 based on the following matches:
+                // uk+en=11, uk+de=10, uk+<none>=9
+                // eu+en=8, eu+de=7, eu+<none>=6
+                // us+en=5, us+de=4, us+<none>=3
+                // <none>+en=2, <none>+de=1, <none>+<none>=0
+
+                // Shift the score left to make way for the "default" release
+                score *= 2;
+
+                // Score will now be 22 to 0 based on the following matches:
+                // uk+en=22, uk+de=20, uk+<none>=18
+                // eu+en=16, eu+de=14, eu+<none>=12
+                // us+en=10, us+de=8, us+<none>=6
+                // <none>+en=4, <none>+de=2, <none>+<none>=0
+
+                // The "default" release is the next most important consideration
+                if release.default = "yes"
+                {
+                    // Increase the current score
+                    score += 1;
+                }
+
+                // Score will now be 23 to 0 (the default will be an odd number).
+
+                // Shift the score left to make way for parent
+                score *= 2;
+
+                // Score will now be 46 to 0 (the default will be a multiple of 2).
+
+                // Original parent is the next most important attribute
+                if close.cloneof is not null
+                {
+                    // Increase the current score
+                    score += 1;
+                }
+
+                // Score will now be 47 to 0.
+
+                // If the score beats the previous best then retain the details
+                if score > bestScore
+                {
+                    preferredGame = clone
+
+                    if release.name is not null
+                    {
+                        preferredName = release.name
+                    }
+                    else
+                    {
+                        preferredName = clone.name
+                    }
+
+                    bestScore = Score
+                }
+            }
+        }
+
+        // We now have the preferred game (1d1r) and preferred name (for the ZIP)
+    }
+}
+
