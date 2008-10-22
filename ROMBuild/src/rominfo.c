@@ -1748,6 +1748,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001d.1fc", 524288, 0xb1a0ccb0, 0, 524288},
 		{"3countb", "043-v2.bin", 2097152, 0xc69a827b, 1572864, 524288},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		EVEN_COPY,
 		{"3countb", "n106001a.038", 524288, 0x10dbe66a, 0, 262144},
@@ -1758,6 +1759,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001a.03c", 524288, 0x6d5bfb61, 0, 262144},
 		{"3countb", "043-p2.bin", 524288, 0x5e764567, 0, 262144},
 	},
+	*/
 	{
 		EVEN_COPY,
 		{"3countb", "n106001a.538", 524288, 0xbe0d2fe0, 0, 262144},
@@ -1838,6 +1840,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001d.63c", 524288, 0x521b6df1, 0, 262144},
 		{"3countb", "043-c4.bin", 2097152, 0x1887e5c0, 1572864, 262144},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		ODD_COPY,
 		{"3countb", "n106001a.038", 524288, 0x10dbe66a, 262144, 262144},
@@ -1848,6 +1851,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001a.03c", 524288, 0x6d5bfb61, 262144, 262144},
 		{"3countb", "043-p2.bin", 524288, 0x5e764567, 0, 262144},
 	},
+	*/
 	{
 		ODD_COPY,
 		{"3countb", "n106001a.538", 524288, 0xbe0d2fe0, 262144, 262144},
@@ -1971,32 +1975,32 @@ struct Rom neoragex_roms[] =
 	{
 		FULL_COPY,
 		{"kof95", "kof95_c6.rom", 4194304, 0x5ab5ea75, 0, 2097152},
-		{"kof95", "084-c6.bin", 2097152, 0xf593ac35, 0, 2097152},
+		{"kof95h", "084-c6.bin", 2097152, 0xf593ac35, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"kof95", "kof95_c6.rom", 4194304, 0x5ab5ea75, 2097152, 2097152},
-		{"kof95", "084-c6.bin", 2097152, 0xf593ac35, 0, 2097152},
+		{"kof95h", "084-c6.bin", 2097152, 0xf593ac35, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"kof95", "kof95_v2.rom", 4194304, 0xef8c08c7, 0, 2097152},
-		{"kof95", "084-v2.bin", 2097152, 0xb38a2803, 0, 2097152},
+		{"kof95h", "084-v2.bin", 2097152, 0xb38a2803, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"kof95", "kof95_v2.rom", 4194304, 0xef8c08c7, 2097152, 2097152},
-		{"kof95", "084-v2.bin", 2097152, 0xb38a2803, 0, 2097152},
+		{"kof95h", "084-v2.bin", 2097152, 0xb38a2803, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"kof95", "kof95_c5.rom", 4194304, 0xfd45472a, 0, 2097152},
-		{"kof95", "084-c5.bin", 2097152, 0x8a2c1edc, 0, 2097152},
+		{"kof95h", "084-c5.bin", 2097152, 0x8a2c1edc, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"kof95", "kof95_c5.rom", 4194304, 0xfd45472a, 2097152, 2097152},
-		{"kof95", "084-c5.bin", 2097152, 0x8a2c1edc, 0, 2097152},
+		{"kof95h", "084-c5.bin", 2097152, 0x8a2c1edc, 0, 2097152},
 	},
 	{
 		FULL_COPY,
@@ -2882,11 +2886,13 @@ struct Rom neoragex_roms[] =
 		{"joyjoy", "n022001a.638", 524288, 0x7e134979, 262144, 262144},
 		{"joyjoy", "021-c2.bin", 524288, 0x09ed5258, 0, 262144},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		FULL_COPY,
 		{"lbowling", "n050001a.478", 65536, 0x535ec016, 0, 65536},
 		{"lbowling", "019-m1.bin", 131072, 0x589d7f25, 0, 65536},
 	},
+	*/
 	{
 		EVEN_COPY,
 		{"lbowling", "n050001a.038", 524288, 0x380e358d, 0, 262144},
@@ -3357,11 +3363,13 @@ struct Rom neoragex_roms[] =
 		{"ridhero", "n046001a.038", 524288, 0xdabfac95, 262144, 262144},
 		{"ridheroh", "006-p1h.bin", 524288, 0x52445646, 0, 262144},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		FULL_COPY,
 		{"ridhero", "n046001a.478", 65536, 0xf7196558, 0, 65536},
 		{"ridheroh", "006-m1.bin", 131072, 0xf0b6425d, 0, 65536},
 	},
+	*/
 	{
 		EVEN_COPY,
 		{"ridhero", "n046001a.538", 524288, 0x24096241, 0, 262144},
@@ -3405,12 +3413,12 @@ struct Rom neoragex_roms[] =
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.038", 524288, 0x4483bae1, 0, 262144},
-		{"sengokh", "017-p1h.bin", 524288, 0x33eccae0, 0, 262144},
+		{"sengokh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.038", 524288, 0x4483bae1, 262144, 262144},
-		{"sengokh", "017-p1h.bin", 524288, 0x33eccae0, 0, 262144},
+		{"sengokh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
 	},
 	{
 		FULL_COPY,
@@ -4559,12 +4567,12 @@ struct Rom neoragex_roms[] =
 	{
 		EVEN_COPY,
 		{"wh1", "n138001a.038", 524288, 0xab39923d, 0, 262144},
-		{"wh1h", "053-p1.rom", 524288, 0x95b574cb, 0, 262144},
+		{"wh1h", "053-p1.bin", 524288, 0x95b574cb, 0, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"wh1", "n138001a.03c", 524288, 0x5adc98ef, 0, 262144},
-		{"wh1h", "053-p2.rom", 524288, 0xf198ed45, 0, 262144},
+		{"wh1h", "053-p2.bin", 524288, 0xf198ed45, 0, 262144},
 	},
 	{
 		EVEN_COPY,
@@ -4649,12 +4657,12 @@ struct Rom neoragex_roms[] =
 	{
 		ODD_COPY,
 		{"wh1", "n138001a.038", 524288, 0xab39923d, 262144, 262144},
-		{"wh1h", "053-p1.rom", 524288, 0x95b574cb, 0, 262144},
+		{"wh1h", "053-p1.bin", 524288, 0x95b574cb, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"wh1", "n138001a.03c", 524288, 0x5adc98ef, 262144, 262144},
-		{"wh1h", "053-p2.rom", 524288, 0xf198ed45, 0, 262144},
+		{"wh1h", "053-p2.bin", 524288, 0xf198ed45, 0, 262144},
 	},
 	{
 		ODD_COPY,
@@ -5835,72 +5843,72 @@ struct Rom neoragex_roms[] =
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c7.rom", 524288, 0x7a01f666, 0, 524288},
-		{"samsho3", "087-c7.bin", 1048576, 0xae450e3d, 0, 524288},
+		{"samsho3h", "087-c7.bin", 1048576, 0xae450e3d, 0, 524288},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c8.rom", 524288, 0xffd009c2, 0, 524288},
-		{"samsho3", "087-c8.bin", 1048576, 0xa9e82717, 0, 524288},
+		{"samsho3h", "087-c8.bin", 1048576, 0xa9e82717, 0, 524288},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c1.rom", 4194304, 0xe079f767, 0, 2097152},
-		{"samsho3", "087-c1.bin", 4194304, 0x07a233bc, 2097152, 2097152},
+		{"samsho3h", "087-c1.bin", 4194304, 0x07a233bc, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c2.rom", 4194304, 0xfc045909, 0, 2097152},
-		{"samsho3", "087-c2.bin", 4194304, 0x7a413592, 2097152, 2097152},
+		{"samsho3h", "087-c2.bin", 4194304, 0x7a413592, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c3.rom", 4194304, 0xc61218d7, 0, 2097152},
-		{"samsho3", "087-c3.bin", 4194304, 0x8b793796, 2097152, 2097152},
+		{"samsho3h", "087-c3.bin", 4194304, 0x8b793796, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c4.rom", 4194304, 0x054ec754, 0, 2097152},
-		{"samsho3", "087-c4.bin", 4194304, 0x728fbf11, 2097152, 2097152},
+		{"samsho3h", "087-c4.bin", 4194304, 0x728fbf11, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c5.rom", 4194304, 0x05feee47, 0, 2097152},
-		{"samsho3", "087-c5.bin", 4194304, 0x172ab180, 2097152, 2097152},
+		{"samsho3h", "087-c5.bin", 4194304, 0x172ab180, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c6.rom", 4194304, 0xef7d9e29, 0, 2097152},
-		{"samsho3", "087-c6.bin", 4194304, 0x002ff8f3, 2097152, 2097152},
+		{"samsho3h", "087-c6.bin", 4194304, 0x002ff8f3, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c1.rom", 4194304, 0xe079f767, 2097152, 2097152},
-		{"samsho3", "087-c1.bin", 4194304, 0x07a233bc, 0, 2097152},
+		{"samsho3h", "087-c1.bin", 4194304, 0x07a233bc, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c2.rom", 4194304, 0xfc045909, 2097152, 2097152},
-		{"samsho3", "087-c2.bin", 4194304, 0x7a413592, 0, 2097152},
+		{"samsho3h", "087-c2.bin", 4194304, 0x7a413592, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c3.rom", 4194304, 0xc61218d7, 2097152, 2097152},
-		{"samsho3", "087-c3.bin", 4194304, 0x8b793796, 0, 2097152},
+		{"samsho3h", "087-c3.bin", 4194304, 0x8b793796, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c4.rom", 4194304, 0x054ec754, 2097152, 2097152},
-		{"samsho3", "087-c4.bin", 4194304, 0x728fbf11, 0, 2097152},
+		{"samsho3h", "087-c4.bin", 4194304, 0x728fbf11, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c5.rom", 4194304, 0x05feee47, 2097152, 2097152},
-		{"samsho3", "087-c5.bin", 4194304, 0x172ab180, 0, 2097152},
+		{"samsho3h", "087-c5.bin", 4194304, 0x172ab180, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"samsho3", "sams3_c6.rom", 4194304, 0xef7d9e29, 2097152, 2097152},
-		{"samsho3", "087-c6.bin", 4194304, 0x002ff8f3, 0, 2097152},
+		{"samsho3h", "087-c6.bin", 4194304, 0x002ff8f3, 0, 2097152},
 	},
 	{
 		FULL_COPY,
@@ -7020,6 +7028,7 @@ struct Rom callus_roms[] =
 		{"willowj", "wl35.bin", 131072, 0x5eff7951, 0, 131072},
 		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 262144, 131072},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		EVEN_COPY,
 		{"area88", "ar09.bin", 131072, 0xdb9376f8, 0, 131072},
@@ -7240,6 +7249,7 @@ struct Rom callus_roms[] =
 		{"ffightj", "ff35.bin", 131072, 0x4a934121, 0, 131072},
 		{"ffightj", "ff32-32m.bin", 524288, 0xc747696e, 262144, 131072},
 	},
+	*/
 	{
 		EVEN_COPY,
 		{"knightsj", "krj35.bin", 131072, 0x1172806d, 0, 131072},
@@ -7260,6 +7270,7 @@ struct Rom callus_roms[] =
 		{"knightsj", "krj29.bin", 131072, 0xf854b020, 0, 131072},
 		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 262144, 131072},
 	},
+	/* Changed whilst doing MAME v0.128
 	{
 		EVEN_COPY,
 		{"mercsj", "so2_09.bin", 131072, 0x690c261d, 0, 131072},
@@ -7700,6 +7711,7 @@ struct Rom callus_roms[] =
 		{"wonder3", "rt33.bin", 131072, 0xd6a99384, 0, 131072},
 		{"wonder3", "3wonders.03", 524288, 0xe35ce720, 262144, 131072},
 	},
+	*/
 	{0}
 };
 
@@ -7955,7 +7967,7 @@ struct Rom shark_roms[] =
 	{
 		FULL_COPY,
 		{"tigerheli",  "rom18.bin",     512, 0x4e7ede2b,     0, 256},
-		{"tigerh2",    "82s129.12q",    256, 0x2c69350d,     0, 256},
+		{"tigerhb2",   "82s129.12q",    256, 0x2c69350d,     0, 256},
 	},
 	{
 		BLOCK_FILL,
@@ -7965,7 +7977,7 @@ struct Rom shark_roms[] =
 	{
 		FULL_COPY,
 		{"tigerheli",  "rom19.bin",     512, 0x81cc6a63,     0, 256},
-		{"tigerh2",    "82s129.12n",    256, 0x25f273f2,     0, 256},
+		{"tigerhb2",   "82s129.12n",    256, 0x25f273f2,     0, 256},
 	},
 	{
 		BLOCK_FILL,
@@ -7975,7 +7987,7 @@ struct Rom shark_roms[] =
 	{
 		FULL_COPY,
 		{"tigerheli",  "rom20.bin",     512, 0x27bb9d8c,     0, 256},
-		{"tigerh2",    "82s129.12m",    256, 0x7142e972,     0, 256},
+		{"tigerhb2",   "82s129.12m",    256, 0x7142e972,     0, 256},
 	},
 	{
 		BLOCK_FILL,
