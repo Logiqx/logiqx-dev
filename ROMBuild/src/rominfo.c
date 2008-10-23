@@ -1748,7 +1748,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001d.1fc", 524288, 0xb1a0ccb0, 0, 524288},
 		{"3countb", "043-v2.bin", 2097152, 0xc69a827b, 1572864, 524288},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		EVEN_COPY,
 		{"3countb", "n106001a.038", 524288, 0x10dbe66a, 0, 262144},
@@ -1840,7 +1840,7 @@ struct Rom neoragex_roms[] =
 		{"3countb", "n106001d.63c", 524288, 0x521b6df1, 0, 262144},
 		{"3countb", "043-c4.bin", 2097152, 0x1887e5c0, 1572864, 262144},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		ODD_COPY,
 		{"3countb", "n106001a.038", 524288, 0x10dbe66a, 262144, 262144},
@@ -2042,12 +2042,87 @@ struct Rom neoragex_roms[] =
 		{"whp", "whp_c4.rom", 4194304, 0xe55832d1, 2097152, 2097152},
 		{"whp", "090-c4.bin", 2097152, 0xf9c8dd26, 0, 2097152},
 	},
-	/* Since MAME changed alpham2 in v0.56 it is impossible to re-build
 	{
 		FULL_COPY,
 		{"alpham2", "n082001a.178", 524288, 0x7ec0e76d, 0, 524288},
-		{"alpham2", "lstg_v11.rom", 1048576, 0xcd5db931, 0, 524288},
+		{"alpham2", "007-v1.bin", 1048576, 0xcd5db931, 0, 524288},
 	},
+	{
+		FULL_COPY,
+		{"alpham2", "n082001b.178", 524288, 0x70bc86a5, 0, 524288},
+		{"alpham2", "007-v2.bin", 1048576, 0x63e9b574, 0, 524288},
+	},
+	{
+		FULL_COPY,
+		{"alpham2", "n082001a.17c", 524288, 0x7a796ead, 0, 524288},
+		{"alpham2", "007-v1.bin", 1048576, 0xcd5db931, 524288, 524288},
+	},
+	{
+		FULL_COPY,
+		{"alpham2", "n082001b.17c", 524288, 0x29963a92, 0, 524288},
+		{"alpham2", "007-v2.bin", 1048576, 0x63e9b574, 524288, 524288},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001b.538", 524288, 0x3a7fe4fd, 0, 262144},
+		{"alpham2", "007-c3.bin", 524288, 0x68c2994e, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001b.538", 524288, 0x3a7fe4fd, 262144, 262144},
+		{"alpham2", "007-c3.bin", 524288, 0x68c2994e, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001a.538", 524288, 0xc516b09e, 0, 262144},
+		{"alpham2", "007-c1.bin", 1048576, 0x8fba8ff3, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001a.538", 524288, 0xc516b09e, 262144, 262144},
+		{"alpham2", "007-c1.bin", 1048576, 0x8fba8ff3, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001b.638", 524288, 0xd0e8eef3, 0, 262144},
+		{"alpham2", "007-c4.bin", 524288, 0x7d588349, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001b.638", 524288, 0xd0e8eef3, 262144, 262144},
+		{"alpham2", "007-c4.bin", 524288, 0x7d588349, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001a.638", 524288, 0x6b674581, 0, 262144},
+		{"alpham2", "007-c2.bin", 1048576, 0x4dad2945, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001a.638", 524288, 0x6b674581, 262144, 262144},
+		{"alpham2", "007-c2.bin", 1048576, 0x4dad2945, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001a.53c", 524288, 0xd9a0ff6c, 0, 262144},
+		{"alpham2", "007-c1.bin", 1048576, 0x8fba8ff3, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001a.53c", 524288, 0xd9a0ff6c, 262144, 262144},
+		{"alpham2", "007-c1.bin", 1048576, 0x8fba8ff3, 524288, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"alpham2", "n082001a.63c", 524288, 0x4ff21008, 0, 262144},
+		{"alpham2", "007-c2.bin", 1048576, 0x4dad2945, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"alpham2", "n082001a.63c", 524288, 0x4ff21008, 262144, 262144},
+		{"alpham2", "007-c2.bin", 1048576, 0x4dad2945, 524288, 262144},
+	},
+	/* MAME changed alpham2 in v0.56 so it is impossible to re-build some of the original ROMs
 	{
 		FULL_COPY,
 		{"alpham2", "n082001a.278", 524288, 0x45f5e914, 0, 524288},
@@ -2057,11 +2132,6 @@ struct Rom neoragex_roms[] =
 		FULL_COPY,
 		{"alpham2", "n082001a.478", 65536, 0x0449acf5, 0, 65536},
 		{"alpham2", "lstg_m1.rom", 131072, 0xf23d3076, 0, 65536},
-	},
-	{
-		FULL_COPY,
-		{"alpham2", "n082001b.178", 524288, 0x70bc86a5, 0, 524288},
-		{"alpham2", "lstg_v12.rom", 1048576, 0x63e9b574, 0, 524288},
 	},
 	{
 		FULL_COPY,
@@ -2080,18 +2150,8 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"alpham2", "n082001a.17c", 524288, 0x7a796ead, 0, 524288},
-		{"alpham2", "lstg_v11.rom", 1048576, 0xcd5db931, 524288, 524288},
-	},
-	{
-		FULL_COPY,
 		{"alpham2", "n082001a.27c", 524288, 0x07524063, 0, 524288},
 		{"alpham2", "lstg_v21.rom", 1048576, 0xff7ebf79, 524288, 524288},
-	},
-	{
-		FULL_COPY,
-		{"alpham2", "n082001b.17c", 524288, 0x29963a92, 0, 524288},
-		{"alpham2", "lstg_v12.rom", 1048576, 0x63e9b574, 524288, 524288},
 	},
 	{
 		FULL_COPY,
@@ -2107,46 +2167,6 @@ struct Rom neoragex_roms[] =
 		FULL_COPY,
 		{"alpham2", "n082001d.27c", 524288, 0x6a2e400d, 0, 524288},
 		{"alpham2", "lstg_v24.rom", 1048576, 0x658ee845, 524288, 524288},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001b.538", 524288, 0x3a7fe4fd, 0, 262144},
-		{"alpham2", "lstg_c3.rom", 524288, 0x68c2994e, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001b.538", 524288, 0x3a7fe4fd, 262144, 262144},
-		{"alpham2", "lstg_c3.rom", 524288, 0x68c2994e, 0, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001a.538", 524288, 0xc516b09e, 0, 262144},
-		{"alpham2", "lstg_c1.rom", 1048576, 0x8fba8ff3, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001a.538", 524288, 0xc516b09e, 262144, 262144},
-		{"alpham2", "lstg_c1.rom", 1048576, 0x8fba8ff3, 0, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001b.638", 524288, 0xd0e8eef3, 0, 262144},
-		{"alpham2", "lstg_c4.rom", 524288, 0x7d588349, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001b.638", 524288, 0xd0e8eef3, 262144, 262144},
-		{"alpham2", "lstg_c4.rom", 524288, 0x7d588349, 0, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001a.638", 524288, 0x6b674581, 0, 262144},
-		{"alpham2", "lstg_c2.rom", 1048576, 0x4dad2945, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001a.638", 524288, 0x6b674581, 262144, 262144},
-		{"alpham2", "lstg_c2.rom", 1048576, 0x4dad2945, 0, 262144},
 	},
 	{
 		EVEN_COPY,
@@ -2167,26 +2187,6 @@ struct Rom neoragex_roms[] =
 		ODD_COPY,
 		{"alpham2", "n082001a.03c", 524288, 0xb0366875, 262144, 262144},
 		{"alpham2", "lstg_p1.rom", 1048576, 0x7b0ebe08, 524288, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001a.53c", 524288, 0xd9a0ff6c, 0, 262144},
-		{"alpham2", "lstg_c1.rom", 1048576, 0x8fba8ff3, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001a.53c", 524288, 0xd9a0ff6c, 262144, 262144},
-		{"alpham2", "lstg_c1.rom", 1048576, 0x8fba8ff3, 524288, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"alpham2", "n082001a.63c", 524288, 0x4ff21008, 0, 262144},
-		{"alpham2", "lstg_c2.rom", 1048576, 0x4dad2945, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"alpham2", "n082001a.63c", 524288, 0x4ff21008, 262144, 262144},
-		{"alpham2", "lstg_c2.rom", 1048576, 0x4dad2945, 524288, 262144},
 	},
 	*/
 	{
@@ -2209,7 +2209,8 @@ struct Rom neoragex_roms[] =
 		{"2020bb", "n046001b.1fc", 524288, 0x88b10192, 0, 524288},
 		{"2020bbh", "030-v2.bin", 1048576, 0x54994455, 524288, 524288},
 	},
-	/*{
+	/* I do not recall when these were removed from MAME
+	{
 		EVEN_COPY,
 		{"2020bb", "n046001b.538", 524288, 0x0b054a38, 0, 262144},
 		{"2020bbh", "030-c3.bin", 524288, 0x6a87ae30, 0, 262144},
@@ -2299,7 +2300,6 @@ struct Rom neoragex_roms[] =
 		{"androdun", "n138001a.03c", 524288, 0x11beb098, 262144, 262144},
 		{"androdun", "049-p2.bin", 524288, 0x2f062209, 0, 262144},
 	},
-	/* Since MAME changed androdun in v0.70 it is impossible to re-build
 	{
 		EVEN_COPY,
 		{"androdun", "n138001a.538", 524288, 0xca08e432, 0, 262144},
@@ -2310,6 +2310,77 @@ struct Rom neoragex_roms[] =
 		{"androdun", "n138001a.638", 524288, 0x7a0deb9e, 0, 262144},
 		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
 	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001c.538", 524288, 0xca08e432, 0, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001c.638", 524288, 0x7a0deb9e, 0, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001a.53c", 524288, 0xfcbcb305, 0, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001a.63c", 524288, 0xb1c640f5, 0, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001c.53c", 524288, 0xfcbcb305, 0, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
+	},
+	{
+		EVEN_COPY,
+		{"androdun", "n138001c.63c", 524288, 0xb1c640f5, 0, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001a.538", 524288, 0xca08e432, 262144, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001a.638", 524288, 0x7a0deb9e, 262144, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001c.538", 524288, 0xca08e432, 262144, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001c.638", 524288, 0x7a0deb9e, 262144, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001a.53c", 524288, 0xfcbcb305, 262144, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001a.63c", 524288, 0xb1c640f5, 262144, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001c.53c", 524288, 0xfcbcb305, 262144, 262144},
+		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
+	},
+	{
+		ODD_COPY,
+		{"androdun", "n138001c.63c", 524288, 0xb1c640f5, 262144, 262144},
+		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
+	},
+	/* Since MAME changed androdun in v0.70 it is impossible to re-build some of these ROMs
 	{
 		EVEN_COPY,
 		{"androdun", "n138001b.538", 524288, 0x806ab937, 0, 262144},
@@ -2327,16 +2398,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		EVEN_COPY,
-		{"androdun", "n138001c.538", 524288, 0xca08e432, 0, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"androdun", "n138001c.638", 524288, 0x7a0deb9e, 0, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
-	},
-	{
-		EVEN_COPY,
 		{"androdun", "n138001d.538", 524288, 0x806ab937, 0, 262144},
 		{"androdun", "049-c3.bin", 1048576, 0x2e0f3f9a, 0, 262144},
 	},
@@ -2344,16 +2405,6 @@ struct Rom neoragex_roms[] =
 		EVEN_COPY,
 		{"androdun", "n138001d.638", 524288, 0x33bee10f, 0, 262144},
 		{"androdun", "049-c4.bin", 1048576, 0x4a19fb92, 0, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"androdun", "n138001a.53c", 524288, 0xfcbcb305, 0, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"androdun", "n138001a.63c", 524288, 0xb1c640f5, 0, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
 	},
 	{
 		EVEN_COPY,
@@ -2367,16 +2418,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		EVEN_COPY,
-		{"androdun", "n138001c.53c", 524288, 0xfcbcb305, 0, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
-	},
-	{
-		EVEN_COPY,
-		{"androdun", "n138001c.63c", 524288, 0xb1c640f5, 0, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
-	},
-	{
-		EVEN_COPY,
 		{"androdun", "n138001d.53c", 524288, 0xe7e1a2be, 0, 262144},
 		{"androdun", "049-c3.bin", 1048576, 0x2e0f3f9a, 524288, 262144},
 	},
@@ -2384,16 +2425,6 @@ struct Rom neoragex_roms[] =
 		EVEN_COPY,
 		{"androdun", "n138001d.63c", 524288, 0x70f0d263, 0, 262144},
 		{"androdun", "049-c4.bin", 1048576, 0x4a19fb92, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001a.538", 524288, 0xca08e432, 262144, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001a.638", 524288, 0x7a0deb9e, 262144, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
 	},
 	{
 		ODD_COPY,
@@ -2407,16 +2438,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		ODD_COPY,
-		{"androdun", "n138001c.538", 524288, 0xca08e432, 262144, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 0, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001c.638", 524288, 0x7a0deb9e, 262144, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 0, 262144},
-	},
-	{
-		ODD_COPY,
 		{"androdun", "n138001d.538", 524288, 0x806ab937, 262144, 262144},
 		{"androdun", "049-c3.bin", 1048576, 0x2e0f3f9a, 0, 262144},
 	},
@@ -2427,28 +2448,8 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		ODD_COPY,
-		{"androdun", "n138001a.53c", 524288, 0xfcbcb305, 262144, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001a.63c", 524288, 0xb1c640f5, 262144, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
-	},
-	{
-		ODD_COPY,
 		{"androdun", "n138001b.53c", 524288, 0xe7e1a2be, 262144, 262144},
 		{"androdun", "049-c3.bin", 1048576, 0x2e0f3f9a, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001c.53c", 524288, 0xfcbcb305, 262144, 262144},
-		{"androdun", "049-c1.bin", 1048576, 0x7ace6db3, 524288, 262144},
-	},
-	{
-		ODD_COPY,
-		{"androdun", "n138001c.63c", 524288, 0xb1c640f5, 262144, 262144},
-		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
 	},
 	{
 		ODD_COPY,
@@ -2886,7 +2887,7 @@ struct Rom neoragex_roms[] =
 		{"joyjoy", "n022001a.638", 524288, 0x7e134979, 262144, 262144},
 		{"joyjoy", "021-c2.bin", 524288, 0x09ed5258, 0, 262144},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		FULL_COPY,
 		{"lbowling", "n050001a.478", 65536, 0x535ec016, 0, 65536},
@@ -3363,7 +3364,7 @@ struct Rom neoragex_roms[] =
 		{"ridhero", "n046001a.038", 524288, 0xdabfac95, 262144, 262144},
 		{"ridheroh", "006-p1h.bin", 524288, 0x52445646, 0, 262144},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		FULL_COPY,
 		{"ridhero", "n046001a.478", 65536, 0xf7196558, 0, 65536},
@@ -3565,7 +3566,7 @@ struct Rom neoragex_roms[] =
 		{"superspy", "n138001a.178", 524288, 0xb993bc83, 0, 524288},
 		{"superspy", "011-v11.bin", 1048576, 0x5c674d5c, 0, 524288},
 	},
-	/* No longer possible from MAME v0.122 onwards
+	/* Not possible from MAME v0.122 onwards
 	{
 		FULL_COPY,
 		{"superspy", "n138001a.278", 524288, 0x426cd040, 0, 524288},
@@ -3591,13 +3592,6 @@ struct Rom neoragex_roms[] =
 		{"superspy", "n138001b.17c", 524288, 0x9f513d5a, 0, 524288},
 		{"superspy", "011-v12.bin", 1048576, 0x7df8898b, 0, 524288},
 	},
-	*/
-	{
-		FULL_COPY,
-		{"superspy", "n138001c.178", 524288, 0xb993bc83, 0, 524288},
-		{"superspy", "011-v11.bin", 1048576, 0x5c674d5c, 0, 524288},
-	},
-	/* No longer possible from MAME v0.122 onwards
 	{
 		FULL_COPY,
 		{"superspy", "n138001d.178", 524288, 0x9f513d5a, 0, 524288},
@@ -3609,6 +3603,11 @@ struct Rom neoragex_roms[] =
 		{"superspy", "011-v12.bin", 1048576, 0x7df8898b, 0, 524288},
 	},
 	*/
+	{
+		FULL_COPY,
+		{"superspy", "n138001c.178", 524288, 0xb993bc83, 0, 524288},
+		{"superspy", "011-v11.bin", 1048576, 0x5c674d5c, 0, 524288},
+	},
 	{
 		FULL_COPY,
 		{"superspy", "n138001a.17c", 524288, 0xd7a059b1, 0, 524288},
@@ -6640,175 +6639,175 @@ struct Rom sage_roms[] =
 
 struct Rom grytra_roms[] =
 {
-	/*
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-7.rom", 65536, 0x57f467d2, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x00000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x00000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-7.rom", 65536, 0x57f467d2, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x00000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x00000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-10.rom", 65536, 0xe6db9685, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x08000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x08000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-10.rom", 65536, 0xe6db9685, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x08000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x08000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-9.rom", 65536, 0x875c61de, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x10000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x10000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-9.rom", 65536, 0x875c61de, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x10000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x10000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-8.rom", 65536, 0x642765d6, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x18000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x18000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-8.rom", 65536, 0x642765d6, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x18000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x18000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-15.rom", 65536, 0xdaa2324b, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x20000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x20000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-15.rom", 65536, 0xdaa2324b, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x20000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x20000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-16.rom", 65536, 0xe27cc835, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x28000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x28000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-16.rom", 65536, 0xe27cc835, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x28000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x28000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-17.rom", 65536, 0xce4330b9, 0x00000, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x30000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x30000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-17.rom", 65536, 0xce4330b9, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x30000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x30000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-18.rom", 65536, 0x1571ce42, 0, 65536},
-		{"contrajb", "633e04.7d", 262144, 0x14ddc542, 0x38000, 32768},
+		{"contraj", "633e04.7d", 262144, 0x14ddc542, 0x38000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-18.rom", 65536, 0x1571ce42, 0, 65536},
-		{"contrajb", "633e05.7f", 262144, 0x42185044, 0x38000, 32768},
+		{"contraj", "633e05.7f", 262144, 0x42185044, 0x38000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-4.rom", 65536, 0x2cc7e52c, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x00000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x00000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-4.rom", 65536, 0x2cc7e52c, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x00000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x00000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-5.rom", 65536, 0xe01a5b9c, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x08000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x08000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-5.rom", 65536, 0xe01a5b9c, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x08000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x08000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-6.rom", 65536, 0xaeea6744, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x10000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x10000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-6.rom", 65536, 0xaeea6744, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x10000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x10000, 32768},
 	},
 	// g-14.rom was slightly different in the original set. Last 8k is now empty (all 0xff)
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-14.rom", 65536, 0x765afdc7, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x18000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x18000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-14.rom", 65536, 0x765afdc7, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x18000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x18000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-11.rom", 65536, 0xbd9ba92c, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x20000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x20000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-11.rom", 65536, 0xbd9ba92c, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x20000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x20000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-12.rom", 65536, 0xd0be7ec2, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x28000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x28000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-12.rom", 65536, 0xd0be7ec2, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x28000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x28000, 32768},
 	},
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-13.rom", 65536, 0x2b513d12, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x30000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x30000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-13.rom", 65536, 0x2b513d12, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x30000, 32768},
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x30000, 32768},
 	},
 	// This ROM isn't needed by Gryzor (never really existed ;)
 	{
 		COMBINE_EVEN,
 		{"gryzor", "g-19.rom", 65536, 0xdeab7e4e, 0, 65536},
-		{"contrajb", "633e06.16d", 262144, 0x9cf6faae, 0x38000, 32768},
+		{"contraj", "633e06.16d", 262144, 0x9cf6faae, 0x38000, 32768},
 	},
 	{
 		COMBINE_ODD,
 		{"gryzor", "g-19.rom", 65536, 0xdeab7e4e, 0, 65536},
-		{"contrajb", "633e07.16f", 262144, 0xf2d06638, 0x38000, 32768},
-	},*/
+		{"contraj", "633e07.16f", 262144, 0xf2d06638, 0x38000, 32768},
+	},
 	{0}
 };
 
 struct Rom s11emu_roms[] =
 {
-	/*{
+	/* I do not recall when these were removed from MAME
+	{
 		EVEN_COPY,
 		{"tk2b", "wavebh", 2097152, 0x344c0c89, 0, 2097152},
 		{"tekken2a", "tes1wavb.8k", 4194304, 0xbee9a7e6, 0, 2097152},
@@ -7033,7 +7032,7 @@ struct Rom callus_roms[] =
 		{"willowj", "wl35.bin", 131072, 0x5eff7951, 0, 131072},
 		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 262144, 131072},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		EVEN_COPY,
 		{"area88", "ar09.bin", 131072, 0xdb9376f8, 0, 131072},
@@ -7275,7 +7274,7 @@ struct Rom callus_roms[] =
 		{"knightsj", "krj29.bin", 131072, 0xf854b020, 0, 131072},
 		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 262144, 131072},
 	},
-	/* Changed whilst doing MAME v0.128
+	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		EVEN_COPY,
 		{"mercsj", "so2_09.bin", 131072, 0x690c261d, 0, 131072},
