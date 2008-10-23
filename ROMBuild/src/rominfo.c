@@ -6310,6 +6310,11 @@ struct Rom neoragex_roms[] =
 		{"wjammers", "windj_v4.rom", 524288, 0x3740edde, 0, 524288},
 		{"wjammers", "065-v4.bin", 1048576, 0x5dee7963, 0, 524288},
 	},
+        {
+                FULL_COPY,
+                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+        },
 	{0}
 };
 
@@ -10561,6 +10566,11 @@ struct Rom calice_roms[] =
 		{"2020bbh", "2020_c4.rom", 524288, 0xbef75dd0, 0, 524288},
 		{"2020bbh", "030-c4.bin", 1048576, 0x780d1c4e, 0, 524288},
 	},
+        {
+                FULL_COPY,
+                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+        },
 	{0}
 };
 
@@ -10576,6 +10586,11 @@ struct Rom nebula_jukebox_roms[] =
 		{"von2", "srom4.u25", 2097152, 0xb7c1bebf, 0, 2097152},
 		{"von2", "mpr-20666.25", 4194304, 0x3ecb2606, 2097152, 2097152},
 	},
+        {
+                FULL_COPY,
+                {"sonicwi2", "075-v2.bin", 524288, 0x6d0a728e, 0, 524288},
+                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+        },
 	{0}
 };
 
@@ -10882,6 +10897,11 @@ struct Rom rcps_roms[] =
 		{"wjammers", "windj_v4.rom", 524288, 0x3740edde, 0, 524288},
 		{"wjammers", "065-v4.bin", 1048576, 0x5dee7963, 0, 524288},
 	},
+        {
+                FULL_COPY,
+                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+        },
 	{0}
 };
 
