@@ -1,3 +1,11 @@
+23/10/2008  *** v2.11 ***
+
+            Changes related to MAME v0.128:
+            kof95->kof95h, samsho3->samsho3h, tigerh2->tigerhb2, msvc->msvcr1.
+            Internal ROM renames for sengokh and wh1h.
+            Added knowledge of old v2 sound ROM from sonicwi2 (various emus).
+            Re-introduced some alpham2 and andodun ROMs for NeoRAGEx.
+
 04/04/2008  *** v2.10 ***
 
             Updated details for World Heroes (NeoRAGEx) to match MAME v0.120.
