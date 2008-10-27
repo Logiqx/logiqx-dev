@@ -5061,7 +5061,9 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    CRC Conflict\n");
 			if (dat->rom_warnings & FLAG_ROM_SHA1_MD5_CONFLICT)
 			{
-				if (dat->options->options & OPTION_MD5_CHECKSUMS)
+				if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
+					fprintf(dat->log_file, "    MD5/SHA1 Conflict\n");
+				else if (dat->options->options & OPTION_MD5_CHECKSUMS)
 					fprintf(dat->log_file, "    MD5 Conflict\n");
 				else
 					fprintf(dat->log_file, "    SHA1 Conflict\n");
@@ -5086,7 +5088,9 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing SHA1\n");
 			if (dat->disk_warnings & FLAG_DISK_SHA1_MD5_CONFLICT)
 			{
-				if (dat->options->options & OPTION_MD5_CHECKSUMS)
+				if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
+					fprintf(dat->log_file, "    MD5/SHA1 Conflict\n");
+				else if (dat->options->options & OPTION_MD5_CHECKSUMS)
 					fprintf(dat->log_file, "    MD5 Conflict\n");
 				else
 					fprintf(dat->log_file, "    SHA1 Conflict\n");
@@ -5283,7 +5287,9 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    ROM %s - CRC Conflict (%08lx)\n", curr_rom->name, (unsigned long)curr_rom->crc);
 						if (curr_rom->rom_warnings & FLAG_ROM_SHA1_MD5_CONFLICT)
 						{
-							if (dat->options->options & OPTION_MD5_CHECKSUMS)
+							if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
+								fprintf(dat->log_file, "    ROM %s - MD5/SHA1 Conflict\n", curr_rom->name);
+							else if (dat->options->options & OPTION_MD5_CHECKSUMS)
 								fprintf(dat->log_file, "    ROM %s - MD5 Conflict (%s)\n", curr_rom->name, curr_rom->md5);
 							else
 								fprintf(dat->log_file, "    ROM %s - SHA1 Conflict (%s)\n", curr_rom->name, curr_rom->sha1);
@@ -5305,7 +5311,9 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    Disk %s - Missing SHA1\n", curr_disk->name);
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1_MD5_CONFLICT)
 						{
-							if (dat->options->options & OPTION_MD5_CHECKSUMS)
+							if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
+								fprintf(dat->log_file, "    ROM %s - MD5/SHA1 Conflict\n", curr_disk->name);
+							else if (dat->options->options & OPTION_MD5_CHECKSUMS)
 								fprintf(dat->log_file, "    Disk %s - MD5 Conflict (%s)\n", curr_disk->name, curr_disk->md5);
 							else
 								fprintf(dat->log_file, "    Disk %s - SHA1 Conflict (%s)\n", curr_disk->name, curr_disk->sha1);
@@ -6683,10 +6691,17 @@ struct dat *init_dat(struct options *options)
 
 	if (!errflg)
 	{
-		/* --- Default extended checksum is SHA1 --- */
+		/* --- If keeping full details then use both extended checksums, otherwise default extended checksum is SHA1 --- */
 
-		if (!(options->options & OPTION_MD5_CHECKSUMS))
+		if (options->options & OPTION_KEEP_FULL_DETAILS)
+		{
+			options->options|=OPTION_MD5_CHECKSUMS;
 			options->options|=OPTION_SHA1_CHECKSUMS;
+		}
+		else if (!(options->options & OPTION_MD5_CHECKSUMS))
+		{
+			options->options|=OPTION_SHA1_CHECKSUMS;
+		}
 
 		dat->options=options;
 	}

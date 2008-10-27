@@ -5,6 +5,7 @@ xx/xx/xxxx  *** v2.33 ***
 
             - Added SHA1 / MD5 information for Neil Corlett's KGPE hack.
             - Added support for AAE RomList.
+            - datutil -k now allows MD5 and SHA1 at the same time.
 
 16/07/2008  *** v2.32 ***
 
