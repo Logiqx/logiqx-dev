@@ -1552,9 +1552,6 @@ int store_tokenized_dat(struct dat *dat)
 					else if (type==TOKEN_ROM_CRC)
 					{
 						curr_rom->crc=strtoul(BUFFER2_PTR, NULL, 16);
-	
-						// Value may be zero so its presence needs remembering!
-						curr_rom->rom_flags|=FLAG_ROM_CRC;
 					}
 
 					else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
@@ -2454,10 +2451,19 @@ int store_tokenized_dat(struct dat *dat)
 	{
 		for (j=0; j<dat->games[i].num_roms; j++)
 		{
-			if (dat->games[i].roms[j].size!=0 && dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
+			if (dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
 			{
-				dat->games[i].roms[j].status="nodump";
-				dat->games[i].roms[j].rom_fixes|=FLAG_ROM_STATUS;
+				if (dat->games[i].roms[j].size!=0)
+				{
+					// ROMs with a CRC of 00000000 are not dumped
+					dat->games[i].roms[j].status="nodump";
+					dat->games[i].roms[j].rom_fixes|=FLAG_ROM_STATUS;
+				}
+				else
+				{
+					// Zero byte ROMs need a CRC of 00000000
+					dat->games[i].roms[j].rom_flags|=FLAG_ROM_CRC;
+				}
 			}
 		}
 	}
