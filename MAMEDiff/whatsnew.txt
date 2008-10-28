@@ -1,10 +1,11 @@
 History
 -------
 
-xx/xx/xxxx  *** v2.30 ***
+28/10/2008  *** v2.30 ***
 
             - Uses DatLib v2.33.
             - Added support for AAE RomList.
+            - Changed the directory scanner to process zero byte files / roms.
 
 11/05/2008  *** v2.29 ***
 

@@ -7,7 +7,7 @@
 
 
 #define MAMEDIFF_VERSION "v2.30"
-#define MAMEDIFF_DATE "Private Beta"
+#define MAMEDIFF_DATE "28 October 2008"
 
 
 /* --- Macros that used to be in DatLib but only used by MAMEDiff now! --- */
