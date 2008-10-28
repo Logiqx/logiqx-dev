@@ -2453,7 +2453,7 @@ int store_tokenized_dat(struct dat *dat)
 		{
 			if (dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
 			{
-				if (dat->games[i].roms[j].size!=0)
+				if (dat->games[i].roms[j].size!=0 || !(dat->games[i].roms[j].rom_flags & FLAG_ROM_SIZE))
 				{
 					// ROMs with a CRC of 00000000 are not dumped
 					dat->games[i].roms[j].status="nodump";
