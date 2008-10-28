@@ -5,11 +5,12 @@ xx/xx/xxxx  *** v2.43 ***
 
             - Uses DatLib v2.33.
             - Added SHA1 / MD5 information for Neil Corlett's KGPE hack.
-            - Added support for AAE RomList.
+            - Added load / support for AAE RomList.
             - datutil -k now allows MD5 and SHA1 at the same time.
             - datutil -n will NOT determine file types (everything = roms).
             - Changed the directory scanner to process zero byte files / roms.
-            - Support for a new rom/disk status of 'verified'
+            - Support for a new rom / disk status of 'verified'
+            - Added save support for the Hyperspin Database format.
 
 16/07/2008  *** v2.42 ***
 

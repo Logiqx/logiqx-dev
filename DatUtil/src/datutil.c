@@ -242,17 +242,17 @@ int main(int argc, char **argv)
 
 		printf("Output formats and aliases:\n\n");
 
-		printf("MAME ListInfo   listinfo info li clrmamepro clrmame cmpro cmp cm\n");
-  		printf("MAME ListXML    listxml xml lx\n");
-  		printf("Generic XML     genericxml generic gx\n");
-  		printf("RomCenter 2     romcenter2 rc2 romcenter rc\n");
-  		printf("Tab Delimited   delimited tab text\n");
-  		printf("AAE RomList     aaeromlist aae romlist\n");
-  		printf("MAME GameList   gamelist gl\n");
-  		printf("TitleList       titlelist titles\n");
-  		printf("RC2 Sublist     sublist sub rcsublist rcsub\n");
-  		printf("Map File        mapfile map\n\n");
-
+		printf("MAME ListInfo       listinfo info li clrmamepro clrmame cmpro cmp cm\n");
+  		printf("MAME ListXML        listxml xml lx\n");
+  		printf("Generic XML         genericxml generic gx\n");
+  		printf("RomCenter 2         romcenter2 rc2 romcenter rc\n");
+  		printf("Tab Delimited       delimited tab text\n");
+  		printf("AAE RomList         aaeromlist aae romlist\n");
+  		printf("MAME GameList       gamelist gl\n");
+  		printf("TitleList           titlelist titles\n");
+  		printf("RC2 Sublist         sublist sub rcsublist rcsub\n");
+  		printf("Map File            mapfile map\n");
+  		printf("HyperSpin Database  hyperspindb hyperspin hsdb\n\n");
 	}
 
 	if (!errflg)

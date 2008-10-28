@@ -1424,3 +1424,93 @@ int save_generic_xml(struct dat *dat)
 	dat->emulator.name="datafile";
 	return(save_mame_listxml(dat));
 }
+
+/* --------------------------------------------------------------------------
+ * Hyperspin Database - Save only
+ * -------------------------------------------------------------------------- */
+
+/* --- Identification --- */
+
+int identify_hyperspin_database(struct dat *dat)
+{
+	return(0);
+}
+
+
+/* --- Load --- */
+
+int load_hyperspin_database(struct dat *dat)
+{
+	return(0);
+}
+
+
+/* --- Specify --- */
+
+int specify_hyperspin_database(struct dat *dat)
+{
+	if (strcmp(dat->options->save_format, "hyperspindb") &&
+		strcmp(dat->options->save_format, "hyperspin") &&
+		strcmp(dat->options->save_format, "hsdb"))
+		return(0);
+	else
+		return(1);
+}
+
+
+/* --- Save --- */
+
+int save_hyperspin_database(struct dat *dat)
+{
+	struct game *curr_game;
+
+	int i;
+
+	int errflg=0;
+
+	fprintf(dat->out, "<menu>\n");
+
+	for (i=0, curr_game=dat->games; i<dat->num_games; i++, curr_game++)
+	{
+		if (curr_game->game_flags & FLAG_GAME_NAME || curr_game->game_flags & FLAG_MACHINE_NAME)
+		{
+			fprintf(dat->out, "  <game");
+			OUTPUT_STRING_ATTRIBUTE(game, name, "name", (FLAG_GAME_NAME|FLAG_RESOURCE_NAME|FLAG_MACHINE_NAME));
+			fprintf(dat->out, ">\n");
+
+			OUTPUT_STRING_ELEMENT(game, description, "    ", "description", FLAG_GAME_DESCRIPTION)
+			OUTPUT_STRING_ELEMENT(game, cloneof, "    ", "cloneof", FLAG_GAME_CLONEOF)
+			OUTPUT_STRING_ELEMENT(game, manufacturer, "    ", "manufacturer", FLAG_GAME_MANUFACTURER)
+			OUTPUT_STRING_ELEMENT(game, year, "    ", "year", FLAG_GAME_YEAR)
+
+			fprintf(dat->out, "  </game>\n");
+		}
+	}
+
+	fprintf(dat->out, "</menu>\n");
+
+	/* --- User only wants the games so don't report other details that are not saved! --- */
+
+	dat->emulator_saved=0xff;
+	dat->header_saved=0xffff;
+	dat->clrmamepro_saved=0xff;
+	dat->romcenter_saved=0xffff;
+	dat->game_saved=0xffff;
+	dat->release_saved=0xff;
+	dat->biosset_saved=0xff;
+	dat->rom_saved=0xffff;
+	dat->disk_saved=0xff;
+	dat->sample_saved=0xff;
+	dat->chip_saved=0xff;
+	dat->video_saved=0xff;
+	dat->display_saved=0xff;
+	dat->sound_saved=0xff;
+	dat->input_saved=0xff;
+	dat->control_saved=0xff;
+	dat->dipswitch_saved=0xff;
+	dat->dipvalue_saved=0xff;
+	dat->driver_saved=0xff;
+
+	return(errflg);
+}
+

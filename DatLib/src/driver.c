@@ -33,6 +33,7 @@ DECLARE_DRIVER(mame_gamelist, "MAME GameList", 0)
 DECLARE_DRIVER(allzip, "All Zip", 5)
 DECLARE_DRIVER(ziplist, "ZIP List", 5)
 DECLARE_DRIVER(map_file, "Map File", 0)
+DECLARE_DRIVER(hyperspin_database, "Hyperspin Database", 0)
 
 
 /* --- List the drivers that have already been declared --- */
@@ -62,6 +63,7 @@ const struct datlib_driver *datlib_drivers[] =
 	DRIVER(allzip)
 	DRIVER(ziplist)
 	DRIVER(map_file)
+	DRIVER(hyperspin_database)
 	0
 };
 

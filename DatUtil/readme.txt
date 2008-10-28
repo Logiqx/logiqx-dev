@@ -38,6 +38,7 @@ Save only:
   - Title List (for listing game titles - used by CPS-2 readme and RAINE docs)
   - RomCenter Sublist
   - Game Launcher / GameEx Map File
+  - Hyperspin Database
 
 Adding support for additional formats is really easy too. If you do add support
 for a new format please let me know and send me a copy of the code!
