@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	/* --- Get the options specified on the command line --- */
 
-	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:P:Z:N:g:cG:S:!rlsXDp:i:I:xmvd?")) != EOF)
+	while (!errflg && (c = getopt(argc, argv, "f:qkjo:a:tA:V:C:R:F:T:E:H:U:O:M:P:Z:N:g:cG:S:!rlsXDp:i:I:xmnvd?")) != EOF)
 	switch (c)
 	{
 		/* --- Saving --- */
@@ -198,6 +198,10 @@ int main(int argc, char **argv)
 			break;
 		case 'm':
 			options->options|=OPTION_MD5_CHECKSUMS;
+			break;
+		/* --- Directory scan --- */
+		case 'n':
+			options->options|=OPTION_NO_INSPECT_FILES;
 			break;
 		/* --- Information --- */
 		case 'v':
