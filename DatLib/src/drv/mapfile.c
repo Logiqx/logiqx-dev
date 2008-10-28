@@ -18,8 +18,6 @@
 
 extern const struct datlib_token datlib_tokens[];
 
-int game_parent_sort_function(const void *game1, const void *game2);
-
 
 /* --- Is debugging enabled? --- */
 
