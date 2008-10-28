@@ -1083,6 +1083,8 @@ struct ini_entry
 
 #define	OPTION_REDUCE_ZIP_STRUCTURES	0x10000000	// MAMEDiff -[dT] options
 
+#define	OPTION_NO_INSPECT_FILES		0x20000000	// DatUtil -n
+
 
 /* --- Datafile Flags (header information takes priority over command line options) --- */
 
