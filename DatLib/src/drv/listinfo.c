@@ -264,7 +264,8 @@ int load_mame_listinfo(struct dat *dat)
 					{
 						BUFFER1_GET_TOKEN
 
-						if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+						if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump") ||
+							!strcmp(TOKEN, "good") || !strcmp(TOKEN, "verified"))
 						{
 							BUFFER2_PUT_TOKEN(TOKEN_ROM_STATUS)
 						}
@@ -282,8 +283,11 @@ int load_mame_listinfo(struct dat *dat)
 
 					/* --- Support the bad syntax of MAME v0.68 --- */
 
-					else if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+					else if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump") ||
+						!strcmp(TOKEN, "good") || !strcmp(TOKEN, "verified"))
+					{
 						BUFFER2_PUT_TOKEN(TOKEN_ROM_STATUS)
+					}
 				}
 			}
 
@@ -309,14 +313,20 @@ int load_mame_listinfo(struct dat *dat)
 					{
 						BUFFER1_GET_TOKEN
 
-						if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+						if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump") ||
+							!strcmp(TOKEN, "good") || !strcmp(TOKEN, "verified"))
+						{
 							BUFFER2_PUT_TOKEN(TOKEN_DISK_STATUS)
+						}
 					}
 
 					/* --- Support the bad syntax of MAME v0.68 --- */
 
-					else if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump"))
+					else if (!strcmp(TOKEN, "baddump") || !strcmp(TOKEN, "nodump") ||
+						!strcmp(TOKEN, "good") || !strcmp(TOKEN, "verified"))
+					{
 						BUFFER2_PUT_TOKEN(TOKEN_DISK_STATUS)
+					}
 				}
 			}
 

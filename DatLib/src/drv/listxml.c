@@ -843,7 +843,7 @@ int save_mame_listxml(struct dat *dat)
 			if (dat->rom_flags & FLAG_ROM_OFFSET)
 				fprintf(dat->out, "\t\t\t<!ATTLIST rom offset CDATA #IMPLIED>\n");
 			if (dat->rom_flags & FLAG_ROM_STATUS)
-				fprintf(dat->out, "\t\t\t<!ATTLIST rom status (baddump|nodump|good) \"good\">\n");
+				fprintf(dat->out, "\t\t\t<!ATTLIST rom status (baddump|nodump|good|verified) \"good\">\n");
 			if (dat->rom_flags & FLAG_ROM_DISPOSE)
 				fprintf(dat->out, "\t\t\t<!ATTLIST rom dispose (yes|no) \"no\">\n");
 			if (dat->rom_flags & FLAG_ROM_SOUNDONLY)
@@ -865,7 +865,7 @@ int save_mame_listxml(struct dat *dat)
 			if (dat->disk_flags & FLAG_DISK_INDEX)
 				fprintf(dat->out, "\t\t\t<!ATTLIST disk index CDATA #IMPLIED>\n");
 			if (dat->disk_flags & FLAG_DISK_STATUS)
-				fprintf(dat->out, "\t\t\t<!ATTLIST disk status (baddump|nodump|good) \"good\">\n");
+				fprintf(dat->out, "\t\t\t<!ATTLIST disk status (baddump|nodump|good|verified) \"good\">\n");
 		}
 
 		if (dat->num_samples)

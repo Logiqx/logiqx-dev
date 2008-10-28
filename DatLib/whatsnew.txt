@@ -8,6 +8,7 @@ xx/xx/xxxx  *** v2.33 ***
             - datutil -k now allows MD5 and SHA1 at the same time.
             - datutil -n will NOT determine file types (everything = roms).
             - Changed the directory scanner to process zero byte files / roms.
+            - Support for a new rom/disk status of 'verified'
 
 16/07/2008  *** v2.32 ***
 
