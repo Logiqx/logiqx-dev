@@ -142,7 +142,7 @@ int output_disk_details(FILE *out, char *name, char *mem, uint32_t mem_size)
 	return(errflg);
 }
 
-int output_rom_details(FILE *out, char *name, uint32_t size, uint32_t crc, char *mem, uint32_t mem_size, FILE *in)
+int output_rom_details(struct dat *dat, FILE *out, char *name, uint32_t size, uint32_t crc, char *mem, uint32_t mem_size, FILE *in)
 {
 	md5_context md5ctx;
 	unsigned char md5sum[16];
@@ -189,7 +189,7 @@ int output_rom_details(FILE *out, char *name, uint32_t size, uint32_t crc, char 
 	fprintf(out, "%s %d\n", datlib_tokens[TOKEN_ROM_SIZE].description, size);
 	fprintf(out, "%s %08lx\n", datlib_tokens[TOKEN_ROM_CRC].description, (unsigned long) crc);
 
-	if (mem)
+	if (mem && dat->options->options & OPTION_EXTENDED_CHECKSUMS)
 	{
 		fprintf(out, "%s ", datlib_tokens[TOKEN_ROM_MD5].description);
 		for (i=0; i<16; i++)
@@ -207,14 +207,21 @@ int output_rom_details(FILE *out, char *name, uint32_t size, uint32_t crc, char 
 	return(errflg);
 }
 
-int determine_file_type(char *mem, uint32_t size)
+int determine_file_type(struct dat *dat, char *mem, uint32_t size)
 {
-	if (size>=8 && !strncmp(mem, "MComprHD", 8))
-		return(OPTION_OBJECT_TYPE_DISK);
-	else if (size>=12 && !strncmp(mem, "RIFF", 4) && !strncmp(mem+8, "WAVE", 4))
-		return(OPTION_OBJECT_TYPE_SAMPLE);
-	else
+	if (dat->options->options & OPTION_NO_INSPECT_FILES)
+	{
 		return(OPTION_OBJECT_TYPE_ROM);
+	}
+	else
+	{
+		if (size>=8 && !strncmp(mem, "MComprHD", 8))
+			return(OPTION_OBJECT_TYPE_DISK);
+		else if (size>=12 && !strncmp(mem, "RIFF", 4) && !strncmp(mem+8, "WAVE", 4))
+			return(OPTION_OBJECT_TYPE_SAMPLE);
+		else
+			return(OPTION_OBJECT_TYPE_ROM);
+	}
 }
 
 int dir_scan(struct dat *dat)
@@ -270,7 +277,7 @@ int dir_scan(struct dat *dat)
 					{
 						while (!errflg && (zipent = readzip(zip)) != 0)
 						{
-							if (zipent->uncompressed_size)
+							if (zipent->name[strlen(zipent->name)-1]!='/')
 							{
 								if (dat->options->options & OPTION_EXTENDED_CHECKSUMS ||
 									dat->options->options & OPTION_OBJECT_TYPE_SAMPLE ||
@@ -279,17 +286,17 @@ int dir_scan(struct dat *dat)
 									mem_size=zipent->uncompressed_size;
 									BYTE_MALLOC(mem, mem_size)
 
-									if (!errflg)
+									if (!errflg && zipent->uncompressed_size)
 										errflg=readuncompresszip(zip, zipent, mem);
 
 									if (!errflg)
 									{
-										file_type=determine_file_type(mem, zipent->uncompressed_size);
+										file_type=determine_file_type(dat, mem, zipent->uncompressed_size);
 
 										switch (file_type)
 										{
 											case OPTION_OBJECT_TYPE_ROM:
-												errflg=output_rom_details(out, zipent->name, zipent->uncompressed_size, zipent->crc32, mem, mem_size, 0);
+												errflg=output_rom_details(dat, out, zipent->name, zipent->uncompressed_size, zipent->crc32, mem, mem_size, 0);
 												break;
 											case OPTION_OBJECT_TYPE_DISK:
 												errflg=output_disk_details(out, zipent->name, mem, zipent->uncompressed_size);
@@ -304,7 +311,7 @@ int dir_scan(struct dat *dat)
 								}
 								else
 								{
-									errflg=output_rom_details(out, zipent->name, zipent->uncompressed_size, zipent->crc32, 0, 0, 0);
+									errflg=output_rom_details(dat, out, zipent->name, zipent->uncompressed_size, zipent->crc32, 0, 0, 0);
 								}
 							}
 						}
@@ -325,7 +332,7 @@ int dir_scan(struct dat *dat)
 						sprintf(st, "%s/%s", fn, sdirentp->d_name);
 						if (stat(st, &buf) == 0)
 						{
-							if (!(buf.st_mode & S_IFDIR) && buf.st_size)
+							if (!(buf.st_mode & S_IFDIR))
 							{
 								BYTE_MALLOC(mem, BUFFER_SIZE)
 
@@ -337,12 +344,12 @@ int dir_scan(struct dat *dat)
 
 								if (!errflg)
 								{
-									file_type=determine_file_type(mem, mem_size);
+									file_type=determine_file_type(dat, mem, mem_size);
 
 									switch (file_type)
 									{
 										case OPTION_OBJECT_TYPE_ROM:
-											errflg=output_rom_details(out, sdirentp->d_name, buf.st_size, 0, mem, mem_size, in);
+											errflg=output_rom_details(dat, out, sdirentp->d_name, buf.st_size, 0, mem, mem_size, in);
 											break;
 										case OPTION_OBJECT_TYPE_DISK:
 											errflg=output_disk_details(out, sdirentp->d_name, mem, mem_size);
@@ -1543,8 +1550,13 @@ int store_tokenized_dat(struct dat *dat)
 					}
 	
 					else if (type==TOKEN_ROM_CRC)
+					{
 						curr_rom->crc=strtoul(BUFFER2_PTR, NULL, 16);
 	
+						// Value may be zero so its presence needs remembering!
+						curr_rom->rom_flags|=FLAG_ROM_CRC;
+					}
+
 					else if (type==TOKEN_ROM_MD5 && dat->options->options & OPTION_MD5_CHECKSUMS)
 						curr_rom->md5=BUFFER2_PTR;
 	
@@ -2442,7 +2454,7 @@ int store_tokenized_dat(struct dat *dat)
 	{
 		for (j=0; j<dat->games[i].num_roms; j++)
 		{
-			if (dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
+			if (dat->games[i].roms[j].size!=0 && dat->games[i].roms[j].crc==0 && strcmp(dat->games[i].roms[j].status, "nodump"))
 			{
 				dat->games[i].roms[j].status="nodump";
 				dat->games[i].roms[j].rom_fixes|=FLAG_ROM_STATUS;
