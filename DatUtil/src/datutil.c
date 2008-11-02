@@ -8,7 +8,7 @@
 /* --- Version information --- */
 
 #define DATUTIL_VERSION "v2.44"
-#define DATUTIL_DATE "Private Beta"
+#define DATUTIL_DATE "2 November 2008"
 
 
 /* --- The standard includes --- */
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		printf("Output formats and aliases:\n\n");
 
 		printf("MAME ListInfo       listinfo info li clrmamepro clrmame cmpro cmp cm\n");
-  		printf("MAME ListXML        listxml xml lx\n");
+  		printf("MAME ListXML        listxml lx\n");
   		printf("Generic XML         genericxml generic gx\n");
   		printf("RomCenter 2         romcenter2 rc2 romcenter rc\n");
   		printf("Tab Delimited       delimited tab text\n");
