@@ -542,97 +542,97 @@ struct Rom tnzs_roms[] =
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz17", 65536, 0x9784d443, 0, 65536},
-		{"tnzsj", "b53-11.38", 65536, 0x9784d443, 0, 65536},
+		{"tnzsjo", "b53-11.38", 65536, 0x9784d443, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz18", 65536, 0xd0c447fd, 0, 65536},
-		{"tnzsj", "b53-10.32", 131072, 0xa73745c6, 0, 65536},
+		{"tnzsjo", "b53-10.32", 131072, 0xa73745c6, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz2", 65536, 0x4ca902fa, 0, 65536},
-		{"tnzsj", "b53-02.2", 131072, 0x095d0dc0, 0, 65536},
+		{"tnzsjo", "b53-02.2", 131072, 0x095d0dc0, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz3", 65536, 0x8de4c673, 0, 65536},
-		{"tnzsj", "b53-03.3", 131072, 0x74acfb9b, 0, 65536},
+		{"tnzsjo", "b53-03.3", 131072, 0x74acfb9b, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz4", 65536, 0x3d6ee15c, 0, 65536},
-		{"tnzsj", "b53-04.4", 131072, 0x59d2aef6, 0, 65536},
+		{"tnzsjo", "b53-04.4", 131072, 0x59d2aef6, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz5", 65536, 0x13b708ea, 0, 65536},
-		{"tnzsj", "b53-05.5", 131072, 0xedbb9581, 0, 65536},
+		{"tnzsjo", "b53-05.5", 131072, 0xedbb9581, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz6", 65536, 0x8f123170, 0, 65536},
-		{"tnzsj", "b53-06.6", 131072, 0x92f35ed9, 0, 65536},
+		{"tnzsjo", "b53-06.6", 131072, 0x92f35ed9, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz7", 65536, 0x772baddb, 0, 65536},
-		{"tnzsj", "b53-07.7", 131072, 0x2bf199e8, 0, 65536},
+		{"tnzsjo", "b53-07.7", 131072, 0x2bf199e8, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz8", 65536, 0x2edffcce, 0, 65536},
-		{"tnzsj", "b53-08.8", 131072, 0xc3519c2a, 0, 65536},
+		{"tnzsjo", "b53-08.8", 131072, 0xc3519c2a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz9", 65536, 0xc7332040, 0, 65536},
-		{"tnzsj", "b53-01.1", 131072, 0x9800c54d, 65536, 65536},
+		{"tnzsjo", "b53-01.1", 131072, 0x9800c54d, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz10", 65536, 0x708005ac, 0, 65536},
-		{"tnzsj", "b53-02.2", 131072, 0x095d0dc0, 65536, 65536},
+		{"tnzsjo", "b53-02.2", 131072, 0x095d0dc0, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz11", 65536, 0x7fe204da, 0, 65536},
-		{"tnzsj", "b53-03.3", 131072, 0x74acfb9b, 65536, 65536},
+		{"tnzsjo", "b53-03.3", 131072, 0x74acfb9b, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz12", 65536, 0x943a744d, 0, 65536},
-		{"tnzsj", "b53-04.4", 131072, 0x59d2aef6, 65536, 65536},
+		{"tnzsjo", "b53-04.4", 131072, 0x59d2aef6, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz13", 65536, 0x81ed38cb, 0, 65536},
-		{"tnzsj", "b53-05.5", 131072, 0xedbb9581, 65536, 65536},
+		{"tnzsjo", "b53-05.5", 131072, 0xedbb9581, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz14", 65536, 0x03ee1f1b, 0, 65536},
-		{"tnzsj", "b53-06.6", 131072, 0x92f35ed9, 65536, 65536},
+		{"tnzsjo", "b53-06.6", 131072, 0x92f35ed9, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz15", 65536, 0xfbeda025, 0, 65536},
-		{"tnzsj", "b53-07.7", 131072, 0x2bf199e8, 65536, 65536},
+		{"tnzsjo", "b53-07.7", 131072, 0x2bf199e8, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz16", 65536, 0x665c76f1, 0, 65536},
-		{"tnzsj", "b53-08.8", 131072, 0xc3519c2a, 65536, 65536},
+		{"tnzsjo", "b53-08.8", 131072, 0xc3519c2a, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz19", 65536, 0xaf3e83d5, 0, 65536},
-		{"tnzsj", "b53-10.32", 131072, 0xa73745c6, 65536, 65536},
+		{"tnzsjo", "b53-10.32", 131072, 0xa73745c6, 65536, 65536},
 	},
 	{
 		FULL_COPY,
 		{"tnzs_new", "nz1", 65536, 0xd87fabab, 0, 65536},
-		{"tnzsj", "b53-01.1", 131072, 0x9800c54d, 0, 65536},
+		{"tnzsjo", "b53-01.1", 131072, 0x9800c54d, 0, 65536},
 		patch_nz1
 	},
 	{0}
@@ -6314,6 +6314,31 @@ struct Rom neoragex_roms[] =
                 {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
                 {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
         },
+        {
+                FULL_COPY,
+                {"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
+                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
+                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
+                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+        },
 	{0}
 };
 
@@ -8913,22 +8938,22 @@ struct Rom the_arcade_roms[] =
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286,    0, 8192},
-		{"tron", "vg_3.bin",	8192, 0xbc036d1d,    0, 8192},
+		{"tron2", "vg_3.bin",	8192, 0xbc036d1d,    0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 8192, 8192},
-		{"tron", "vg_2.bin",	8192, 0x58ee14d3,    0, 8192},
+		{"tron2", "vg_2.bin",	8192, 0x58ee14d3,    0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 16384, 8192},
-		{"tron", "vg_1.bin",	8192, 0x3329f9d4,     0, 8192},
+		{"tron2", "vg_1.bin",	8192, 0x3329f9d4,     0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 24576, 8192},
-		{"tron", "vg_0.bin",	8192, 0x9743f873,     0, 8192},
+		{"tron2", "vg_0.bin",	8192, 0x9743f873,     0, 8192},
 	},
 	{0}
 };
@@ -10570,6 +10595,61 @@ struct Rom calice_roms[] =
                 {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
                 {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
         },
+        {
+                FULL_COPY,
+                {"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
+                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
+                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
+                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+        },
+	{0}
+};
+
+struct Rom nebula_roms[] =
+{
+        {
+                FULL_COPY,
+                {"breakrev", "245-c5.bin", 2097152, 0x28ff1792, 0, 2097152},
+                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"breakrev", "245-c6.bin", 2097152, 0x23c65644, 0, 2097152},
+                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+        },
+        {
+                FULL_COPY,
+                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "004-s1.bin", 65536, 0xb0d16529, 0, 65536},
+                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+        },
 	{0}
 };
 
@@ -10589,6 +10669,31 @@ struct Rom nebula_jukebox_roms[] =
                 FULL_COPY,
                 {"sonicwi2", "075-v2.bin", 524288, 0x6d0a728e, 0, 524288},
                 {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+        },
+	{0}
+};
+
+struct Rom neojukebox_roms[] =
+{
+        {
+                FULL_COPY,
+                {"gururin", "067_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "004_m1.rom", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
         },
 	{0}
 };
@@ -11522,6 +11627,21 @@ struct Rom hoot_roms[] =
 	{0}
 };
 
+struct Rom m1_roms[] =
+{
+        {
+                FULL_COPY,
+                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+        },
+	{0}
+};
+
 struct Rom m72_roms[] =
 {
 	{
@@ -11893,12 +12013,15 @@ struct Emulator ems[] =
 	{"junofirst", "Juno First v1.23", junofirst_roms},
 	{"kem", "KEM v1.1", kem_roms},
 	{"kungfu", "Kung Fu Master v0.0000001a", kungfu_roms},
+	{"m1", "M1 v0.7.8a6", m1_roms},
 	{"m72", "M72 v0.33b", m72_roms},
 	{"magex", "MageX v0.8a", magex_roms},
 	{"mge", "MGE v0.471", mge_roms},
 	{"mimic", "Mimic v2.11", mimic_roms},
 	{"modeler", "Modeler v0.9.3a", modeler_roms},
+	{"nebula", "Nebula v2.25b", nebula_roms},
 	{"nebula_jukebox", "Nebula Jukebox v2.9", nebula_jukebox_roms},
+	{"neojukebox", "NeoJukeBox v2.7", neojukebox_roms},
 	{"neoragex", "NeoRAGEx v0.6b", neoragex_roms},
 	{"pacsaver", "Pac Saver v1.00a", pacsaver_roms},
 	{"pacx", "Pac-X v0.2", pacx_roms},

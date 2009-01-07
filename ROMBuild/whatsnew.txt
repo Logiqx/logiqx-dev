@@ -1,3 +1,9 @@
+07/01/2009  *** v2.12 ***
+
+            Changes related to MAME v0.129:
+            Added support for breakrev (c5+c6), gururin (m1), mahretsu (m1+s1).
+            Updated a few existing definitions to account for MAME ROM renames.
+
 23/10/2008  *** v2.11 ***
 
             Changes related to MAME v0.128:
