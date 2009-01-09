@@ -119,6 +119,7 @@ struct disk
 	/* --- Fields that appear in data files */
 
 	char *name;
+	uint32_t size;
 	char *md5;
 	char *sha1;
 	char *merge;

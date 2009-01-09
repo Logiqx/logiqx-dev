@@ -4626,6 +4626,12 @@ int fix_merging_phase_2(struct dat *dat)
 					}
 				}
 
+				if (dat->disk_name_idx[i].disk->size != dat->disk_name_idx[j].disk->size)
+				{
+					dat->disk_name_idx[i].disk->disk_warnings|=FLAG_DISK_SIZE_CONFLICT;
+					dat->disk_name_idx[j].disk->disk_warnings|=FLAG_DISK_SIZE_CONFLICT;
+				}
+
 				if (dat->disk_name_idx[i].disk->sha1 && dat->disk_name_idx[j].disk->sha1 &&
 					strcmp(dat->disk_name_idx[i].disk->sha1, dat->disk_name_idx[j].disk->sha1))
 				{
@@ -5075,6 +5081,8 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing MD5\n");
 			if (dat->rom_warnings & FLAG_ROM_SHA1)
 				fprintf(dat->log_file, "    Missing SHA1\n");
+			if (dat->rom_warnings & FLAG_ROM_SIZE_CONFLICT)
+				fprintf(dat->log_file, "    Size Conflict\n");
 			if (dat->rom_warnings & FLAG_ROM_CRC_CONFLICT)
 				fprintf(dat->log_file, "    CRC Conflict\n");
 			if (dat->rom_warnings & FLAG_ROM_SHA1_MD5_CONFLICT)
@@ -5104,6 +5112,8 @@ int report_warnings(struct dat *dat)
 				fprintf(dat->log_file, "    Missing MD5\n");
 			if (dat->disk_warnings & FLAG_DISK_SHA1)
 				fprintf(dat->log_file, "    Missing SHA1\n");
+			if (dat->disk_warnings & FLAG_DISK_SIZE_CONFLICT)
+				fprintf(dat->log_file, "    Size Conflict\n");
 			if (dat->disk_warnings & FLAG_DISK_SHA1_MD5_CONFLICT)
 			{
 				if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
@@ -5301,6 +5311,8 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    ROM %s - Missing MD5\n", curr_rom->name);
 						if (curr_rom->rom_warnings & FLAG_ROM_SHA1)
 							fprintf(dat->log_file, "    ROM %s - Missing SHA1\n", curr_rom->name);
+						if (curr_rom->rom_warnings & FLAG_ROM_SIZE_CONFLICT)
+							fprintf(dat->log_file, "    ROM %s - Size Conflict (%d)\n", curr_rom->name, curr_rom->size);
 						if (curr_rom->rom_warnings & FLAG_ROM_CRC_CONFLICT)
 							fprintf(dat->log_file, "    ROM %s - CRC Conflict (%08lx)\n", curr_rom->name, (unsigned long)curr_rom->crc);
 						if (curr_rom->rom_warnings & FLAG_ROM_SHA1_MD5_CONFLICT)
@@ -5327,10 +5339,12 @@ int report_warnings(struct dat *dat)
 							fprintf(dat->log_file, "    Disk %s - Missing MD5\n", curr_disk->name);
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1)
 							fprintf(dat->log_file, "    Disk %s - Missing SHA1\n", curr_disk->name);
+						if (curr_disk->disk_warnings & FLAG_DISK_SIZE_CONFLICT)
+							fprintf(dat->log_file, "    Disk %s - Size Conflict (%d)\n", curr_disk->name, curr_disk->size);
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1_MD5_CONFLICT)
 						{
 							if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)
-								fprintf(dat->log_file, "    ROM %s - MD5/SHA1 Conflict\n", curr_disk->name);
+								fprintf(dat->log_file, "    Disk %s - MD5/SHA1 Conflict\n", curr_disk->name);
 							else if (dat->options->options & OPTION_MD5_CHECKSUMS)
 								fprintf(dat->log_file, "    Disk %s - MD5 Conflict (%s)\n", curr_disk->name, curr_disk->md5);
 							else
