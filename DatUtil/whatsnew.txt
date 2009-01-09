@@ -1,6 +1,11 @@
 History
 -------
 
+09/01/2009  *** v2.45 ***
+
+            - Uses DatLib v2.35.
+            - Fixed warning messages for ROM size conflicts (Kawaks v1.60).
+
 02/11/2008  *** v2.44 ***
 
             - Uses DatLib v2.34.
