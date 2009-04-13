@@ -540,7 +540,7 @@ int save_romcenter_250(struct dat *dat)
 					fprintf(dat->out, "¬%08lx", (unsigned long)~curr_rom->crc);
 				else
 					fprintf(dat->out, "¬%08lx", (unsigned long)curr_rom->crc);
-				fprintf(dat->out, "¬%lu", (unsigned long)curr_rom->size);
+				fprintf(dat->out, "¬%"PRIu64, (unsigned long long)curr_rom->size);
 	
 				if (curr_game->romof)
 				{
@@ -601,7 +601,7 @@ int save_romcenter_250(struct dat *dat)
 					fprintf(dat->out, "¬%08lx", (unsigned long)~curr_rom->crc);
 				else
 					fprintf(dat->out, "¬%08lx", (unsigned long)curr_rom->crc);
-				fprintf(dat->out, "¬%lu", (unsigned long)curr_rom->size);
+				fprintf(dat->out, "¬%"PRIu64, (unsigned long long)curr_rom->size);
 	
 				if (curr_game->romof)
 					fprintf(dat->out, "¬%s", curr_game->romof);

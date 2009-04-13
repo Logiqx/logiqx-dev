@@ -1,6 +1,10 @@
 History
 -------
 
+13/04/2009  *** v2.36 ***
+
+            - Added support for 64-bit ROM sizes (n.b. not for directory scan).
+
 09/01/2009  *** v2.35 ***
 
             - Fixed warning messages for ROM size conflicts (Kawaks v1.60).

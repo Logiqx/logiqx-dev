@@ -8,8 +8,8 @@
 
 /* --- Version information --- */
 
-#define DATLIB_VERSION "v2.35"
-#define DATLIB_DATE "9 January 2009"
+#define DATLIB_VERSION "v2.36"
+#define DATLIB_DATE "13 April 2009"
 
 
 /* --- Standard includes --- */
@@ -142,6 +142,8 @@ int output_disk_details(FILE *out, char *name, char *mem, uint32_t mem_size)
 	return(errflg);
 }
 
+// Note: The code structures that are passed to output_rom_details() do not support 64-bit file sizes (zipent and stat)
+
 int output_rom_details(struct dat *dat, FILE *out, char *name, uint32_t size, uint32_t crc, char *mem, uint32_t mem_size, FILE *in)
 {
 	md5_context md5ctx;
@@ -186,7 +188,7 @@ int output_rom_details(struct dat *dat, FILE *out, char *name, uint32_t size, ui
 	/* --- Output --- */
 
 	fprintf(out, "%s \"%s\"\n", datlib_tokens[TOKEN_ROM_NAME].description, name);
-	fprintf(out, "%s %d\n", datlib_tokens[TOKEN_ROM_SIZE].description, size);
+	fprintf(out, "%s %lu\n", datlib_tokens[TOKEN_ROM_SIZE].description, (unsigned long) size);
 	fprintf(out, "%s %08lx\n", datlib_tokens[TOKEN_ROM_CRC].description, (unsigned long) crc);
 
 	if (mem && dat->options->options & OPTION_EXTENDED_CHECKSUMS)
@@ -206,6 +208,8 @@ int output_rom_details(struct dat *dat, FILE *out, char *name, uint32_t size, ui
 
 	return(errflg);
 }
+
+// Note: The code structures that are passed to determine_file_type() do not support 64-bit file sizes (zipent and stat)
 
 int determine_file_type(struct dat *dat, char *mem, uint32_t size)
 {
@@ -1535,7 +1539,7 @@ int store_tokenized_dat(struct dat *dat)
 	
 					else if (type==TOKEN_ROM_SIZE)
 					{
-						curr_rom->size=strtoul(BUFFER2_PTR, NULL, 10);
+						curr_rom->size=strtoull(BUFFER2_PTR, NULL, 10);
 	
 						// Value may be zero so its presence needs remembering!
 						curr_rom->rom_flags|=FLAG_ROM_SIZE;
@@ -1543,7 +1547,7 @@ int store_tokenized_dat(struct dat *dat)
 	
 					else if (type==TOKEN_ROM_SIZE_HEX)
 					{
-						curr_rom->size=strtoul(BUFFER2_PTR, NULL, 16);
+						curr_rom->size=strtoull(BUFFER2_PTR, NULL, 16);
 	
 						// Value may be zero so its presence needs remembering!
 						curr_rom->rom_flags|=FLAG_ROM_SIZE;
@@ -2278,7 +2282,7 @@ int store_tokenized_dat(struct dat *dat)
 					{
 						/* --- The current RAM option must remember its size --- */
 	
-						curr_ramoption->size=strtoul(BUFFER2_PTR, NULL, 10);
+						curr_ramoption->size=strtoull(BUFFER2_PTR, NULL, 10);
 	
 						/* --- If this is the first RAM option for the current game then set up the ramoptions pointer --- */
 	
@@ -5312,7 +5316,7 @@ int report_warnings(struct dat *dat)
 						if (curr_rom->rom_warnings & FLAG_ROM_SHA1)
 							fprintf(dat->log_file, "    ROM %s - Missing SHA1\n", curr_rom->name);
 						if (curr_rom->rom_warnings & FLAG_ROM_SIZE_CONFLICT)
-							fprintf(dat->log_file, "    ROM %s - Size Conflict (%d)\n", curr_rom->name, curr_rom->size);
+							fprintf(dat->log_file, "    ROM %s - Size Conflict (%"PRIu64")\n", curr_rom->name, (unsigned long long)curr_rom->size);
 						if (curr_rom->rom_warnings & FLAG_ROM_CRC_CONFLICT)
 							fprintf(dat->log_file, "    ROM %s - CRC Conflict (%08lx)\n", curr_rom->name, (unsigned long)curr_rom->crc);
 						if (curr_rom->rom_warnings & FLAG_ROM_SHA1_MD5_CONFLICT)
@@ -5340,7 +5344,7 @@ int report_warnings(struct dat *dat)
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1)
 							fprintf(dat->log_file, "    Disk %s - Missing SHA1\n", curr_disk->name);
 						if (curr_disk->disk_warnings & FLAG_DISK_SIZE_CONFLICT)
-							fprintf(dat->log_file, "    Disk %s - Size Conflict (%d)\n", curr_disk->name, curr_disk->size);
+							fprintf(dat->log_file, "    Disk %s - Size Conflict (%"PRIu64")\n", curr_disk->name, (unsigned long long)curr_disk->size);
 						if (curr_disk->disk_warnings & FLAG_DISK_SHA1_MD5_CONFLICT)
 						{
 							if (dat->options->options & OPTION_MD5_CHECKSUMS && dat->options->options & OPTION_SHA1_CHECKSUMS)

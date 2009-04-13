@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 
 /* --- DatLib Includes --- */
@@ -82,7 +82,7 @@ struct rom
 
 	char *name;
 	char *bios;
-	uint32_t size;
+	uint64_t size;
 	uint32_t crc;
 	char *md5;
 	char *sha1;
@@ -119,7 +119,7 @@ struct disk
 	/* --- Fields that appear in data files */
 
 	char *name;
-	uint32_t size;
+	uint64_t size;
 	char *md5;
 	char *sha1;
 	char *merge;
@@ -444,7 +444,7 @@ struct ramoption
 {
 	/* --- Fields that appear in data files */
 
-	uint32_t size;
+	uint64_t size;
 	char *_default;
 
 	/* --- Fields that are calculated by DatLib */
@@ -541,7 +541,7 @@ struct game
 	uint32_t num_archives;
 	uint32_t num_ramoptions;
 
-	uint32_t size;
+	uint64_t size;
 	uint32_t crc;
 
 	uint32_t num_clones;

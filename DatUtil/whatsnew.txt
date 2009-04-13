@@ -1,6 +1,11 @@
 History
 -------
 
+13/04/2009  *** v2.46 ***
+
+            - Uses DatLib v2.36.
+            - Added support for 64-bit ROM sizes (n.b. not for directory scan).
+
 09/01/2009  *** v2.45 ***
 
             - Uses DatLib v2.35.

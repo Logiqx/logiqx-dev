@@ -650,6 +650,22 @@ if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 	} \
 }
 
+#define OUTPUT_UNSIGNED_LONG_LONG(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, "%s %"PRIu64, ATTRIBUTE_TEXT, (unsigned long long)curr_##OBJECT->ATTRIBUTE); \
+\
+	OUTPUT_COMPLETED(OBJECT, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+}
+
+#define OUTPUT_SIGNED_LONG_LONG(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, "%s %"PRId64, ATTRIBUTE_TEXT, (long long)curr_##OBJECT->ATTRIBUTE); \
+\
+	OUTPUT_COMPLETED(OBJECT, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
+}
+
 #define OUTPUT_UNSIGNED_LONG(OBJECT, ATTRIBUTE, ATTRIBUTE_TEXT, ATTRIBUTE_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 { \
@@ -972,7 +988,7 @@ int save_mame_listinfo(struct dat *dat)
 			OUTPUT_SMART_STRING(rom, name, "name", FLAG_ROM_NAME)
 			OUTPUT_SMART_STRING(rom, merge, "merge", FLAG_ROM_MERGE)
 			OUTPUT_SMART_STRING(rom, bios, "bios", FLAG_ROM_BIOS)
-			OUTPUT_UNSIGNED_LONG(rom, size, "size", FLAG_ROM_SIZE)
+			OUTPUT_UNSIGNED_LONG_LONG(rom, size, "size", FLAG_ROM_SIZE)
 			OUTPUT_PADDED_HEX(rom, crc, "crc", FLAG_ROM_CRC)
 			OUTPUT_UNQUOTED_STRING(rom, md5, "md5", FLAG_ROM_MD5)
 			OUTPUT_UNQUOTED_STRING(rom, sha1, "sha1", FLAG_ROM_SHA1)
@@ -1192,7 +1208,7 @@ int save_mame_listinfo(struct dat *dat)
 		{
 			fprintf(dat->out, "\tramoption ( ");
 
-			OUTPUT_UNSIGNED_LONG(ramoption, size, "size", FLAG_RAMOPTION_SIZE)
+			OUTPUT_UNSIGNED_LONG_LONG(ramoption, size, "size", FLAG_RAMOPTION_SIZE)
 			OUTPUT_UNQUOTED_STRING(ramoption, _default, "default", FLAG_RAMOPTION_DEFAULT)
 
 			fprintf(dat->out, ")\n");

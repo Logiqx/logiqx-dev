@@ -598,6 +598,20 @@ if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 	dat->OBJECT##_saved|=ATTRIBUTE_FLAG; \
 }
 
+#define OUTPUT_UNSIGNED_LONG_LONG_ATTRIBUTE(OBJECT, ATTRIBUTE, ATTRIBUTE_NAME, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, " %s=\"%"PRIu64"\"", ATTRIBUTE_NAME, (unsigned long long)curr_##OBJECT->ATTRIBUTE); \
+	dat->OBJECT##_saved|=ATTRIBUTE_FLAG; \
+}
+
+#define OUTPUT_SIGNED_LONG_LONG_ATTRIBUTE(OBJECT, ATTRIBUTE, ATTRIBUTE_NAME, ATTRIBUTE_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
+{ \
+	fprintf(dat->out, " %s=\"%"PRId64"\"", ATTRIBUTE_NAME, (long long)curr_##OBJECT->ATTRIBUTE); \
+	dat->OBJECT##_saved|=ATTRIBUTE_FLAG; \
+}
+
 #define OUTPUT_UNSIGNED_LONG_ATTRIBUTE(OBJECT, ATTRIBUTE, ATTRIBUTE_NAME, ATTRIBUTE_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & ATTRIBUTE_FLAG) \
 { \
@@ -1176,7 +1190,7 @@ int save_mame_listxml(struct dat *dat)
 			OUTPUT_STRING_ATTRIBUTE(rom, name, "name", FLAG_ROM_NAME)
 			OUTPUT_STRING_ATTRIBUTE(rom, merge, "merge", FLAG_ROM_MERGE)
 			OUTPUT_STRING_ATTRIBUTE(rom, bios, "bios", FLAG_ROM_BIOS)
-			OUTPUT_UNSIGNED_LONG_ATTRIBUTE(rom, size, "size", FLAG_ROM_SIZE)
+			OUTPUT_UNSIGNED_LONG_LONG_ATTRIBUTE(rom, size, "size", FLAG_ROM_SIZE)
 			OUTPUT_PADDED_HEX_ATTRIBUTE(rom, crc, "crc", FLAG_ROM_CRC)
 			OUTPUT_STRING_ATTRIBUTE(rom, md5, "md5", FLAG_ROM_MD5)
 			OUTPUT_STRING_ATTRIBUTE(rom, sha1, "sha1", FLAG_ROM_SHA1)
@@ -1398,7 +1412,7 @@ int save_mame_listxml(struct dat *dat)
 
 			if (curr_ramoption->size)
 			{
-				fprintf(dat->out, "%d", curr_ramoption->size);
+				fprintf(dat->out, "%"PRIu64, (unsigned long long)curr_ramoption->size);
 				dat->ramoption_saved|=FLAG_RAMOPTION_SIZE;
 			}
 

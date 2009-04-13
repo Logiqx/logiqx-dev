@@ -554,6 +554,28 @@ else \
 	dat->OBJECT##_saved|=FIELD_FLAG; \
 }
 
+#define OUTPUT_UNSIGNED_LONG_LONG_FIELD(OBJECT, FIELD, FIELD_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
+{ \
+	fprintf(dat->out, "%"PRIu64"\t", (unsigned long long)curr_##OBJECT->FIELD); \
+	dat->OBJECT##_saved|=FIELD_FLAG; \
+} \
+else \
+{ \
+	fprintf(dat->out, "\\N\t"); \
+}
+
+#define OUTPUT_SIGNED_LONG_LONG_FIELD(OBJECT, FIELD, FIELD_FLAG) \
+if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
+{ \
+	fprintf(dat->out, "%"PRId64"\t", (long long)curr_##OBJECT->FIELD); \
+	dat->OBJECT##_saved|=FIELD_FLAG; \
+} \
+else \
+{ \
+	fprintf(dat->out, "\\N\t"); \
+}
+
 #define OUTPUT_UNSIGNED_LONG_FIELD(OBJECT, FIELD, FIELD_FLAG) \
 if (curr_##OBJECT->OBJECT##_flags & FIELD_FLAG) \
 { \
@@ -746,7 +768,7 @@ int save_tab_delimited(struct dat *dat)
 			OUTPUT_STRING_FIELD(rom, name, FLAG_ROM_NAME)
 			OUTPUT_STRING_FIELD(rom, merge, FLAG_ROM_MERGE)
 			OUTPUT_STRING_FIELD(rom, bios, FLAG_ROM_BIOS)
-			OUTPUT_UNSIGNED_LONG_FIELD(rom, size, FLAG_ROM_SIZE)
+			OUTPUT_UNSIGNED_LONG_LONG_FIELD(rom, size, FLAG_ROM_SIZE)
 			OUTPUT_PADDED_HEX_FIELD(rom, crc, FLAG_ROM_CRC)
 			OUTPUT_STRING_FIELD(rom, sha1, FLAG_ROM_SHA1)
 			OUTPUT_STRING_FIELD(rom, md5, FLAG_ROM_MD5)
@@ -959,7 +981,7 @@ int save_tab_delimited(struct dat *dat)
 		{
 			fprintf(dat->out, "game_ramoption\t%s\t%s\t", dat_name, curr_game->name);
 
-			OUTPUT_UNSIGNED_LONG_FIELD(ramoption, size, FLAG_RAMOPTION_SIZE)
+			OUTPUT_UNSIGNED_LONG_LONG_FIELD(ramoption, size, FLAG_RAMOPTION_SIZE)
 			OUTPUT_STRING_FIELD(ramoption, _default, FLAG_RAMOPTION_DEFAULT)
 
 			fprintf(dat->out, "\n");
