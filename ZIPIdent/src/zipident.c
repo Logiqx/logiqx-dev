@@ -6,8 +6,8 @@
 
 /* --- Version information --- */
 
-#define ZIPIDENT_VERSION "v2.10"
-#define ZIPIDENT_DATE "24 March 2008"
+#define ZIPIDENT_VERSION "v2.11"
+#define ZIPIDENT_DATE "13 April 2009"
 
 
 /* --- The standard includes --- */
@@ -363,7 +363,7 @@ int process_text(FILE *definite, FILE *maybe, struct dat *dat, struct game_match
 			invalid++;
 
 		if ((ptr=strtok(NULL, " "))!=0)
-			zip_entry[num_zip_entries].size=strtoul(ptr, NULL, 10);
+			zip_entry[num_zip_entries].size=strtoull(ptr, NULL, 10);
 		else
 			invalid++;
 
@@ -473,7 +473,7 @@ int process_entries(FILE *definite, FILE *maybe, struct dat *dat, struct game_ma
 	struct rom_idx *rom_match;
 	int match;
 	int i, j, found, bits;
-	int game_size, zip_size;
+	unsigned long long game_size, zip_size;
 	double game_score, zip_score, best_score=0;
 	int errflg=0;
 
@@ -690,24 +690,24 @@ int process_entries(FILE *definite, FILE *maybe, struct dat *dat, struct game_ma
 			fprintf(out, "ZIP summary:\n\n");
 			for (i=0; i<max_length-4; i++)
 				fprintf(out, " ");
-			fprintf(out, "Name     Size       CRC   Region  Matched using\n");
+			fprintf(out, "Name        Size       CRC  Region  Matched using\n");
 			for (i=0; i<max_length-4; i++)
 				fprintf(out, "-");
-			fprintf(out, "----  --------  --------  ------  -----------------\n");
+			fprintf(out, "----  ----------  --------  ------  -----------------\n");
 
 			for (i=0; i<num_zip_entries; i++)
 			{
 				if (zip_entry[i].region!=0)
 				{
-					sprintf(st, "%%%ds  %%8d  %%08lx %%7s  ", max_length);
+					sprintf(st, "%%%ds  %%10"PRIu64"  %%08lx %%7s  ", max_length);
 					fprintf(out, st,
-						zip_entry[i].name, zip_entry[i].size, zip_entry[i].crc, zip_entry[i].region);
+						zip_entry[i].name, (unsigned long long)zip_entry[i].size, zip_entry[i].crc, zip_entry[i].region);
 				}
 				else
 				{
-					sprintf(st, "%%%ds  %%8d  %%08lx          ", max_length);
+					sprintf(st, "%%%ds  %%10"PRIu64"  %%08lx          ", max_length);
 					fprintf(out, st,
-						zip_entry[i].name, zip_entry[i].size, zip_entry[i].crc);
+						zip_entry[i].name, (unsigned long long)zip_entry[i].size, zip_entry[i].crc);
 				}
 
 				switch(zip_entry[i].match)

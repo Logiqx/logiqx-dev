@@ -12,7 +12,7 @@ struct zip_entry
 
 	char name[MAX_FILENAME_LENGTH+1];
 	char lname[MAX_FILENAME_LENGTH+1];
-	uint32_t size;
+	uint64_t size;
 	uint32_t crc;
 
 	/* --- Information derived by ZipIdent --- */
@@ -29,7 +29,7 @@ struct game_match
 
 struct dummy_rom
 {
-	uint32_t size;
+	uint64_t size;
 	uint32_t crc;
 };
 
