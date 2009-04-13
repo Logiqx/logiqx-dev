@@ -6,8 +6,8 @@
  * -------------------------------------------------------------------------- */
 
 
-#define MAMEDIFF_VERSION "v2.30"
-#define MAMEDIFF_DATE "28 October 2008"
+#define MAMEDIFF_VERSION "v2.31"
+#define MAMEDIFF_DATE "13 April 2009"
 
 
 /* --- Macros that used to be in DatLib but only used by MAMEDiff now! --- */
@@ -27,7 +27,7 @@
 
 #define FORMAT_LISTINFO_ROM(ST, ROM) \
 { \
-	char size[10]; \
+	char size[21]; \
 	char crc[9]; \
 	char offset[10]; \
 \
@@ -56,7 +56,7 @@
 	} \
 	if (ROM->rom_flags & FLAG_ROM_SIZE) \
 	{ \
-		sprintf(size, "%lu", (unsigned long) ROM->size); \
+		sprintf(size, "%"PRIu64, (unsigned long long) ROM->size); \
 		strcat(ST, " size "); \
 		strcat(ST, size); \
 	} \

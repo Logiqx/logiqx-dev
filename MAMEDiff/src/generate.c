@@ -733,9 +733,9 @@ int generate_changes(struct dat *dat1, struct dat *dat2, int diff_type, int rena
 							curr_game_zip_rom2->flags & GAME_ZIP_ROM_ADDED)
 						{
 							if (!strcmp(curr_rom->status, "nodump"))
-								fprintf(changes_log, "  ROM: %12s (%7lu bytes, no dump available)", curr_rom->name, (unsigned long) curr_rom->size);
+								fprintf(changes_log, "  ROM: %12s (%7"PRIu64" bytes, no dump available)", curr_rom->name, (unsigned long long) curr_rom->size);
 							else
-								fprintf(changes_log, "  ROM: %12s (%7lu bytes, crc %08lx)", curr_rom->name, (unsigned long) curr_rom->size, (unsigned long) curr_rom->crc);
+								fprintf(changes_log, "  ROM: %12s (%7"PRIu64" bytes, crc %08lx)", curr_rom->name, (unsigned long long) curr_rom->size, (unsigned long) curr_rom->crc);
 
 							if (dat2->options->options & OPTION_DAT_FULL_MERGING)
 								fprintf(changes_log, " - from %s", curr_rom->game->name);
