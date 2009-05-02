@@ -2005,42 +2005,42 @@ struct Rom neoragex_roms[] =
 	{
 		FULL_COPY,
 		{"whp", "whp_c6.rom", 4194304, 0x360f3799, 0, 2097152},
-		{"whp", "090-c6.bin", 2097152, 0xa43e4766, 0, 2097152},
+		{"whp", "064-c6.bin", 2097152, 0xa43e4766, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c6.rom", 4194304, 0x360f3799, 2097152, 2097152},
-		{"whp", "090-c6.bin", 2097152, 0xa43e4766, 0, 2097152},
+		{"whp", "064-c6.bin", 2097152, 0xa43e4766, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c3.rom", 4194304, 0x52ac82aa, 0, 2097152},
-		{"whp", "090-c3.bin", 2097152, 0x436d1b31, 0, 2097152},
+		{"whp", "064-c3.bin", 2097152, 0x436d1b31, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c3.rom", 4194304, 0x52ac82aa, 2097152, 2097152},
-		{"whp", "090-c3.bin", 2097152, 0x436d1b31, 0, 2097152},
+		{"whp", "064-c3.bin", 2097152, 0x436d1b31, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c5.rom", 4194304, 0xb3b49535, 0, 2097152},
-		{"whp", "090-c5.bin", 2097152, 0x8e34a9f4, 0, 2097152},
+		{"whp", "064-c5.bin", 2097152, 0x8e34a9f4, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c5.rom", 4194304, 0xb3b49535, 2097152, 2097152},
-		{"whp", "090-c5.bin", 2097152, 0x8e34a9f4, 0, 2097152},
+		{"whp", "064-c5.bin", 2097152, 0x8e34a9f4, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c4.rom", 4194304, 0xe55832d1, 0, 2097152},
-		{"whp", "090-c4.bin", 2097152, 0xf9c8dd26, 0, 2097152},
+		{"whp", "064-c4.bin", 2097152, 0xf9c8dd26, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"whp", "whp_c4.rom", 4194304, 0xe55832d1, 2097152, 2097152},
-		{"whp", "090-c4.bin", 2097152, 0xf9c8dd26, 0, 2097152},
+		{"whp", "064-c4.bin", 2097152, 0xf9c8dd26, 0, 2097152},
 	},
 	{
 		FULL_COPY,
@@ -6309,35 +6309,45 @@ struct Rom neoragex_roms[] =
 		{"wjammers", "windj_v4.rom", 524288, 0x3740edde, 0, 524288},
 		{"wjammers", "065-v4.bin", 1048576, 0x5dee7963, 0, 524288},
 	},
+	{
+		FULL_COPY,
+		{"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+		{"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+	},
+	{
+		FULL_COPY,
+		{"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
+		{"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
+		{"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
+		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
         {
                 FULL_COPY,
-                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
-                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
-        },
-        {
-                FULL_COPY,
-                {"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
-                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
-        },
-        {
-                FULL_COPY,
-                {"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
-                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
-        },
-        {
-                FULL_COPY,
-                {"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
-                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
@@ -10590,65 +10600,95 @@ struct Rom calice_roms[] =
 		{"2020bbh", "2020_c4.rom", 524288, 0xbef75dd0, 0, 524288},
 		{"2020bbh", "030-c4.bin", 1048576, 0x780d1c4e, 0, 524288},
 	},
+	{
+		FULL_COPY,
+		{"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+		{"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+	},
+	{
+		FULL_COPY,
+		{"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
+		{"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
+		{"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
+		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
         {
                 FULL_COPY,
-                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
-                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
         {
                 FULL_COPY,
-                {"breakrev", "brev_c5.rom", 2097152, 0x28ff1792, 0, 2097152},
-                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
-        },
-        {
-                FULL_COPY,
-                {"breakrev", "brev_c6.rom", 2097152, 0x23c65644, 0, 2097152},
-                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
-        },
-        {
-                FULL_COPY,
-                {"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
-                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+                {"maglordh", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+                {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
 
 struct Rom nebula_roms[] =
 {
+	{
+		FULL_COPY,
+		{"breakrev", "245-c5.bin", 2097152, 0x28ff1792, 0, 2097152},
+		{"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"breakrev", "245-c6.bin", 2097152, 0x23c65644, 0, 2097152},
+		{"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
+	},
+	{
+		FULL_COPY,
+		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "004-s1.bin", 65536, 0xb0d16529, 0, 65536},
+		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
         {
                 FULL_COPY,
-                {"breakrev", "245-c5.bin", 2097152, 0x28ff1792, 0, 2097152},
-                {"breakrev", "245-c5.bin", 4194304, 0xb5f40e7f, 0, 2097152},
+                {"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
         {
                 FULL_COPY,
-                {"breakrev", "245-c6.bin", 2097152, 0x23c65644, 0, 2097152},
-                {"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
-        },
-        {
-                FULL_COPY,
-                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "004-s1.bin", 65536, 0xb0d16529, 0, 65536},
-                {"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
+                {"maglordh", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+                {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
@@ -10665,35 +10705,55 @@ struct Rom nebula_jukebox_roms[] =
 		{"von2", "srom4.u25", 2097152, 0xb7c1bebf, 0, 2097152},
 		{"von2", "mpr-20666.25", 4194304, 0x3ecb2606, 2097152, 2097152},
 	},
+	{
+		FULL_COPY,
+		{"sonicwi2", "075-v2.bin", 524288, 0x6d0a728e, 0, 524288},
+		{"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+	},
+	{
+		FULL_COPY,
+		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
         {
                 FULL_COPY,
-                {"sonicwi2", "075-v2.bin", 524288, 0x6d0a728e, 0, 524288},
-                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
-        },
-        {
-                FULL_COPY,
-                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+                {"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
 
 struct Rom neojukebox_roms[] =
 {
+	{
+		FULL_COPY,
+		{"gururin", "067_m1.rom", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "004_m1.rom", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "010_m1.rom", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
         {
                 FULL_COPY,
-                {"gururin", "067_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "004_m1.rom", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+                {"maglord", "005_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
@@ -11001,10 +11061,15 @@ struct Rom rcps_roms[] =
 		{"wjammers", "windj_v4.rom", 524288, 0x3740edde, 0, 524288},
 		{"wjammers", "065-v4.bin", 1048576, 0x5dee7963, 0, 524288},
 	},
+	{
+		FULL_COPY,
+		{"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
+		{"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+	},
         {
                 FULL_COPY,
-                {"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
-                {"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
+                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
 	{0}
 };
@@ -11629,16 +11694,21 @@ struct Rom hoot_roms[] =
 
 struct Rom m1_roms[] =
 {
-        {
-                FULL_COPY,
-                {"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-                {"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
-                {"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
+		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
+		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
+		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
+	},
 	{0}
 };
 
