@@ -3027,7 +3027,7 @@ struct Rom neoragex_roms[] =
 	{
 		FULL_COPY,
 		{"minasan", "n054001a.478", 65536, 0x19ef88ea, 0, 65536},
-		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -6960,7 +6960,7 @@ struct Rom callus_roms[] =
 	{
 		FULL_COPY,
 		{"striderj", "sth09.bin", 131072, 0x4769272a, 0, 65536},
-		{"striderj", "strider.09", 65536, 0x2ed403bc, 0, 65536},
+		{"striderj", "sth23.bin", 65536, 0x2ed403bc, 0, 65536},
 	},
 	{
 		BLOCK_FILL,

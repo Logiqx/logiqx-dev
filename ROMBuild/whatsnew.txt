@@ -1,3 +1,8 @@
+xx/xx/xxxx  *** v2.14 ***
+
+            Changes related to MAME v0.133:
+            Updated a few existing definitions to account for MAME ROM renames.
+
 03/05/2009  *** v2.13 ***
 
             Changes related to MAME v0.130 and MAME v0.131:
