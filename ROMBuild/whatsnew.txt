@@ -2,6 +2,7 @@ xx/xx/xxxx  *** v2.14 ***
 
             Changes related to MAME v0.133:
             Updated a few existing definitions to account for MAME ROM renames.
+            Added some additional ROMs for minasan and hachamf.
 
 03/05/2009  *** v2.13 ***
 
