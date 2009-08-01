@@ -10645,6 +10645,16 @@ struct Rom calice_roms[] =
                 {"maglordh", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
                 {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
 	{0}
 };
 
@@ -10690,6 +10700,16 @@ struct Rom nebula_roms[] =
                 {"maglordh", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
                 {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
 	{0}
 };
 
@@ -10730,6 +10750,16 @@ struct Rom nebula_jukebox_roms[] =
                 {"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
                 {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
         },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
 	{0}
 };
 
@@ -10754,6 +10784,16 @@ struct Rom neojukebox_roms[] =
                 FULL_COPY,
                 {"maglord", "005_m1.rom", 65536, 0x91ee1f73, 0, 65536},
                 {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027_m1.rom", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027_m1.rom", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
         },
 	{0}
 };
@@ -11709,6 +11749,16 @@ struct Rom m1_roms[] =
 		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
 	{0}
 };
 
@@ -12063,6 +12113,31 @@ struct Rom mge_roms[] =
 	{0}
 };
 
+struct Rom kawaks_roms[] =
+{
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+        {
+                FULL_COPY,
+                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+        },
+	{0}
+};
+
+struct Rom raine_roms[] =
+{
+        {
+                FULL_COPY,
+                {"hachamf", "hmf_04.rom", 524288, 0x05a624e3, 0, 524288},
+                {"hachamf", "91076-4.101", 1048576, 0xdf9653a4, 524288, 524288},
+        },
+	{0}
+};
+
 struct Emulator ems[] =
 {
 	{"ace", "ACE v1.9", ace_roms},
@@ -12081,6 +12156,7 @@ struct Emulator ems[] =
 	{"jff", "JFF v0.24", jff_roms},
 	{"jumpbug", "Jump Bug Emulator v0.50", jumpbug_roms},
 	{"junofirst", "Juno First v1.23", junofirst_roms},
+	{"kawaks", "WinKawaks v1.60", kawaks_roms},
 	{"kem", "KEM v1.1", kem_roms},
 	{"kungfu", "Kung Fu Master v0.0000001a", kungfu_roms},
 	{"m1", "M1 v0.7.8a6", m1_roms},
@@ -12099,6 +12175,7 @@ struct Emulator ems[] =
 	{"pcslomo", "PCSloMo v0.24 Final", pcslomo_roms},
 	{"qsound", "QSound Player v2", qsound_player_roms},
 	{"rage", "RAGE v0.9", rage_roms},
+	{"raine", "RAINE v0.51.0", raine_roms},
 	{"rcps", "RCPS", rcps_roms},
 	{"replay", "Replay v0.04", replay_roms},
 	{"retrocade", "Retrocade v1.2 b2", retrocade_roms},
