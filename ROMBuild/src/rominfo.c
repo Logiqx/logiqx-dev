@@ -638,6 +638,21 @@ struct Rom tnzs_roms[] =
 	{0}
 };
 
+struct Rom trombone_roms[] =
+{
+	{
+		FULL_COPY,
+		{"shogwarr", "fb002.u44", 524288, 0x05d7c2a9, 0, 524288},
+		{"shogwarr", "fb-002.u45", 1048576, 0x010acc17, 524288, 524288},
+	},
+	{
+		FULL_COPY,
+		{"shogwarr", "fb003.u45", 524288, 0x405722e9, 0, 524288},
+		{"shogwarr", "fb-003.u44", 1048576, 0x0aea4ac5, 524288, 524288},
+	},
+	{0}
+};
+
 struct Rom pacx_roms[] =
 {
 	{
@@ -6344,11 +6359,11 @@ struct Rom neoragex_roms[] =
 		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
 	{0}
 };
 
@@ -6552,22 +6567,22 @@ struct Rom galemu_roms[] =
 	{
 		FULL_COPY,
 		{"galaxb",   "cp1",	 2048, 0xe8f3aa67,    0, 2048},
-		{"galaxiaj", "7f.bin",      4096, 0x4335b1de,    0, 2048},
+		{"galaxiana", "7f.bin",      4096, 0x4335b1de,    0, 2048},
 	},
 	{
 		FULL_COPY,
 		{"galaxb",   "cp2",	 2048, 0xf58283e3,    0, 2048},
-		{"galaxiaj", "7f.bin",      4096, 0x4335b1de, 2048, 2048},
+		{"galaxiana", "7f.bin",      4096, 0x4335b1de, 2048, 2048},
 	},
 	{
 		FULL_COPY,
 		{"galaxb",   "cp3",	 2048, 0x4c7031c0,    0, 2048},
-		{"galaxiaj", "7j.bin",      4096, 0x4e6f66a1,    0, 2048},
+		{"galaxiana", "7j.bin",      4096, 0x4e6f66a1,    0, 2048},
 	},
 	{
 		FULL_COPY,
 		{"galaxb",   "cp4",	 2048, 0x097d92a2,    0, 2048},
-		{"galaxiaj", "7j.bin",      4096, 0x4e6f66a1, 2048, 2048},
+		{"galaxiana", "7j.bin",      4096, 0x4e6f66a1, 2048, 2048},
 	},
 	{
 		FULL_COPY,
@@ -7774,22 +7789,22 @@ struct Rom hive_roms[] =
 	{
 		FULL_COPY,
 		{"todruaga", "todruaga.pr3", 256, 0x5bcec186, 0, 256},
-		{"todruago", "td1-7.5k", 1024, 0xa86c74dd, 0, 256},
+		{"todruagao", "td1-7.5k", 1024, 0xa86c74dd, 0, 256},
 	},
 	{
 		FULL_COPY,
 		{"todruaga", "todruaga.pr4", 256, 0xf029e5f5, 0, 256},
-		{"todruago", "td1-7.5k", 1024, 0xa86c74dd, 256, 256},
+		{"todruagao", "td1-7.5k", 1024, 0xa86c74dd, 256, 256},
 	},
 	{
 		FULL_COPY,
 		{"todruaga", "todruaga.pr5", 256, 0xecdc206c, 0, 256},
-		{"todruago", "td1-7.5k", 1024, 0xa86c74dd, 512, 256},
+		{"todruagao", "td1-7.5k", 1024, 0xa86c74dd, 512, 256},
 	},
 	{
 		FULL_COPY,
 		{"todruaga", "todruaga.pr6", 256, 0x57b5ad6d, 0, 256},
-		{"todruago", "td1-7.5k", 1024, 0xa86c74dd, 768, 256},
+		{"todruagao", "td1-7.5k", 1024, 0xa86c74dd, 768, 256},
 	},
 	{
 		FULL_COPY,
@@ -7824,42 +7839,42 @@ struct Rom hive_roms[] =
 	{
 		LOWER_COPY,
 		{"xevious",  "3l-3m",	512, 0x90876fdc,    0, 512},
-		{"xevious", "xvi_4bpr.3l",   512, 0xfd8b9d91,    0, 512},
+		{"xevious", "xvi-4.3l",   512, 0xfd8b9d91,    0, 512},
 	},
 	{
 		LOWER_SHIFT,
 		{"xevious",  "3l-3m",	512, 0x90876fdc,    0, 512},
-		{"xevious", "xvi_5bpr.3m",   512, 0xbf906d82,    0, 512},
+		{"xevious", "xvi-5.3m",   512, 0xbf906d82,    0, 512},
 	},
 	{
 		LOWER_COPY,
 		{"xevious", "4h-4f",	512, 0xc21a65ff,    0, 512},
-		{"xevious", "xvi_7bpr.4h",   512, 0x22d98032,    0, 512},
+		{"xevious", "xvi-7.4h",   512, 0x22d98032,    0, 512},
 	},
 	{
 		LOWER_SHIFT,
 		{"xevious", "4h-4f",	512, 0xc21a65ff,    0, 512},
-		{"xevious", "xvi_6bpr.4f",   512, 0x3a7599f0,    0, 512},
+		{"xevious", "xvi-6.4f",   512, 0x3a7599f0,    0, 512},
 	},
 	{
 		LOWER_COPY,
 		{"sxevious",  "3l-3m",	512, 0x90876fdc,    0, 512},
-		{"sxevious", "xvi_4bpr.3l",   512, 0xfd8b9d91,    0, 512},
+		{"sxevious", "xvi-4.3l",   512, 0xfd8b9d91,    0, 512},
 	},
 	{
 		LOWER_SHIFT,
 		{"sxevious",  "3l-3m",	512, 0x90876fdc,    0, 512},
-		{"sxevious", "xvi_5bpr.3m",   512, 0xbf906d82,    0, 512},
+		{"sxevious", "xvi-5.3m",   512, 0xbf906d82,    0, 512},
 	},
 	{
 		LOWER_COPY,
 		{"sxevious", "4h-4f",	512, 0xc21a65ff,    0, 512},
-		{"sxevious", "xvi_7bpr.4h",   512, 0x22d98032,    0, 512},
+		{"sxevious", "xvi-7.4h",   512, 0x22d98032,    0, 512},
 	},
 	{
 		LOWER_SHIFT,
 		{"sxevious", "4h-4f",	512, 0xc21a65ff,    0, 512},
-		{"sxevious", "xvi_6bpr.4f",   512, 0x3a7599f0,    0, 512},
+		{"sxevious", "xvi-6.4f",   512, 0x3a7599f0,    0, 512},
 	},
 	{
 		/* No corresponding ROM in MAME */
@@ -8864,22 +8879,22 @@ struct Rom retrocade_roms[] =
 	{
 		FULL_COPY,
 		{"snowbros", "ch0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbros", "ch1", 131072, 0x76347256, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbros", "ch2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbros", "ch3", 131072, 0x34024aef, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
 	},
 	{
 		FULL_COPY,
@@ -8948,22 +8963,22 @@ struct Rom the_arcade_roms[] =
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286,    0, 8192},
-		{"tron2", "vg_3.bin",	8192, 0xbc036d1d,    0, 8192},
+		{"tron2", "vga.e1",	8192, 0xbc036d1d,    0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 8192, 8192},
-		{"tron2", "vg_2.bin",	8192, 0x58ee14d3,    0, 8192},
+		{"tron2", "vgb.dc1",	8192, 0x58ee14d3,    0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 16384, 8192},
-		{"tron2", "vg_1.bin",	8192, 0x3329f9d4,     0, 8192},
+		{"tron2", "vgc.cb1",	8192, 0x3329f9d4,     0, 8192},
 	},
 	{
 		FULL_COPY,
 		{"tron", "troncb1.bin",    32768, 0xc2bbb286, 24576, 8192},
-		{"tron2", "vg_0.bin",	8192, 0x9743f873,     0, 8192},
+		{"tron2", "vga.a1",	8192, 0x9743f873,     0, 8192},
 	},
 	{0}
 };
@@ -9133,32 +9148,32 @@ struct Rom system16_roms[] =
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 0, 65536},
-		{"altbeas4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
+		{"altbeast4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 0, 65536},
-		{"altbeas4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
+		{"altbeast4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 0, 65536},
-		{"altbeas4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
+		{"altbeast4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 65536, 65536},
-		{"altbeas4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
+		{"altbeast4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 65536, 65536},
-		{"altbeas4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
+		{"altbeast4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 65536, 65536},
-		{"altbeas4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
+		{"altbeast4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
 	},
 	{0}
 };
@@ -9168,12 +9183,12 @@ struct Rom modeler_roms[] =
 	{
 		FULL_COPY,
 		{"harddunk", "16506",     1048576, 0x06c52b89, 0, 1048576 },
-		{"harddunj", "mp16506.1", 2097152, 0xe779f5ed, 0, 1048576},
+		{"harddunkj", "mp16506.1", 2097152, 0xe779f5ed, 0, 1048576},
 	},
 	{
 		FULL_COPY,
 		{"harddunk", "16507",     1048576, 0x351c0281, 0, 1048576 },
-		{"harddunj", "mp16507.2", 2097152, 0x31e068d3, 0, 1048576},
+		{"harddunkj", "mp16507.2", 2097152, 0x31e068d3, 0, 1048576},
 	},
 	{0}
 };
@@ -9183,32 +9198,32 @@ struct Rom calice_roms[] =
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 0, 65536},
-		{"altbeas4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
+		{"altbeast4", "epr-11722.a14", 65536, 0xadaa8db5, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 0, 65536},
-		{"altbeas4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
+		{"altbeast4", "epr-11723.a15", 65536, 0x131a3f9a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 0, 65536},
-		{"altbeas4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
+		{"altbeast4", "epr-11724.a16", 65536, 0x6f2ed50a, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11674.bin", 131072, 0xa57a66d5, 65536, 65536},
-		{"altbeas4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
+		{"altbeast4", "epr-11736.b14", 65536, 0xe9ad5e89, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11675.bin", 131072, 0x2ef2f144, 65536, 65536},
-		{"altbeas4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
+		{"altbeast4", "epr-11737.b15", 65536, 0x2e420023, 0, 65536},
 	},
 	{
 		FULL_COPY,
 		{"altbeast", "ab11676.bin", 131072, 0x0c04acac, 65536, 65536},
-		{"altbeas4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
+		{"altbeast4", "epr-11738.b16", 65536, 0xde3d6d02, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -10635,26 +10650,26 @@ struct Rom calice_roms[] =
 		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"maglordh", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
-                {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"maglordh", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+		{"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
@@ -10690,26 +10705,26 @@ struct Rom nebula_roms[] =
 		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"maglordh", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
-                {"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"maglordh", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+		{"maglordh", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
@@ -10745,21 +10760,21 @@ struct Rom nebula_jukebox_roms[] =
 		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "005-m1.bin", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
@@ -10780,21 +10795,21 @@ struct Rom neojukebox_roms[] =
 		{"cyberlip", "010_m1.rom", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "005_m1.rom", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027_m1.rom", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027_m1.rom", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "005_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027_m1.rom", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027_m1.rom", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
@@ -11106,11 +11121,11 @@ struct Rom rcps_roms[] =
 		{"sonicwi2", "afig2_v2.rom", 524288, 0x6d0a728e, 0, 524288},
 		{"sonicwi2", "075-v2.bin", 1048576, 0x021760cd, 0, 524288},
 	},
-        {
-                FULL_COPY,
-                {"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
-                {"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"maglord", "magl_m1.rom", 65536, 0x91ee1f73, 0, 65536},
+		{"maglord", "005-m1.bin", 262144, 0x26259f0f, 0, 65536},
+	},
 	{0}
 };
 
@@ -11749,16 +11764,16 @@ struct Rom m1_roms[] =
 		{"cyberlip", "010-m1.bin", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
@@ -12023,22 +12038,22 @@ struct Rom besnowbros_roms[] =
 	{
 		FULL_COPY,
 		{"snowbroa", "CH0", 131072, 0x36d84dfe, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 0, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbroa", "CH1", 131072, 0x76347256, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 131072, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbroa", "CH2", 131072, 0xfdaa634c, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 262144, 131072},
 	},
 	{
 		FULL_COPY,
 		{"snowbroa", "CH3", 131072, 0x34024aef, 0, 131072},
-		{"snowbroa", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
+		{"snowbrosa", "sbros-1.41", 524288, 0x16f06b3a, 393216, 131072},
 	},
 	{0}
 };
@@ -12115,26 +12130,26 @@ struct Rom mge_roms[] =
 
 struct Rom kawaks_roms[] =
 {
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
-        {
-                FULL_COPY,
-                {"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
-                {"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
-        },
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 0, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
+	{
+		FULL_COPY,
+		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
+		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
+	},
 	{0}
 };
 
 struct Rom raine_roms[] =
 {
-        {
-                FULL_COPY,
-                {"hachamf", "hmf_04.rom", 524288, 0x05a624e3, 0, 524288},
-                {"hachamf", "91076-4.101", 1048576, 0xdf9653a4, 524288, 524288},
-        },
+	{
+		FULL_COPY,
+		{"hachamf", "hmf_04.rom", 524288, 0x05a624e3, 0, 524288},
+		{"hachamf", "91076-4.101", 1048576, 0xdf9653a4, 524288, 524288},
+	},
 	{0}
 };
 
@@ -12193,6 +12208,7 @@ struct Emulator ems[] =
 	{"system16", "System 16 v0.82a", system16_roms},
 	{"thearcade", "The Arcade Machine", the_arcade_roms},
 	{"tnzsemu", "TNZS-EMU v2.10b", tnzs_roms},
+	{"trombone", "tROMbone v0.11", trombone_roms},
 	{"vantage", "VAntAGE v1.12", vantage_roms},
 	{"vbemusaver", "VBEmu Screen Saver v1.01a", vbemusaver_roms},
 	{"xcade", "Xcade v0.85", xcade_roms},
