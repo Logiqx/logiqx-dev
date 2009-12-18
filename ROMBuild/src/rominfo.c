@@ -444,6 +444,21 @@ struct Rom vbemusaver_roms[] =
 	{0}
 };
 
+struct Rom winkawaks_roms[] =
+{
+        {
+                FULL_COPY,
+                {"androdun", "049-v1.bin", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "049-v2.bin", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
+	{0}
+};
+
 struct Rom pacsaver_roms[] =
 {
 	{
@@ -647,6 +662,16 @@ struct Rom trombone_roms[] =
 	},
 	{
 		FULL_COPY,
+		{"shogwarr", "fb003.u45", 524288, 0x405722e9, 0, 524288},
+		{"shogwarr", "fb-003.u44", 1048576, 0x0aea4ac5, 524288, 524288},
+	},
+	{
+	FULL_COPY,
+		{"shogwarr", "fb002.u44", 524288, 0x05d7c2a9, 0, 524288},
+		{"shogwarr", "fb-002.u45", 1048576, 0x010acc17, 524288, 524288},
+	},
+	{
+	FULL_COPY,
 		{"shogwarr", "fb003.u45", 524288, 0x405722e9, 0, 524288},
 		{"shogwarr", "fb-003.u44", 1048576, 0x0aea4ac5, 524288, 524288},
 	},
@@ -2395,6 +2420,16 @@ struct Rom neoragex_roms[] =
 		{"androdun", "n138001c.63c", 524288, 0xb1c640f5, 262144, 262144},
 		{"androdun", "049-c2.bin", 1048576, 0xb17024f7, 524288, 262144},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "n138001a.1f8", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "n138001a.1fc", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	/* Since MAME changed androdun in v0.70 it is impossible to re-build some of these ROMs
 	{
 		EVEN_COPY,
@@ -10670,6 +10705,16 @@ struct Rom calice_roms[] =
 		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
 		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "adun_v1.rom", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "adun_v2.rom", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -10725,6 +10770,16 @@ struct Rom nebula_roms[] =
 		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
 		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "049-v1.bin", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "049-v2.bin", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -10775,6 +10830,16 @@ struct Rom nebula_jukebox_roms[] =
 		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
 		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "049-v1.bin", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "049-v2.bin", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -10810,6 +10875,16 @@ struct Rom neojukebox_roms[] =
 		{"minasan", "027_m1.rom", 131072, 0xadd5a226, 65536, 65536},
 		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "049_v1.rom", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "049_v2.rom", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -11744,6 +11819,16 @@ struct Rom hoot_roms[] =
 		{"gaiapols", "123e13.9c", 524288,  0x0bc4056c, 262144, 262144},
 		{"gaiapols", "123e13.9c", 262144,  0xe772f822,      0, 262144},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "adun_v1.rom", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "adun_v2.rom", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -11774,6 +11859,16 @@ struct Rom m1_roms[] =
 		{"minasan", "027-m1.bin", 131072, 0xadd5a226, 65536, 65536},
 		{"minasan", "027-m1.bin", 131072, 0x6a915482, 0, 65536},
 	},
+        {
+                FULL_COPY,
+                {"androdun", "049-v1.bin", 524288, 0x577c85b3, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 0, 524288},
+        },
+        {
+                FULL_COPY,
+                {"androdun", "049-v2.bin", 524288, 0xe14551c4, 0, 524288},
+                {"androdun", "049-v1.bin", 1048576, 0xce43cb89, 524288, 524288},
+        },
 	{0}
 };
 
@@ -12211,6 +12306,7 @@ struct Emulator ems[] =
 	{"trombone", "tROMbone v0.11", trombone_roms},
 	{"vantage", "VAntAGE v1.12", vantage_roms},
 	{"vbemusaver", "VBEmu Screen Saver v1.01a", vbemusaver_roms},
+	{"winkawaks", "WinKawaks v1.60", winkawaks_roms},
 	{"xcade", "Xcade v0.85", xcade_roms},
 	{"xpac", "XPac Beta 1-2-3", xpac_roms},
 	{"zem", "ZEM v0.001", zem_roms},

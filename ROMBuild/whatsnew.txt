@@ -1,15 +1,16 @@
-xx/xx/xxxx  *** v2.14 ***
+18/12/2009  *** v2.14 ***
 
             Changes related to MAME v0.133:
             Updated a few existing definitions to account for MAME ROM renames.
             Added some additional ROMs for minasan and hachamf.
 
             Changes related to MAME v0.134:
-            Updated a few existing definitions to account for MAME ROM renames.
+            Updated a existing definitions to account for MAME ROM renames.
             Added tROMbone v0.11
 
             Changes related to MAME v0.135:
             Updated a few existing definitions to account for MAME ROM renames.
+            Added some additional ROMs for androdun and shogwarr.
 
 03/05/2009  *** v2.13 ***
 
