@@ -905,162 +905,162 @@ struct Rom replay_roms[] =
 	{
 		FULL_COPY,
 		{"carnival", "666u1.cpu", 2048, 0x4846ae8b, 0, 1024},
-		{"carnival", "666u1.cpu", 1024, 0x4eec7fae, 0, 1024},
+		{"carnival", "epr-666.u1", 1024, 0x4eec7fae, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "666u1.cpu", 2048, 0x4846ae8b, 1024, 1024},
-		{"carnival", "666u1.cpu", 1024, 0x4eec7fae, 0, 1024},
+		{"carnival", "epr-666.u1", 1024, 0x4eec7fae, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "652u32.cpu", 2048, 0xacb73519, 0, 1024},
-		{"carnival", "652u32.cpu", 1024, 0xa1f58beb, 0, 1024},
+		{"carnival", "epr-652.u32", 1024, 0xa1f58beb, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "652u32.cpu", 2048, 0xacb73519, 1024, 1024},
-		{"carnival", "652u32.cpu", 1024, 0xa1f58beb, 0, 1024},
+		{"carnival", "epr-652.u32", 1024, 0xa1f58beb, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "653u31.cpu", 2048, 0xbd179c15, 0, 1024},
-		{"carnival", "653u31.cpu", 1024, 0x67b17922, 0, 1024},
+		{"carnival", "epr-653.u31", 1024, 0x67b17922, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "653u31.cpu", 2048, 0xbd179c15, 1024, 1024},
-		{"carnival", "653u31.cpu", 1024, 0x67b17922, 0, 1024},
+		{"carnival", "epr-653.u31", 1024, 0x67b17922, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "654u30.cpu", 2048, 0x59f75cc0, 0, 1024},
-		{"carnival", "654u30.cpu", 1024, 0xbefb09a5, 0, 1024},
+		{"carnival", "epr-654.u30", 1024, 0xbefb09a5, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "654u30.cpu", 2048, 0x59f75cc0, 1024, 1024},
-		{"carnival", "654u30.cpu", 1024, 0xbefb09a5, 0, 1024},
+		{"carnival", "epr-654.u30", 1024, 0xbefb09a5, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "655u29.cpu", 2048, 0x92f6c07d, 0, 1024},
-		{"carnival", "655u29.cpu", 1024, 0x623fcdad, 0, 1024},
+		{"carnival", "epr-655.u29", 1024, 0x623fcdad, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "655u29.cpu", 2048, 0x92f6c07d, 1024, 1024},
-		{"carnival", "655u29.cpu", 1024, 0x623fcdad, 0, 1024},
+		{"carnival", "epr-655.u29", 1024, 0x623fcdad, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "656u28.cpu", 2048, 0x410914ac, 0, 1024},
-		{"carnival", "656u28.cpu", 1024, 0x53040332, 0, 1024},
+		{"carnival", "epr-656.u28", 1024, 0x53040332, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "656u28.cpu", 2048, 0x410914ac, 1024, 1024},
-		{"carnival", "656u28.cpu", 1024, 0x53040332, 0, 1024},
+		{"carnival", "epr-656.u28", 1024, 0x53040332, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "657u27.cpu", 2048, 0xc99a9bbd, 0, 1024},
-		{"carnival", "657u27.cpu", 1024, 0xf2537467, 0, 1024},
+		{"carnival", "epr-657.u27", 1024, 0xf2537467, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "657u27.cpu", 2048, 0xc99a9bbd, 1024, 1024},
-		{"carnival", "657u27.cpu", 1024, 0xf2537467, 0, 1024},
+		{"carnival", "epr-657.u27", 1024, 0xf2537467, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "658u26.cpu", 2048, 0xd2e4925a, 0, 1024},
-		{"carnival", "658u26.cpu", 1024, 0xfcc3854e, 0, 1024},
+		{"carnival", "epr-658.u26", 1024, 0xfcc3854e, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "658u26.cpu", 2048, 0xd2e4925a, 1024, 1024},
-		{"carnival", "658u26.cpu", 1024, 0xfcc3854e, 0, 1024},
+		{"carnival", "epr-658.u26", 1024, 0xfcc3854e, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "659u8.cpu", 2048, 0x3a894cfe, 0, 1024},
-		{"carnival", "659u8.cpu", 1024, 0x28be8d69, 0, 1024},
+		{"carnival", "epr-659.u8", 1024, 0x28be8d69, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "659u8.cpu", 2048, 0x3a894cfe, 1024, 1024},
-		{"carnival", "659u8.cpu", 1024, 0x28be8d69, 0, 1024},
+		{"carnival", "epr-659.u8", 1024, 0x28be8d69, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "660u7.cpu", 2048, 0x8b792ab7, 0, 1024},
-		{"carnival", "660u7.cpu", 1024, 0x3873ccdb, 0, 1024},
+		{"carnival", "epr-660.u7", 1024, 0x3873ccdb, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "660u7.cpu", 2048, 0x8b792ab7, 1024, 1024},
-		{"carnival", "660u7.cpu", 1024, 0x3873ccdb, 0, 1024},
+		{"carnival", "epr-660.u7", 1024, 0x3873ccdb, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "661u6.cpu", 2048, 0x261c3ca0, 0, 1024},
-		{"carnival", "661u6.cpu", 1024, 0xd9a96dff, 0, 1024},
+		{"carnival", "epr-661.u6", 1024, 0xd9a96dff, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "661u6.cpu", 2048, 0x261c3ca0, 1024, 1024},
-		{"carnival", "661u6.cpu", 1024, 0xd9a96dff, 0, 1024},
+		{"carnival", "epr-661.u6", 1024, 0xd9a96dff, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "662u5.cpu", 2048, 0x59247fa2, 0, 1024},
-		{"carnival", "662u5.cpu", 1024, 0xd893ca72, 0, 1024},
+		{"carnival", "epr-662.u5", 1024, 0xd893ca72, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "662u5.cpu", 2048, 0x59247fa2, 1024, 1024},
-		{"carnival", "662u5.cpu", 1024, 0xd893ca72, 0, 1024},
+		{"carnival", "epr-662.u5", 1024, 0xd893ca72, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "663u4.cpu", 2048, 0x42787079, 0, 1024},
-		{"carnival", "663u4.cpu", 1024, 0xdf8c63c5, 0, 1024},
+		{"carnival", "epr-663.u4", 1024, 0xdf8c63c5, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "663u4.cpu", 2048, 0x42787079, 1024, 1024},
-		{"carnival", "663u4.cpu", 1024, 0xdf8c63c5, 0, 1024},
+		{"carnival", "epr-663.u4", 1024, 0xdf8c63c5, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "664u3.cpu", 2048, 0xe0ff6e25, 0, 1024},
-		{"carnival", "664u3.cpu", 1024, 0x689a73e8, 0, 1024},
+		{"carnival", "epr-664.u3", 1024, 0x689a73e8, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "664u3.cpu", 2048, 0xe0ff6e25, 1024, 1024},
-		{"carnival", "664u3.cpu", 1024, 0x689a73e8, 0, 1024},
+		{"carnival", "epr-664.u3", 1024, 0x689a73e8, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "665u2.cpu", 2048, 0xc5868119, 0, 1024},
-		{"carnival", "665u2.cpu", 1024, 0x28e7b2b6, 0, 1024},
+		{"carnival", "epr-665.u2", 1024, 0x28e7b2b6, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "665u2.cpu", 2048, 0xc5868119, 1024, 1024},
-		{"carnival", "665u2.cpu", 1024, 0x28e7b2b6, 0, 1024},
+		{"carnival", "epr-665.u2", 1024, 0x28e7b2b6, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "651u33.cpu", 2048, 0xa98d5f3d, 0, 1024},
-		{"carnival", "651u33.cpu", 1024, 0x9f2736e6, 0, 1024},
+		{"carnival", "epr-651.u33", 1024, 0x9f2736e6, 0, 1024},
 	},
 	{
 		FULL_COPY,
 		{"carnival", "651u33.cpu", 2048, 0xa98d5f3d, 1024, 1024},
-		{"carnival", "651u33.cpu", 1024, 0x9f2736e6, 0, 1024},
+		{"carnival", "epr-651.u33", 1024, 0x9f2736e6, 0, 1024},
 	},
 	{
 		FULL_COPY,
@@ -6386,11 +6386,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
-		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
@@ -10677,11 +10672,6 @@ struct Rom calice_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"mahretsu", "maj_s1.rom", 65536, 0xb0d16529, 0, 65536},
-		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"cyberlip", "cybl_m1.rom", 65536, 0x47980d3a, 0, 65536},
 		{"cyberlip", "010-m1.bin", 131072, 0x8be3a078, 0, 65536},
 	},
@@ -10739,11 +10729,6 @@ struct Rom nebula_roms[] =
 		FULL_COPY,
 		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
 		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
-	},
-	{
-		FULL_COPY,
-		{"mahretsu", "004-s1.bin", 65536, 0xb0d16529, 0, 65536},
-		{"mahretsu", "004-s1.bin", 131072, 0x4e310702, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -11723,25 +11708,25 @@ struct Rom rage_roms[] =
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_h1.bin", 131072, 0x4b79840c, 0, 131072},
-		{"rtype2", "ic53.8b",    131072, 0x4f6e9b15, 0, 131072},
+		{"rtype2", "rt2-a-h1-d.53",    131072, 0x4f6e9b15, 0, 131072},
 		patch_rt2_h1
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_l1.bin", 131072, 0x6ab3ae42, 0, 131072},
-		{"rtype2", "ic59.9b",    131072, 0x0fd123bf, 0, 131072},
+		{"rtype2", "rt2-a-l1-d.59",    131072, 0x0fd123bf, 0, 131072},
 		patch_rt2_l1
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_l0.bin", 131072, 0xa1661cdf, 0, 131072},
-		{"rtype2", "ic60.9d",    131072, 0x32cfb2e4, 0, 131072},
+		{"rtype2", "rt2-a-l0-d.60",    131072, 0x32cfb2e4, 0, 131072},
 		patch_rt2_l0
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_h0.bin", 131072, 0x47639a78, 0, 131072},
-		{"rtype2", "ic54.8d",    131072, 0xd8ece6f4, 0, 131072},
+		{"rtype2", "rt2-a-h0-d.54",    131072, 0xd8ece6f4, 0, 131072},
 		patch_rt2_h0
 	},
 	{
@@ -11969,25 +11954,25 @@ struct Rom m72_roms[] =
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_h1.bin", 131072, 0x4b79840c, 0, 131072},
-		{"rtype2", "ic53.8b",    131072, 0x4f6e9b15, 0, 131072},
+		{"rtype2", "rt2-a-h1-d.53",    131072, 0x4f6e9b15, 0, 131072},
 		patch_rt2_h1
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_l1.bin", 131072, 0x6ab3ae42, 0, 131072},
-		{"rtype2", "ic59.9b",    131072, 0x0fd123bf, 0, 131072},
+		{"rtype2", "rt2-a-l1-d.59",    131072, 0x0fd123bf, 0, 131072},
 		patch_rt2_l1
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_l0.bin", 131072, 0xa1661cdf, 0, 131072},
-		{"rtype2", "ic60.9d",    131072, 0x32cfb2e4, 0, 131072},
+		{"rtype2", "rt2-a-l0-d.60",    131072, 0x32cfb2e4, 0, 131072},
 		patch_rt2_l0
 	},
 	{
 		FULL_COPY,
 		{"rtype2", "rt2_h0.bin", 131072, 0x47639a78, 0, 131072},
-		{"rtype2", "ic54.8d",    131072, 0xd8ece6f4, 0, 131072},
+		{"rtype2", "rt2-a-h0-d.54",    131072, 0xd8ece6f4, 0, 131072},
 		patch_rt2_h0
 	},
 	{
