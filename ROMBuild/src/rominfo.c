@@ -3464,152 +3464,152 @@ struct Rom neoragex_roms[] =
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.038", 524288, 0x4483bae1, 0, 262144},
-		{"sengokh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
+		{"sengokuh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.038", 524288, 0x4483bae1, 262144, 262144},
-		{"sengokh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
+		{"sengokuh", "017-hp1.bin", 524288, 0x33eccae0, 0, 262144},
 	},
 	{
 		FULL_COPY,
 		{"sengoku", "n058001a.1f8", 524288, 0x205258a7, 0, 524288},
-		{"sengokh", "017-v1.bin", 1048576, 0x23663295, 0, 524288},
+		{"sengokuh", "017-v1.bin", 1048576, 0x23663295, 0, 524288},
 	},
 	{
 		FULL_COPY,
 		{"sengoku", "n058001b.1f8", 524288, 0x6421bdf3, 0, 524288},
-		{"sengokh", "017-v2.bin", 1048576, 0xf61e6765, 0, 524288},
+		{"sengokuh", "017-v2.bin", 1048576, 0xf61e6765, 0, 524288},
 	},
 	{
 		FULL_COPY,
 		{"sengoku", "n058001a.1fc", 524288, 0x6fbe52c8, 0, 524288},
-		{"sengokh", "017-v1.bin", 1048576, 0x23663295, 524288, 524288},
+		{"sengokuh", "017-v1.bin", 1048576, 0x23663295, 524288, 524288},
 	},
 	{
 		FULL_COPY,
 		{"sengoku", "n058001b.1fc", 524288, 0x1f9578fb, 0, 524288},
-		{"sengokh", "017-v2.bin", 1048576, 0xf61e6765, 524288, 524288},
+		{"sengokuh", "017-v2.bin", 1048576, 0xf61e6765, 524288, 524288},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.538", 524288, 0xe834b925, 0, 262144},
-		{"sengokh", "017-c1.bin", 1048576, 0xb4eb82a1, 0, 262144},
+		{"sengokuh", "017-c1.bin", 1048576, 0xb4eb82a1, 0, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.638", 524288, 0x96de5eb9, 0, 262144},
-		{"sengokh", "017-c2.bin", 1048576, 0xd55c550d, 0, 262144},
+		{"sengokuh", "017-c2.bin", 1048576, 0xd55c550d, 0, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001b.538", 524288, 0x443c552c, 0, 262144},
-		{"sengokh", "017-c3.bin", 1048576, 0xed51ef65, 0, 262144},
+		{"sengokuh", "017-c3.bin", 1048576, 0xed51ef65, 0, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001b.638", 524288, 0xafbd5b0b, 0, 262144},
-		{"sengokh", "017-c4.bin", 1048576, 0xf4f3c9cb, 0, 262144},
+		{"sengokuh", "017-c4.bin", 1048576, 0xf4f3c9cb, 0, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.53c", 524288, 0x66be6d46, 0, 262144},
-		{"sengokh", "017-c1.bin", 1048576, 0xb4eb82a1, 524288, 262144},
+		{"sengokuh", "017-c1.bin", 1048576, 0xb4eb82a1, 524288, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.63c", 524288, 0x25f5fd7b, 0, 262144},
-		{"sengokh", "017-c2.bin", 1048576, 0xd55c550d, 524288, 262144},
+		{"sengokuh", "017-c2.bin", 1048576, 0xd55c550d, 524288, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001b.53c", 524288, 0xecb41adc, 0, 262144},
-		{"sengokh", "017-c3.bin", 1048576, 0xed51ef65, 524288, 262144},
+		{"sengokuh", "017-c3.bin", 1048576, 0xed51ef65, 524288, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001b.63c", 524288, 0x78b25278, 0, 262144},
-		{"sengokh", "017-c4.bin", 1048576, 0xf4f3c9cb, 524288, 262144},
+		{"sengokuh", "017-c4.bin", 1048576, 0xf4f3c9cb, 524288, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.538", 524288, 0xe834b925, 262144, 262144},
-		{"sengokh", "017-c1.bin", 1048576, 0xb4eb82a1, 0, 262144},
+		{"sengokuh", "017-c1.bin", 1048576, 0xb4eb82a1, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.638", 524288, 0x96de5eb9, 262144, 262144},
-		{"sengokh", "017-c2.bin", 1048576, 0xd55c550d, 0, 262144},
+		{"sengokuh", "017-c2.bin", 1048576, 0xd55c550d, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001b.538", 524288, 0x443c552c, 262144, 262144},
-		{"sengokh", "017-c3.bin", 1048576, 0xed51ef65, 0, 262144},
+		{"sengokuh", "017-c3.bin", 1048576, 0xed51ef65, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001b.638", 524288, 0xafbd5b0b, 262144, 262144},
-		{"sengokh", "017-c4.bin", 1048576, 0xf4f3c9cb, 0, 262144},
+		{"sengokuh", "017-c4.bin", 1048576, 0xf4f3c9cb, 0, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.53c", 524288, 0x66be6d46, 262144, 262144},
-		{"sengokh", "017-c1.bin", 1048576, 0xb4eb82a1, 524288, 262144},
+		{"sengokuh", "017-c1.bin", 1048576, 0xb4eb82a1, 524288, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.63c", 524288, 0x25f5fd7b, 262144, 262144},
-		{"sengokh", "017-c2.bin", 1048576, 0xd55c550d, 524288, 262144},
+		{"sengokuh", "017-c2.bin", 1048576, 0xd55c550d, 524288, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001b.53c", 524288, 0xecb41adc, 262144, 262144},
-		{"sengokh", "017-c3.bin", 1048576, 0xed51ef65, 524288, 262144},
+		{"sengokuh", "017-c3.bin", 1048576, 0xed51ef65, 524288, 262144},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001b.63c", 524288, 0x78b25278, 262144, 262144},
-		{"sengokh", "017-c4.bin", 1048576, 0xf4f3c9cb, 524288, 262144},
+		{"sengokuh", "017-c4.bin", 1048576, 0xf4f3c9cb, 524288, 262144},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 0, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 65536, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 131072, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		EVEN_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 196608, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 262144, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 327680, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 393216, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		ODD_COPY,
 		{"sengoku", "n058001a.03c", 524288, 0xd0d55b2a, 458752, 65536},
-		{"sengokh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
+		{"sengokuh", "017-p2.bin", 131072, 0x3024bbb3, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -5025,11 +5025,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"crsword", "n046001a.4f8", 65536, 0x66633e5e, 0, 65536},
-		{"crsword", "037-m1.bin", 131072, 0x9c384263, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"crsword", "n046001a.1fc", 524288, 0xa11ecaf4, 0, 524288},
 		{"crsword", "037-v1.bin", 1048576, 0x61fedf65, 524288, 524288},
 	},
@@ -6376,11 +6371,6 @@ struct Rom neoragex_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
 		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
 	},
@@ -7012,106 +7002,6 @@ struct Rom callus_roms[] =
 		{"striderj", "sth09.bin", 131072, 0x4769272a, 65536, 65536},
 		{"	", "	 ", 65536, 0xffffffff, 0, 65536},
 	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl09.bin", 131072, 0x05aa71b4, 0, 131072},
-		{"willowj", "wl_gfx5.rom", 524288, 0xafa74b73, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl13.bin", 131072, 0x1f7c87cd, 0, 131072},
-		{"willowj", "wl_gfx7.rom", 524288, 0x12a0dc0b, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl24.bin", 131072, 0xd9d73ba1, 0, 131072},
-		{"willowj", "wl_gfx1.rom", 524288, 0xc6f2abce, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl38.bin", 131072, 0xf6f9111b, 0, 131072},
-		{"willowj", "wl_gfx3.rom", 524288, 0x4aa4c6d3, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl40.bin", 131072, 0xc7a0ed21, 0, 131072},
-		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl05.bin", 131072, 0xf5254bf2, 0, 131072},
-		{"willowj", "wl_gfx7.rom", 524288, 0x12a0dc0b, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl17.bin", 131072, 0xa652f30c, 0, 131072},
-		{"willowj", "wl_gfx1.rom", 524288, 0xc6f2abce, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl32.bin", 131072, 0x10f64027, 0, 131072},
-		{"willowj", "wl_gfx3.rom", 524288, 0x4aa4c6d3, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl34.bin", 131072, 0x23a84f7a, 0, 131072},
-		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 0, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl01.bin", 131072, 0x08c2df12, 0, 131072},
-		{"willowj", "wl_gfx5.rom", 524288, 0xafa74b73, 0, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl10.bin", 131072, 0xdbba0a3f, 0, 131072},
-		{"willowj", "wl_gfx5.rom", 524288, 0xafa74b73, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl14.bin", 131072, 0x7d5798b2, 0, 131072},
-		{"willowj", "wl_gfx7.rom", 524288, 0x12a0dc0b, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl25.bin", 131072, 0x857d17d2, 0, 131072},
-		{"willowj", "wl_gfx1.rom", 524288, 0xc6f2abce, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl39.bin", 131072, 0xe6fce9b0, 0, 131072},
-		{"willowj", "wl_gfx3.rom", 524288, 0x4aa4c6d3, 262144, 131072},
-	},
-	{
-		EVEN_COPY,
-		{"willowj", "wl41.bin", 131072, 0x8d6477a3, 0, 131072},
-		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl02.bin", 131072, 0x86fba7a5, 0, 131072},
-		{"willowj", "wl_gfx5.rom", 524288, 0xafa74b73, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl06.bin", 131072, 0x1f052948, 0, 131072},
-		{"willowj", "wl_gfx7.rom", 524288, 0x12a0dc0b, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl18.bin", 131072, 0x316c7fbc, 0, 131072},
-		{"willowj", "wl_gfx1.rom", 524288, 0xc6f2abce, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl33.bin", 131072, 0xa15d5517, 0, 131072},
-		{"willowj", "wl_gfx3.rom", 524288, 0x4aa4c6d3, 262144, 131072},
-	},
-	{
-		ODD_COPY,
-		{"willowj", "wl35.bin", 131072, 0x5eff7951, 0, 131072},
-		{"willowj", "wl_32.rom", 524288, 0xdfd9f643, 262144, 131072},
-	},
 	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
 		EVEN_COPY,
@@ -7337,22 +7227,22 @@ struct Rom callus_roms[] =
 	{
 		EVEN_COPY,
 		{"knightsj", "krj35.bin", 131072, 0x1172806d, 0, 131072},
-		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 0, 131072},
+		{"knightsj", "kr_22.7f", 524288, 0xd0b671a9, 0, 131072},
 	},
 	{
 		ODD_COPY,
 		{"knightsj", "krj28.bin", 131072, 0xfe6eb08d, 0, 131072},
-		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 0, 131072},
+		{"knightsj", "kr_22.7f", 524288, 0xd0b671a9, 0, 131072},
 	},
 	{
 		EVEN_COPY,
 		{"knightsj", "krj36.bin", 131072, 0xeb52e78d, 0, 131072},
-		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 262144, 131072},
+		{"knightsj", "kr_22.7f", 524288, 0xd0b671a9, 262144, 131072},
 	},
 	{
 		ODD_COPY,
 		{"knightsj", "krj29.bin", 131072, 0xf854b020, 0, 131072},
-		{"knightsj", "kr_22.rom", 524288, 0xd0b671a9, 262144, 131072},
+		{"knightsj", "kr_22.7f", 524288, 0xd0b671a9, 262144, 131072},
 	},
 	/* Commented out whilst doing the CAESAR update for MAME v0.128
 	{
@@ -10318,92 +10208,92 @@ struct Rom calice_roms[] =
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c1.rom", 4194304, 0xaad087fc, 0, 2097152},
-		{"shocktra", "238-c1.bin", 4194304, 0x90c6a181, 2097152, 2097152},
+		{"shocktroa", "238-c1.bin", 4194304, 0x90c6a181, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c2.rom", 4194304, 0x7e39df1f, 0, 2097152},
-		{"shocktra", "238-c2.bin", 4194304, 0x888720f0, 2097152, 2097152},
+		{"shocktroa", "238-c2.bin", 4194304, 0x888720f0, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c3.rom", 4194304, 0x6682a458, 0, 2097152},
-		{"shocktra", "238-c3.bin", 4194304, 0x2c393aa3, 2097152, 2097152},
+		{"shocktroa", "238-c3.bin", 4194304, 0x2c393aa3, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c4.rom", 4194304, 0xcbef1f17, 0, 2097152},
-		{"shocktra", "238-c4.bin", 4194304, 0xb9e909eb, 2097152, 2097152},
+		{"shocktroa", "238-c4.bin", 4194304, 0xb9e909eb, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c5.rom", 4194304, 0xe17762b1, 0, 2097152},
-		{"shocktra", "238-c5.bin", 4194304, 0xc22c68eb, 2097152, 2097152},
+		{"shocktroa", "238-c5.bin", 4194304, 0xc22c68eb, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c6.rom", 4194304, 0x28beab71, 0, 2097152},
-		{"shocktra", "238-c6.bin", 4194304, 0x119323cd, 2097152, 2097152},
+		{"shocktroa", "238-c6.bin", 4194304, 0x119323cd, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c7.rom", 4194304, 0xa47e62d2, 0, 2097152},
-		{"shocktra", "238-c7.bin", 4194304, 0xa72ce7ed, 2097152, 2097152},
+		{"shocktroa", "238-c7.bin", 4194304, 0xa72ce7ed, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c8.rom", 4194304, 0xe8e890fb, 0, 2097152},
-		{"shocktra", "238-c8.bin", 4194304, 0x1c7c2efb, 2097152, 2097152},
+		{"shocktroa", "238-c8.bin", 4194304, 0x1c7c2efb, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_p2.rom", 4194304, 0x646f6c76, 0, 2097152},
-		{"shocktra", "238-p2.bin", 4194304, 0x5b4a09c5, 2097152, 2097152},
+		{"shocktroa", "238-p2.bin", 4194304, 0x5b4a09c5, 2097152, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c1.rom", 4194304, 0xaad087fc, 2097152, 2097152},
-		{"shocktra", "238-c1.bin", 4194304, 0x90c6a181, 0, 2097152},
+		{"shocktroa", "238-c1.bin", 4194304, 0x90c6a181, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c2.rom", 4194304, 0x7e39df1f, 2097152, 2097152},
-		{"shocktra", "238-c2.bin", 4194304, 0x888720f0, 0, 2097152},
+		{"shocktroa", "238-c2.bin", 4194304, 0x888720f0, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c3.rom", 4194304, 0x6682a458, 2097152, 2097152},
-		{"shocktra", "238-c3.bin", 4194304, 0x2c393aa3, 0, 2097152},
+		{"shocktroa", "238-c3.bin", 4194304, 0x2c393aa3, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c4.rom", 4194304, 0xcbef1f17, 2097152, 2097152},
-		{"shocktra", "238-c4.bin", 4194304, 0xb9e909eb, 0, 2097152},
+		{"shocktroa", "238-c4.bin", 4194304, 0xb9e909eb, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c5.rom", 4194304, 0xe17762b1, 2097152, 2097152},
-		{"shocktra", "238-c5.bin", 4194304, 0xc22c68eb, 0, 2097152},
+		{"shocktroa", "238-c5.bin", 4194304, 0xc22c68eb, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c6.rom", 4194304, 0x28beab71, 2097152, 2097152},
-		{"shocktra", "238-c6.bin", 4194304, 0x119323cd, 0, 2097152},
+		{"shocktroa", "238-c6.bin", 4194304, 0x119323cd, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c7.rom", 4194304, 0xa47e62d2, 2097152, 2097152},
-		{"shocktra", "238-c7.bin", 4194304, 0xa72ce7ed, 0, 2097152},
+		{"shocktroa", "238-c7.bin", 4194304, 0xa72ce7ed, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_c8.rom", 4194304, 0xe8e890fb, 2097152, 2097152},
-		{"shocktra", "238-c8.bin", 4194304, 0x1c7c2efb, 0, 2097152},
+		{"shocktroa", "238-c8.bin", 4194304, 0x1c7c2efb, 0, 2097152},
 	},
 	{
 		FULL_COPY,
 		{"shocktrj", "shock_p2.rom", 4194304, 0x646f6c76, 2097152, 2097152},
-		{"shocktra", "238-p2.bin", 4194304, 0x5b4a09c5, 0, 2097152},
+		{"shocktroa", "238-p2.bin", 4194304, 0x5b4a09c5, 0, 2097152},
 	},
 	{
 		FULL_COPY,
@@ -10662,11 +10552,6 @@ struct Rom calice_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"gururin", "gurin_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"mahretsu", "maj_m1.rom", 65536, 0x37965a73, 0, 65536},
 		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
 	},
@@ -10719,11 +10604,6 @@ struct Rom nebula_roms[] =
 		FULL_COPY,
 		{"breakrev", "245-c6.bin", 2097152, 0x23c65644, 0, 2097152},
 		{"breakrev", "245-c6.bin", 4194304, 0xd0337328, 0, 2097152},
-	},
-	{
-		FULL_COPY,
-		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
 	},
 	{
 		FULL_COPY,
@@ -10787,11 +10667,6 @@ struct Rom nebula_jukebox_roms[] =
 	},
 	{
 		FULL_COPY,
-		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-	},
-	{
-		FULL_COPY,
 		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
 		{"mahretsu", "004-m1.bin", 131072, 0xc71fbb3b, 0, 65536},
 	},
@@ -10830,11 +10705,6 @@ struct Rom nebula_jukebox_roms[] =
 
 struct Rom neojukebox_roms[] =
 {
-	{
-		FULL_COPY,
-		{"gururin", "067_m1.rom", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-	},
 	{
 		FULL_COPY,
 		{"mahretsu", "004_m1.rom", 65536, 0x37965a73, 0, 65536},
@@ -11819,11 +11689,6 @@ struct Rom hoot_roms[] =
 
 struct Rom m1_roms[] =
 {
-	{
-		FULL_COPY,
-		{"gururin", "067-m1.bin", 65536, 0x833cdf1b, 0, 65536},
-		{"gururin", "067-m1.bin", 131072, 0xe777a234, 0, 65536},
-	},
 	{
 		FULL_COPY,
 		{"mahretsu", "004-m1.bin", 65536, 0x37965a73, 0, 65536},
