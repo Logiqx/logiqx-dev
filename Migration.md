@@ -407,9 +407,7 @@ Untracked files:
         Limited Edition/IPMask/_test.bat
         Limited Edition/IPMask/inet32ut/
         Limited Edition/IPMask/ipmask.log
-        Limited Edition/M1SHA1/
         MAMEDiff/tst/
-        Migration.md
         ROMInfo/rominfo.log
         ZIPIdent/zipident.dat
         grep.sh
