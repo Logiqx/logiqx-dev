@@ -1,0 +1,53 @@
+  -!  changes the -g, -G, -S options (including the -c option) to exclude games
+  -A  author
+  -B  *** available ***
+  -C  category
+  -D  remove duplicate ROMs/disks/samples (as above in terms of usage)
+  -E  e-mail
+  -F  full name (i.e. description)
+  -G  select games from a specified sourcefile. The @ method is also supported
+  -H  homepage
+  -I  Incorporate games from a 'supplement' data file
+  -J  *** available ***
+  -K  *** available ***
+  -L  *** available ***
+  -M  merging (none, split or full)
+  -N  nodump (obsolete, required or ignore)
+  -O  comment
+  -P  packing (zip or unzip)
+  -Q  *** available ***
+  -R  ref name
+  -S  select games using substring of description. The @ method is supported
+  -T  date
+  -U  url
+  -V  version
+  -W  *** available ***
+  -X  fix merging off (do not use unless you understand the consequences!)
+  -Y  *** available ***
+  -Z  *** available ***
+  -a  append to file
+  -b  *** available ***
+  -c  include clones (for use with the -g option)
+  -d  Show debug messages
+  -e  *** available ***
+  -f  output format (listinfo, listxml, romcenter2, delimited, sublist, etc)
+  -g  individual game selection. use the @ symbol to specify a file of names
+  -h  *** available ***
+  -i  include missing information from a 'reference' data file
+  -j  Nebula Jukebox - only load Z80 and Sample ROMs from romdata
+  -k  keep as much information as possible from the source file
+  -l  lower case game names and ROM names
+  -m  Use MD5 checksums rather than SHA1 (e.g. when using -x, -m can be used)
+  -n  *** todo *** - "no inspection" of file types (samples, disks)
+  -o  output to file
+  -p  prune (remove) ROMs, disks and/or samples (e.g. '-p disk,sample')
+  -q  always use quotes around strings (only applies to listinfo output)
+  -r  remove clones
+  -s  sort games by parent (sorted by parent name then game name)
+  -t  test mode - no data file is actually saved (just loaded and cleansed)
+  -u  *** available ***
+  -v  Verbose logging
+  -w  *** available ***
+  -x  Calculate SHA1/MD5 when scanning files or ZIPs in a directory
+  -y  *** available ***
+  -z  *** todo *** include ROMs with a size of zero bytes

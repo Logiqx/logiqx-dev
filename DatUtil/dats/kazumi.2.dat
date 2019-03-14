@@ -1,0 +1,11 @@
+clrmamepro ( 
+   name "Nintendo - DS Decrypted (numbered)" 
+   description "Nintendo - DS Decrypted (numbered)" 
+   version #2828+x108 
+   comment "no-intro | no-intro.org" 
+) 
+
+game (
+	name g1
+	description d1
+)

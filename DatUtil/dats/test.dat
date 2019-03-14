@@ -1,0 +1,778 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//Logiqx//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+<datafile>
+	<header>
+		<name>A&apos;E</name>
+		<description>AAE Update 5</description>
+		<category>Vector Based Arcade Games</category>
+		<version>20080401</version>
+		<date>2008-04-01</date>
+		<author>Logiqx</author>
+		<email>no_way@anywhere.com</email>
+		<homepage>Logiqx Home Page</homepage>
+		<url>http://www.logiqx.com/</url>
+		<comment>Report problems on the forum!</comment>
+		<clrmamepro header="arcade.xml" forcemerging="full" forcepacking="zip"/>
+		<romcenter plugin="arcade.dll" rommode="merged" biosmode="split" samplemode="unmerged" lockrommode="yes" lockbiosmode="no" locksamplemode="yes"/>
+	</header>
+	<game name="alienst">
+		<description>Aliens (Tempest Prototype)</description>
+		<year>2001</year>
+		<manufacturer>Atari</manufacturer>
+		<release name="alienst #2" region="eu" language="en" date="20010101" default="no"/>
+		<rom name="aliens_r3.bin" size="2048" crc="6cabcd08" sha1="e3950de50f3dfbc4d4d2f4fe26625d8ef94c0819" status="verified"/>
+		<rom name="aliens_r1.bin" size="2048" crc="555c3070" sha1="032f03af23c7ccac8a2bf50c3c646e141921ffee" md5="x"/>
+		<rom name="aliens_p1.bin" size="2048" crc="7c10adbd" sha1="38579128a90bff4a7a4ae46d6aaa42118b8bc218"/>
+		<rom name="aliens_n3.bin" size="2048" crc="5c8fd38b" sha1="bb0d6bd062eba53b5d64b3f444d5ce0a34728bf5"/>
+		<rom name="aliens_n1.bin" size="2048" crc="bd98c5f3" sha1="268487d9cf46b4b7b49eab7420d078bf676e636c"/>
+		<rom name="aliens_l1.bin" size="2048" crc="cd246ac2" sha1="de2e6fe2e72c092c3874e797fc302a71dbf57710"/>
+		<rom name="aliens_k1.bin" size="2048" crc="0ac96e87" sha1="37461e84e6f46516c25dbf4ddb2ffd65877445c0"/>
+		<rom name="aliens_j1.bin" size="2048" crc="5487d531" sha1="c95f037151b824345af03f27a6c3c7eb8a899b2c"/>
+		<rom name="aliens_d1.bin" size="2048" crc="337e21f6" sha1="7adadeaa975e22f0b20e8f1fb6ad68b5c3934133"/>
+		<rom name="aliens_f1.bin" size="2048" crc="4d2aabb0" sha1="31106a1fc22d2a19866f07b8d6c6f4bf76007909"/>
+		<rom name="aliens_e1.bin" size="2048" crc="337e21f6" sha1="7adadeaa975e22f0b20e8f1fb6ad68b5c3934133"/>
+		<rom name="aliens_h1.bin" size="2048" crc="a503f54a" sha1="91ebf9f69a183a04a5bf55fcdd9e191523bb66bb"/>
+	</game>
+	<game name="armora">
+		<description>Armor Attack</description>
+		<year>1980</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<release name="alienst #2" region="eu" language="en" date="20010101" default="no"/>
+		<rom name="ar414le.t6" size="4096" crc="d7e71f84" sha1="0b29278a6a698f07eae597bc0a8650e91eaabffa"/>
+		<rom name="ar414lo.p6" size="4096" crc="df1c2370" sha1="b74834d1a591a741892ec41269a831d3590ff766"/>
+		<rom name="ar414ue.u6" size="4096" crc="b0276118" sha1="88f33cb2f46a89819c85f810c7cff812e918391e"/>
+		<rom name="ar414uo.r6" size="4096" crc="229d779f" sha1="0cbdd83eb224146944049346f30d9c72d3ad5f52"/>
+	</game>
+	<game name="astdelu1">
+		<description>Asteroids Deluxe (rev 1)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="036430.01" size="2048" crc="8f5dabc6" sha1="5d7543e19acab99ddb63c0ffd60f54d7a0f267f5"/>
+		<rom name="036431.01" size="2048" crc="157a8516" sha1="9041d8c2369d004f198681e02b59a923fa8f70c9"/>
+		<rom name="036432.01" size="2048" crc="fdea913c" sha1="ded0138a20d80317d67add5bb2a64e6274e0e409"/>
+		<rom name="036433.01" size="2048" crc="ef09bac7" sha1="6a4b37dbfe4e6badc4e81036b1430da2e9cb8ca4"/>
+		<rom name="036800.01" size="2048" crc="3b597407" sha1="344fea2e5d84acce365d76daed61e96b9b6b37cc"/>
+		<rom name="036799.01" size="2048" crc="7d511572" sha1="1956a12bccb5d3a84ce0c1cc10c6ad7f64e30b40"/>
+	</game>
+	<game name="astdelu2">
+		<description>Asteroids Deluxe (rev 2)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="036430.01" size="2048" crc="8f5dabc6" sha1="5d7543e19acab99ddb63c0ffd60f54d7a0f267f5"/>
+		<rom name="036431.01" size="2048" crc="157a8516" sha1="9041d8c2369d004f198681e02b59a923fa8f70c9"/>
+		<rom name="036432.01" size="2048" crc="fdea913c" sha1="ded0138a20d80317d67add5bb2a64e6274e0e409"/>
+		<rom name="036433.02" size="2048" crc="d8db74e3" sha1="52b64e867df98d14742eb1817b59931bb7f941d9"/>
+		<rom name="036800.01" size="2048" crc="3b597407" sha1="344fea2e5d84acce365d76daed61e96b9b6b37cc"/>
+		<rom name="036799.01" size="2048" crc="7d511572" sha1="1956a12bccb5d3a84ce0c1cc10c6ad7f64e30b40"/>
+	</game>
+	<game name="astdelux">
+		<description>Asteroids Deluxe (rev 3)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="036430.02" size="2048" crc="a4d7a525" sha1="abe262193ec8e1981be36928e9a89a8ac95cd0ad"/>
+		<rom name="036431.02" size="2048" crc="d4004aae" sha1="aa2099b8fc62a79879efeea70ea1e9ed77e3e6f0"/>
+		<rom name="036432.02" size="2048" crc="6d720c41" sha1="198218cd2f43f8b83e4463b1f3a8aa49da5015e4"/>
+		<rom name="036433.03" size="2048" crc="0dcc0be6" sha1="bf10ffb0c4870e777d6b509cbede35db8bb6b0b8"/>
+		<rom name="036800.02" size="2048" crc="bb8cabe1" sha1="cebaa1b91b96e8b80f2b2c17c6fd31fa9f156386"/>
+		<rom name="036799.01" size="2048" crc="7d511572" sha1="1956a12bccb5d3a84ce0c1cc10c6ad7f64e30b40"/>
+	</game>
+	<game name="asterock">
+		<description>Asterock</description>
+		<year>1979</year>
+		<manufacturer>Sidam</manufacturer>
+		<rom name="sidamas.2" size="1024" crc="cdf720c6" sha1="85fe748096478e28a06bd98ff3aad73ab21b22a4"/>
+		<rom name="sidamas.3" size="1024" crc="ee58bdf0" sha1="80094cb5dafd327aff6658ede33106f0493a809d"/>
+		<rom name="sidamas.4" size="1024" crc="8d3e421e" sha1="5f5719ab84d4755e69bef205d313b455bc59c413"/>
+		<rom name="sidamas.5" size="1024" crc="d2ce7672" sha1="b6012e09b2439a614a55bcf23be0692c42830e21"/>
+		<rom name="sidamas.6" size="1024" crc="74103c87" sha1="e568b5ac573a6d0474cf672b3c62abfbd3320799"/>
+		<rom name="sidamas.7" size="1024" crc="75a39768" sha1="bf22998fd692fb01964d8894e421435c55d746a0"/>
+		<rom name="sidamas.0" size="1024" crc="6bd2053f" sha1="790f2858f44bbb1854e2d9d549e29f4815c4665b"/>
+		<rom name="sidamas.1" size="1024" crc="231ce201" sha1="710f4c19864d725ba1c9ea447a97e84001a679f7"/>
+	</game>
+	<game name="asteroi1">
+		<description>Asteroids (rev 1)</description>
+		<year>1979</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="035145.01" size="2048" crc="e9bfda64" sha1="291dc567ebb31b35df83d9fb87f4080f251ff9c8"/>
+		<rom name="035144.01" size="2048" crc="e53c28a9" sha1="d9f081e73511ec43377f0c6457747f15a470d4dc"/>
+		<rom name="035143.01" size="2048" crc="7d4e3d05" sha1="d88000e904e158efde50e453e2889ecd2cb95f24"/>
+		<rom name="035127.01" size="2048" crc="99699366" sha1="9b2828fc1cef7727f65fa65e1e11e309b7c98792"/>
+	</game>
+	<game name="asteroib">
+		<description>Asteroids (bootleg on Lunar Lander hardware)</description>
+		<year>1979</year>
+		<manufacturer>bootleg</manufacturer>
+		<rom name="035145ll.bin" size="2048" crc="605fc0f2" sha1="8d897a3b75bd1f2537470f0a34a97a8c0853ee08"/>
+		<rom name="035144ll.bin" size="2048" crc="e106de77" sha1="003e99d095bd4df6fae243ea1dd5b12f3eb974f1"/>
+		<rom name="035143ll.bin" size="2048" crc="6b1d8594" sha1="ff3cd93f1bc5734bface285e442125b395602d7d"/>
+		<rom name="035127.02" size="2048" crc="8b71fd9e" sha1="8cd5005e531eafa361d6b7e9eed159d164776c70"/>
+	</game>
+	<game name="asteroid">
+		<description>Asteroids (rev 2)</description>
+		<year>1979</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="035145.02" size="2048" crc="0cc75459" sha1="2af85c9689b878155004da47fedbde5853a18723"/>
+		<rom name="035144.02" size="2048" crc="096ed35c" sha1="064d680ded7f30c543f93ae5ca85f90d550f73e5"/>
+		<rom name="035143.02" size="2048" crc="312caa02" sha1="1ce2eac1ab90b972e3f1fc3d250908f26328d6cb"/>
+		<rom name="035127.02" size="2048" crc="8b71fd9e" sha1="8cd5005e531eafa361d6b7e9eed159d164776c70"/>
+	</game>
+	<game name="astropal">
+		<description>Astropal</description>
+		<manufacturer>Sidam?</manufacturer>
+		<rom name="2708.0a" size="1024" crc="e6883322" sha1="05b0ab0dc6297209dcfdd173e762bfae3a720e8d"/>
+		<rom name="2708.1a" size="1024" crc="4401df1d" sha1="16f3b957278aa67cb37bcd5defb6e4dd8ccf7d1f"/>
+		<rom name="2708.2a" size="1024" crc="5bac1ee4" sha1="8c3e5f882f4798f8ed0523b60a216c989324a7c2"/>
+		<rom name="2708.3a" size="1024" crc="a870afad" sha1="1a256db2bc6baa238ee1df4eff2fdce0888f812c"/>
+		<rom name="2708.4a" size="1024" crc="8bd2d985" sha1="3ff9110c1bad7d4562664da772d14750d738c2d6"/>
+		<rom name="2708.5a" size="1024" crc="5e97a86b" sha1="f3500d48ecb3969b8aaea9c4e812fbf6cf4170af"/>
+		<rom name="2708.6a" size="1024" crc="22c354d0" sha1="c465ca5787ad8de3be97deac1214d3abd0b27e6b"/>
+		<rom name="2708.7a" size="1024" crc="aeca51c1" sha1="767bca1e6bca41327b9ff6c3570edcabe46dec21"/>
+	</game>
+	<game name="barrier">
+		<description>Barrier</description>
+		<year>1979</year>
+		<manufacturer>Vectorbeam</manufacturer>
+		<rom name="barrier.t7" size="2048" crc="7c3d68c8" sha1="1138029552b73e94522b3b48096befc057d603c7"/>
+		<rom name="barrier.p7" size="2048" crc="aec142b5" sha1="b268936b82e072f38f1f1dd54e0bc88bcdf19925"/>
+	</game>
+	<game name="bwidow">
+		<description>Black Widow</description>
+		<year>1982</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136017.107" size="2048" crc="97f6000c" sha1="bbae93058228820ee67b05f23e45fb54ee0963ff"/>
+		<rom name="136017.108" size="4096" crc="3da354ed" sha1="935295d66ad40ad702eb7a694296e836f53d22ec"/>
+		<rom name="136017.109" size="4096" crc="2fc4ce79" sha1="2b324877bf55151747eaacd9a58f846712bfbc14"/>
+		<rom name="136017.110" size="4096" crc="0dd52987" sha1="72aa1d24f20cc86701189df486488edc434b1be1"/>
+		<rom name="136017.101" size="4096" crc="fe3febb7" sha1="b62f7622ca60248e1b8376ee135ae3d94d0b4437"/>
+		<rom name="136017.102" size="4096" crc="10ad0376" sha1="614c74daa468a7430ed965a3a9d07b6ad846016c"/>
+		<rom name="136017.103" size="4096" crc="8a1430ee" sha1="3aa6c40721a4289c1cf01f37c89b6b0a96336c68"/>
+		<rom name="136017.104" size="4096" crc="44f9943f" sha1="e83d8242e4592149719be6a68cf3aba46116072f"/>
+		<rom name="136017.105" size="4096" crc="1fdf801c" sha1="33da2ba3cefa3d0dddc8647f9b6caf5d5bfe9b3b"/>
+		<rom name="136017.106" size="4096" crc="ccc9b26c" sha1="f1398e3ff2b62af1509bc117028845b671ff1ca2"/>
+	</game>
+	<game name="bzone">
+		<description>Battle Zone (set 1)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="036414.01" size="2048" crc="efbc3fa0" sha1="6d284fab34b09dde8aa0df7088711d4723f07970"/>
+		<rom name="036413.01" size="2048" crc="5d9d9111" sha1="42638cff53a9791a0f18d316f62a0ea8eea4e194"/>
+		<rom name="036412.01" size="2048" crc="ab55cbd2" sha1="6bbb8316d9f8588ea0893932f9174788292b8edc"/>
+		<rom name="036411.01" size="2048" crc="ad281297" sha1="54c5e06b2e69eb731a6c9b1704e4340f493e7ea5"/>
+		<rom name="036410.01" size="2048" crc="0b7bfaa4" sha1="33ae0f68b4e2eae9f3aecbee2d0b29003ce460b2"/>
+		<rom name="036409.01" size="2048" crc="1e14e919" sha1="448fab30535e6fad7e0ab4427bc06bbbe075e797"/>
+		<rom name="036422.01" size="2048" crc="7414177b" sha1="147d97a3b475e738ce00b1a7909bbd787ad06eda"/>
+		<rom name="036421.01" size="2048" crc="8ea8f939" sha1="b71e0ab0e220c3e64dc2b094c701fb1a960b64e4"/>
+	</game>
+	<game name="bzonec">
+		<description>Battle Zone (cocktail)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="bz1g4800" size="2048" crc="e228dd64" sha1="247c788b4ccadf6c1e9201ad4f31d55c0036ff0f"/>
+		<rom name="bz1f5000" size="2048" crc="dddfac9a" sha1="e6f2761902e1ffafba437a1117e9ba40f116087d"/>
+		<rom name="bz1e5800" size="2048" crc="7e00e823" sha1="008e491a8074dac16e56c3aedec32d4b340158ce"/>
+		<rom name="bz1d6000" size="2048" crc="c0f8c068" sha1="66fff6b493371f0015c21b06b94637db12deced2"/>
+		<rom name="bz1c6800" size="2048" crc="5adc64bd" sha1="4574e4fe375d4ab3151a988235efa11e8744e2c6"/>
+		<rom name="bz1b7000" size="2048" crc="ed8a860e" sha1="316a3c4870ba44bb3e9cb9fc5200eb081318facf"/>
+		<rom name="bz1a7800" size="2048" crc="04babf45" sha1="a59da5ff49fc398ca4a948e28f05250af776b898"/>
+		<rom name="036422.01" size="2048" crc="7414177b" sha1="147d97a3b475e738ce00b1a7909bbd787ad06eda"/>
+		<rom name="bz3b3800" size="2048" crc="76cf57f6" sha1="1b8f3fcd664ed04ce60d94fdf27e56b20d52bdbd"/>
+	</game>
+	<game name="bzonep">
+		<description>BattleZone Plus (Clay Cowgill)</description>
+		<year>2000</year>
+		<manufacturer>Clay Cowgill</manufacturer>
+		<rom name="036422.01.bin" size="2048" crc="7414177b" sha1="147d97a3b475e738ce00b1a7909bbd787ad06eda"/>
+		<rom name="036421.01.bin" size="2048" crc="8ea8f939" sha1="b71e0ab0e220c3e64dc2b094c701fb1a960b64e4"/>
+		<rom name="036414.01.bin" size="2048" crc="55e0b5d5" sha1="88cbf5c98b41cde5524e9bef537a03db9e783f17"/>
+		<rom name="036413.01.bin" size="2048" crc="5d9d9111" sha1="42638cff53a9791a0f18d316f62a0ea8eea4e194"/>
+		<rom name="036412.01.bin" size="2048" crc="3e0931d7" sha1="1366a8e9b18a5b2d3f23d9069845403b5d65d32d"/>
+		<rom name="036411.01.bin" size="2048" crc="ad281297" sha1="54c5e06b2e69eb731a6c9b1704e4340f493e7ea5"/>
+		<rom name="036408.01.bin" size="2048" crc="7513fc40" sha1="c01c8959df2c24435a50caa46104a88a9fb7f7fd"/>
+		<rom name="036409.01.bin" size="2048" crc="debaea12" sha1="d23cf62182e76562f4d4e9023a8be6243183da00"/>
+		<rom name="036410.01.bin" size="2048" crc="0b7bfaa4" sha1="33ae0f68b4e2eae9f3aecbee2d0b29003ce460b2"/>
+	</game>
+	<game name="clowns">
+		<description>Clowns (rev. 2)</description>
+		<year>1978</year>
+		<manufacturer>Midway</manufacturer>
+		<rom name="h2.cpu" size="1024" crc="ff4432eb" sha1="997aee1e3669daa1d8169b4e103d04baaab8ea8d"/>
+		<rom name="g2.cpu" size="1024" crc="676c934b" sha1="72b681ca9ef23d820fdd297cc417932aecc9677b"/>
+		<rom name="f2.cpu" size="1024" crc="00757962" sha1="ef39211493393e97284a08eea63be0757643ac88"/>
+		<rom name="e2.cpu" size="1024" crc="9e506a36" sha1="8aad486a72d148d8b03e7bec4c12abd14e425c5f"/>
+		<rom name="d2.cpu" size="1024" crc="d61b5b47" sha1="6051c0a2e81d6e975e82c2d48d0e52dc0d4723e3"/>
+		<rom name="c2.cpu" size="1024" crc="154d129a" sha1="61eebb319ee3a6be598b764b295c18a93a953c1e"/>
+	</game>
+	<game name="deltrace">
+		<description>Delta Race</description>
+		<year>1981</year>
+		<manufacturer>Allied Leisure</manufacturer>
+		<rom name="omega.m7" size="4096" crc="0424d46e" sha1="cc1ac6c06ba6f6e8466fa08286a0c70b5335af33"/>
+		<rom name="omega.l7" size="4096" crc="edcd7a7d" sha1="5d142de2f48b01d563578a54fd5540e5d0ac8f4c"/>
+		<rom name="omega.k7" size="4096" crc="6d10f197" sha1="9609a0cbeeef2efa10d49cde9f0afdca96e9c2f8"/>
+		<rom name="delta.j7" size="4096" crc="8ef9541e" sha1="89e34f50a958ac60c5f223bcb6c1c14796b903c7"/>
+		<rom name="omega.e1" size="2048" crc="1d0fdf3a" sha1="3333397a9745874cea1dd6a1bda783cc59393b55"/>
+		<rom name="omega.f1" size="2048" crc="d44c0814" sha1="2f216ee6de88bbe09775619003aee2d5aa8c554d"/>
+	</game>
+	<game name="demon">
+		<description>Demon</description>
+		<year>1982</year>
+		<manufacturer>Rock-ola</manufacturer>
+		<rom name="demon.7t" size="4096" crc="866596c1" sha1="65202dcd5c6bf6c11fe76a89682a1505b1870cc9"/>
+		<rom name="demon.7p" size="4096" crc="1109e2f1" sha1="c779b6af1ca09e2e295fc9a0e221ddf283b683ed"/>
+		<rom name="demon.7u" size="4096" crc="d447a3c3" sha1="32f6fb01231aa4f3d93e32d639a89f0cf9624a71"/>
+		<rom name="demon.7r" size="4096" crc="64b515f0" sha1="2dd9a6d784ec1baf31e8c6797ddfdc1423c69470"/>
+	</game>
+	<game name="elim2">
+		<description>Eliminator (2 Players, set 1)</description>
+		<year>1981</year>
+		<manufacturer>Gremlin</manufacturer>
+		<rom name="969.cpu-u25" size="2048" crc="411207f2" sha1="2a082be4052b5d8f365abd0a51ea805d270d1189"/>
+		<rom name="1333.prom-u1" size="2048" crc="fd2a2916" sha1="431d340c0c9257d66f5851a591861bcefb600cec"/>
+		<rom name="1334.prom-u2" size="2048" crc="79eb5548" sha1="d951de5c0ab94fdb6e58207ee9a147674dd74220"/>
+		<rom name="1335.prom-u3" size="2048" crc="3944972e" sha1="59c84cf23898adb7e434c5802dbb821c79099890"/>
+		<rom name="1336.prom-u4" size="2048" crc="852f7b4d" sha1="6db45b9d11374f4cadf185aec81f33c0040bc001"/>
+		<rom name="1337.prom-u5" size="2048" crc="cf932b08" sha1="f0b61ca8266fd3de7522244c9b1587eecd24a4f1"/>
+		<rom name="1338.prom-u6" size="2048" crc="99a3f3c9" sha1="aa7d4805c70311ebe24ff70fcc32c0e2a7c4488a"/>
+		<rom name="1339.prom-u7" size="2048" crc="d35f0fa3" sha1="752f14b298604a9b91e94cd6d5d291ef33f27ec0"/>
+		<rom name="1340.prom-u8" size="2048" crc="8fd4da21" sha1="f30627dd1fbcc12bb587742a9072bbf38ba48401"/>
+		<rom name="1341.prom-u9" size="2048" crc="629c9a28" sha1="cb7df14ea1bb2d7997bfae1ca70b47763c73298a"/>
+		<rom name="1342.prom-u10" size="2048" crc="643df651" sha1="80c5da44b5d2a7d97c7ba0067f773eb645a9d432"/>
+		<rom name="1343.prom-u11" size="2048" crc="d29d70d2" sha1="ee2cd752b99ebd522eccf5e71d02c31479acfdf5"/>
+		<rom name="1344.prom-u12" size="2048" crc="c5e153a3" sha1="7e805573aeed01e3d4ed477870800dd7ecad7a1b"/>
+		<rom name="1345.prom-u13" size="2048" crc="40597a92" sha1="ee1ae2b424c38b40d2cbeda4aba3328e6d3f9c81"/>
+	</game>
+	<game name="gmissile">
+		<description>Missile X / Guided Missile</description>
+		<year>1977</year>
+		<manufacturer>Taito / Midway</manufacturer>
+		<rom name="gm_623.h" size="2048" crc="a3ebb792" sha1="30d9613de849c1a868056c5e28cf2a8608b63e88"/>
+		<rom name="gm_623.g" size="2048" crc="a5e740bb" sha1="963c0984953eb58fe7eab84fabb724ec6e29e706"/>
+		<rom name="gm_623.f" size="2048" crc="da381025" sha1="c9d0511567ed571b424459896ce7de0326850388"/>
+		<rom name="gm_623.e" size="2048" crc="f350146b" sha1="a07000a979b1a735754eca623cc880988924877f"/>
+	</game>
+	<game name="gravitar">
+		<description>Gravitar (version 3)</description>
+		<year>1982</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136010.210" size="2048" crc="debcb243" sha1="2c50cd38d60739c126f1d0d8e7fbd46a0bde6e1c"/>
+		<rom name="136010.207" size="4096" crc="4135629a" sha1="301ddb7a34b38140a1fdffc060cb08ff57f10cf1"/>
+		<rom name="136010.208" size="4096" crc="358f25d9" sha1="9c2920cf2b73a93ac2808be654b08505037f53b1"/>
+		<rom name="136010.309" size="4096" crc="4ac78df4" sha1="5164f2a54244ce1e863d1ec0dd29bc9da7103a85"/>
+		<rom name="136010.301" size="4096" crc="a2a55013" sha1="800b52ead9f56a3e372797fbc698c8fc791398da"/>
+		<rom name="136010.302" size="4096" crc="d3700b3c" sha1="b9e846db14fa23f8d2def97030d8b072b2bbc0be"/>
+		<rom name="136010.303" size="4096" crc="8e12e3e0" sha1="e09f58f6f36de6bf6724a1ab14ab35acbb0b3876"/>
+		<rom name="136010.304" size="4096" crc="467ad5da" sha1="822b06be6f2d6298b2b10161fbabbb2caa74b2ef"/>
+		<rom name="136010.305" size="4096" crc="840603af" sha1="4a7124f91d3ee940686c51374a861efe6cb5d282"/>
+		<rom name="136010.306" size="4096" crc="3f3805ad" sha1="baf080deaa8eea43af2f3be71dacc63e4666c453"/>
+	</game>
+	<game name="invaddlx">
+		<description>Space Invaders Deluxe</description>
+		<year>1980</year>
+		<manufacturer>Midway</manufacturer>
+		<rom name="invdelux.h" size="2048" crc="e690818f" sha1="0860fb03a64d34a9704a1459a5e96929eafd39c7"/>
+		<rom name="invdelux.g" size="2048" crc="4268c12d" sha1="df02419f01cf0874afd1f1aa16276751acd0604a"/>
+		<rom name="invdelux.f" size="2048" crc="f4aa1880" sha1="995d77b67cb4f2f3781c2c8747cb058b7c1b3412"/>
+		<rom name="invdelux.e" size="2048" crc="408849c1" sha1="f717e81017047497a2e9f33f0aafecfec5a2ed7d"/>
+		<rom name="invdelux.d" size="2048" crc="e8d5afcd" sha1="91fde9a9e7c3dd53aac4770bd169721a79b41ed1"/>
+	</game>
+	<game name="invaders">
+		<description>Space Invaders / Space Invaders M</description>
+		<year>1978</year>
+		<manufacturer>Midway / Taito</manufacturer>
+		<rom name="invaders.h" size="2048" crc="734f5ad8" sha1="ff6200af4c9110d8181249cbcef1a8a40fa40b7f"/>
+		<rom name="invaders.g" size="2048" crc="6bfaca4a" sha1="16f48649b531bdef8c2d1446c429b5f414524350"/>
+		<rom name="invaders.f" size="2048" crc="0ccead96" sha1="537aef03468f63c5b9e11dd61e253f7ae17d9743"/>
+		<rom name="invaders.e" size="2048" crc="14e538b0" sha1="1d6ca0c99f9df71e2990b610deb9d7da0125e2d8"/>
+	</game>
+	<game name="invadpt2">
+		<description>Space Invaders Part II (Taito)</description>
+		<year>1979</year>
+		<manufacturer>Taito</manufacturer>
+		<rom name="pv01" size="2048" crc="7288a511" sha1="ff617872784c28ed03591aefa9f0519e5651701f"/>
+		<rom name="pv02" size="2048" crc="097dd8d5" sha1="8d68654d54d075c0f0d7f63c87ff4551ce8b7fbf"/>
+		<rom name="pv03" size="2048" crc="1766337e" sha1="ea959bf06c9930d83a07559e191a28641efb07ac"/>
+		<rom name="pv04" size="2048" crc="8f0e62e0" sha1="a967b155f15f8432222fcc78b23121b00c405c5c"/>
+		<rom name="pv05" size="2048" crc="19b505e9" sha1="6a31a37586782ce421a7d2cffd8f958c00b7b415"/>
+		<rom name="pv06.1" size="1024" crc="a732810b" sha1="a5fabffa73ca740909e23b9530936f9274dff356"/>
+		<rom name="pv07.2" size="1024" crc="2c5b91cb" sha1="7fa4d4aef85473b1b4f18734230c164e72be44e7"/>
+	</game>
+	<game name="llander">
+		<description>Lunar Lander (rev 2)</description>
+		<year>1979</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="034572.02" size="2048" crc="b8763eea" sha1="5a15eaeaf825ccdf9ce013a6789cf51da20f785c"/>
+		<rom name="034571.02" size="2048" crc="77da4b2f" sha1="4be6cef5af38734d580cbfb7e4070fe7981ddfd6"/>
+		<rom name="034570.01" size="2048" crc="2724e591" sha1="ecf4430a0040c227c896aa2cd81ee03960b4d641"/>
+		<rom name="034569.02" size="2048" crc="72837a4e" sha1="9b21ba5e1518079c326ca6e15b9993e6c4483caa"/>
+		<rom name="034599.01" size="2048" crc="355a9371" sha1="6ecb40169b797d9eb623bcb17872f745b1bf20fa"/>
+		<rom name="034598.01" size="2048" crc="9c4ffa68" sha1="eb4ffc289d254f699f821df3146aa2c6cd78597f"/>
+		<rom name="034597.01" size="2048" status="nodump"/>
+	</game>
+	<game name="llander1">
+		<description>Lunar Lander (rev 1)</description>
+		<year>1979</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="034572.01" size="2048" crc="2aff3140" sha1="4fc8aae640ce655417c11d9a3121aae9a1238e7c"/>
+		<rom name="034571.01" size="2048" crc="493e24b7" sha1="125a2c335338ccabababef12fd7096ef4b605a31"/>
+		<rom name="034570.01" size="2048" crc="2724e591" sha1="ecf4430a0040c227c896aa2cd81ee03960b4d641"/>
+		<rom name="034569.01" size="2048" crc="b11a7d01" sha1="8f2935dbe04ee68815d69ea9e71853b5a145d7c3"/>
+		<rom name="034599.01" size="2048" crc="355a9371" sha1="6ecb40169b797d9eb623bcb17872f745b1bf20fa"/>
+		<rom name="034598.01" size="2048" crc="9c4ffa68" sha1="eb4ffc289d254f699f821df3146aa2c6cd78597f"/>
+		<rom name="034597.01" size="2048" status="nodump"/>
+	</game>
+	<game name="lrescue">
+		<description>Lunar Rescue</description>
+		<year>1979</year>
+		<manufacturer>Taito</manufacturer>
+		<rom name="lrescue.1" size="2048" crc="2bbc4778" sha1="0167f1ac1501ab0b4c4e555023fa5efed59d56ae"/>
+		<rom name="lrescue.2" size="2048" crc="49e79706" sha1="bed675bb97d59ae0132c007ccead0d096ed2ddf1"/>
+		<rom name="lrescue.3" size="2048" crc="1ac969be" sha1="67ac47f45b9fa5c530bf6047bb7d5776b52847be"/>
+		<rom name="lrescue.4" size="2048" crc="782fee3c" sha1="668295e9d6d99084bb4e7c5491f00fe75f4f5a88"/>
+		<rom name="lrescue.5" size="2048" crc="58fde8bc" sha1="663665ac5254204c1eba18357d9867034eae55eb"/>
+		<rom name="lrescue.6" size="2048" crc="bfb0f65d" sha1="ea0943d764a16094b6e2289f62ef117c9f838c98"/>
+		<rom name="7643-1.cpu" size="1024" crc="8b2e38de" sha1="d6a757be31c3a179d31bd3709e71f9e38ec632e9"/>
+	</game>
+	<game name="lunarbat">
+		<description>Lunar Battle (prototype, later)</description>
+		<year>1982</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="010.010" size="2048" crc="48fd38aa" sha1="e6ec31e784c2965369161c33d00903ba027f7f20"/>
+		<rom name="007.010" size="4096" crc="9754830e" sha1="2e6885155a93d4eaf9a405f3eb740f2f4b30bc23"/>
+		<rom name="008.010" size="4096" crc="084aa8db" sha1="80050f981b9a673d336bbcf712faf21b7be7e042"/>
+		<rom name="001.010" size="4096" crc="cd7e1780" sha1="92265a548485d140b73ef542ad66dc32cb52d42b"/>
+		<rom name="002.010" size="4096" crc="dc813a54" sha1="c543cae3a3ba5b00e5a8714a42b2557bc6e730cf"/>
+		<rom name="003.010" size="4096" crc="8e1fecd3" sha1="a43cb4ea77e095227590fcefa778688093dcf135"/>
+		<rom name="004.010" size="4096" crc="c407764f" sha1="f202a9fe6c10975bb124b4b1e902341da578da8f"/>
+		<rom name="005.010" size="4096" crc="4feb6f81" sha1="b852f1093e56343225c1b2b2554a93c88fc58637"/>
+		<rom name="006.010" size="4096" crc="f8ad139d" sha1="e9e0dcb0872b19af09825a979f8b3747c9632091"/>
+	</game>
+	<game name="meteorts">
+		<description>Meteorites</description>
+		<year>1979</year>
+		<manufacturer>VGG</manufacturer>
+		<rom name="m0_c1.bin" size="2048" crc="dff88688" sha1="7f4148a580fb6f605499c99e7dde7068eca1651a"/>
+		<rom name="m1_f1.bin" size="2048" crc="e53c28a9" sha1="d9f081e73511ec43377f0c6457747f15a470d4dc"/>
+		<rom name="m2_j1.bin" size="2048" crc="64bd0408" sha1="141d053cb4cce3fece98293136928b527d3ade0f"/>
+		<rom name="mv_np3.bin" size="2048" crc="11d1c4ae" sha1="433c2c05b92094bbe102c356d7f1a907db13da67"/>
+	</game>
+	<game name="mhavoc">
+		<description>Major Havoc (rev 3)</description>
+		<year>1983</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136025.210" size="8192" crc="c67284ca" sha1="d9adad80c266d36429444f483cac4ebcf1fec7b8"/>
+		<rom name="136025.216" size="16384" crc="522a9cc0" sha1="bbd75e01c45220e1c87bd1e013cf2c2fb9f376b2"/>
+		<rom name="136025.217" size="16384" crc="ea3d6877" sha1="27823c1b546c073b37ff11a8cb25312ea71673c2"/>
+		<rom name="136025.215" size="16384" crc="a4d380ca" sha1="c3cdc76054be2f904b1fb6f28c3c027eba5c3a70"/>
+		<rom name="136025.318" size="16384" crc="ba935067" sha1="05ad81e7a1982b9d8fddb48502546f48b5dc21b7"/>
+		<rom name="136025.106" size="16384" crc="2ca83c76" sha1="cc1adca32f70af30c4590e9fd6b056b051ccdb38"/>
+		<rom name="136025.107" size="16384" crc="5f81c5f3" sha1="be4055727a2d4536e37ec20150deffdb5af5b01f"/>
+		<rom name="136025.108" size="16384" crc="93faf210" sha1="7744368a1d520f986d1c4246113a7e24fcdd6d04"/>
+	</game>
+	<game name="omegrace">
+		<description>Omega Race</description>
+		<year>1981</year>
+		<manufacturer>Midway</manufacturer>
+		<rom name="omega.m7" size="4096" crc="0424d46e" sha1="cc1ac6c06ba6f6e8466fa08286a0c70b5335af33"/>
+		<rom name="omega.l7" size="4096" crc="edcd7a7d" sha1="5d142de2f48b01d563578a54fd5540e5d0ac8f4c"/>
+		<rom name="omega.k7" size="4096" crc="6d10f197" sha1="9609a0cbeeef2efa10d49cde9f0afdca96e9c2f8"/>
+		<rom name="omega.j7" size="4096" crc="8e8d4b54" sha1="944192c0f6f0cdb25d492ee9f33959d38a1062f2"/>
+		<rom name="omega.e1" size="2048" crc="1d0fdf3a" sha1="3333397a9745874cea1dd6a1bda783cc59393b55"/>
+		<rom name="omega.f1" size="2048" crc="d44c0814" sha1="2f216ee6de88bbe09775619003aee2d5aa8c554d"/>
+	</game>
+	<game name="quantum">
+		<description>Quantum (rev 2)</description>
+		<year>1982</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136016.201" size="8192" crc="7e7be63a" sha1="11b2d0168cdbaa7a48656b77abc0bcbe9408fe84"/>
+		<rom name="136016.206" size="8192" crc="2d8f5759" sha1="54b0388ef44b5d34e621b48b465566aa16887e8f"/>
+		<rom name="136016.102" size="8192" crc="408d34f4" sha1="9a30debd1240b9c103134701943c94d6b48b926d"/>
+		<rom name="136016.107" size="8192" crc="63154484" sha1="c098cdbc339c9ea291c4c4fb203c60b3284e894a"/>
+		<rom name="136016.203" size="8192" crc="bdc52fad" sha1="c8ede54a4f7f555adffa5b4bfea6bf646a0d02d4"/>
+		<rom name="136016.208" size="8192" crc="dab4066b" sha1="dbb82df8e6de4e0f9f6e7ddd5f07618864fce8f9"/>
+		<rom name="136016.104" size="8192" crc="bf271e5c" sha1="012edb947f1437932b9283e49d025a7794c45669"/>
+		<rom name="136016.109" size="8192" crc="d2894424" sha1="5390025136b677b66d948c8cf6ea5e20203a4bae"/>
+		<rom name="136016.105" size="8192" crc="13ec512c" sha1="22a0395135b83ba47eacb5129f34fc97aa1b70a1"/>
+		<rom name="136016.110" size="8192" crc="acb50363" sha1="9efa9ca88efdd2d5e212bd537903892b67b4fe53"/>
+	</game>
+	<game name="redbaron">
+		<description>Red Baron</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="037587.01" size="4096" crc="60f23983" sha1="7a9e5380bf49bf50a2d8ab0e0bd1ba3ac8efde24"/>
+		<rom name="037000.01e" size="2048" crc="69bed808" sha1="27d99efc74113cdcbbf021734b8a5a5fdb78c04c"/>
+		<rom name="036998.01e" size="2048" crc="d1104dd7" sha1="0eab47cb45ede9dcc4dd7498dcf3a8d8194460b4"/>
+		<rom name="036997.01e" size="2048" crc="7434acb4" sha1="c950c4c12ab556b5051ad356ab4a0ed6b779ba1f"/>
+		<rom name="036996.01e" size="2048" crc="c0e7589e" sha1="c1aedc95966afffd860d7e0009d5a43e8b292036"/>
+		<rom name="036995.01e" size="2048" crc="ad81d1da" sha1="8bd66e5f34fc1c75f31eb6b168607e52aa3aa4df"/>
+		<rom name="037006.01e" size="2048" crc="9fcffea0" sha1="69b76655ee75742fcaa0f39a4a1cf3aa58088343"/>
+		<rom name="037007.01e" size="2048" crc="60250ede" sha1="9c48952bd69863bee0c6dce09f3613149e0151ef"/>
+	</game>
+	<game name="ripoff">
+		<description>Rip Off</description>
+		<year>1980</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="ripoff.t7" size="2048" crc="40c2c5b8" sha1="bc1f3b540475c9868443a72790a959b1f36b93c6"/>
+		<rom name="ripoff.p7" size="2048" crc="a9208afb" sha1="ea362494855be27a07014832b01e65c1645385d0"/>
+		<rom name="ripoff.u7" size="2048" crc="29c13701" sha1="5e7672deffac1fa8f289686a5527adf7e51eb0bb"/>
+		<rom name="ripoff.r7" size="2048" crc="150bd4c8" sha1="e1e2f0dfec4f53d8ff67b0e990514c304f496b3a"/>
+	</game>
+	<game name="sicv">
+		<description>Space Invaders (CV Version)</description>
+		<year>1979</year>
+		<manufacturer>Taito</manufacturer>
+		<rom name="cv17.bin" size="2048" crc="3dfbe9e6" sha1="26487df7fa0bbd0b9b7f74347c4b9318b0a73b89"/>
+		<rom name="cv18.bin" size="2048" crc="bc3c82bf" sha1="33e39fc97bd46699be1f9b9741a86f433efdc911"/>
+		<rom name="cv19.bin" size="2048" crc="d202b41c" sha1="868fe938ef768655c894ec95b7d9a81bf21f69ca"/>
+		<rom name="cv20.bin" size="2048" crc="c74ee7b6" sha1="4f52db274a2d4433ab67c099ee805e8eb8516c0f"/>
+		<rom name="cv01_1.bin" size="1024" crc="aac24f34" sha1="ad110e776547fb48baac568bb50d61854537ca34"/>
+		<rom name="cv02_2.bin" size="1024" crc="2bdf83a0" sha1="01ffbd43964c41987e7d44816271308f9a70802b"/>
+	</game>
+	<game name="sitv">
+		<description>Space Invaders (TV Version)</description>
+		<year>1978</year>
+		<manufacturer>Taito</manufacturer>
+		<rom name="tv0h.s1" size="2048" crc="fef18aad" sha1="043edeefe6a6d4934bd384eafea19326de1dbeec"/>
+		<rom name="tv02.rp1" size="2048" crc="3c759a90" sha1="d847d592dee592b1d3a575c21d89eaf3f7f6ae1b"/>
+		<rom name="tv03.n1" size="2048" crc="0ad3657f" sha1="a501f316535c50f7d7a20ef8e6dede1526a3f2a8"/>
+		<rom name="tv04.m1" size="2048" crc="cd2c67f6" sha1="60f9d8fe2d36ff589277b607f07c1edc917c755c"/>
+	</game>
+	<game name="solarq">
+		<description>Solar Quest</description>
+		<year>1981</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="solar.6t" size="4096" crc="1f3c5333" sha1="58d847b5f009a0363ae116768b22d0bcfb3d60a4"/>
+		<rom name="solar.6p" size="4096" crc="d6c16bcc" sha1="6953bdc698da060d37f6bc33a810ba44595b1257"/>
+		<rom name="solar.6u" size="4096" crc="a5970e5c" sha1="9ac07924ca86d003964022cffdd6a0436dde5624"/>
+		<rom name="solar.6r" size="4096" crc="b763fff2" sha1="af1fd978e46a4aee3048e6e36c409821d986f7ee"/>
+	</game>
+	<game name="spacduel">
+		<description>Space Duel</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136006.106" size="2048" crc="691122fe" sha1="f53be76a49dba319050ca7767de3441521910e83"/>
+		<rom name="136006.107" size="4096" crc="d8dd0461" sha1="58060b20b2511d30d2ec06479d21840bdd0b53c6"/>
+		<rom name="136006.201" size="4096" crc="f4037b6e" sha1="9bacb64d257edd31f53db878477604f50681d78f"/>
+		<rom name="136006.102" size="4096" crc="4c451e8a" sha1="c05c52bb08acccb60950a15f05c960c3bc163d3e"/>
+		<rom name="136006.103" size="4096" crc="ee72da63" sha1="d36d62cdf7fe76ee9cdbfc2e76ac5d90f22986ba"/>
+		<rom name="136006.104" size="4096" crc="e41b38a3" sha1="9e8773e78d65d74db824cfd7108e7038f26757db"/>
+		<rom name="136006.105" size="4096" crc="5652710f" sha1="b15891d22a47ac3448d2ced40c04d0ab80606c7d"/>
+	</game>
+	<game name="spacewar">
+		<description>Space Wars</description>
+		<year>1977</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="spacewar.1l" size="2048" crc="edf0fd53" sha1="a543d8b95bc77ec061c6b10161a6f3e07401e251"/>
+		<rom name="spacewar.2r" size="2048" crc="4f21328b" sha1="8889f1a9353d6bb1e1078829c1ba77557853739b"/>
+	</game>
+	<game name="spacfura">
+		<description>Space Fury (revision A)</description>
+		<year>1981</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="969a.cpu-u25" size="2048" crc="896a615c" sha1="542386196eca9fd822e36508e173201ee8a962ed"/>
+		<rom name="960a.prom-u1" size="2048" crc="e1ea7964" sha1="9c84c525973fcf1437b062d98195272723249d02"/>
+		<rom name="961a.prom-u2" size="2048" crc="cdb04233" sha1="6f8d2fe6d46d04ebe94b7943006d63b24c88ed5a"/>
+		<rom name="962a.prom-u3" size="2048" crc="5f03e632" sha1="c6e8d72ba13ab05ec01a78502948a73c21e0fd69"/>
+		<rom name="963a.prom-u4" size="2048" crc="45a77b44" sha1="91f4822b89ec9c16c67c781a11fabfa4b9914660"/>
+		<rom name="964a.prom-u5" size="2048" crc="ba008f8b" sha1="24f5bef240ae2bcfd5b1d95f51b3599f79518b56"/>
+		<rom name="965a.prom-u6" size="2048" crc="78677d31" sha1="ed5810aa4bddbfe36a6ff9992dd0cb58cce66836"/>
+		<rom name="966a.prom-u7" size="2048" crc="a8a51105" sha1="f5e0fa662552f50fa6905f579d4c678b790ffa96"/>
+		<rom name="967a.prom-u8" size="2048" crc="d60f667d" sha1="821271ec1918e22ed29a5b1f4b0182765ef5ba10"/>
+		<rom name="968a.prom-u9" size="2048" crc="aea85b6a" sha1="8778ff0be34cd4fd5b8f6f76c64bfca68d4d240e"/>
+	</game>
+	<game name="spacfury">
+		<description>Space Fury (revision C)</description>
+		<year>1981</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="969c.cpu-u25" size="2048" crc="411207f2" sha1="2a082be4052b5d8f365abd0a51ea805d270d1189"/>
+		<rom name="960c.prom-u1" size="2048" crc="d071ab7e" sha1="c7d2429e4fa77988d7ac62bc68f876ffb7467838"/>
+		<rom name="961c.prom-u2" size="2048" crc="aebc7b97" sha1="d0a0328ed34de9bd2c83da4ddc2d017e2b5a8bdc"/>
+		<rom name="962c.prom-u3" size="2048" crc="dbbba35e" sha1="0400d1ba09199d19f5b8aa5bb1a85ed27930822d"/>
+		<rom name="963c.prom-u4" size="2048" crc="d9e9eadc" sha1="1ad228d65dca48d084bbac358af80882886e7a40"/>
+		<rom name="964c.prom-u5" size="2048" crc="7ed947b6" sha1="c0fd7ed74a87cc422a42e2a4f9eb947f5d5d9fed"/>
+		<rom name="965c.prom-u6" size="2048" crc="d2443a22" sha1="45e5d43eae89e25370bb8e8db2b664642a238eb9"/>
+		<rom name="966c.prom-u7" size="2048" crc="1985ccfc" sha1="8c5931519b976c82a94d17279cc919b4baad5bb7"/>
+		<rom name="967c.prom-u8" size="2048" crc="330f0751" sha1="07ae52fdbfa2cc326f88dc76c3dc8e145b592863"/>
+		<rom name="968c.prom-u9" size="2048" crc="8366eadb" sha1="8e4cb30a730237da2e933370faf5eaa1a41cacbf"/>
+	</game>
+	<game name="starcas">
+		<description>Star Castle (version 3)</description>
+		<year>1980</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="starcas3.t7" size="2048" crc="b5838b5d" sha1="6ac30be55514cba55180c85af69072b5056d1d4c"/>
+		<rom name="starcas3.p7" size="2048" crc="f6bc2f4d" sha1="ef6f01556b154cfb3e37b2a99d6ea6292e5ec844"/>
+		<rom name="starcas3.u7" size="2048" crc="188cd97c" sha1="c021e93a01e9c65013073de551a8c24fd1a68bde"/>
+		<rom name="starcas3.r7" size="2048" crc="c367b69d" sha1="98354d34ceb03e080b1846611d533be7bdff01cc"/>
+	</game>
+	<game name="starhawk">
+		<description>Star Hawk</description>
+		<year>1979</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="starhawk.u7" size="2048" crc="376e6c5c" sha1="7d9530ed2e75464578b541f61408ba64ee9d2a95"/>
+		<rom name="starhawk.r7" size="2048" crc="bb71144f" sha1="79591cd3ef8df78ec26e158f7e82ca0dcd72260d"/>
+	</game>
+	<game name="startrek">
+		<description>Star Trek</description>
+		<year>1982</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="1873.cpu-u25" size="2048" crc="be46f5d9" sha1="fadf13042d31b0dacf02a3166545c946f6fd3f33"/>
+		<rom name="1848.prom-u1" size="2048" crc="65e3baf3" sha1="0c081ed6c8be0bb5eb3d5769ac1f0b8fe4735d11"/>
+		<rom name="1849.prom-u2" size="2048" crc="8169fd3d" sha1="439d4b857083ae40df7d7f53c36ec13b05d86a86"/>
+		<rom name="1850.prom-u3" size="2048" crc="78fd68dc" sha1="fb56567458807d9becaacac11091931af9889620"/>
+		<rom name="1851.prom-u4" size="2048" crc="3f55ab86" sha1="f75ce0c56e22e8758dd1f5ce9ac00f5f41b13465"/>
+		<rom name="1852.prom-u5" size="2048" crc="2542ecfb" sha1="7cacee44670768e9fae1024f172b867193d2ea4a"/>
+		<rom name="1853.prom-u6" size="2048" crc="75c2526a" sha1="6e86b30fcdbe7622ab873092e7a7a46d8bad790f"/>
+		<rom name="1854.prom-u7" size="2048" crc="096d75d0" sha1="26e90c296b00239a6cde4ec5e80cccd7bb36bcbd"/>
+		<rom name="1855.prom-u8" size="2048" crc="bc7b9a12" sha1="6dc60e380dc5790cd345b06c064ea7d69570aadb"/>
+		<rom name="1856.prom-u9" size="2048" crc="ed9fe2fb" sha1="5d56e8499cb4f54c5e76a9231c53d95777777e05"/>
+		<rom name="1857.prom-u10" size="2048" crc="28699d45" sha1="c133eb4fc13987e634d3789bfeaf9e03196f8fd3"/>
+		<rom name="1858.prom-u11" size="2048" crc="3a7593cb" sha1="7504f960507579d043b7ee20fb8fd2610399ff4b"/>
+		<rom name="1859.prom-u12" size="2048" crc="5b11886b" sha1="b0fb6e912953822242501943f7214e4af6ab7891"/>
+		<rom name="1860.prom-u13" size="2048" crc="62eb96e6" sha1="51d1f5e48e3e21147584ace61b8832ad892cb6e2"/>
+		<rom name="1861.prom-u14" size="2048" crc="99852d1d" sha1="eaea6a99f0a7f0292db3ea19649b5c1be45b9507"/>
+		<rom name="1862.prom-u15" size="2048" crc="76ce27b2" sha1="8fa8d73aa4dcf3709ecd057bad3278fac605988c"/>
+		<rom name="1863.prom-u16" size="2048" crc="dd92d187" sha1="5a11cdc91bb7b36ea98503892847d8dbcedfe95a"/>
+		<rom name="1864.prom-u17" size="2048" crc="e37d3a1e" sha1="15d949989431dcf1e0406f1e3745f3ee91012ff5"/>
+		<rom name="1865.prom-u18" size="2048" crc="b2ec8125" sha1="70982c614471614f6b490ae2d65faec0eff2ac37"/>
+		<rom name="1866.prom-u19" size="2048" crc="6f188354" sha1="e99946467090b68559c2b54ad2e85204b71a459f"/>
+		<rom name="1867.prom-u20" size="2048" crc="b0a3eae8" sha1="51a0855753dc2d4fe1a05bd54fa958beeab35299"/>
+		<rom name="1868.prom-u21" size="2048" crc="8b4e2e07" sha1="11f7de6327abf88012854417224b38a2352a9dc7"/>
+		<rom name="1869.prom-u22" size="2048" crc="e5663070" sha1="735944c2b924964f72f3bb3d251a35ea2aef3d15"/>
+		<rom name="1870.prom-u23" size="2048" crc="4340616d" sha1="e93686a29377933332523425532d102e30211111"/>
+	</game>
+	<game name="starwars">
+		<description>Star Wars (rev 2)</description>
+		<year>1983</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136021.105" size="4096" crc="538e7d2f" sha1="032c933fd94a6b0b294beee29159a24494ae969b"/>
+		<rom name="136021.214" size="16384" crc="04f1876e" sha1="c1d3637cb31ece0890c25f6122d6bcd27e6ffe0c"/>
+		<rom name="136021.102" size="8192" crc="f725e344" sha1="f8943b67f2ea032ab9538084756ba86f892be5ca"/>
+		<rom name="136021.203" size="8192" crc="f6da0a00" sha1="dd53b643be856787bbc4da63e5eb132f98f623c3"/>
+		<rom name="136021.104" size="8192" crc="7e406703" sha1="981b505d6e06d7149f8bcb3e81e4d0c790f2fc86"/>
+		<rom name="136021.206" size="8192" crc="c7e51237" sha1="4960f4446271316e3f730eeb2531dbc702947395"/>
+		<rom name="136021.107" size="8192" crc="dbf3aea2" sha1="c38661b2b846fe93487eef09ca3cda19c44f08a0"/>
+		<rom name="136021.208" size="8192" crc="e38070a8" sha1="c858ae1702efdd48615453ab46e488848891d139"/>
+	</game>
+	<game name="sundance">
+		<description>Sundance</description>
+		<year>1979</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="sundance.t7" size="2048" crc="d5b9cb19" sha1="72dca386b48a582186898c32123d61b4fd58632e"/>
+		<rom name="sundance.p7" size="2048" crc="445c4f20" sha1="972d0b0613f154ee3347206cae05ee8c36796f84"/>
+		<rom name="sundance.u7" size="2048" crc="67887d48" sha1="be225dbd3508fad2711286834880065a4fc0a2fc"/>
+		<rom name="sundance.r7" size="2048" crc="10b77ebd" sha1="3d43bd47c498d5ea74a7322f8d25dbc0c0187534"/>
+	</game>
+	<game name="tacscan">
+		<description>Tac/Scan</description>
+		<year>1982</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="1711a.cpu-u25" size="2048" crc="0da13158" sha1="256c5441a4841441501c9b7bcf09e0e99e8dd671"/>
+		<rom name="1670c.prom-u1" size="2048" crc="98de6fd5" sha1="f22c215d7558e00366fec5092abb51c670468f8c"/>
+		<rom name="1671a.prom-u2" size="2048" crc="dc400074" sha1="70093ef56e0784173a06da1ac781bb9d8c4e7fc5"/>
+		<rom name="1672a.prom-u3" size="2048" crc="2caf6f7e" sha1="200119260f78bb1c5389707b3ceedfbc1ae43549"/>
+		<rom name="1673a.prom-u4" size="2048" crc="1495ce3d" sha1="3189f8061961d90a52339c855c06e81f4537fb2b"/>
+		<rom name="1674a.prom-u5" size="2048" crc="ab7fc5d9" sha1="b2d9241d83d175ead4da36d7311a41a5f972e06a"/>
+		<rom name="1675a.prom-u6" size="2048" crc="cf5e5016" sha1="78a3f1e4a905515330d4737ac38576ac6e0d8611"/>
+		<rom name="1676a.prom-u7" size="2048" crc="b61a3ab3" sha1="0f4ef5c7fe299ad20fa4637260282a733f1cf461"/>
+		<rom name="1677a.prom-u8" size="2048" crc="bc0273b1" sha1="8e8d8830f17b9fa6d45d98108ca02d90c29de574"/>
+		<rom name="1678b.prom-u9" size="2048" crc="7894da98" sha1="2de7c121ad847e51a10cb1b81aec84cc44a3d04c"/>
+		<rom name="1679a.prom-u10" size="2048" crc="db865654" sha1="db4d5675b53ff2bbaf70090fd064e98862f4ad33"/>
+		<rom name="1680a.prom-u11" size="2048" crc="2c2454de" sha1="74101806439c9faeba88ffe573fa4f93ffa0ba3c"/>
+		<rom name="1681a.prom-u12" size="2048" crc="77028885" sha1="bc981620ebbfbe4e32b3b4d00504475634454c57"/>
+		<rom name="1682a.prom-u13" size="2048" crc="babe5cf1" sha1="26219b7a26f818fee2fe579ec6fb0b16c6bf056f"/>
+		<rom name="1683a.prom-u14" size="2048" crc="1b98b618" sha1="19854cb2741ba37c11ae6d429fa6c17ff930f5e5"/>
+		<rom name="1684a.prom-u15" size="2048" crc="cb3ded3b" sha1="f1e886f4f71b0f6f2c11fb8b4921c3452fc9b2c0"/>
+		<rom name="1685a.prom-u16" size="2048" crc="43016a79" sha1="ee22c1fe0c8df90d9215175104f8a796c3d2aed3"/>
+		<rom name="1686a.prom-u17" size="2048" crc="a4397772" sha1="cadc95b869f5bf5dba7f03dfe5ae64a50899cced"/>
+		<rom name="1687a.prom-u18" size="2048" crc="002f3bc4" sha1="7f3795a05d5651c90cdcd4d00c46d05178b433ea"/>
+		<rom name="1688a.prom-u19" size="2048" crc="0326d87a" sha1="3a5ea4526db417b9e00b24b019c1c6016773c9e7"/>
+		<rom name="1709a.prom-u20" size="2048" crc="f35ed1ec" sha1="dce95a862af0c6b67fb76b99fee0523d53b7551c"/>
+		<rom name="1710a.prom-u21" size="2048" crc="6203be22" sha1="89731c7c88d0125a11368d707f566eb53c783266"/>
+	</game>
+	<game name="tailg">
+		<description>Tailgunner</description>
+		<year>1979</year>
+		<manufacturer>Cinematronics</manufacturer>
+		<rom name="tgunner.t70" size="2048" crc="21ec9a04" sha1="b442f34360d1d4769e7bca73a2d79ce97d335460"/>
+		<rom name="tgunner.p70" size="2048" crc="8d7410b3" sha1="59ead49bd229a873f15334d0999c872d3d6581d4"/>
+		<rom name="tgunner.t71" size="2048" crc="2c954ab6" sha1="9edf189a19b50a9abf458d4ef8ba25b53934385e"/>
+		<rom name="tgunner.p71" size="2048" crc="8e2c8494" sha1="65e461ec4938f9895e5ac31442193e06c8731dc1"/>
+	</game>
+	<game name="tempest">
+		<description>Tempest (rev 3)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136002-113.d1" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002-114.e1" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002-115.f1" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002-316.h1" size="2048" crc="aeb0f7e9" sha1="a5cc25015b98692673cfc1c7c2e9634efd750870"/>
+		<rom name="136002-217.j1" size="2048" crc="ef2eb645" sha1="b1a2c969e8897e335d5354de6ae04a65d4b2a1e4"/>
+		<rom name="136002-118.k1" size="2048" crc="beb352ab" sha1="f213166d3970e0bd0f29d8dea8d6afa6990cce38"/>
+		<rom name="136002-119.lm1" size="2048" crc="a4de050f" sha1="ea302e43a313a5a18115e74ddbaaedde0fbecda7"/>
+		<rom name="136002-120.mn1" size="2048" crc="35619648" sha1="48f1e8bed7ec6afa0b4c549a30e5ec331c071e40"/>
+		<rom name="136002-121.p1" size="2048" crc="73d38e47" sha1="9980606376a79ba94f8e2a325871a6c8d10d83fc"/>
+		<rom name="136002-222.r1" size="2048" crc="707bd5c3" sha1="2f0af6fb7154c244c794f7247e5c16a1e06ddf7d"/>
+		<rom name="136002-123.np3" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="136002-124.r3" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+	</game>
+	<game name="tempest1">
+		<description>Tempest (rev 1)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136002-113.d1" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002-114.e1" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002-115.f1" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002-116.h1" size="2048" crc="7356896c" sha1="a013ede292189a8f5a907de882ee1a573d784b3c"/>
+		<rom name="136002-117.j1" size="2048" crc="55952119" sha1="470d914fa52fce3786cb6330889876d3547dca65"/>
+		<rom name="136002-118.k1" size="2048" crc="beb352ab" sha1="f213166d3970e0bd0f29d8dea8d6afa6990cce38"/>
+		<rom name="136002-119.lm1" size="2048" crc="a4de050f" sha1="ea302e43a313a5a18115e74ddbaaedde0fbecda7"/>
+		<rom name="136002-120.mn1" size="2048" crc="35619648" sha1="48f1e8bed7ec6afa0b4c549a30e5ec331c071e40"/>
+		<rom name="136002-121.p1" size="2048" crc="73d38e47" sha1="9980606376a79ba94f8e2a325871a6c8d10d83fc"/>
+		<rom name="136002-122.r1" size="2048" crc="796a9918" sha1="c862a0d4ea330161e4c3cc8e5e9ad38893fffbd4"/>
+		<rom name="136002-123.np3" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="136002-124.r3" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+	</game>
+	<game name="tempest2">
+		<description>Tempest (rev 2)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136002-113.d1" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002-114.e1" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002-115.f1" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002-116.h1" size="2048" crc="7356896c" sha1="a013ede292189a8f5a907de882ee1a573d784b3c"/>
+		<rom name="136002-217.j1" size="2048" crc="ef2eb645" sha1="b1a2c969e8897e335d5354de6ae04a65d4b2a1e4"/>
+		<rom name="136002-118.k1" size="2048" crc="beb352ab" sha1="f213166d3970e0bd0f29d8dea8d6afa6990cce38"/>
+		<rom name="136002-119.lm1" size="2048" crc="a4de050f" sha1="ea302e43a313a5a18115e74ddbaaedde0fbecda7"/>
+		<rom name="136002-120.mn1" size="2048" crc="35619648" sha1="48f1e8bed7ec6afa0b4c549a30e5ec331c071e40"/>
+		<rom name="136002-121.p1" size="2048" crc="73d38e47" sha1="9980606376a79ba94f8e2a325871a6c8d10d83fc"/>
+		<rom name="136002-222.r1" size="2048" crc="707bd5c3" sha1="2f0af6fb7154c244c794f7247e5c16a1e06ddf7d"/>
+		<rom name="136002-123.np3" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="136002-124.r3" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+	</game>
+	<game name="tempest3">
+		<description>Tempest (rev 2, Revised Hardware)</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="136002-237.p1" size="4096" crc="1d0cc503" sha1="7bef95db9b1102d6b1166bda0ccb276ef4cc3764"/>
+		<rom name="136002-136.lm1" size="4096" crc="c88e3524" sha1="89144baf1efc703b2336774793ce345b37829ee7"/>
+		<rom name="136002-235.j1" size="4096" crc="a4b2ce3f" sha1="a5f5fb630a48c5d25346f90d4c13aaa98f60b228"/>
+		<rom name="136002-134.f1" size="4096" crc="65a9a9f9" sha1="73aa7d6f4e7093ccb2d97f6344f354872bcfd72a"/>
+		<rom name="136002-133.d1" size="4096" crc="de4e9e34" sha1="04be074e45bf5cd95a852af97cd04e35b7f27fc4"/>
+		<rom name="136002-138.np3" size="4096" crc="9995256d" sha1="2b725ee1a57d423c7d7377a1744f48412e0f2f69"/>
+	</game>
+	<game name="tempestm">
+		<description>TempestMulti (Clay Cowgill)</description>
+		<year>2001</year>
+		<manufacturer>Clay Cowgill</manufacturer>
+		<rom name="menu_r3.bin" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+		<rom name="menu_d1.bin" size="2048" crc="8a6633fb" sha1="b143a5d2019f24666b350b40b0dab2924bb9c7c0"/>
+		<rom name="menu_n3.bin" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="menu_f1.bin" size="2048" crc="12f62746" sha1="37356b5738c27ffe4c38f1b6cf99ae21441d8e8e"/>
+		<rom name="menu_e1.bin" size="2048" crc="2eedfdf6" sha1="2ed494bd8610bebd07284289ca8b7059fd805300"/>
+		<rom name="menu_r1.bin" size="2048" crc="1d8f194a" sha1="c77f6b83f5c498c0f2d5372089a4604913a4aad5"/>
+		<rom name="136002.113" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002.114" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002.115" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002.116" size="2048" crc="7356896c" sha1="a013ede292189a8f5a907de882ee1a573d784b3c"/>
+		<rom name="136002.117" size="2048" crc="55952119" sha1="470d914fa52fce3786cb6330889876d3547dca65"/>
+		<rom name="136002.118" size="2048" crc="beb352ab" sha1="f213166d3970e0bd0f29d8dea8d6afa6990cce38"/>
+	</game>
+	<game name="temptube">
+		<description>Tempest Tubes</description>
+		<year>1980</year>
+		<manufacturer>hack</manufacturer>
+		<rom name="136002-113.d1" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002-114.e1" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002-115.f1" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002-316.h1" size="2048" crc="aeb0f7e9" sha1="a5cc25015b98692673cfc1c7c2e9634efd750870"/>
+		<rom name="136002-217.j1" size="2048" crc="ef2eb645" sha1="b1a2c969e8897e335d5354de6ae04a65d4b2a1e4"/>
+		<rom name="tube-118.k1" size="2048" crc="cefb03f0" sha1="41ddfa4991fa49a31d4740a04551556acca66196"/>
+		<rom name="136002-119.lm1" size="2048" crc="a4de050f" sha1="ea302e43a313a5a18115e74ddbaaedde0fbecda7"/>
+		<rom name="136002-120.mn1" size="2048" crc="35619648" sha1="48f1e8bed7ec6afa0b4c549a30e5ec331c071e40"/>
+		<rom name="136002-121.p1" size="2048" crc="73d38e47" sha1="9980606376a79ba94f8e2a325871a6c8d10d83fc"/>
+		<rom name="136002-222.r1" size="2048" crc="707bd5c3" sha1="2f0af6fb7154c244c794f7247e5c16a1e06ddf7d"/>
+		<rom name="136002-123.np3" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="136002-124.r3" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+	</game>
+	<game name="vbreak">
+		<description>Vector Breakout (Clay Cowgill)</description>
+		<year>2001</year>
+		<manufacturer>Clay Cowgill</manufacturer>
+		<rom name="vb_r3.bin" size="2048" crc="c16ec351" sha1="a30a3662c740810c0f20e3712679606921b8ca06"/>
+		<rom name="vb_r1.bin" size="2048" crc="1ae2dd53" sha1="b908ba6b59195aea853380a56a243aa8fa2fba71"/>
+		<rom name="vb_n3.bin" size="2048" crc="29f7e937" sha1="686c8b9b8901262e743497cee7f2f7dd5cb3af7e"/>
+		<rom name="vb_d1.bin" size="2048" crc="6fd3efe5" sha1="d195d08984ad8797607bc1989e8a606d51547c68"/>
+		<rom name="vb_e1.bin" size="2048" crc="9974b9a5" sha1="6ecc6f72070895bb15992977348f58835233911f"/>
+		<rom name="vb_f1.bin" size="2048" crc="44d611d8" sha1="82cd63fc9067ea1f00feeffbee66e7d750cab7e5"/>
+		<rom name="136002.113" size="2048" crc="65d61fe7" sha1="38a1e8a8f65b7887cf3e190269fe4ce2c6f818aa"/>
+		<rom name="136002.114" size="2048" crc="11077375" sha1="ed8ff0ca969da6672a7683b93d4fcf2935a0d903"/>
+		<rom name="136002.115" size="2048" crc="f3e2827a" sha1="bd04fcfbbba995e08c3144c1474fcddaaeb1c700"/>
+		<rom name="136002.116" size="2048" crc="7356896c" sha1="a013ede292189a8f5a907de882ee1a573d784b3c"/>
+		<rom name="136002.117" size="2048" crc="55952119" sha1="470d914fa52fce3786cb6330889876d3547dca65"/>
+		<rom name="136002.118" size="2048" crc="beb352ab" sha1="f213166d3970e0bd0f29d8dea8d6afa6990cce38"/>
+	</game>
+	<game name="vortex">
+		<description>Vortex (Tempest Prototype)</description>
+		<year>2001</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="e1.bin" size="2048" crc="11861be3" sha1="a35797c649e8286c844cee6dac86ac50f4fbd669"/>
+		<rom name="f1.bin" size="2048" crc="1d251111" sha1="2912a21dc708231e28d6164e54e593a8300b9c4a"/>
+		<rom name="h1.bin" size="2048" crc="937a9859" sha1="336b25291533d19294f1ced730bbf20971849adf"/>
+		<rom name="j1.bin" size="2048" crc="79481246" sha1="c5362670fd29ef1432f8e626323da395d6e8a675"/>
+		<rom name="k1.bin" size="2048" crc="390f872a" sha1="c5463ea2d2307e21c941b5b459e3652c12154609"/>
+		<rom name="lm1.bin" size="2048" crc="515760dd" sha1="773f06c9a64e72f9d3d8a5c622bf3ec2b4ba678d"/>
+		<rom name="mn1.bin" size="2048" crc="c6c41c68" sha1="9323c07fc80a947142dde008c53f5e8c0b0c572d"/>
+		<rom name="n3.bin" size="2048" crc="29c6a1cb" sha1="290702a1c0942a68e288b37963e51eba02177a3f"/>
+		<rom name="p1.bin" size="2048" crc="3c2ff130" sha1="32ebabcb2cbd7aab5e29de2b873f02ed78776ae6"/>
+		<rom name="r1.bin" size="2048" crc="67cafbb1" sha1="467515733d843398e6fe29661002536a1e6c8fc9"/>
+		<rom name="r3.bin" size="2048" crc="7fbe5e21" sha1="e5de6c3af82e64444b0ddcda559e9cb4fbf6c1da"/>
+		<rom name="d1.bin" size="2048" crc="3aff3417" sha1="3b7c31f01b7467757ec85e98a17038e5df5720bb"/>
+	</game>
+	<game name="warlords">
+		<description>Warlords</description>
+		<year>1980</year>
+		<manufacturer>Atari</manufacturer>
+		<rom name="037154.1m" size="2048" crc="18006c87" sha1="6b4aab1b1710819d29f4bbc29269eb9c915626c0"/>
+		<rom name="037153.1k" size="2048" crc="67758f4c" sha1="b65ca677b54de7a8202838207d9a7bb0aed3e0f2"/>
+		<rom name="037158.1j" size="2048" crc="1f043a86" sha1="b1e271c0979d62202ae86c4b6860fb67bbef6400"/>
+		<rom name="037157.1h" size="2048" crc="1a639100" sha1="41ec333aee7192f8aeef49e5257f201f4db01cff"/>
+		<rom name="037156.1e" size="2048" crc="534f34b4" sha1="1680982ded17350c2ae10bb47f7eb8908bb10db2"/>
+		<rom name="037155.1d" size="2048" crc="23b94210" sha1="d74c1ca90caf15942805043b4ebe4ee077799da0"/>
+		<rom name="037159.6e" size="2048" crc="ff979a08" sha1="422053473e41e3e1f71eb28e40eedc78f22326b3"/>
+	</game>
+	<game name="warrior">
+		<description>Warrior</description>
+		<year>1979</year>
+		<manufacturer>Vectorbeam</manufacturer>
+		<rom name="warrior.t7" size="2048" crc="ac3646f9" sha1="515c3acb638fad27fa57f6b438c8ec0b5b76f319"/>
+		<rom name="warrior.p7" size="2048" crc="517d3021" sha1="0483dcaf92c336a07d2c535823348ee886567e85"/>
+		<rom name="warrior.u7" size="2048" crc="2e39340f" sha1="4b3cfb3674dd2a668d4d65e28cb37d7ad20f118d"/>
+		<rom name="warrior.r7" size="2048" crc="8e91b502" sha1="27614c3a8613f49187039cfb05ee96303caf72ba"/>
+	</game>
+	<game name="zektor">
+		<description>Zektor (revision B)</description>
+		<year>1982</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="1611.cpu-u25" size="2048" crc="6245aa23" sha1="815f3c7edad9c290b719a60964085e90e7268112"/>
+		<rom name="1586.prom-u1" size="2048" crc="efeb4fb5" sha1="b337179c01870c953b8d38c20263802e9a7936d3"/>
+		<rom name="1587.prom-u2" size="2048" crc="daa6c25c" sha1="061e390775b6dd24f85d51951267bca4339a3845"/>
+		<rom name="1588.prom-u3" size="2048" crc="62b67dde" sha1="831bad0f5a601d6859f69c70d0962c970d92db0e"/>
+		<rom name="1589.prom-u4" size="2048" crc="c2db0ba4" sha1="658773f2b56ea805d7d678e300f9bbc896fbf176"/>
+		<rom name="1590.prom-u5" size="2048" crc="4d948414" sha1="f60d295b0f8f798126dbfdc197943d8511238390"/>
+		<rom name="1591.prom-u6" size="2048" crc="b0556a6c" sha1="84b481cc60dc3df3a1cf18b1ece4c70bcc7bb5a1"/>
+		<rom name="1592.prom-u7" size="2048" crc="750ecadf" sha1="83ddd482230fbf6cf78a054fb4abd5bc8aec3ec8"/>
+		<rom name="1593.prom-u8" size="2048" crc="34f8850f" sha1="d93594e529aca8d847c9f1e9055f1840f6069fb2"/>
+		<rom name="1594.prom-u9" size="2048" crc="52b22ab2" sha1="c8f822a1a54081cfc88149c97b4dc19aa745a8d5"/>
+		<rom name="1595.prom-u10" size="2048" crc="a704d142" sha1="95c1249a8efd1a69972ffd7a4da76a0bca5095d9"/>
+		<rom name="1596.prom-u11" size="2048" crc="6975e33d" sha1="3f12037edd6f1b803b5f864789f4b88958ac9578"/>
+		<rom name="1597.prom-u12" size="2048" crc="d48ab5c2" sha1="3f4faf4b131b120b30cd4e73ff34d5cd7ef6c47a"/>
+		<rom name="1598.prom-u13" size="2048" crc="ab54a94c" sha1="9dd57b4b6e46d46922933128d9786df011c6133d"/>
+		<rom name="1599.prom-u14" size="2048" crc="c9d4f3a5" sha1="8516914b49fad85222cbdd9a43609834f5d0f13d"/>
+		<rom name="1600.prom-u15" size="2048" crc="893b7dbc" sha1="136135f0be2e8dddfa0d21a5f4119ee4685c4866"/>
+		<rom name="1601.prom-u16" size="2048" crc="867bdf4f" sha1="5974d32d878206abd113f74ba20fa5276cf21a6f"/>
+		<rom name="1602.prom-u17" size="2048" crc="bd447623" sha1="b8d255aeb32096891379330c5b8adf1d151d70c2"/>
+		<rom name="1603.prom-u18" size="2048" crc="9f8f10e8" sha1="ffe9d872d9011b3233cb06d966852319f9e4cd01"/>
+		<rom name="1604.prom-u19" size="2048" crc="ad2f0f6c" sha1="494a224905b1dac58b3b50f65a8be986b68b06f2"/>
+		<rom name="1605.prom-u20" size="2048" crc="e27d7144" sha1="5b82fda797d86e11882d1f9738a59092c5e3e7d8"/>
+		<rom name="1606.prom-u21" size="2048" crc="7965f636" sha1="5c8720beedab4979a813ce7f0e8961c863973ff7"/>
+	</game>
+</datafile>

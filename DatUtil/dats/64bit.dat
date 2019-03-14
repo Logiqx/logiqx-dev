@@ -1,0 +1,5 @@
+game (
+	name tst
+	rom ( name tst size 99999999999999 )
+)
+
