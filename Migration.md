@@ -432,6 +432,8 @@ nothing to commit, working directory clean
 
 ### Pushing the Repo to GitHub
 
+Push the local repository to GitHub:
+
 ```bash
 mike@MIKE-ENVY:/mnt/c/Logiqx/Dev$ git remote add origin https://github.com/Logiqx/logiqx-dev.git
 mike@MIKE-ENVY:/mnt/c/Logiqx/Dev$ git push -u origin --all
@@ -450,4 +452,37 @@ On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
 ```
+
+
+
+### Final Check
+
+Pull the repository from GitHub and compare with the working directory:
+
+```bash
+mike@MIKE-ENVY:/mnt/c/Logiqx$ git init Dev.github
+Initialized empty Git repository in /mnt/c/logiqx/Dev.github/.git/
+mike@MIKE-ENVY:/mnt/c/Logiqx$ cd Dev.github
+mike@MIKE-ENVY:/mnt/c/Logiqx/Dev.github$ git remote add origin https://github.com/Logiqx/logiqx-dev.git
+mike@MIKE-ENVY:/mnt/c/Logiqx/Dev.github$ git pull origin master
+remote: Enumerating objects: 3099, done.
+remote: Counting objects: 100% (3099/3099), done.
+remote: Compressing objects: 100% (914/914), done.
+remote: Total 3099 (delta 2155), reused 3099 (delta 2155), pack-reused 0
+Receiving objects: 100% (3099/3099), 4.97 MiB | 1.76 MiB/s, done.
+Resolving deltas: 100% (2155/2155), done.
+From https://github.com/Logiqx/logiqx-dev
+ * branch            master     -> FETCH_HEAD
+ * [new branch]      master     -> origin/master
+mike@MIKE-ENVY:/mnt/c/Logiqx/Dev.github$ rm -fr .git
+mike@MIKE-ENVY:/mnt/c/Logiqx/Dev.github$ cd ..
+mike@MIKE-ENVY:/mnt/c/Logiqx$ diff -r Dev.github/ Dev | egrep -v 'obj$|\.exe$'
+Only in Dev: .git
+Only in Dev/Limited Edition/IPMask: inet32ut
+Only in Dev/Limited Edition/IPMask: ipmask.log
+Only in Dev/ROMInfo: rominfo.log
+Only in Dev/ZIPIdent: zipident.dat
+```
+
+Note:  The "Only in Dev" items are the Git repository and a handful of files listed in .gitignore
 
