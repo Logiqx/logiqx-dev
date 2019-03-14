@@ -1,0 +1,60 @@
+game (
+	name a1
+	sample 2
+	sample 3
+)
+
+game (
+	name a2
+	sample 1
+	sample 3
+)
+
+game (
+	name a3
+	sample 1
+	sample 2
+)
+
+game (
+	name r1
+	sample 1
+	sample 2
+	sample 3
+)
+
+game (
+	name r2
+	sample 1
+	sample 2
+	sample 3
+)
+
+game (
+	name r3
+	sample 1
+	sample 2
+	sample 3
+)
+
+game (
+	name x1
+	sample 1
+	sample 2
+	sample 3
+)
+
+game (
+	name x2
+	sample 1
+	sample 2
+	sample 3
+)
+
+game (
+	name x3
+	sample 1
+	sample 2
+	sample 3
+)
+
